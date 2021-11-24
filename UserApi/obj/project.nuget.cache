@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7ZQYCv1mYcCZPSL4uSFbtZII70CIT6pkvXYF5ZZZNFN2l4EehEW3saxjw0puydaYICJXatWCh/JLz+D8NdH7+w==",
+  "dgSpecHash": "CXwZ4ewmuNexhPkuGedP9wTnlpbzbSlZ2fTJm3XjD/bP7223U6RbrCocB1FTOy6pyhyKWLDELNoeSfVXOHOgYw==",
   "success": true,
-  "projectFilePath": "E:\\projects\\NisSystem\\NisSystem\\UserApi\\UserApi.csproj",
+  "projectFilePath": "E:\\projects\\NisSystem\\nissystem\\UserApi\\UserApi.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

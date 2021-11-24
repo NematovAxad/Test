@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\projects\\NisSystem\\NisSystem\\UserApi\\UserApi.csproj": {}
+    "E:\\projects\\NisSystem\\nissystem\\UserApi\\UserApi.csproj": {}
   },
   "projects": {
-    "E:\\projects\\NisSystem\\NisSystem\\UserApi\\UserApi.csproj": {
+    "E:\\projects\\NisSystem\\nissystem\\UserApi\\UserApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\projects\\NisSystem\\NisSystem\\UserApi\\UserApi.csproj",
+        "projectUniqueName": "E:\\projects\\NisSystem\\nissystem\\UserApi\\UserApi.csproj",
         "projectName": "UserApi",
-        "projectPath": "E:\\projects\\NisSystem\\NisSystem\\UserApi\\UserApi.csproj",
+        "projectPath": "E:\\projects\\NisSystem\\nissystem\\UserApi\\UserApi.csproj",
         "packagesPath": "C:\\Users\\a.nematov\\.nuget\\packages\\",
-        "outputPath": "E:\\projects\\NisSystem\\NisSystem\\UserApi\\obj\\",
+        "outputPath": "E:\\projects\\NisSystem\\nissystem\\UserApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\a.nematov\\AppData\\Roaming\\NuGet\\NuGet.Config",
