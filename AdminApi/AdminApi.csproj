@@ -8,6 +8,10 @@
     <DocumentationFile>AdminApi.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>AdminApi.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="AdminApi.xml" />
   </ItemGroup>
