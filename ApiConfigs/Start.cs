@@ -67,11 +67,6 @@ namespace ApiConfigs
 
             AdminHandler.Start.Builder(builder);
 
-            //DataInfrostructure.Start.Builder(builder);
-            //AdminHandler.Start.Builder(builder);
-            //ReferenceHandler.Start.Builder(builder);
-            //OrganizationHandler.Start.Builder(builder);
-            //DataInfrostructure.Start.Builder(builder);
         }
         public static void PartialRegister(IServiceCollection services, ContainerBuilder builder)
         {
@@ -86,8 +81,11 @@ namespace ApiConfigs
 
             JohaRepository.BaseConfigState.ProjectName = "nis_system";
             JohaRepository.BaseConfigState.LoginName = "nis_system";
-            
-            services.AddApiSwagger(Assembly.GetExecutingAssembly().GetName().Name);
+            services.AddMvc();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
             AddJwt(services);
             // CoreResult.Start.ConfigureService(services);
             services.AddSession();
@@ -107,52 +105,6 @@ namespace ApiConfigs
 
         }
 
-        public static IServiceCollection AddApiSwagger(this IServiceCollection services, string assemblyName)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "E-Gov WMS",
-                    Description = "API for WMS"
-                });
-
-                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
-                {
-                    Description =
-                        "Заголовок авторизации JWT с использованием схемы Bearer. Пример: \"Bearer { token }\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = JwtBearerDefaults.AuthenticationScheme
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = JwtBearerDefaults.AuthenticationScheme
-                            }
-                        },
-                        new string[] { }
-                    }
-                });
-
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-                //var xmlFile = $"{assemblyName}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
-            });
-
-            return services;
-        }
-
         #endregion
         #region
 
@@ -163,7 +115,10 @@ namespace ApiConfigs
             app.UseRouting();
             app.UseAuthorization();
             app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{serviceName.ToUpper()} SERVICE API V1"); });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
+            });
         }
         #endregion
     }

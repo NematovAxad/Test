@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AdminApi.Controllers
 {
-    [Route("apiTurn/[controller]/[action]")]
+    [Route("apiAdmin/[controller]/[action]")]
     public class Organization : Controller
     {
         IMediator _mediator;
