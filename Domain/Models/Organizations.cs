@@ -52,6 +52,7 @@ namespace Domain.Models
         public string Fax { get; set; }
         [Column("org_category")]
         public OrgCategory OrgCategory { get; set; }
+        public ICollection<BasedDocuments> BasedDocuments { get; set; }
 
     }
 }

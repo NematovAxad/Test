@@ -15,7 +15,7 @@ namespace ApiConfigs
             var path = Directory.GetCurrentDirectory();
             var name = Guid.NewGuid().ToString();
             //dirName = "reestrfiles/" + dirName;
-            path = Path.Combine(path, "wwwroot", "pictures", dirName);
+            path = Path.Combine(path, "wwwroot", "documents", dirName);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -40,7 +40,7 @@ namespace ApiConfigs
 
         public static string FileUrl(string dirName, string fileName)
         {
-            return AuthOptions.FilePath + "/" + "pictures/" + dirName + "/" + fileName;
+            return AuthOptions.FilePath + "/" + "documents/" + dirName + "/" + fileName;
         }
 
         public static string CombinateFileName(string fileName)

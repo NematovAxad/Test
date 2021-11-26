@@ -23,7 +23,7 @@ namespace AdminApi
 
         public static IWebHostBuilder CreateHostBuilder(string[] args) =>
               WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://*:5000")
+                .UseUrls("http://*:6001")
                 .UseStartup<Startup>();
     }
 }
