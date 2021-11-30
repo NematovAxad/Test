@@ -42,6 +42,7 @@ namespace AdminHandler.Handlers.Organization
             }
             Organizations addModel = new Organizations()
             {
+                UserServiceId = model.UserServiceId,
                 FullName = model.FullName,
                 ShortName = model.ShortName,
                 DirectorFirstName = model.DirectorFirstName,
@@ -60,7 +61,8 @@ namespace AdminHandler.Handlers.Organization
                 WebSite = model.WebSite,
                 OrgType = model.OrgType,
                 Fax = model.Fax,
-                OrgCategory = model.OrgCategory
+                OrgCategory = model.OrgCategory,
+                IsActive = model.IsActive
             };
             _organization.Add(addModel);
         }
@@ -78,6 +80,7 @@ namespace AdminHandler.Handlers.Organization
             Organizations updateModel = new Organizations()
             {
                 Id = model.Id,
+                UserServiceId = model.UserServiceId,
                 FullName = model.FullName,
                 ShortName = model.ShortName,
                 DirectorFirstName = model.DirectorFirstName,
@@ -96,7 +99,8 @@ namespace AdminHandler.Handlers.Organization
                 WebSite = model.WebSite,
                 OrgType = model.OrgType,
                 Fax = model.Fax,
-                OrgCategory = model.OrgCategory
+                OrgCategory = model.OrgCategory,
+                IsActive = model.IsActive
             };
             _organization.Update(updateModel);
 

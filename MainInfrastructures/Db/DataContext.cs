@@ -23,5 +23,6 @@ namespace MainInfrastructures.Db
         public DbContext Context => this;
         public DbSet<Organizations> Organizations { get; set; }
         public DbSet<BasedDocuments> BasedDocuments { get; set; }
+        public DbSet<SubOrganizations> SubOrganizations { get; set; }
     }
 }

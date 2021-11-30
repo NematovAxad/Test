@@ -12,6 +12,7 @@ namespace AdminHandler.Commands.Organization
     {
         public EventType EventType { get; set; }
         public int Id { get; set; }
+        public int UserServiceId { get; set; }
         public string FullName { get; set; }
         public string ShortName { get; set; }
         public string DirectorFirstName { get; set; }
@@ -31,5 +32,6 @@ namespace AdminHandler.Commands.Organization
         public OrgTypes OrgType { get; set; }
         public string Fax { get; set; }
         public OrgCategory OrgCategory { get; set; }
+        public bool IsActive { get; set; }
     }
 }

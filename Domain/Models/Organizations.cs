@@ -14,6 +14,8 @@ namespace Domain.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int Id { get; set; }
+        [Column("user_service_id")]
+        public int UserServiceId { get; set; }
         [Column("full_name")]
         public string FullName { get; set; }
         [Column("short_name")]
@@ -53,6 +55,8 @@ namespace Domain.Models
         [Column("org_category")]
         public OrgCategory OrgCategory { get; set; }
         public ICollection<BasedDocuments> BasedDocuments { get; set; }
+        public ICollection<SubOrganizations> SubOrganizations { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

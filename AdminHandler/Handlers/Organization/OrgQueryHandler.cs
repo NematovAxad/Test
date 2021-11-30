@@ -23,11 +23,11 @@ namespace AdminHandler.Handlers.Organization
         }
         public async Task<OrgQueryResult> Handle(OrgQuery request, CancellationToken cancellationToken)
         {
-            var organization = _organizations.GetAll().Include(m => m.BasedDocuments);
+            var organization = _organizations.GetAll().Include(m => m.BasedDocuments).Include(mbox=>mbox.SubOrganizations);
 
             if (request.OrgId != 0)
             {
-                organization = organization.Where(o=>o.Id == request.OrgId).Include(m => m.BasedDocuments);
+                organization = organization.Where(o=>o.Id == request.OrgId).Include(m => m.BasedDocuments).Include(mbox => mbox.SubOrganizations);
             }
 
             OrgQueryResult result = new OrgQueryResult();
