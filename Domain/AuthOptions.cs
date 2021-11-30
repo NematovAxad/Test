@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApiConfigs
+namespace Domain
 {
     public static class AuthOptions
     {

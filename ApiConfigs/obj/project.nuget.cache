@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "twj+dbT/pR5ng+oHSAXXj697wK6U4GamPI03oyOfrm1QTCFv0ht0SXb9AWzxf/wl6TepPCo9wehWwSuk3Wrp8A==",
+  "dgSpecHash": "A/QbLQqg3tSyO98Tbw257z+zskVNfjHlNt17QfgrYr9nVSY+Hk36hSe68xj+CIGYKNQBXRFk7AkczQNZpZeCBg==",
   "success": true,
   "projectFilePath": "E:\\projects\\NisSystem\\nissystem\\ApiConfigs\\ApiConfigs.csproj",
   "expectedPackageFiles": [
@@ -38,7 +38,7 @@
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.http\\2.2.0\\microsoft.aspnetcore.http.2.2.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.http.extensions\\2.2.0\\microsoft.aspnetcore.http.extensions.2.2.0.nupkg.sha512",
-    "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.9\\microsoft.aspnetcore.http.features.5.0.9.nupkg.sha512",
+    "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.12\\microsoft.aspnetcore.http.features.5.0.12.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\3.1.9\\microsoft.aspnetcore.jsonpatch.3.1.9.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.localization\\2.2.0\\microsoft.aspnetcore.localization.2.2.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.mvc\\2.2.0\\microsoft.aspnetcore.mvc.2.2.0.nupkg.sha512",

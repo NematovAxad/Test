@@ -34,36 +34,80 @@ namespace AdminHandler.Handlers.Organization
         }
         public void AddOrg(OrgCommand model)
         {
-            var org = _organization.Find(o => o.ShortName == model.Organization.ShortName).FirstOrDefault();
+            var org = _organization.Find(o => o.ShortName == model.ShortName).FirstOrDefault();
 
             if (org != null)
             {
-                throw ErrorStates.NotAllowed(model.Organization.ShortName);
+                throw ErrorStates.NotAllowed(model.ShortName);
             }
-            
-            _organization.Add(model.Organization);
+            Organizations addModel = new Organizations()
+            {
+                FullName = model.FullName,
+                ShortName = model.ShortName,
+                DirectorFirstName = model.DirectorFirstName,
+                DirectorLastName = model.DirectorLastName,
+                DirectorMidName = model.DirectorMidName,
+                DirectorPosition = model.DirectorPosition,
+                PhoneNumber = model.PhoneNumber,
+                AddressHomeNo = model.AddressHomeNo,
+                AddressStreet = model.AddressStreet,
+                AddressProvince = model.AddressProvince,
+                AddressDistrict = model.AddressDistrict,
+                PostIndex = model.PostIndex,
+                Department = model.Department,
+                DirectorMail = model.DirectorMail,
+                OrgMail = model.OrgMail,
+                WebSite = model.WebSite,
+                OrgType = model.OrgType,
+                Fax = model.Fax,
+                OrgCategory = model.OrgCategory
+            };
+            _organization.Add(addModel);
         }
         public void UpdateOrg(OrgCommand model)
         {
-            if (model.Organization.Id==0)
+            if (model.Id==0)
             {
                 throw ErrorStates.NotFound("");
             }
-            var org = _organization.Find(r => r.Id == model.Organization.Id).FirstOrDefault();
+            var org = _organization.Find(r => r.Id == model.Id).FirstOrDefault();
             if (org == null)
             {
                 throw ErrorStates.NotFound("");
             }
-            _organization.Update(model.Organization);
+            Organizations updateModel = new Organizations()
+            {
+                Id = model.Id,
+                FullName = model.FullName,
+                ShortName = model.ShortName,
+                DirectorFirstName = model.DirectorFirstName,
+                DirectorLastName = model.DirectorLastName,
+                DirectorMidName = model.DirectorMidName,
+                DirectorPosition = model.DirectorPosition,
+                PhoneNumber = model.PhoneNumber,
+                AddressHomeNo = model.AddressHomeNo,
+                AddressStreet = model.AddressStreet,
+                AddressProvince = model.AddressProvince,
+                AddressDistrict = model.AddressDistrict,
+                PostIndex = model.PostIndex,
+                Department = model.Department,
+                DirectorMail = model.DirectorMail,
+                OrgMail = model.OrgMail,
+                WebSite = model.WebSite,
+                OrgType = model.OrgType,
+                Fax = model.Fax,
+                OrgCategory = model.OrgCategory
+            };
+            _organization.Update(updateModel);
 
         }
         public void DeleteOrg(OrgCommand model)
         {
-            if (model.Organization.Id==0)
+            if (model.Id==0)
             {
                 throw ErrorStates.NotFound("");
             }
-            _organization.Remove(model.Organization.Id);
+            _organization.Remove(model.Id);
         }
     }
 }

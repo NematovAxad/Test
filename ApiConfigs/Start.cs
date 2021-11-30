@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.Variance;
 using CoreResult;
+using Domain;
 using EntityRepository;
 using JohaRepository;
 using MainInfrastructures.Db;

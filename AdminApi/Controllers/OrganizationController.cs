@@ -44,10 +44,7 @@ namespace AdminApi.Controllers
         [HttpPost]
         public async Task<ResponseCore<BasedDocsCommandResult>> AddBasedDocs(BasedDocsCommand model)
         {
-            string ext = System.IO.Path.GetExtension(model.File.FileName);
-            var filePath = FileState.AddFile("basedDocs", model.File);
             model.EventType = Domain.Enums.EventType.Add;
-            model.BasedDoc.Path = filePath;
             var result = await _mediator.Send(model);
             return result;
         }
@@ -88,7 +85,7 @@ namespace AdminApi.Controllers
         {
             try
             {
-                OrgCommand model = new OrgCommand() { EventType = Domain.Enums.EventType.Delete, Organization = new Organizations() { Id = id } };
+                OrgCommand model = new OrgCommand() { EventType = Domain.Enums.EventType.Delete,  Id = id };
                 return await _mediator.Send(model);
             }
             catch (Exception ex)

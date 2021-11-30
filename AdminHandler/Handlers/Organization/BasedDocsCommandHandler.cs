@@ -1,5 +1,6 @@
 ﻿using AdminHandler.Commands.Organization;
 using AdminHandler.Results.Organization;
+using Domain;
 using Domain.Models;
 using Domain.States;
 using JohaRepository;
@@ -35,25 +36,41 @@ namespace AdminHandler.Handlers.Organization
         }
         public void Add(BasedDocsCommand model)
         {
-            var org = _organizations.Find(o => o.Id == model.BasedDoc.OrganizationId).FirstOrDefault();
+            var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
 
             if (org == null)
             {
-                throw ErrorStates.NotFound(model.BasedDoc.OrganizationId.ToString());
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
             }
 
-            var doc = _basedDocs.Find(d => d.DocumentNo == model.BasedDoc.DocumentNo).FirstOrDefault();
+            var doc = _basedDocs.Find(d => d.DocumentNo == model.DocumentNo).FirstOrDefault();
             if (doc != null)
-                throw ErrorStates.NotAllowed(model.BasedDoc.DocumentNo);
-            _basedDocs.Add(model.BasedDoc);
+                throw ErrorStates.NotAllowed(model.DocumentNo);
+
+            var filePath = FileState.AddFile("basedDocs", model.File);
+
+            BasedDocuments addModel = new BasedDocuments()
+            {
+                OrganizationId = model.OrganizationId,
+                DocumentNo = model.DocumentNo,
+                DocumentDate = model.DocumentDate,
+                DocumentType = model.DocumentType,
+                AcceptedOrg = model.AcceptedOrg,
+                DocumentName = model.DocumentName,
+                Path = filePath
+            };
+            _basedDocs.Add(addModel);
         }
         public void Delete(BasedDocsCommand model)
         {
-            if (model.BasedDoc.Id == 0)
+            var doc = _basedDocs.Find(d => d.Id == model.Id).FirstOrDefault();
+            if (doc is null)
+                throw ErrorStates.NotFound(model.Id.ToString());
+            if (model.Id == 0)
             {
                 throw ErrorStates.NotFound("");
             }
-            _basedDocs.Remove(model.BasedDoc.Id);
+            _basedDocs.Remove(model.Id);
         }
     }
 }

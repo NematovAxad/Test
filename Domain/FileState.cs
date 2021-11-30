@@ -6,7 +6,7 @@ using System.Text;
 using Domain.States;
 using System.Linq;
 
-namespace ApiConfigs
+namespace Domain
 {
     public static class FileState
     {

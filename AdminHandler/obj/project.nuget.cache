@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "JqHnBHF55z2LMxE0c1jcktnl24wZiwpaAnS4jcqxICcs4+wWV39O0i1RnRkHDSrCl94l5irqpuk5gs1wZtVHLQ==",
+  "dgSpecHash": "htiN4ZZu822eBTJB3wbeYFSFzRjwOBsGlimVlZnTex+L/pgQHPFUs7qDV/SWdoYSg9/ORnys+sViVmpyQ6s45g==",
   "success": true,
   "projectFilePath": "E:\\projects\\NisSystem\\nissystem\\AdminHandler\\AdminHandler.csproj",
   "expectedPackageFiles": [
@@ -11,7 +11,7 @@
     "C:\\Users\\a.nematov\\.nuget\\packages\\joharepository\\0.0.0.4\\joharepository.0.0.0.4.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\mediatr\\9.0.0\\mediatr.9.0.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\mediatr.extensions.autofac.dependencyinjection\\7.1.0\\mediatr.extensions.autofac.dependencyinjection.7.1.0.nupkg.sha512",
-    "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.9\\microsoft.aspnetcore.http.features.5.0.9.nupkg.sha512",
+    "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.12\\microsoft.aspnetcore.http.features.5.0.12.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.bcl.hashcode\\1.1.1\\microsoft.bcl.hashcode.1.1.1.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
