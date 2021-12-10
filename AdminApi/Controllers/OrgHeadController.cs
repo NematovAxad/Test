@@ -1,4 +1,5 @@
 ﻿using AdminHandler.Commands.Organization;
+using AdminHandler.Querys.Organization;
 using AdminHandler.Results.Organization;
 using CoreResult.ResponseCores;
 using MediatR;
@@ -18,6 +19,25 @@ namespace AdminApi.Controllers
         public OrgHead(IMediator mediator)
         {
             _mediator = mediator;
+        }
+        [HttpGet]
+        public async Task<ResponseCore<OrgHeadQueryResult>> Get([FromQuery] int id, int organizationId)
+        {
+            try
+            {
+                OrgHeadQuery model = new OrgHeadQuery()
+                {
+                    Id = id,
+                    OrgId = organizationId
+                };
+
+                var result = await _mediator.Send<OrgHeadQueryResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
         [HttpPost]
         public async Task<ResponseCore<OrgHeadCommandResult>> Add([FromQuery] OrgHeadCommand model)
