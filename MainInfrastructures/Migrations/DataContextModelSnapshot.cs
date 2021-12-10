@@ -161,6 +161,49 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("employee_statistics","organizations");
                 });
 
+            modelBuilder.Entity("Domain.Models.OrganizationDocuments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("DocumentDate")
+                        .HasColumnName("document_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("DocumentName")
+                        .HasColumnName("document_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DocumentNo")
+                        .HasColumnName("document_no")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DocumentType")
+                        .HasColumnName("document_type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MainPurpose")
+                        .HasColumnName("main_purpose")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Path")
+                        .HasColumnName("path")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("organization_documents","organizations");
+                });
+
             modelBuilder.Entity("Domain.Models.Organizations", b =>
                 {
                     b.Property<int>("Id")
@@ -257,6 +300,53 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("organization","organizations");
                 });
 
+            modelBuilder.Entity("Domain.Models.ReplacerOrgHead", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Fax")
+                        .HasColumnName("fax")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnName("file_path")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnName("first_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnName("last_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MidName")
+                        .HasColumnName("mid_name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .HasColumnName("phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Position")
+                        .HasColumnName("position")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("replacer_org_head","organizations");
+                });
+
             modelBuilder.Entity("Domain.Models.SubOrgStatistics", b =>
                 {
                     b.Property<int>("Id")
@@ -349,6 +439,24 @@ namespace MainInfrastructures.Migrations
                 });
 
             modelBuilder.Entity("Domain.Models.EmployeeStatistics", b =>
+                {
+                    b.HasOne("Domain.Models.Organizations", "Organizations")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.OrganizationDocuments", b =>
+                {
+                    b.HasOne("Domain.Models.Organizations", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.ReplacerOrgHead", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organizations")
                         .WithMany()

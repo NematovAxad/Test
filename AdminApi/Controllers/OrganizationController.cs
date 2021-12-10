@@ -79,13 +79,32 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
-
+        [HttpPut]
+        public async Task<ResponseCore<BasedDocsCommandResult>> PutBasedDocs(BasedDocsCommand model)
+        {
+            model.EventType = Domain.Enums.EventType.Update;
+            var result = await _mediator.Send(model);
+            return result;
+        }
         [HttpDelete]
         public async Task<ResponseCore<OrgCommandResult>> Delete([FromQuery] int id)
         {
             try
             {
                 OrgCommand model = new OrgCommand() { EventType = Domain.Enums.EventType.Delete,  Id = id };
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpDelete]
+        public async Task<ResponseCore<BasedDocsCommandResult>> DeleteBasedDocs([FromQuery] int id)
+        {
+            try
+            {
+                BasedDocsCommand model = new BasedDocsCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 return await _mediator.Send(model);
             }
             catch (Exception ex)

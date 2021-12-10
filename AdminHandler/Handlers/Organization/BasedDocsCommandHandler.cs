@@ -30,6 +30,7 @@ namespace AdminHandler.Handlers.Organization
             switch (request.EventType)
             {
                 case Domain.Enums.EventType.Add: Add(request); break;
+                case Domain.Enums.EventType.Update: Update(request); break;
                 case Domain.Enums.EventType.Delete: Delete(request); break;
             }
             return new BasedDocsCommandResult() { IsSuccess = true };
@@ -60,6 +61,26 @@ namespace AdminHandler.Handlers.Organization
                 Path = filePath
             };
             _basedDocs.Add(addModel);
+        }
+        public void Update(BasedDocsCommand model)
+        {
+            var doc = _basedDocs.Find(d => d.Id == model.Id).FirstOrDefault();
+            if (doc != null)
+                throw ErrorStates.NotAllowed(model.DocumentNo);
+
+            var filePath = FileState.AddFile("basedDocs", model.File);
+
+            BasedDocuments updateModel = new BasedDocuments()
+            {
+                OrganizationId = doc.OrganizationId,
+                DocumentNo = model.DocumentNo,
+                DocumentDate = model.DocumentDate,
+                DocumentType = model.DocumentType,
+                AcceptedOrg = model.AcceptedOrg,
+                DocumentName = model.DocumentName,
+                Path = filePath
+            };
+            _basedDocs.Add(updateModel);
         }
         public void Delete(BasedDocsCommand model)
         {

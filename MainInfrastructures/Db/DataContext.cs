@@ -26,5 +26,7 @@ namespace MainInfrastructures.Db
         public DbSet<SubOrganizations> SubOrganizations { get; set; }
         public DbSet<EmployeeStatistics> EmployeeStatistics { get; set; }
         public DbSet<SubOrgStatistics> SubOrgStatistics { get; set; }
+        public DbSet<OrganizationDocuments> OrganizationDocuments { get; set; }
+        public DbSet<ReplacerOrgHead> ReplacerOrgHeads { get; set; }
     }
 }

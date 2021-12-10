@@ -41,7 +41,7 @@ namespace AdminApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseCore<SubOrgStatisticsCommandResult>> AddOrg([FromBody] SubOrgStatisticsCommand model)
+        public async Task<ResponseCore<SubOrgStatisticsCommandResult>> Add([FromBody] SubOrgStatisticsCommand model)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<SubOrgStatisticsCommandResult>> PutOrg([FromBody] SubOrgStatisticsCommand model)
+        public async Task<ResponseCore<SubOrgStatisticsCommandResult>> Put([FromBody] SubOrgStatisticsCommand model)
         {
             try
             {
