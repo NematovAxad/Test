@@ -1,4 +1,5 @@
 ﻿using AdminHandler.Commands.SecondOptionCommands;
+using AdminHandler.Querys.SecondOptionQueries;
 using AdminHandler.Results.SecondOptionResults;
 using CoreResult.ResponseCores;
 using MediatR;
@@ -18,6 +19,25 @@ namespace AdminApi.Controllers
         public ContentManager(IMediator mediator)
         {
             _mediator = mediator;
+        }
+        [HttpGet]
+        public async Task<ResponseCore<ContentManagerQueryResult>> Get([FromQuery] int id, int organizationId)
+        {
+            try
+            {
+                ContentManagerQuery model = new ContentManagerQuery()
+                {
+                    Id = id,
+                    OrganizationId = organizationId
+                };
+
+                var result = await _mediator.Send<ContentManagerQueryResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
         [HttpPost]
         public async Task<ResponseCore<ContentManagerCommandResult>> Add([FromQuery] ContentManagerCommand model)
