@@ -81,7 +81,7 @@ namespace AdminHandler.Handlers.Organization
             }
             
             
-            _orgDocuments.Add(updateModel);
+            _orgDocuments.Update(updateModel);
         }
 
         public void Delete(OrganizationDocsCommand model)

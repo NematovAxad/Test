@@ -87,7 +87,7 @@ namespace AdminHandler.Handlers.Organization
             {
                 updateModel.Path = doc.Path;
             }
-            _basedDocs.Add(updateModel);
+            _basedDocs.Update(updateModel);
         }
         public void Delete(BasedDocsCommand model)
         {
