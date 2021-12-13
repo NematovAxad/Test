@@ -70,6 +70,7 @@ namespace AdminHandler.Handlers.Organization
 
             BasedDocuments updateModel = new BasedDocuments()
             {
+                Id = model.Id,
                 OrganizationId = doc.OrganizationId,
                 DocumentNo = model.DocumentNo,
                 DocumentDate = DateTime.Now,

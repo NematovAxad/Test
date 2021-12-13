@@ -103,7 +103,7 @@ namespace AdminHandler.Handlers.Organization
                 ServiceStuffPositions = model.ServiceStuffPositions,
                 ServiceStuffEmployee = model.ServiceStuffEmployee
             };
-            _employeeStatistics.Add(updateModel);
+            _employeeStatistics.Update(updateModel);
         }
         public void Delete(EmployeeStatisticsCommand model)
         {
