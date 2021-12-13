@@ -46,7 +46,7 @@ namespace AdminHandler.Handlers.Organization
             {
                 OrganizationId = model.OrganizationId,
                 DocumentNo = model.DocumentNo,
-                DocumentDate = model.DocumentDate,
+                DocumentDate = DateTime.Now,
                 DocumentType = model.DocumentType,
                 DocumentName = model.DocumentName,
                 MainPurpose = model.MainPurpose,
@@ -60,17 +60,27 @@ namespace AdminHandler.Handlers.Organization
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            var filePath = FileState.AddFile("orgDocs", model.File);
+            
             OrganizationDocuments updateModel = new OrganizationDocuments()
             {
                 OrganizationId = orgDoc.OrganizationId,
                 DocumentNo = model.DocumentNo,
-                DocumentDate = model.DocumentDate,
+                DocumentDate = DateTime.Now,
                 DocumentType = model.DocumentType,
                 DocumentName = model.DocumentName,
                 MainPurpose = model.MainPurpose,
-                Path = filePath
             };
+            if(model.File!=null)
+            {
+                var filePath = FileState.AddFile("orgDocs", model.File);
+                updateModel.Path = filePath;
+            }
+            else
+            {
+                updateModel.Path = orgDoc.Path;
+            }
+            
+            
             _orgDocuments.Add(updateModel);
         }
 

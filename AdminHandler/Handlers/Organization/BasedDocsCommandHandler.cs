@@ -54,7 +54,7 @@ namespace AdminHandler.Handlers.Organization
             {
                 OrganizationId = model.OrganizationId,
                 DocumentNo = model.DocumentNo,
-                DocumentDate = model.DocumentDate,
+                DocumentDate = DateTime.Now,
                 DocumentType = model.DocumentType,
                 AcceptedOrg = model.AcceptedOrg,
                 DocumentName = model.DocumentName,
@@ -65,21 +65,28 @@ namespace AdminHandler.Handlers.Organization
         public void Update(BasedDocsCommand model)
         {
             var doc = _basedDocs.Find(d => d.Id == model.Id).FirstOrDefault();
-            if (doc != null)
+            if (doc == null)
                 throw ErrorStates.NotAllowed(model.DocumentNo);
-
-            var filePath = FileState.AddFile("basedDocs", model.File);
 
             BasedDocuments updateModel = new BasedDocuments()
             {
                 OrganizationId = doc.OrganizationId,
                 DocumentNo = model.DocumentNo,
-                DocumentDate = model.DocumentDate,
+                DocumentDate = DateTime.Now,
                 DocumentType = model.DocumentType,
                 AcceptedOrg = model.AcceptedOrg,
                 DocumentName = model.DocumentName,
-                Path = filePath
             };
+
+            if(model.File!=null)
+            {
+                var filePath = FileState.AddFile("basedDocs", model.File);
+                updateModel.Path = filePath;
+            }
+            else
+            {
+                updateModel.Path = doc.Path;
+            }
             _basedDocs.Add(updateModel);
         }
         public void Delete(BasedDocsCommand model)

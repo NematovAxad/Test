@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Models
 {
-    [Table("based_documents", Schema = "organizations")]
+    [Table("regions", Schema = "organizations")]
     public class Regions:IDomain<int>
     {
         [Column("id")]
