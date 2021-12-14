@@ -35,10 +35,7 @@ namespace AdminHandler.Handlers.Region
             {
                 reg = reg.Where(o => o.ParentId == request.ParentId);
             }
-            if (request.IsParent == true)
-            {
-                reg = reg.Where(o => o.IsParent == true);
-            }
+            
 
             RegionQueryResult result = new RegionQueryResult();
             result.Count = reg.Count();

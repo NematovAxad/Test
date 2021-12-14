@@ -43,17 +43,12 @@ namespace AdminHandler.Handlers.Region
                 var reg = _regions.Find(r=>r.Id == model.ParentId).FirstOrDefault();
                 if (reg == null)
                     throw ErrorStates.NotFound(model.ParentId.ToString());
-                model.IsParent = true;
             }
-            if(model.ParentId==0)
-            {
-                model.IsParent = false;
-            }
+           
             Regions addModel = new Regions()
             {
                 ParentId = model.ParentId,
                 Name = model.Name,
-                IsParent = model.IsParent
             };
             _regions.Add(addModel);
         }

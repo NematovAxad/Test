@@ -29,5 +29,7 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationDocuments> OrganizationDocuments { get; set; }
         public DbSet<ReplacerOrgHead> ReplacerOrgHeads { get; set; }
         public DbSet<Regions> Regions { get; set; }
+        public DbSet<OrganizationApps> OrganziationApps { get; set; }
+        public DbSet<ContentManager> ContentManager { get; set; }
     }
 }

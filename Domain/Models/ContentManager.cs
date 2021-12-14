@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Models
 {
-    [Table("replacer_org_head", Schema = "organizations")]
+    [Table("content_manager", Schema = "organizations")]
     public class ContentManager:IDomain<int>
     {
         [Column("id")]

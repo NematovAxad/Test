@@ -15,7 +15,5 @@ namespace Domain.Models
         public int ParentId { get; set; }
         [Column("Name")]
         public string Name { get; set; }
-        [Column("is_parent")]
-        public bool IsParent { get; set; }
     }
 }
