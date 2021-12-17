@@ -36,7 +36,7 @@ namespace AdminHandler.Handlers.Region
         public void Add(RegionCommand model)
         {
             var region = _regions.Find(r => r.Name == model.Name).FirstOrDefault();
-            if (region != null)
+            if (region.ParentId == 0 && model.ParentId == 0)
                 throw ErrorStates.NotAllowed(model.Name);
             if(model.ParentId!=0)
             {

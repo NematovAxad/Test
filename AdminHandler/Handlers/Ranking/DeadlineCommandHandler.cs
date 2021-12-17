@@ -2,6 +2,7 @@
 using AdminHandler.Results.Ranking;
 using Domain.Models;
 using Domain.States;
+using EntityRepository;
 using JohaRepository;
 using MediatR;
 using System;
@@ -16,10 +17,11 @@ namespace AdminHandler.Handlers.Ranking
     public class DeadlineCommandHandler : IRequestHandler<DeadlineCommand, DeadlineCommandResult>
     {
         private readonly IRepository<Deadline, int> _deadline;
-
-        public DeadlineCommandHandler(IRepository<Deadline, int> deadline)
+        IDataContext _db;
+        public DeadlineCommandHandler(IRepository<Deadline, int> deadline, IDataContext db)
         {
             _deadline = deadline;
+            _db = db;
         }
 
         public async Task<DeadlineCommandResult> Handle(DeadlineCommand request, CancellationToken cancellationToken)
@@ -39,12 +41,14 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotAllowed(model.Year.ToString());
             if(model.IsActive == true)
             {
-                var list = _deadline.GetAll();
-                foreach(var d in list)
+                var list = _deadline.GetAll().ToList();
+                for(int i = 0; i<list.Count; i++)
                 {
-                    d.IsActive = false;
-                    _deadline.Update(d);
+                    list[i].IsActive = false;
                 }
+
+                _db.Context.Set<Deadline>().UpdateRange(list);
+                
             }
             Deadline addModel = new Deadline()
             {
@@ -57,19 +61,22 @@ namespace AdminHandler.Handlers.Ranking
         }
         public void Update(DeadlineCommand model)
         {
-            var deadline = _deadline.Find(d => d.Id == model.Id && d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
+            var deadline = _deadline.Find(d => d.Id == model.Id).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            
+
             if (model.IsActive == true)
             {
-                var list = _deadline.GetAll();
-                foreach (var d in list)
+                var list = _deadline.GetAll().ToList();
+                for (int i = 0; i < list.Count; i++)
                 {
-                    d.IsActive = false;
-                    _deadline.Update(d);
+                    list[i].IsActive = false;
                 }
+
+                _db.Context.Set<Deadline>().UpdateRange(list);
+
             }
+            deadline.IsActive = model.IsActive;
             deadline.DeadlineDate = model.DeadlineDate;
             _deadline.Update(deadline);
         }
