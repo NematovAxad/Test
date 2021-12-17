@@ -23,14 +23,16 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
         public async Task<ContentManagerQueryResult> Handle(ContentManagerQuery request, CancellationToken cancellationToken)
         {
-            var manager = new ContentManager();
+            var manager = _contentManager.GetAll();
             if (request.Id != 0)
-                manager = _contentManager.Find(m => m.Id == request.Id).FirstOrDefault();
+                manager = manager.Where(m => m.Id == request.Id);
             if (request.OrganizationId != 0)
-                manager = _contentManager.Find(m => m.OrganizationId == request.OrganizationId).FirstOrDefault();
+                manager = manager.Where(m => m.OrganizationId == request.OrganizationId);
 
-            return new ContentManagerQueryResult() {ContentManager = manager };
-
+            ContentManagerQueryResult result = new ContentManagerQueryResult();
+            result.Count = manager.Count();
+            result.Data = manager.OrderBy(u => u.Id).ToList<object>();
+            return result;
 
         }
     }

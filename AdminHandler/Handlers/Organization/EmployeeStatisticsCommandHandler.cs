@@ -78,32 +78,27 @@ namespace AdminHandler.Handlers.Organization
             if (employeeStat == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-            EmployeeStatistics updateModel = new EmployeeStatistics()
-            {
-                Id = model.Id,
-                OrganizationId = model.OrganizationId,
-                CentralManagementPositions = model.CentralManagementPositions,
-                CentralManagementEmployees = model.CentralManagementEmployees,
-                TerritorialManagementPositions = model.TerritorialManagementPositions,
-                TerritorialManagementEmployees = model.TerritorialManagementEmployees,
-                SubordinationPositions = model.SubordinationPositions,
-                SubordinationEmployees = model.SubordinationEmployees,
-                OtherPositions = model.OtherPositions,
-                OtherEmployees = model.OtherEmployees,
-                HeadPositions = model.HeadPositions,
-                HeadEmployees = model.HeadEmployees,
-                DepartmentHeadPositions = model.DepartmentHeadPositions,
-                DepartmentHeadEmployees = model.DepartmentHeadEmployees,
-                SpecialistsPosition = model.SpecialistsPosition,
-                SpecialistsEmployee = model.SpecialistsEmployee,
-                ProductionPersonnelsPosition = model.ProductionPersonnelsPosition,
-                ProductionPersonnelsEmployee = model.ProductionPersonnelsEmployee,
-                TechnicalStuffPositions = model.TechnicalStuffPositions,
-                TechnicalStuffEmployee = model.TechnicalStuffEmployee,
-                ServiceStuffPositions = model.ServiceStuffPositions,
-                ServiceStuffEmployee = model.ServiceStuffEmployee
-            };
-            _employeeStatistics.Update(updateModel);
+            employeeStat.CentralManagementPositions = model.CentralManagementPositions;
+            employeeStat.CentralManagementEmployees = model.CentralManagementEmployees;
+            employeeStat.TerritorialManagementPositions = model.TerritorialManagementPositions;
+            employeeStat.TerritorialManagementEmployees = model.TerritorialManagementEmployees;
+            employeeStat.SubordinationPositions = model.SubordinationPositions;
+            employeeStat.SubordinationEmployees = model.SubordinationEmployees;
+            employeeStat.OtherPositions = model.OtherPositions;
+            employeeStat.OtherEmployees = model.OtherEmployees;
+            employeeStat.HeadPositions = model.HeadPositions;
+            employeeStat.HeadEmployees = model.HeadEmployees;
+            employeeStat.DepartmentHeadPositions = model.DepartmentHeadPositions;
+            employeeStat.DepartmentHeadEmployees = model.DepartmentHeadEmployees;
+            employeeStat.SpecialistsPosition = model.SpecialistsPosition;
+            employeeStat.SpecialistsEmployee = model.SpecialistsEmployee;
+            employeeStat.ProductionPersonnelsPosition = model.ProductionPersonnelsPosition;
+            employeeStat.ProductionPersonnelsEmployee = model.ProductionPersonnelsEmployee;
+            employeeStat.TechnicalStuffPositions = model.TechnicalStuffPositions;
+            employeeStat.TechnicalStuffEmployee = model.TechnicalStuffEmployee;
+            employeeStat.ServiceStuffPositions = model.ServiceStuffPositions;
+            employeeStat.ServiceStuffEmployee = model.ServiceStuffEmployee;
+            _employeeStatistics.Update(employeeStat);
         }
         public void Delete(EmployeeStatisticsCommand model)
         {

@@ -7,6 +7,7 @@ namespace AdminHandler.Results.SecondOptionResults
 {
     public class ContentManagerQueryResult
     {
-        public ContentManager ContentManager { get; set; }
+        public int Count { get; set; }
+        public List<object> Data { get; set; }
     }
 }

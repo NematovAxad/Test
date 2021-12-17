@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "A/QbLQqg3tSyO98Tbw257z+zskVNfjHlNt17QfgrYr9nVSY+Hk36hSe68xj+CIGYKNQBXRFk7AkczQNZpZeCBg==",
+  "dgSpecHash": "E8NsL4WHI5lcsSsp/eMldTkkAgdSQV7norLFagRvPkD9MSDh3aJaQFIRJ+MK/QF1+lqyIavdwVp+zNh1xHTY9A==",
   "success": true,
   "projectFilePath": "E:\\projects\\NisSystem\\nissystem\\ApiConfigs\\ApiConfigs.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\a.nematov\\.nuget\\packages\\ardalis.smartenum\\2.0.1\\ardalis.smartenum.2.0.1.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\authlib\\0.0.0.4\\authlib.0.0.0.4.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\autofac\\6.1.0\\autofac.6.1.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\autofac.extensions.dependencyinjection\\7.1.0\\autofac.extensions.dependencyinjection.7.1.0.nupkg.sha512",

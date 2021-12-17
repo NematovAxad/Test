@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20211130073543_parentid.cs" />
     <Compile Remove="Migrations\20211130073543_parentid.Designer.cs" />
+    <Compile Remove="Migrations\20211215103605_ranktableadded.cs" />
+    <Compile Remove="Migrations\20211215103605_ranktableadded.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

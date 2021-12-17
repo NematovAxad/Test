@@ -68,27 +68,19 @@ namespace AdminHandler.Handlers.Organization
             if (doc == null)
                 throw ErrorStates.NotAllowed(model.DocumentNo);
 
-            BasedDocuments updateModel = new BasedDocuments()
-            {
-                Id = model.Id,
-                OrganizationId = doc.OrganizationId,
-                DocumentNo = model.DocumentNo,
-                DocumentDate = DateTime.Now,
-                DocumentType = model.DocumentType,
-                AcceptedOrg = model.AcceptedOrg,
-                DocumentName = model.DocumentName,
-            };
+            doc.DocumentNo = model.DocumentNo;
+            doc.DocumentDate = DateTime.Now;
+            doc.DocumentType = model.DocumentType;
+            doc.AcceptedOrg = model.AcceptedOrg;
+            doc.DocumentName = model.DocumentName;
+
 
             if(model.File!=null)
             {
                 var filePath = FileState.AddFile("basedDocs", model.File);
-                updateModel.Path = filePath;
+                doc.Path = filePath;
             }
-            else
-            {
-                updateModel.Path = doc.Path;
-            }
-            _basedDocs.Update(updateModel);
+            _basedDocs.Update(doc);
         }
         public void Delete(BasedDocsCommand model)
         {

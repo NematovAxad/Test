@@ -60,20 +60,17 @@ namespace AdminHandler.Handlers.Organization
             var subOrg = _subOrganizations.Find(o => o.Id == model.Id).FirstOrDefault();
             if (subOrg == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            SubOrganizations updateModel = new SubOrganizations()
-            {
-                Id = model.Id,
-                OrganizationId = subOrg.OrganizationId,
-                Name = model.Name,
-                DirectorFirstName = model.DirectorFirstName,
-                DirectorLastName = model.DirectorLastName,
-                DirectorMidName = model.DirectorMidName,
-                OwnerType = model.OwnerType,
-                OfficialSite = model.OfficialSite,
-                Contacts = model.Contacts
-            };
 
-            _subOrganizations.Update(updateModel);
+            subOrg.Name = model.Name;
+            subOrg.DirectorFirstName = model.DirectorFirstName;
+            subOrg.DirectorLastName = model.DirectorLastName;
+            subOrg.DirectorMidName = model.DirectorMidName;
+            subOrg.OwnerType = model.OwnerType;
+            subOrg.OfficialSite = model.OfficialSite;
+            subOrg.Contacts = model.Contacts;
+
+
+            _subOrganizations.Update(subOrg);
         }
         public void Delete(SubOrgCommand model)
         {

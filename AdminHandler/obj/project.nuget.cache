@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "htiN4ZZu822eBTJB3wbeYFSFzRjwOBsGlimVlZnTex+L/pgQHPFUs7qDV/SWdoYSg9/ORnys+sViVmpyQ6s45g==",
+  "dgSpecHash": "OjwGlX4okCZwQw8mZ7y9BJRrHcB3YhLKqgAj3wg2JAyklA2+2MYkhPPX31D2e9i6vZgHkL4Rlhq5HdeLQtLUMQ==",
   "success": true,
   "projectFilePath": "E:\\projects\\NisSystem\\nissystem\\AdminHandler\\AdminHandler.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\a.nematov\\.nuget\\packages\\ardalis.smartenum\\2.0.1\\ardalis.smartenum.2.0.1.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\autofac\\6.1.0\\autofac.6.1.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\autofac.extensions.dependencyinjection\\7.1.0\\autofac.extensions.dependencyinjection.7.1.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",

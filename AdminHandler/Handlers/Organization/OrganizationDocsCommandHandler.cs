@@ -60,28 +60,18 @@ namespace AdminHandler.Handlers.Organization
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            
-            OrganizationDocuments updateModel = new OrganizationDocuments()
-            {
-                OrganizationId = orgDoc.OrganizationId,
-                DocumentNo = model.DocumentNo,
-                DocumentDate = DateTime.Now,
-                DocumentType = model.DocumentType,
-                DocumentName = model.DocumentName,
-                MainPurpose = model.MainPurpose,
-            };
+
+            orgDoc.DocumentNo = model.DocumentNo;
+            orgDoc.DocumentDate = DateTime.Now;
+            orgDoc.DocumentType = model.DocumentType;
+            orgDoc.DocumentName = model.DocumentName;
             if(model.File!=null)
             {
                 var filePath = FileState.AddFile("orgDocs", model.File);
-                updateModel.Path = filePath;
+                orgDoc.Path = filePath;
             }
-            else
-            {
-                updateModel.Path = orgDoc.Path;
-            }
-            
-            
-            _orgDocuments.Update(updateModel);
+
+            _orgDocuments.Update(orgDoc);
         }
 
         public void Delete(OrganizationDocsCommand model)

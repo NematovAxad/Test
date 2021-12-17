@@ -77,32 +77,29 @@ namespace AdminHandler.Handlers.Organization
             {
                 throw ErrorStates.NotFound("");
             }
-            Organizations updateModel = new Organizations()
-            {
-                Id = model.Id,
-                UserServiceId = model.UserServiceId,
-                FullName = model.FullName,
-                ShortName = model.ShortName,
-                DirectorFirstName = model.DirectorFirstName,
-                DirectorLastName = model.DirectorLastName,
-                DirectorMidName = model.DirectorMidName,
-                DirectorPosition = model.DirectorPosition,
-                PhoneNumber = model.PhoneNumber,
-                AddressHomeNo = model.AddressHomeNo,
-                AddressStreet = model.AddressStreet,
-                AddressProvince = model.AddressProvince,
-                AddressDistrict = model.AddressDistrict,
-                PostIndex = model.PostIndex,
-                Department = model.Department,
-                DirectorMail = model.DirectorMail,
-                OrgMail = model.OrgMail,
-                WebSite = model.WebSite,
-                OrgType = model.OrgType,
-                Fax = model.Fax,
-                OrgCategory = model.OrgCategory,
-                IsActive = model.IsActive
-            };
-            _organization.Update(updateModel);
+
+            org.FullName = model.FullName;
+            org.ShortName = model.ShortName;
+            org.DirectorFirstName = model.DirectorFirstName;
+            org.DirectorLastName = model.DirectorLastName;
+            org.DirectorMidName = model.DirectorMidName;
+            org.DirectorPosition = model.DirectorPosition;
+            org.PhoneNumber = model.PhoneNumber;
+            org.AddressHomeNo = model.AddressHomeNo;
+            org.AddressStreet = model.AddressStreet;
+            org.AddressProvince = model.AddressProvince;
+            org.AddressDistrict = model.AddressDistrict;
+            org.PostIndex = model.PostIndex;
+            org.Department = model.Department;
+            org.DirectorMail = model.DirectorMail;
+            org.OrgMail = model.OrgMail;
+            org.WebSite = model.WebSite;
+            org.OrgType = model.OrgType;
+            org.Fax = model.Fax;
+            org.OrgCategory = model.OrgCategory;
+            org.IsActive = model.IsActive;
+
+            _organization.Update(org);
 
         }
         public void DeleteOrg(OrgCommand model)

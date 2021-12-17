@@ -29,8 +29,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             switch (request.EventType)
             {
                 case Domain.Enums.EventType.Add: Add(request); break;
-                //case Domain.Enums.EventType.Update: Update(request); break;
-                //case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Update: Update(request); break;
+                case Domain.Enums.EventType.Delete: Delete(request); break;
             }
             return new OrganizationAppsCommandResult() { IsSuccess = true };
         }
@@ -39,6 +39,45 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            var apps = _organizationApps.Find(a => a.OrganizationId == model.OrganizationId).FirstOrDefault();
+            if (apps != null)
+                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+            OrganizationApps addModel = new OrganizationApps()
+            {
+                OrganizationId = model.OrganizationId,
+                HasAndroidApp = model.HasAndroidApp,
+                AndroidAppLink = model.AndroidAppLink,
+                HasIosApp = model.HasIosApp,
+                IosAppLink = model.IosAppLink,
+                HasOtherApps = model.HasOtherApps,
+                OtherAppLink = model.OtherAppLink,
+                HasResponsiveWebsite = model.HasResponsiveWebsite
+            };
+            _organizationApps.Add(addModel);
+        }
+        public void Update(OrganizationAppCommand model)
+        {
+            
+            var apps = _organizationApps.Find(a => a.Id == model.Id).FirstOrDefault();
+            if (apps == null)
+                throw ErrorStates.NotFound(model.Id.ToString());
+
+            apps.HasAndroidApp = model.HasAndroidApp;
+            apps.AndroidAppLink = model.AndroidAppLink;
+            apps.HasIosApp = model.HasIosApp;
+            apps.IosAppLink = model.IosAppLink;
+            apps.HasOtherApps = model.HasOtherApps;
+            apps.OtherAppLink = model.OtherAppLink;
+            apps.HasResponsiveWebsite = model.HasResponsiveWebsite;
+            
+            _organizationApps.Update(apps);
+        }
+        public void Delete(OrganizationAppCommand model)
+        {
+            var apps = _organizationApps.Find(a => a.Id == model.Id).FirstOrDefault();
+            if (apps == null)
+                throw ErrorStates.NotFound(model.Id.ToString());
+            _organizationApps.Remove(apps);
         }
     }
 }

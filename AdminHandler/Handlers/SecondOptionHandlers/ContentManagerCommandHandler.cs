@@ -61,15 +61,17 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (manager == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
 
-            var filePath = FileState.AddFile("headDocs", model.File);
-            ContentManager updateModel = new ContentManager()
+            if(model.File!=null)
             {
-                FullName = model.FullName,
-                Position = model.Position,
-                Phone = model.Phone,
-                FilePath = filePath
-            };
-            _contentManager.Update(updateModel);
+                var filePath = FileState.AddFile("headDocs", model.File);
+                manager.FilePath = filePath;
+            }
+
+            manager.FullName = model.FullName;
+            manager.Position = model.Position;
+            manager.Phone = model.Phone;
+   
+            _contentManager.Update(manager);
         }
         public void Delete(ContentManagerCommand model)
         {

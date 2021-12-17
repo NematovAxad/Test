@@ -31,5 +31,9 @@ namespace MainInfrastructures.Db
         public DbSet<Regions> Regions { get; set; }
         public DbSet<OrganizationApps> OrganziationApps { get; set; }
         public DbSet<ContentManager> ContentManager { get; set; }
+        public DbSet<Deadline> Deadline { get; set; }
+        public DbSet<RankTable> RankTable { get; set; }
+        public DbSet<Sphere> Sphere { get; set; }
+        public DbSet<Field> Field { get; set; }
     }
 }

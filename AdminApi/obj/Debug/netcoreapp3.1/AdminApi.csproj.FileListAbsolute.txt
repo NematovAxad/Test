@@ -93,3 +93,4 @@ E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\MainInfrastruct
 E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.csproj.CopyComplete
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\AdminApi.xml
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\ApiConfigs.xml
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Ardalis.SmartEnum.dll

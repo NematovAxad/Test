@@ -63,20 +63,22 @@ namespace AdminHandler.Handlers.Organization
             var head = _replacerHead.Find(h => h.Id == model.Id).FirstOrDefault();
             if (head == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            var filePath = FileState.AddFile("headDocs", model.File);
-            ReplacerOrgHead updateModel = new ReplacerOrgHead()
+
+            if(model.File!=null)
             {
-                Id = head.Id,
-                OrganizationId = head.OrganizationId,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                MidName = model.MidName,
-                Position = model.Position,
-                Phone = model.Phone,
-                Fax = model.Fax,
-                FilePath = filePath
-            };
-            _replacerHead.Update(updateModel);
+                var filePath = FileState.AddFile("headDocs", model.File);
+                head.FilePath = filePath;
+            }
+
+            head.FirstName = model.FirstName;
+            head.LastName = model.LastName;
+            head.MidName = model.MidName;
+            head.Position = model.Position;
+            head.Phone = model.Phone;
+            head.Fax = model.Fax;
+            
+
+            _replacerHead.Update(head);
         }
         public void Delete(OrgHeadCommand model)
         {

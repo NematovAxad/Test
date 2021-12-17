@@ -1,4 +1,5 @@
-﻿using JohaRepository;
+﻿using Domain.Enums;
+using JohaRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,6 +30,5 @@ namespace Domain.Models
         public string OtherAppLink { get; set; }
         [Column("has_responsive_website")]
         public bool HasResponsiveWebsite { get; set; }
-
     }
 }

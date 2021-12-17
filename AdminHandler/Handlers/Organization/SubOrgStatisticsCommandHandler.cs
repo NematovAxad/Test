@@ -55,22 +55,16 @@ namespace AdminHandler.Handlers.Organization
         }
         public void Update(SubOrgStatisticsCommand model)
          {
-            var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
-            if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            var subOrgStat = _subOrgStatistics.Find(s => s.Id == model.Id && s.OrganizationId == model.OrganizationId).FirstOrDefault();
+            var subOrgStat = _subOrgStatistics.Find(s => s.Id == model.Id).FirstOrDefault();
             if (subOrgStat == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            SubOrgStatistics updateModel = new SubOrgStatistics()
-            {
-                Id = model.Id,
-                OrganizationId = model.OrganizationId,
-                CentralManagements = model.CentralManagements,
-                TerritorialManagements = model.TerritorialManagements,
-                Subordinations = model.Subordinations,
-                Others = model.Others
-            };
-            _subOrgStatistics.Update(updateModel);
+
+            subOrgStat.CentralManagements = model.CentralManagements;
+            subOrgStat.TerritorialManagements = model.TerritorialManagements;
+            subOrgStat.Subordinations = model.Subordinations;
+            subOrgStat.Others = model.Others;
+
+            _subOrgStatistics.Update(subOrgStat);
         }
         public void Delete(SubOrgStatisticsCommand model)
         {
