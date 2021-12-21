@@ -56,6 +56,7 @@ namespace Domain.Models
         public OrgCategory OrgCategory { get; set; }
         public ICollection<BasedDocuments> BasedDocuments { get; set; }
         public ICollection<SubOrganizations> SubOrganizations { get; set; }
+        public ICollection<RankTable> OrgRanks { get; set; }
         public bool IsActive { get; set; }
 
     }

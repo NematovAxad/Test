@@ -1,0 +1,14 @@
+E:\projects\NisSystem\nissystem\UserHandler\bin\Debug\netcoreapp3.1\UserHandler.deps.json
+E:\projects\NisSystem\nissystem\UserHandler\bin\Debug\netcoreapp3.1\UserHandler.dll
+E:\projects\NisSystem\nissystem\UserHandler\bin\Debug\netcoreapp3.1\UserHandler.pdb
+E:\projects\NisSystem\nissystem\UserHandler\bin\Debug\netcoreapp3.1\Domain.dll
+E:\projects\NisSystem\nissystem\UserHandler\bin\Debug\netcoreapp3.1\MainInfrastructures.dll
+E:\projects\NisSystem\nissystem\UserHandler\bin\Debug\netcoreapp3.1\Domain.pdb
+E:\projects\NisSystem\nissystem\UserHandler\bin\Debug\netcoreapp3.1\MainInfrastructures.pdb
+E:\projects\NisSystem\nissystem\UserHandler\obj\Debug\netcoreapp3.1\UserHandler.csprojAssemblyReference.cache
+E:\projects\NisSystem\nissystem\UserHandler\obj\Debug\netcoreapp3.1\UserHandler.AssemblyInfoInputs.cache
+E:\projects\NisSystem\nissystem\UserHandler\obj\Debug\netcoreapp3.1\UserHandler.AssemblyInfo.cs
+E:\projects\NisSystem\nissystem\UserHandler\obj\Debug\netcoreapp3.1\UserHandler.csproj.CoreCompileInputs.cache
+E:\projects\NisSystem\nissystem\UserHandler\obj\Debug\netcoreapp3.1\UserHandler.csproj.CopyComplete
+E:\projects\NisSystem\nissystem\UserHandler\obj\Debug\netcoreapp3.1\UserHandler.dll
+E:\projects\NisSystem\nissystem\UserHandler\obj\Debug\netcoreapp3.1\UserHandler.pdb

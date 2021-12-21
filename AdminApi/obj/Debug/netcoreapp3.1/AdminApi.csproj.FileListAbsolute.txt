@@ -94,3 +94,12 @@ E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.csproj
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\AdminApi.xml
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\ApiConfigs.xml
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Ardalis.SmartEnum.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\ClosedXML.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\ClosedXML.Report.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\ExcelNumberFormat.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\MoreLinq.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\System.IO.Packaging.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\System.Linq.Dynamic.Core.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\UserHandler.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\UserHandler.pdb

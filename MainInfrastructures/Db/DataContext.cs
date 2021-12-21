@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Models.SecondSection;
 using EntityRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -35,5 +36,6 @@ namespace MainInfrastructures.Db
         public DbSet<RankTable> RankTable { get; set; }
         public DbSet<Sphere> Sphere { get; set; }
         public DbSet<Field> Field { get; set; }
+        public DbSet<OrganizationSocialSites> OrganizationSocialSites { get; set; }
     }
 }

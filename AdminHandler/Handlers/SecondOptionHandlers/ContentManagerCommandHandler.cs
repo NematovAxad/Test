@@ -2,6 +2,7 @@
 using AdminHandler.Results.SecondOptionResults;
 using Domain;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -43,7 +44,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var manager = _contentManager.Find(m => m.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (manager != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
+
             var filePath = FileState.AddFile("headDocs", model.File);
             ContentManager addModel = new ContentManager()
             {
@@ -61,7 +64,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (manager == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
 
-            if(model.File!=null)
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == manager.OrganizationId) && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                throw ErrorStates.NotAllowed("permission");
+            if (model.File!=null)
             {
                 var filePath = FileState.AddFile("headDocs", model.File);
                 manager.FilePath = filePath;
@@ -78,6 +83,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var manager = _contentManager.Find(m => m.Id == model.Id).FirstOrDefault();
             if (manager == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == manager.OrganizationId) && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                throw ErrorStates.NotAllowed("permission");
             _contentManager.Remove(model.Id);
         }
     }

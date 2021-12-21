@@ -553,6 +553,41 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("replacer_org_head","organizations");
                 });
 
+            modelBuilder.Entity("Domain.Models.SecondSection.OrganizationSocialSites", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("DeadlineId")
+                        .HasColumnName("deadline_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SocialSiteLink")
+                        .HasColumnName("social_site_link")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeadlineId");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("org_social_sites","organizations");
+                });
+
             modelBuilder.Entity("Domain.Models.Sphere", b =>
                 {
                     b.Property<int>("Id")
@@ -729,6 +764,27 @@ namespace MainInfrastructures.Migrations
 
             modelBuilder.Entity("Domain.Models.ReplacerOrgHead", b =>
                 {
+                    b.HasOne("Domain.Models.Organizations", "Organizations")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.OrganizationSocialSites", b =>
+                {
+                    b.HasOne("Domain.Models.Deadline", "Deadline")
+                        .WithMany()
+                        .HasForeignKey("DeadlineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Models.Organizations", "Organizations")
                         .WithMany()
                         .HasForeignKey("OrganizationId")

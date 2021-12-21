@@ -1,3 +1,6 @@
+using ApiConfigs;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -21,11 +24,15 @@ namespace UserApi
         }
 
         public IConfiguration Configuration { get; }
-
+        public IContainer Container { get; private set; }
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            var builder = new ContainerBuilder();
+            services.ConfigureServices(builder);
+            Container = builder.Build();
+            return new AutofacServiceProvider(Container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,11 +43,8 @@ namespace UserApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
+            app.UseStaticFiles();
+            app.Configure("UserApi");
 
             app.UseEndpoints(endpoints =>
             {

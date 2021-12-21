@@ -15,3 +15,5 @@ E:\projects\NisSystem\nissystem\ApiConfigs\obj\Debug\netcoreapp3.1\ApiConfigs.cs
 E:\projects\NisSystem\nissystem\ApiConfigs\obj\Debug\netcoreapp3.1\ApiConfigs.dll
 E:\projects\NisSystem\nissystem\ApiConfigs\obj\Debug\netcoreapp3.1\ApiConfigs.pdb
 E:\projects\NisSystem\nissystem\ApiConfigs\bin\Debug\netcoreapp3.1\ApiConfigs.xml
+E:\projects\NisSystem\nissystem\ApiConfigs\bin\Debug\netcoreapp3.1\UserHandler.dll
+E:\projects\NisSystem\nissystem\ApiConfigs\bin\Debug\netcoreapp3.1\UserHandler.pdb
