@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using ClosedXML.Report;
 using UserHandler.Queries.DownloadQuery;
 using ClosedXML.Excel;
+using CoreResult.ResponseCores;
+using AdminHandler.Results.Ranking;
+using AdminHandler.Querys.Ranking;
 
 namespace UserApi.Controllers
 {
@@ -20,7 +23,7 @@ namespace UserApi.Controllers
         {
             _mediator = mediator;
         }
-        [HttpGet("downloadorgreport")]
+        [HttpGet]
         public async Task<IActionResult> DownloadExportReport([FromQuery] ExportReportQuery query)
         {
             try
@@ -50,6 +53,24 @@ namespace UserApi.Controllers
                 stream.Position = 0;
 
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgreport.xlsx");
+            }
+            catch (Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult<ReportBySpheresResult>> Get([FromQuery] int deadlineId)
+        {
+            try
+            {
+                ReportBySpheresQuery model = new ReportBySpheresQuery()
+                {
+                    DeadlineId = deadlineId
+                };
+
+                var result = await _mediator.Send<ReportBySpheresResult>(model);
+                return result;
             }
             catch (Exception ex)
             {

@@ -40,6 +40,25 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
+        [HttpGet]
+        public async Task<ResponseCore<BasedDocsQueryResult>> GetBasedDocs([FromQuery] int id, int organizationId)
+        {
+            try
+            {
+                BasedDocsQuery model = new BasedDocsQuery()
+                {
+                    Id = id,
+                    OrganizationId = organizationId
+                };
+
+                var result = await _mediator.Send<BasedDocsQueryResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
 
         [HttpPost]
         public async Task<ResponseCore<BasedDocsCommandResult>> AddBasedDocs(BasedDocsCommand model)

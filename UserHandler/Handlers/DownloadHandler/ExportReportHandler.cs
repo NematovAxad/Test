@@ -20,12 +20,14 @@ namespace UserHandler.Handlers.DownloadHandler
         private readonly IRepository<Organizations, int> _organizations;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<RankTable, int> _rankTable;
+        private readonly IRepository<Field, int> _field;
 
-        public ExportReportHandler(IRepository<Organizations, int> organizations, IRepository<Deadline, int> deadline, IRepository<RankTable, int> rankTable)
+        public ExportReportHandler(IRepository<Organizations, int> organizations, IRepository<Deadline, int> deadline, IRepository<RankTable, int> rankTable, IRepository<Field, int> field)
         {
             _organizations = organizations;
             _deadline = deadline;
             _rankTable = rankTable;
+            _field = field;
         }
 
         public async Task<ExportReportResult> Handle(ExportReportQuery request, CancellationToken cancellationToken)
@@ -37,8 +39,8 @@ namespace UserHandler.Handlers.DownloadHandler
                 throw ErrorStates.NotFound(request.DeadlineId.ToString());
 
             var org = _organizations.GetAll().Include(mbox=>mbox.OrgRanks).ThenInclude(mbox=>mbox.Field).Where(o=>o.OrgRanks.All(r=>r.Quarter == deadline.Quarter && r.Year == deadline.Year));
-            
-            foreach(var o in org)
+            double maxRate = _field.GetAll().Select(f => f.MaxRate).Sum();
+            foreach (var o in org)
             {
                 if(o.OrgRanks != null)
                 {
@@ -82,7 +84,7 @@ namespace UserHandler.Handlers.DownloadHandler
                         model.RateSum = o.OrgRanks.Select(r => r.Rank).Sum();
 
                     if (o.OrgRanks != null)
-                        model.RatePercent = Math.Round((o.OrgRanks.Select(r => r.Rank).Sum() / o.OrgRanks.Select(r => r.Field.MaxRate).Sum()) * 100, 2);
+                        model.RatePercent = Math.Round((o.OrgRanks.Select(r => r.Rank).Sum() / maxRate) * 100, 2);
                     
                     result.Item.Add(model);
                 }

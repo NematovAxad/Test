@@ -100,3 +100,4 @@ E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\MainInfrastructu
 E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\UserHandler.pdb
 E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.MvcApplicationPartsAssemblyInfo.cs
 E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.csproj.CopyComplete
+E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\UserApi.xml

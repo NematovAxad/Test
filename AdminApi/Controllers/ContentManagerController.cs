@@ -4,6 +4,7 @@ using AdminHandler.Results.SecondOptionResults;
 using ApiConfigs;
 using CoreResult.ResponseCores;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,8 @@ using System.Threading.Tasks;
 
 namespace AdminApi.Controllers
 {
+    [Authorize]
+
     [Route("apiAdmin/[controller]/[action]")]
     public class ContentManager : Controller
     {
