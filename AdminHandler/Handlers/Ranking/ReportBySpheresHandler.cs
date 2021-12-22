@@ -36,6 +36,10 @@ namespace AdminHandler.Handlers.Ranking
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline id " + request.DeadlineId.ToString());
             var org = _organization.GetAll().Include(mbox => mbox.OrgRanks).ThenInclude(mbox => mbox.Field).Where(o => o.OrgRanks.All(r => r.Quarter == deadline.Quarter && r.Year == deadline.Year));
+            if(request.OrganizationId != 0)
+            {
+                org = org.Where(o => o.Id == request.OrganizationId).Include(mbox => mbox.OrgRanks).ThenInclude(mbox => mbox.Field).Where(o => o.OrgRanks.All(r => r.Quarter == deadline.Quarter && r.Year == deadline.Year));
+            }
             double maxRate = _field.GetAll().Select(f => f.MaxRate).Sum();
             foreach (var o in org)
             {

@@ -9,5 +9,6 @@ namespace AdminHandler.Querys.Ranking
     public class ReportBySpheresQuery:IRequest<ReportBySpheresResult>
     {
         public int DeadlineId { get; set; }
+        public int OrganizationId { get; set; }
     }
 }

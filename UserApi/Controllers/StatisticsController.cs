@@ -60,13 +60,14 @@ namespace UserApi.Controllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult<ReportBySpheresResult>> Get([FromQuery] int deadlineId)
+        public async Task<ActionResult<ReportBySpheresResult>> ReportBySphere([FromQuery] int deadlineId, int organizationId)
         {
             try
             {
                 ReportBySpheresQuery model = new ReportBySpheresQuery()
                 {
-                    DeadlineId = deadlineId
+                    DeadlineId = deadlineId,
+                    OrganizationId = organizationId
                 };
 
                 var result = await _mediator.Send<ReportBySpheresResult>(model);
