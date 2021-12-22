@@ -15,7 +15,7 @@ using AdminHandler.Querys.Ranking;
 
 namespace UserApi.Controllers
 {
-    [Route("apiAdmin/[controller]/[action]")]
+    [Route("apiUser/[controller]/[action]")]
     public class Statistics : Controller
     {
         IMediator _mediator;
