@@ -1628,6 +1628,21 @@
       "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "Swashbuckle.AspNetCore.Newtonsoft/6.0.7": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "3.1.9",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.0.7"
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Newtonsoft.dll": {
+            "assemblyVersion": "6.0.7.0",
+            "fileVersion": "6.0.7.0"
+          }
+        },
+        "compile": {
+          "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Newtonsoft.dll": {}
+        }
+      },
       "Swashbuckle.AspNetCore.ReDoc/6.0.7": {
         "runtime": {
           "lib/netcoreapp3.0/Swashbuckle.AspNetCore.ReDoc.dll": {
@@ -2498,6 +2513,7 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.9",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "3.1.9",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
+          "Swashbuckle.AspNetCore.Newtonsoft": "6.0.7",
           "Swashbuckle.AspNetCore.ReDoc": "6.0.7",
           "Swashbuckle.AspNetCore.SwaggerGen": "6.0.7",
           "Swashbuckle.AspNetCore.SwaggerUI": "6.0.7",
@@ -5095,6 +5111,13 @@
       "sha512": "sha512-VB5cn/7OzUfzdnC8tqAIMQciVLiq2epm2NrAm1E9OjNRyG4lVhfR61SMcLizejzQP8R8Uf/0l5qOIbUEi+RdEg==",
       "path": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "hashPath": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.Newtonsoft/6.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1IXSJ6I0kAWsSEckf03pr7+kEsnByAr5LVAIjE2CepMSki6S2yuKXrvgmQv3VnO0rRStyC5uo9U0uIlvROJgNA==",
+      "path": "swashbuckle.aspnetcore.newtonsoft/6.0.7",
+      "hashPath": "swashbuckle.aspnetcore.newtonsoft.6.0.7.nupkg.sha512"
     },
     "Swashbuckle.AspNetCore.ReDoc/6.0.7": {
       "type": "package",

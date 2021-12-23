@@ -2,6 +2,7 @@
 using AdminHandler.Results.SecondOptionResults;
 using Domain.Models;
 using Domain.Models.SecondSection;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -52,6 +53,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var socialSite = _orgSocialSites.Find(s => s.OrganizationId == model.OrganizationId && s.DeadlineId == model.DeadlineId && s.FieldId == model.FieldId && s.SocialSiteLink == model.SocialSiteLink).FirstOrDefault();
             if (socialSite != null)
                 throw ErrorStates.NotAllowed(model.SocialSiteLink);
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
 
             OrganizationSocialSites addModel = new OrganizationSocialSites()
             {
@@ -67,6 +70,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var socialSites = _orgSocialSites.Find(s => s.Id == model.Id).FirstOrDefault();
             if (socialSites == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == socialSites.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
+
             socialSites.SocialSiteLink = model.SocialSiteLink;
 
             _orgSocialSites.Update(socialSites);
@@ -76,6 +82,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var socialSites = _orgSocialSites.Find(s => s.Id == model.Id).FirstOrDefault();
             if (socialSites == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == socialSites.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             _orgSocialSites.Remove(socialSites);
         }
     }

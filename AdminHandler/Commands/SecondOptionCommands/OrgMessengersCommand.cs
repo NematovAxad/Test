@@ -23,6 +23,11 @@ namespace AdminHandler.Commands.SecondOptionCommands
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public EventType EventType { get; set; }
-        public OrganizationMessengers Messenger { get; set; }
+        public int Id { get; set; }
+        public int OrganizationId { get; set; }
+        public int FieldId { get; set; }
+        public int DeadlineId { get; set; }
+        public string MessengerLink { get; set; }
+        public string ReasonNotFilling { get; set; }
     }
 }

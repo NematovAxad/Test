@@ -1,6 +1,6 @@
-﻿using AdminHandler.Commands.Organization;
-using AdminHandler.Querys.Organization;
-using AdminHandler.Results.Organization;
+﻿using AdminHandler.Commands.SecondOptionCommands;
+using AdminHandler.Querys.SecondOptionQueries;
+using AdminHandler.Results.SecondOptionResults;
 using ApiConfigs;
 using CoreResult.ResponseCores;
 using MediatR;
@@ -11,28 +11,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdminApi.Controllers
+namespace UserApi.Controllers
 {
-    [Route("apiAdmin/[controller]/[action]")]
-    public class EmployeeStatistics : Controller
+    [Route("apiUser/[controller]/[action]")]
+    public class OrgMessengers : Controller
     {
         IMediator _mediator;
-        public EmployeeStatistics(IMediator mediator)
+        public OrgMessengers(IMediator mediator)
         {
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<EmployeeStatisticsQueryResult>> Get([FromQuery] int id, int organizationId)
+        public async Task<ResponseCore<OrgMessengersQueryResult>> Get([FromQuery] int deadlineId, int organizationId, int id)
         {
             try
             {
-                EmployeeStatisticsQuery model = new EmployeeStatisticsQuery()
+                OrgMessengersQuery model = new OrgMessengersQuery()
                 {
-                    Id = id,
-                    OrganizationId = organizationId
+                    DeadlineId = deadlineId,
+                    OrganizationId = organizationId,
+                    Id = id
                 };
 
-                var result = await _mediator.Send<EmployeeStatisticsQueryResult>(model);
+                var result = await _mediator.Send<OrgMessengersQueryResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -41,7 +42,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<EmployeeStatisticsCommandResult>> Add([FromBody] EmployeeStatisticsCommand model)
+        public async Task<ResponseCore<OrgMessengersCommandResult>> Add([FromQuery] OrgMessengersCommand model)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace AdminApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                var result = await _mediator.Send<EmployeeStatisticsCommandResult>(model);
+                var result = await _mediator.Send<OrgMessengersCommandResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -58,7 +59,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<EmployeeStatisticsCommandResult>> Put([FromBody] EmployeeStatisticsCommand model)
+        public async Task<ResponseCore<OrgMessengersCommandResult>> Put([FromQuery] OrgMessengersCommand model)
         {
             try
             {
@@ -66,7 +67,7 @@ namespace AdminApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                var result = await _mediator.Send<EmployeeStatisticsCommandResult>(model);
+                var result = await _mediator.Send<OrgMessengersCommandResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -76,11 +77,11 @@ namespace AdminApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseCore<EmployeeStatisticsCommandResult>> Delete([FromQuery] int id)
+        public async Task<ResponseCore<OrgMessengersCommandResult>> Delete([FromQuery] int id)
         {
             try
             {
-                EmployeeStatisticsCommand model = new EmployeeStatisticsCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                OrgMessengersCommand model = new OrgMessengersCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();

@@ -2,6 +2,7 @@
 using AdminHandler.Results.Ranking;
 using Domain.Enums;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -61,6 +62,8 @@ namespace AdminHandler.Handlers.Ranking
 
             if (model.Rank > field.MaxRate)
                 throw ErrorStates.NotAllowed("incorrect mark");
+            if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                throw ErrorStates.NotAllowed("permission");
 
             RankTable addModel = new RankTable()
             {

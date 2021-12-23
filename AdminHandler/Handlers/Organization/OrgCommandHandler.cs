@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.Organization;
 using AdminHandler.Results.Organization;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -40,6 +41,8 @@ namespace AdminHandler.Handlers.Organization
             {
                 throw ErrorStates.NotAllowed(model.ShortName);
             }
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER))
+                throw ErrorStates.NotAllowed("permission");
             Organizations addModel = new Organizations()
             {
                 UserServiceId = model.UserServiceId,
@@ -77,7 +80,8 @@ namespace AdminHandler.Handlers.Organization
             {
                 throw ErrorStates.NotFound("");
             }
-
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             org.FullName = model.FullName;
             org.ShortName = model.ShortName;
             org.DirectorFirstName = model.DirectorFirstName;
@@ -104,10 +108,13 @@ namespace AdminHandler.Handlers.Organization
         }
         public void DeleteOrg(OrgCommand model)
         {
-            if (model.Id==0)
+            var org = _organization.Find(r => r.Id == model.Id).FirstOrDefault();
+            if (org == null)
             {
                 throw ErrorStates.NotFound("");
             }
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER))
+                throw ErrorStates.NotAllowed("permission");
             _organization.Remove(model.Id);
         }
     }

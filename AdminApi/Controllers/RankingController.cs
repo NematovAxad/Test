@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.Ranking;
 using AdminHandler.Querys.Ranking;
 using AdminHandler.Results.Ranking;
+using ApiConfigs;
 using CoreResult.ResponseCores;
 using Domain.Enums;
 using MediatR;
@@ -49,7 +50,9 @@ namespace AdminApi.Controllers
             try
             {
                 model.EventType = Domain.Enums.EventType.Add;
-
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<RankingCommandResult>(model);
                 return result;
             }
@@ -64,7 +67,9 @@ namespace AdminApi.Controllers
             try
             {
                 model.EventType = Domain.Enums.EventType.Update;
-
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<RankingCommandResult>(model);
                 return result;
             }
@@ -80,6 +85,9 @@ namespace AdminApi.Controllers
             try
             {
                 RankingCommand model = new RankingCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
                 return await _mediator.Send(model);
             }
             catch (Exception ex)

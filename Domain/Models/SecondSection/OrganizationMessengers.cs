@@ -15,20 +15,14 @@ namespace Domain.Models.SecondSection
         [Column("organization_id")]
         [ForeignKey("Organizations")]
         public int OrganizationId { get; set; }
-        [JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
         public Organizations Organizations { get; set; }
         [Column("field_id")]
         [ForeignKey("Field")]
         public int FieldId { get; set; }
-        [JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
         public Field Field { get; set; }
         [Column("deadline_id")]
         [ForeignKey("Deadline")]
         public int DeadlineId { get; set; }
-        [JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
         public Deadline Deadline { get; set; }
         [Column("messenger_link")]
         public string MessengerLink { get; set; }

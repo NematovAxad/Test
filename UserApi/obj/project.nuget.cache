@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "AC2EUiw5OVe/ZQBaMO4g6cADr/TZHS+cr3wVZyVK+pGuQ03d//FbHa9mKmi2WfwZkK6umiPpmU6OhyGB9I91gw==",
+  "dgSpecHash": "pAaXh68isC4XjHrvuCzrSWMMcWH2XYA54US3B+7ja8FxAsqibyHorQlzmyAAsTnhQhg0Cm9nSAwJ+treeTbkDg==",
   "success": true,
   "projectFilePath": "E:\\projects\\NisSystem\\nissystem\\UserApi\\UserApi.csproj",
   "expectedPackageFiles": [
@@ -137,6 +137,7 @@
     "C:\\Users\\a.nematov\\.nuget\\packages\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
+    "C:\\Users\\a.nematov\\.nuget\\packages\\swashbuckle.aspnetcore.newtonsoft\\6.0.7\\swashbuckle.aspnetcore.newtonsoft.6.0.7.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\swashbuckle.aspnetcore.redoc\\6.0.7\\swashbuckle.aspnetcore.redoc.6.0.7.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.0.7\\swashbuckle.aspnetcore.swagger.6.0.7.nupkg.sha512",
     "C:\\Users\\a.nematov\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.0.7\\swashbuckle.aspnetcore.swaggergen.6.0.7.nupkg.sha512",

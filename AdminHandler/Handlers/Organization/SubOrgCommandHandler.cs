@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.Organization;
 using AdminHandler.Results.Organization;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -42,6 +43,8 @@ namespace AdminHandler.Handlers.Organization
             var org = _organizations.Find(o => o.Id == model.ParentId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.ParentId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             SubOrganizations addModel = new SubOrganizations()
             {
                 OrganizationId = model.ParentId,
@@ -60,7 +63,8 @@ namespace AdminHandler.Handlers.Organization
             var subOrg = _subOrganizations.Find(o => o.Id == model.Id).FirstOrDefault();
             if (subOrg == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == subOrg.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             subOrg.Name = model.Name;
             subOrg.DirectorFirstName = model.DirectorFirstName;
             subOrg.DirectorLastName = model.DirectorLastName;
@@ -77,6 +81,8 @@ namespace AdminHandler.Handlers.Organization
             var subOrg = _subOrganizations.Find(o => o.Id == model.Id).FirstOrDefault();
             if (subOrg == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == subOrg.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             _subOrganizations.Remove(model.Id);
         }
     }

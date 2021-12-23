@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.SecondOptionCommands;
 using AdminHandler.Results.SecondOptionResults;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -42,6 +43,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var apps = _organizationApps.Find(a => a.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (apps != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             OrganizationApps addModel = new OrganizationApps()
             {
                 OrganizationId = model.OrganizationId,
@@ -61,6 +64,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var apps = _organizationApps.Find(a => a.Id == model.Id).FirstOrDefault();
             if (apps == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == apps.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
 
             apps.HasAndroidApp = model.HasAndroidApp;
             apps.AndroidAppLink = model.AndroidAppLink;
@@ -77,6 +82,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var apps = _organizationApps.Find(a => a.Id == model.Id).FirstOrDefault();
             if (apps == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == apps.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             _organizationApps.Remove(apps);
         }
     }

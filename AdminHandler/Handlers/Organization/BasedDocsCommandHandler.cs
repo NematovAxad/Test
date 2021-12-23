@@ -2,6 +2,7 @@
 using AdminHandler.Results.Organization;
 using Domain;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -47,6 +48,8 @@ namespace AdminHandler.Handlers.Organization
             var doc = _basedDocs.Find(d => d.DocumentNo == model.DocumentNo).FirstOrDefault();
             if (doc != null)
                 throw ErrorStates.NotAllowed(model.DocumentNo);
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
 
             var filePath = FileState.AddFile("basedDocs", model.File);
 
@@ -67,6 +70,8 @@ namespace AdminHandler.Handlers.Organization
             var doc = _basedDocs.Find(d => d.Id == model.Id).FirstOrDefault();
             if (doc == null)
                 throw ErrorStates.NotAllowed(model.DocumentNo);
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == doc.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
 
             doc.DocumentNo = model.DocumentNo;
             doc.DocumentDate = DateTime.Now;
@@ -91,6 +96,8 @@ namespace AdminHandler.Handlers.Organization
             {
                 throw ErrorStates.NotFound("");
             }
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == doc.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             _basedDocs.Remove(model.Id);
         }
     }

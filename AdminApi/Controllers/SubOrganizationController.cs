@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.Organization;
 using AdminHandler.Querys.Organization;
 using AdminHandler.Results.Organization;
+using ApiConfigs;
 using CoreResult.ResponseCores;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -46,7 +47,9 @@ namespace AdminApi.Controllers
             try
             {
                 model.EventType = Domain.Enums.EventType.Add;
-
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<SubOrgCommandResult>(model);
                 return result;
             }
@@ -61,7 +64,9 @@ namespace AdminApi.Controllers
             try
             {
                 model.EventType = Domain.Enums.EventType.Update;
-
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<SubOrgCommandResult>(model);
                 return result;
             }
@@ -77,6 +82,9 @@ namespace AdminApi.Controllers
             try
             {
                 SubOrgCommand model = new SubOrgCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
                 return await _mediator.Send(model);
             }
             catch (Exception ex)

@@ -1796,6 +1796,19 @@
           }
         }
       },
+      "Swashbuckle.AspNetCore.Newtonsoft/6.0.7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "3.0.0",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.0.7"
+        },
+        "compile": {
+          "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Newtonsoft.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Newtonsoft.dll": {}
+        }
+      },
       "Swashbuckle.AspNetCore.ReDoc/6.0.7": {
         "type": "package",
         "compile": {
@@ -3205,6 +3218,7 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.9",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "3.1.9",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
+          "Swashbuckle.AspNetCore.Newtonsoft": "6.0.7",
           "Swashbuckle.AspNetCore.ReDoc": "6.0.7",
           "Swashbuckle.AspNetCore.SwaggerGen": "6.0.7",
           "Swashbuckle.AspNetCore.SwaggerUI": "6.0.7",
@@ -5407,6 +5421,23 @@
         "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
         "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.nuspec",
         "runtimes/ubuntu.16.10-x64/native/System.Security.Cryptography.Native.OpenSsl.so"
+      ]
+    },
+    "Swashbuckle.AspNetCore.Newtonsoft/6.0.7": {
+      "sha512": "1IXSJ6I0kAWsSEckf03pr7+kEsnByAr5LVAIjE2CepMSki6S2yuKXrvgmQv3VnO0rRStyC5uo9U0uIlvROJgNA==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore.newtonsoft/6.0.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net5.0/Swashbuckle.AspNetCore.Newtonsoft.dll",
+        "lib/net5.0/Swashbuckle.AspNetCore.Newtonsoft.pdb",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Newtonsoft.dll",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Newtonsoft.pdb",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.Newtonsoft.dll",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.Newtonsoft.pdb",
+        "swashbuckle.aspnetcore.newtonsoft.6.0.7.nupkg.sha512",
+        "swashbuckle.aspnetcore.newtonsoft.nuspec"
       ]
     },
     "Swashbuckle.AspNetCore.ReDoc/6.0.7": {

@@ -103,3 +103,4 @@ E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.csproj
 E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.dll
 E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.pdb
 E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.genruntimeconfig.cache
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Newtonsoft.dll

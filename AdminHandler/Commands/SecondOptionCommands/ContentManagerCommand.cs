@@ -21,6 +21,8 @@ namespace AdminHandler.Commands.SecondOptionCommands
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public List<string> UserPermissions { get; set; }
+        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public EventType EventType { get; set; }
         public int Id { get; set; }
         public int OrganizationId { get; set; }

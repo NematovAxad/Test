@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.Organization;
 using AdminHandler.Results.Organization;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -43,6 +44,8 @@ namespace AdminHandler.Handlers.Organization
             var subOrgStat = _subOrgStatistics.Find(s => s.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (subOrgStat != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             SubOrgStatistics addModel = new SubOrgStatistics()
             {
                 OrganizationId = model.OrganizationId,
@@ -58,7 +61,8 @@ namespace AdminHandler.Handlers.Organization
             var subOrgStat = _subOrgStatistics.Find(s => s.Id == model.Id).FirstOrDefault();
             if (subOrgStat == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == subOrgStat.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             subOrgStat.CentralManagements = model.CentralManagements;
             subOrgStat.TerritorialManagements = model.TerritorialManagements;
             subOrgStat.Subordinations = model.Subordinations;
@@ -68,6 +72,11 @@ namespace AdminHandler.Handlers.Organization
         }
         public void Delete(SubOrgStatisticsCommand model)
         {
+            var subOrgStat = _subOrgStatistics.Find(s => s.Id == model.Id).FirstOrDefault();
+            if (subOrgStat == null)
+                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == subOrgStat.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
             _subOrgStatistics.Remove(model.Id);
         }
     }

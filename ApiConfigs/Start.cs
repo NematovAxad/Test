@@ -119,6 +119,7 @@ namespace ApiConfigs
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddSwaggerGenNewtonsoftSupport();
             AddJwt(services);
             // CoreResult.Start.ConfigureService(services);
             services.AddSession();

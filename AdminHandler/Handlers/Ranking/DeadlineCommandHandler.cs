@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.Ranking;
 using AdminHandler.Results.Ranking;
 using Domain.Models;
+using Domain.Permission;
 using Domain.States;
 using EntityRepository;
 using JohaRepository;
@@ -39,7 +40,9 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
             if (deadline != null)
                 throw ErrorStates.NotAllowed(model.Year.ToString());
-            if(model.IsActive == true)
+            if (!model.UserPermissions.Any(p => p == Permissions.DEADLINE_CONTROL))
+                throw ErrorStates.NotAllowed("permission");
+            if (model.IsActive == true)
             {
                 var list = _deadline.GetAll().ToList();
                 for(int i = 0; i<list.Count; i++)
@@ -64,7 +67,8 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == model.Id).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-
+            if (!model.UserPermissions.Any(p => p == Permissions.DEADLINE_CONTROL))
+                throw ErrorStates.NotAllowed("permission");
             if (model.IsActive == true)
             {
                 var list = _deadline.GetAll().ToList();
@@ -85,6 +89,8 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == model.Id).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.DEADLINE_CONTROL))
+                throw ErrorStates.NotAllowed("permission");
             _deadline.Remove(deadline);
         }
     }

@@ -2,6 +2,7 @@
 using AdminHandler.Results.SecondOptionResults;
 using Domain.Models;
 using Domain.Models.SecondSection;
+using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -34,27 +35,59 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             switch (request.EventType)
             {
                 case Domain.Enums.EventType.Add: Add(request); break;
-                //case Domain.Enums.EventType.Update: Update(request); break;
-                //case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Update: Update(request); break;
+                case Domain.Enums.EventType.Delete: Delete(request); break;
             }
             return new OrgMessengersCommandResult() { IsSuccess = true };
         }
         public void Add(OrgMessengersCommand model)
         {
-            var org = _organization.Find(o => o.Id == model.Messenger.OrganizationId).FirstOrDefault();
+            var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.Messenger.OrganizationId.ToString());
-            var field = _field.Find(f => f.Id == model.Messenger.FieldId).FirstOrDefault();
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            var field = _field.Find(f => f.Id == model.FieldId).FirstOrDefault();
             if (field == null)
-                throw ErrorStates.NotFound(model.Messenger.FieldId.ToString());
-            var deadline = _deadline.Find(d => d.Id == model.Messenger.DeadlineId).FirstOrDefault();
+                throw ErrorStates.NotFound(model.FieldId.ToString());
+            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
             if (deadline == null)
-                throw ErrorStates.NotFound(model.Messenger.DeadlineId.ToString());
-            var messenger = _organizationMessengers.Find(s => s.OrganizationId == model.Messenger.OrganizationId && s.DeadlineId == model.Messenger.DeadlineId && s.FieldId == model.Messenger.FieldId && s.MessengerLink == model.Messenger.MessengerLink).FirstOrDefault();
+                throw ErrorStates.NotFound(model.DeadlineId.ToString());
+            var messenger = _organizationMessengers.Find(s => s.OrganizationId == model.OrganizationId && s.DeadlineId == model.DeadlineId && s.FieldId == model.FieldId && s.MessengerLink == model.MessengerLink).FirstOrDefault();
             if (messenger != null)
-                throw ErrorStates.NotAllowed(model.Messenger.MessengerLink);
+                throw ErrorStates.NotAllowed(model.MessengerLink);
 
-            
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
+
+            OrganizationMessengers addModel = new OrganizationMessengers()
+            {
+                OrganizationId = model.OrganizationId,
+                FieldId = model.FieldId,
+                DeadlineId = model.DeadlineId,
+                MessengerLink = model.MessengerLink,
+                ReasonNotFilling = model.ReasonNotFilling
+            };
+
+            _organizationMessengers.Add(addModel);
+        }
+        public void Update(OrgMessengersCommand model)
+        {
+            var messenger = _organizationMessengers.Find(m => m.Id == model.Id).FirstOrDefault();
+            if (messenger == null)
+                throw ErrorStates.NotFound(model.Id.ToString());
+            messenger.MessengerLink = model.MessengerLink;
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == messenger.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
+
+            _organizationMessengers.Update(messenger);
+        }
+        public void Delete(OrgMessengersCommand model)
+        {
+            var messenger = _organizationMessengers.Find(m => m.Id == model.Id).FirstOrDefault();
+            if (messenger == null)
+                throw ErrorStates.NotFound(model.Id.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == messenger.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
+            _organizationMessengers.Remove(messenger);
         }
     }
 }
