@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Domain.Models.SecondSection
 {
-    [Table("org_social_sites", Schema = "organizations")]
+    [Table("organization_messengers", Schema = "organizations")]
     public class OrganizationMessengers:IDomain<int>
     {
         [Column("id")]

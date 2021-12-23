@@ -47,22 +47,24 @@ namespace AdminHandler.Handlers.Ranking
                 {
                     ReportBySpheresModel model = new ReportBySpheresModel()
                     {
+                        OrganizationId = o.Id,
                         OrgName = o.ShortName,
+                        Category = o.OrgCategory
                     };
                     if (o.OrgRanks.Where(r => r.SphereId == 1).FirstOrDefault() != null)
                         model.SphereRate1 = o.OrgRanks.Where(r => r.SphereId == 1).Select(r => r.Rank).Sum();
 
                     if (o.OrgRanks.Where(r => r.SphereId == 2).FirstOrDefault() != null)
-                        model.SphereRate1 = o.OrgRanks.Where(r => r.SphereId == 2).Select(r => r.Rank).Sum();
+                        model.SphereRate2 = o.OrgRanks.Where(r => r.SphereId == 2).Select(r => r.Rank).Sum();
 
                     if (o.OrgRanks.Where(r => r.SphereId == 3).FirstOrDefault() != null)
-                        model.SphereRate1 = o.OrgRanks.Where(r => r.SphereId == 3).Select(r => r.Rank).Sum();
+                        model.SphereRate3 = o.OrgRanks.Where(r => r.SphereId == 3).Select(r => r.Rank).Sum();
 
                     if (o.OrgRanks.Where(r => r.SphereId == 4).FirstOrDefault() != null)
-                        model.SphereRate1 = o.OrgRanks.Where(r => r.SphereId == 4).Select(r => r.Rank).Sum();
+                        model.SphereRate4 = o.OrgRanks.Where(r => r.SphereId == 4).Select(r => r.Rank).Sum();
 
                     if (o.OrgRanks.Where(r => r.SphereId == 5).FirstOrDefault() != null)
-                        model.SphereRate1 = o.OrgRanks.Where(r => r.SphereId == 5).Select(r => r.Rank).Sum();
+                        model.SphereRate5 = o.OrgRanks.Where(r => r.SphereId == 5).Select(r => r.Rank).Sum();
 
                     if (o.OrgRanks != null)
                     {

@@ -553,6 +553,178 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("replacer_org_head","organizations");
                 });
 
+            modelBuilder.Entity("Domain.Models.SecondSection.HelplineInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("CanGiveFeedbackToHelpline")
+                        .HasColumnName("can_give_feedback_to_helpline")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("DeadlineId")
+                        .HasColumnName("deadline_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("HelplineNumber")
+                        .HasColumnName("helpline")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("OfficialSiteHasHelpline")
+                        .HasColumnName("official_site_has_helpline")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("OfficialSiteHasHelplinefeedback")
+                        .HasColumnName("official_site_has_helpline_feedback")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeadlineId");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("helpline_info","organizations");
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.OrgDataFiller", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Contacts")
+                        .HasColumnName("contacts")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DeadlineId")
+                        .HasColumnName("deadline_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FullName")
+                        .HasColumnName("full_name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Position")
+                        .HasColumnName("position")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeadlineId");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("org_data_filler","organizations");
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.OrgHelpline", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("AcceptableResponseTime")
+                        .HasColumnName("acceptable_response_time")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("DeadlineId")
+                        .HasColumnName("deadline_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("HasOnlineConsultant")
+                        .HasColumnName("has_online_consultant")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("OperatesInWorkingDay")
+                        .HasColumnName("operates_in_working_day")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeadlineId");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("org_helpline","organizations");
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.OrganizationMessengers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("DeadlineId")
+                        .HasColumnName("deadline_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MessengerLink")
+                        .HasColumnName("messenger_link")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReasonNotFilling")
+                        .HasColumnName("reason_not_filling")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeadlineId");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("organization_messengers","organizations");
+                });
+
             modelBuilder.Entity("Domain.Models.SecondSection.OrganizationSocialSites", b =>
                 {
                     b.Property<int>("Id")
@@ -750,7 +922,7 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.Organizations", "Organization")
-                        .WithMany()
+                        .WithMany("OrgRanks")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -764,6 +936,90 @@ namespace MainInfrastructures.Migrations
 
             modelBuilder.Entity("Domain.Models.ReplacerOrgHead", b =>
                 {
+                    b.HasOne("Domain.Models.Organizations", "Organizations")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.HelplineInfo", b =>
+                {
+                    b.HasOne("Domain.Models.Deadline", "Deadline")
+                        .WithMany()
+                        .HasForeignKey("DeadlineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Organizations", "Organizations")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.OrgDataFiller", b =>
+                {
+                    b.HasOne("Domain.Models.Deadline", "Deadline")
+                        .WithMany()
+                        .HasForeignKey("DeadlineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Organizations", "Organizations")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.OrgHelpline", b =>
+                {
+                    b.HasOne("Domain.Models.Deadline", "Deadline")
+                        .WithMany()
+                        .HasForeignKey("DeadlineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Organizations", "Organizations")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.SecondSection.OrganizationMessengers", b =>
+                {
+                    b.HasOne("Domain.Models.Deadline", "Deadline")
+                        .WithMany()
+                        .HasForeignKey("DeadlineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Models.Organizations", "Organizations")
                         .WithMany()
                         .HasForeignKey("OrganizationId")

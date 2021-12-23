@@ -44,6 +44,24 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
+        [HttpGet]
+        public async Task<ResponseCore<FieldQueryResult>> GetField([FromQuery] int id)
+        {
+            try
+            {
+                FieldQuery model = new FieldQuery()
+                {
+                    Id = id
+                };
+
+                var result = await _mediator.Send<FieldQueryResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
         [HttpPost]
         public async Task<ResponseCore<RankingCommandResult>> Add([FromQuery] RankingCommand model)
         {

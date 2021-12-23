@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\DownloadCommand\" />
+    <Folder Include="Results\NewFolder\" />
   </ItemGroup>
 
 </Project>
