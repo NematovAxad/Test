@@ -45,24 +45,21 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            var field = _field.Find(f => f.Id == model.FieldId).FirstOrDefault();
-            if (field == null)
-                throw ErrorStates.NotFound(model.FieldId.ToString());
-            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound(model.DeadlineId.ToString());
-            var orgHelpline = _orgHelpline.Find(h => h.OrganizationId == model.OrganizationId && h.DeadlineId == model.DeadlineId).FirstOrDefault();
+            var orgHelpline = _orgHelpline.Find(h => h.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (orgHelpline != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+            if (deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
             OrgHelpline addModel = new OrgHelpline()
             {
                 OrganizationId = model.OrganizationId,
-                FieldId = model.FieldId,
-                DeadlineId = model.DeadlineId,
                 HasOnlineConsultant = model.HasOnlineConsultant,
                 OperatesInWorkingDay = model.OperatesInWorkingDay,
                 AcceptableResponseTime = model.AcceptableResponseTime
@@ -76,6 +73,11 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgHelpline.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+            if (deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
             orgHelpline.HasOnlineConsultant = model.HasOnlineConsultant;
             orgHelpline.OperatesInWorkingDay = model.OperatesInWorkingDay;
@@ -90,6 +92,11 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgHelpline.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+            if (deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
             _orgHelpline.Remove(orgHelpline);
         }
     }

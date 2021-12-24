@@ -28,7 +28,6 @@ namespace UserApi.Controllers
             {
                 OrgMessengersQuery model = new OrgMessengersQuery()
                 {
-                    DeadlineId = deadlineId,
                     OrganizationId = organizationId,
                     Id = id
                 };

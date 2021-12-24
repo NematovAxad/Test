@@ -34,19 +34,14 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (org == null)
                 throw ErrorStates.NotFound(request.OrganizationId.ToString());
             
-            var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound(request.DeadlineId.ToString());
+            
             var sites = _orgSocialSites.GetAll();
 
             if(request.OrganizationId!=0)
             {
                 sites = sites.Where(s => s.OrganizationId == request.OrganizationId);
             }
-            if (request.DeadlineId != 0)
-            {
-                sites = sites.Where(s => s.DeadlineId == request.DeadlineId);
-            }
+            
 
             OrgSocialSitesQueryResult result = new OrgSocialSitesQueryResult();
             result.Count = sites.Count();

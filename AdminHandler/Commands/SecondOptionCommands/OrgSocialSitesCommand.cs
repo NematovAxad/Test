@@ -24,8 +24,6 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public EventType EventType { get; set; }
         public int Id { get; set; }
         public int OrganizationId { get; set; }
-        public int FieldId { get; set; }
-        public int DeadlineId { get; set; }
         public string SocialSiteLink { get; set; }
     }
 }

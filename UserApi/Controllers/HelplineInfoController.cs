@@ -29,7 +29,6 @@ namespace UserApi.Controllers
             {
                 HelplineInfoQuery model = new HelplineInfoQuery()
                 {
-                    DeadlineId = deadlineId,
                     OrganizationId = organizationId,
                     Id = id
                 };

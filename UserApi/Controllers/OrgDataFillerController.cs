@@ -29,7 +29,6 @@ namespace UserApi.Controllers
             {
                 OrgDataFillerQuery model = new OrgDataFillerQuery()
                 {
-                    DeadlineId = deadlineId,
                     OrganizationId = organizationId,
                     Id = id
                 };

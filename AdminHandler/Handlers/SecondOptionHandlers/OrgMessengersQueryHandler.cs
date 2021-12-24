@@ -32,11 +32,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (org == null)
                 throw ErrorStates.NotFound(request.OrganizationId.ToString());
            
-            var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound(request.DeadlineId.ToString());
+           
 
-            var messengers = _organizationMessengers.Find(m => m.OrganizationId == request.OrganizationId && m.DeadlineId == request.DeadlineId).ToList();
+            var messengers = _organizationMessengers.Find(m => m.OrganizationId == request.OrganizationId).ToList();
 
             if(request.Id!=0)
             {

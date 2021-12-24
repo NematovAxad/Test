@@ -24,8 +24,6 @@ namespace UserHandler.Commands.SecondSectionCommand
         public EventType EventType { get; set; }
         public int Id { get; set; }
         public int OrganizationId { get; set; }
-        public int FieldId { get; set; }
-        public int DeadlineId { get; set; }
         public string FullName { get; set; }
         public string Position { get; set; }
         public string Contacts { get; set; }

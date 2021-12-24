@@ -10,6 +10,5 @@ namespace AdminHandler.Querys.SecondOptionQueries
     {
         public int Id { get; set; }
         public int OrganizationId { get; set; }
-        public int DeadlineId { get; set; }
     }
 }

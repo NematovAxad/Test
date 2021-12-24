@@ -45,13 +45,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            var field = _field.Find(f => f.Id == model.FieldId).FirstOrDefault();
-            if (field == null)
-                throw ErrorStates.NotFound(model.FieldId.ToString());
-            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound(model.DeadlineId.ToString());
-            var dataFiller = _orgDataFiller.Find(h => h.OrganizationId == model.OrganizationId && h.DeadlineId == model.DeadlineId).FirstOrDefault();
+            
+            var dataFiller = _orgDataFiller.Find(h => h.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (dataFiller != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
@@ -61,8 +56,6 @@ namespace UserHandler.Handlers.SecondSectionHandler
             OrgDataFiller addModel = new OrgDataFiller()
             {
                 OrganizationId = model.OrganizationId,
-                FieldId = model.FieldId,
-                DeadlineId = model.DeadlineId,
                 FullName = model.FullName,
                 Position = model.Position,
                 Contacts = model.Contacts

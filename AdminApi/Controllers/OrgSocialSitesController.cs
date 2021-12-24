@@ -29,8 +29,7 @@ namespace AdminApi.Controllers
                 OrgSocialSitesQuery model = new OrgSocialSitesQuery()
                 {
                     Id = id,
-                   OrganizationId = orgId,
-                   DeadlineId = deadlineId
+                   OrganizationId = orgId
                 };
 
                 var result = await _mediator.Send<OrgSocialSitesQueryResult>(model);

@@ -35,9 +35,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (org == null)
                 throw ErrorStates.NotFound(request.OrganizationId.ToString());
 
-            var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound(request.DeadlineId.ToString());
+            
 
             var orgDataFiller = _orgDataFiller.GetAll();
 
@@ -45,10 +43,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             {
                 orgDataFiller = orgDataFiller.Where(s => s.OrganizationId == request.OrganizationId);
             }
-            if (request.DeadlineId != 0)
-            {
-                orgDataFiller = orgDataFiller.Where(s => s.DeadlineId == request.DeadlineId);
-            }
+            
             OrgDataFillerQueryResult result = new OrgDataFillerQueryResult
             {
                 Count = orgDataFiller.Count(),

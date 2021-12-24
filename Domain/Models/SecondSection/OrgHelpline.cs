@@ -15,14 +15,6 @@ namespace Domain.Models.SecondSection
         [ForeignKey("Organizations")]
         public int OrganizationId { get; set; }
         public Organizations Organizations { get; set; }
-        [Column("field_id")]
-        [ForeignKey("Field")]
-        public int FieldId { get; set; }
-        public Field Field { get; set; }
-        [Column("deadline_id")]
-        [ForeignKey("Deadline")]
-        public int DeadlineId { get; set; }
-        public Deadline Deadline { get; set; }
         [Column("has_online_consultant")]
         public bool HasOnlineConsultant { get; set; }
         [Column("operates_in_working_day")]

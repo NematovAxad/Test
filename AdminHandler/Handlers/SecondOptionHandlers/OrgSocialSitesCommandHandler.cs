@@ -44,23 +44,21 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            var field = _field.Find(f => f.Id == model.FieldId).FirstOrDefault();
-            if (field == null)
-                throw ErrorStates.NotFound(model.FieldId.ToString());
-            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound(model.DeadlineId.ToString());
-            var socialSite = _orgSocialSites.Find(s => s.OrganizationId == model.OrganizationId && s.DeadlineId == model.DeadlineId && s.FieldId == model.FieldId && s.SocialSiteLink == model.SocialSiteLink).FirstOrDefault();
+           
+            var socialSite = _orgSocialSites.Find(s => s.OrganizationId == model.OrganizationId && s.SocialSiteLink == model.SocialSiteLink).FirstOrDefault();
             if (socialSite != null)
                 throw ErrorStates.NotAllowed(model.SocialSiteLink);
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+            if (deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
             OrganizationSocialSites addModel = new OrganizationSocialSites()
             {
                 OrganizationId = model.OrganizationId,
-                FieldId = model.FieldId,
-                DeadlineId = model.DeadlineId,
                 SocialSiteLink = model.SocialSiteLink
             };
             _orgSocialSites.Add(addModel);
@@ -72,6 +70,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotFound(model.Id.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == socialSites.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+            if (deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
             socialSites.SocialSiteLink = model.SocialSiteLink;
 
@@ -84,6 +87,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotFound(model.Id.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == socialSites.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+            if (deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
             _orgSocialSites.Remove(socialSites);
         }
     }

@@ -17,8 +17,4 @@
     <ProjectReference Include="..\MainInfrastructures\MainInfrastructures.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Results\NewFolder\" />
-  </ItemGroup>
-
 </Project>

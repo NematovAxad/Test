@@ -35,9 +35,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (org == null)
                 throw ErrorStates.NotFound(request.OrganizationId.ToString());
 
-            var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound(request.DeadlineId.ToString());
+            
 
             var helpLine = _helplineInfo.GetAll();
 
@@ -45,10 +43,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             {
                 helpLine = helpLine.Where(s => s.OrganizationId == request.OrganizationId);
             }
-            if (request.DeadlineId != 0)
-            {
-                helpLine = helpLine.Where(s => s.DeadlineId == request.DeadlineId);
-            }
+           
             HelplineInfoQueryResult result = new HelplineInfoQueryResult();
             result.Count = helpLine.Count();
             result.Data = helpLine.OrderBy(u => u.Id).ToList<object>();

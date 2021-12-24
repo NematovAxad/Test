@@ -30,7 +30,6 @@ namespace UserApi.Controllers
             {
                 OrgHelplineQuery model = new OrgHelplineQuery()
                 {
-                    DeadlineId = deadlineId,
                     OrganizationId = organizationId,
                     Id = id
                 };
