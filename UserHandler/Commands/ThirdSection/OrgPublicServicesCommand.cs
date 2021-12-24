@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +37,7 @@ namespace UserHandler.Commands.ThirdSection
         public string ServiceOtherResult { get; set; }
         public bool MechanizmForTrackingProgress { get; set; }
         public string TrackingProgressBy { get; set; }
-        public string ReglamentPath { get; set; }
         public bool ReglamentUpdated { get; set; }
+        public IFormFile ReglamentFile { get; set; }
     }
 }

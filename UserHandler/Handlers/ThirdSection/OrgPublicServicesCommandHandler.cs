@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain;
+using Domain.Models;
 using Domain.Models.ThirdSection;
 using Domain.Permission;
 using Domain.States;
@@ -57,6 +58,11 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
+            if (model.ReglamentFile != null)
+            {
+                throw ErrorStates.NotEntered("file");
+            }
+            var filePath = FileState.AddFile("basedDocs", model.ReglamentFile);
             OrganizationPublicServices addModel = new OrganizationPublicServices()
             {
                 OrganizationId = model.OrganizationId,
@@ -72,7 +78,7 @@ namespace UserHandler.Handlers.ThirdSection
                 ServiceOtherResult = model.ServiceOtherResult,
                 MechanizmForTrackingProgress = model.MechanizmForTrackingProgress,
                 TrackingProgressBy = model.TrackingProgressBy,
-                ReglamentPath = model.ReglamentPath,
+                ReglamentPath = filePath,
                 ReglamentUpdated = model.ReglamentUpdated
             };
             _orgPublicServices.Add(addModel);
@@ -124,8 +130,11 @@ namespace UserHandler.Handlers.ThirdSection
             if (!String.IsNullOrEmpty(model.TrackingProgressBy))
                 service.TrackingProgressBy = model.TrackingProgressBy;
 
-            if (!String.IsNullOrEmpty(model.ReglamentPath))
-                service.ReglamentPath = model.ReglamentPath;
+            if (model.ReglamentFile != null)
+            {
+                var filePath = FileState.AddFile("basedDocs", model.ReglamentFile);
+                service.ReglamentPath = filePath;
+            }
 
             service.ReglamentUpdated = model.ReglamentUpdated;
 
