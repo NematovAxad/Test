@@ -64,6 +64,7 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotAllowed("incorrect mark");
             if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
+            
 
             RankTable addModel = new RankTable()
             {
@@ -82,10 +83,18 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
             if (deadline == null || deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(model.Quarter.ToString());
+
             var rank = _rankTable.Find(r => r.Id == model.Id && r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.FieldId == model.FieldId).FirstOrDefault();
             if (rank == null)
                 throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
-            if(model.IsException==false)
+            
+            var field = _field.Find(r => r.Id == model.FieldId).FirstOrDefault();
+            if (field == null)
+                throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+            if (model.Rank > field.MaxRate)
+                throw ErrorStates.NotAllowed("incorrect mark");
+
+            if (model.IsException==false)
             {
                 rank.Rank = model.Rank;
             }
