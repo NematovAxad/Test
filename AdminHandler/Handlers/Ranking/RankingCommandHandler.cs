@@ -4,6 +4,7 @@ using Domain.Enums;
 using Domain.Models;
 using Domain.Permission;
 using Domain.States;
+using EntityRepository;
 using JohaRepository;
 using MediatR;
 using System;
@@ -22,14 +23,16 @@ namespace AdminHandler.Handlers.Ranking
         private readonly IRepository<RankTable, int> _rankTable;
         private readonly IRepository<Sphere, int> _sphere;
         private readonly IRepository<Field, int> _field;
+        private readonly IDataContext _db;
 
-        public RankingCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<RankTable, int> rankTable, IRepository<Sphere, int> sphere, IRepository<Field, int> field)
+        public RankingCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<RankTable, int> rankTable, IRepository<Sphere, int> sphere, IRepository<Field, int> field, IDataContext db)
         {
             _organization = organization;
             _deadline = deadline;
             _rankTable = rankTable;
             _sphere = sphere;
             _field = field;
+            _db = db;
         }
 
         public async Task<RankingCommandResult> Handle(RankingCommand request, CancellationToken cancellationToken)
@@ -77,6 +80,8 @@ namespace AdminHandler.Handlers.Ranking
                 FieldId = field.Id
             };
             _rankTable.Add(addModel);
+
+            ExceptionCases(model.OrganizationId, model.FieldId, deadline.Id);
         }
         public void Update(RankingCommand model)
         {
@@ -99,7 +104,7 @@ namespace AdminHandler.Handlers.Ranking
                 rank.Rank = model.Rank;
             }
             _rankTable.Update(rank);
-
+            ExceptionCases(model.OrganizationId, model.FieldId, deadline.Id);
         }
         public void Delete(RankingCommand model)
         {
@@ -107,6 +112,36 @@ namespace AdminHandler.Handlers.Ranking
             if (rank == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
             _rankTable.Remove(rank);
+        }
+        public void ExceptionCases(int orgId, int fieldId, int deadlineId)
+        {
+            var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(orgId.ToString());
+            var field = _field.Find(f => f.Id == fieldId).FirstOrDefault();
+            if (field == null)
+                throw ErrorStates.NotFound(fieldId.ToString());
+            var deadline = _deadline.Find(d => d.Id == deadlineId).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound(deadlineId.ToString());
+            var ranks = _rankTable.Find(r => r.OrganizationId == org.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.IsException == false && r.SphereId == field.SphereId).ToList();
+            double rankSum = 0;
+            if(ranks.Count>0)
+                rankSum = ranks.Select(r => r.Rank).Sum();
+
+            double maxRankSum = _field.Find(f => f.SphereId == field.SphereId).Select(f => f.MaxRate).Sum();
+
+            double percent = Math.Round(rankSum / maxRankSum, 2);
+
+            if (percent == 0)
+                percent = 1;
+
+            var exceptionRanks = _rankTable.Find(r => r.OrganizationId == org.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.IsException == true && r.SphereId == field.SphereId).ToList();
+            foreach(var eRank in exceptionRanks)
+            {
+                eRank.Rank = Math.Round(_field.Find(f => f.Id == eRank.FieldId).Select(f => f.MaxRate).Sum() * percent, 2);
+            }
+            _db.Context.Set<RankTable>().UpdateRange(exceptionRanks); 
         }
     }
 }
