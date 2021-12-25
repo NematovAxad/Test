@@ -60,6 +60,7 @@ namespace UserHandler.Handlers.ThirdSection
             
             OrgInformationSystems addModel = new OrgInformationSystems()
             {
+                OrganizationId = model.OrganizationId,
                 SystemName = model.SystemName,
                 SystemAppointment = model.SystemAppointment,
                 SystemReestrNumber = model.SystemReestrNumber,
