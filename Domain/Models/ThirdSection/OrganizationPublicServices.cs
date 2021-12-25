@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Models.ThirdSection
 {
-    [Table("content_manager", Schema = "organizations")]
+    [Table("organization_public_services", Schema = "organizations")]
     public class OrganizationPublicServices:IDomain<int>
     {
         [Column("id")]

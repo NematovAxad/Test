@@ -30,7 +30,7 @@ namespace UserHandler.Commands.ThirdSection
         public string SystemCondition { get; set; }
         public DateTime CommissioningDate { get; set; }
         public DateTime ExpertOpinionDate { get; set; }
-        public DateTime ExpertOpinionNumber { get; set; }
+        public string ExpertOpinionNumber { get; set; }
         public string ListOfServices { get; set; }
         public int UsersCount { get; set; }
         public bool UsesClassifiers { get; set; }

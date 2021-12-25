@@ -28,7 +28,7 @@ namespace Domain.Models.FifthSection
         [Column("expert_opinion_date")]
         public DateTime ExpertOpinionDate { get; set; }
         [Column("expert_opinion_number")]
-        public DateTime ExpertOpinionNumber { get; set; }
+        public string ExpertOpinionNumber { get; set; }
         [Column("list_of_services")]
         public string ListOfServices { get; set; }
         [Column("users_count")]

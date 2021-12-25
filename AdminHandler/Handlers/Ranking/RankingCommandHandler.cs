@@ -98,11 +98,8 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
             if (model.Rank > field.MaxRate)
                 throw ErrorStates.NotAllowed("incorrect mark");
-
-            if (model.IsException==false)
-            {
-                rank.Rank = model.Rank;
-            }
+            rank.IsException = model.IsException;
+            rank.Rank = model.Rank;
             _rankTable.Update(rank);
             ExceptionCases(model.OrganizationId, model.FieldId, deadline.Id);
         }
@@ -140,8 +137,8 @@ namespace AdminHandler.Handlers.Ranking
             foreach(var eRank in exceptionRanks)
             {
                 eRank.Rank = Math.Round(_field.Find(f => f.Id == eRank.FieldId).Select(f => f.MaxRate).Sum() * percent, 2);
+                _rankTable.Update(eRank);
             }
-            _db.Context.Set<RankTable>().UpdateRange(exceptionRanks); 
         }
     }
 }

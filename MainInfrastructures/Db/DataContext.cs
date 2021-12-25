@@ -1,5 +1,7 @@
 ﻿using Domain.Models;
+using Domain.Models.FifthSection;
 using Domain.Models.SecondSection;
+using Domain.Models.ThirdSection;
 using EntityRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -41,5 +43,7 @@ namespace MainInfrastructures.Db
         public DbSet<HelplineInfo> HelplineInfo { get; set; }
         public DbSet<OrgDataFiller> OrgDataFiller { get; set; }
         public DbSet<OrgHelpline> OrgHelpline { get; set; }
+        public DbSet<OrganizationPublicServices> OrganizationPublicServices { get; set; }
+        public DbSet<OrgInformationSystems> OrgInformationSystems { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211225070837_typechanged")]
+    partial class typechanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,125 +252,6 @@ namespace MainInfrastructures.Migrations
                     b.HasIndex("SphereId");
 
                     b.ToTable("field","ranking");
-                });
-
-            modelBuilder.Entity("Domain.Models.FifthSection.OrgInformationSystems", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("AutomatedServices")
-                        .HasColumnName("automated_services")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("AvailabilityAutomationOfService")
-                        .HasColumnName("availability_automation_of_service")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("CommissioningDate")
-                        .HasColumnName("commissioning_date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("ExpertOpinionDate")
-                        .HasColumnName("expert_opinion_date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ExpertOpinionNumber")
-                        .HasColumnName("expert_opinion_number")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("HasIntegrationWithEgovernment")
-                        .HasColumnName("has_integration_with_egovernment")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IntegratedCentralDatabase")
-                        .HasColumnName("integrated_central_database")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IntegratedComplexesOfSystems")
-                        .HasColumnName("integrated_complexes_of_systems")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IntegratedPaymentSystem")
-                        .HasColumnName("integrated_payment_system")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IntegratedRegisterClassifiers")
-                        .HasColumnName("integrated_register_classifiers")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IntegrationInterdepartmentalPlatform")
-                        .HasColumnName("integration_interdepartmental_platform")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ListOfServices")
-                        .HasColumnName("list_of_services")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnName("organization_id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("OtherClassifiers")
-                        .HasColumnName("other_clasifiers")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PaymentSystemName")
-                        .HasColumnName("payment_system_name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SystemAppointment")
-                        .HasColumnName("system_appointment")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SystemCondition")
-                        .HasColumnName("system_condition")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SystemName")
-                        .HasColumnName("system_name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SystemReestrNumber")
-                        .HasColumnName("system_reestr_number")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransmittingInformationsFirst")
-                        .HasColumnName("transmitting_informations_first")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransmittingInformationsFourth")
-                        .HasColumnName("transmitting_informations_fourth")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransmittingInformationsSecond")
-                        .HasColumnName("transmitting_informations_second")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransmittingInformationsThird")
-                        .HasColumnName("transmitting_informations_third")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UsedClassifiers")
-                        .HasColumnName("used_clasifiers")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UsersCount")
-                        .HasColumnName("users_count")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("UsesClassifiers")
-                        .HasColumnName("uses_classifiers")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("org_information_systems","organizations");
                 });
 
             modelBuilder.Entity("Domain.Models.OrganizationApps", b =>
@@ -918,81 +801,6 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("sub_organization","organizations");
                 });
 
-            modelBuilder.Entity("Domain.Models.ThirdSection.OrganizationPublicServices", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnName("is_paid")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("MechanizmForTrackingProgress")
-                        .HasColumnName("mechanizm_for_tracking_progress")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("MobileApp")
-                        .HasColumnName("mobile_app")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnName("organization_id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("OtherResources")
-                        .HasColumnName("other_resources")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PortalLink")
-                        .HasColumnName("portal_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ReglamentPath")
-                        .HasColumnName("reglament_path")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("ReglamentUpdated")
-                        .HasColumnName("reglament_updated")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("RenderingForm")
-                        .HasColumnName("rendering_form")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ServiceLink")
-                        .HasColumnName("service_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ServiceName")
-                        .HasColumnName("service_name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ServiceOtherResult")
-                        .HasColumnName("service_other_result")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ServiceResult")
-                        .HasColumnName("service_result")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TrackingProgressBy")
-                        .HasColumnName("tracking_progress_by")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserTypes")
-                        .HasColumnName("user_types")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("organization_public_services","organizations");
-                });
-
             modelBuilder.Entity("Domain.Models.BasedDocuments", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organization")
@@ -1025,15 +833,6 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.Sphere", "Sphere")
                         .WithMany()
                         .HasForeignKey("SphereId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.FifthSection.OrgInformationSystems", b =>
-                {
-                    b.HasOne("Domain.Models.Organizations", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1144,15 +943,6 @@ namespace MainInfrastructures.Migrations
                 {
                     b.HasOne("Domain.Models.Organizations", "Organization")
                         .WithMany("SubOrganizations")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.ThirdSection.OrganizationPublicServices", b =>
-                {
-                    b.HasOne("Domain.Models.Organizations", "Organizations")
-                        .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
