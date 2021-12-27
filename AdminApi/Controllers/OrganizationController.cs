@@ -61,7 +61,7 @@ namespace AdminApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseCore<BasedDocsCommandResult>> AddBasedDocs(BasedDocsCommand model)
+        public async Task<ResponseCore<BasedDocsCommandResult>> AddBasedDocs([FromQuery] BasedDocsCommand model)
         {
             model.EventType = Domain.Enums.EventType.Add;
             model.UserId = this.UserId();
@@ -106,7 +106,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<BasedDocsCommandResult>> PutBasedDocs(BasedDocsCommand model)
+        public async Task<ResponseCore<BasedDocsCommandResult>> PutBasedDocs([FromQuery] BasedDocsCommand model)
         {
             model.EventType = Domain.Enums.EventType.Update;
             model.UserId = this.UserId();
