@@ -63,12 +63,19 @@ namespace AdminApi.Controllers
         [HttpPost]
         public async Task<ResponseCore<BasedDocsCommandResult>> AddBasedDocs([FromQuery] BasedDocsCommand model)
         {
-            model.EventType = Domain.Enums.EventType.Add;
-            model.UserId = this.UserId();
-            model.UserOrgId = this.UserOrgId();
-            model.UserPermissions = this.UserRights();
-            var result = await _mediator.Send(model);
-            return result;
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Add;
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
         [HttpPost]
@@ -108,12 +115,19 @@ namespace AdminApi.Controllers
         [HttpPut]
         public async Task<ResponseCore<BasedDocsCommandResult>> PutBasedDocs([FromQuery] BasedDocsCommand model)
         {
-            model.EventType = Domain.Enums.EventType.Update;
-            model.UserId = this.UserId();
-            model.UserOrgId = this.UserOrgId();
-            model.UserPermissions = this.UserRights();
-            var result = await _mediator.Send(model);
-            return result;
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Update;
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
         [HttpDelete]
         public async Task<ResponseCore<OrgCommandResult>> Delete([FromQuery] int id)
