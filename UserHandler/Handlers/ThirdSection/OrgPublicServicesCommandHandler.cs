@@ -58,11 +58,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            if (model.ReglamentFile != null)
-            {
-                throw ErrorStates.NotEntered("file");
-            }
-            var filePath = FileState.AddFile("basedDocs", model.ReglamentFile);
+            
             OrganizationPublicServices addModel = new OrganizationPublicServices()
             {
                 OrganizationId = model.OrganizationId,
@@ -78,9 +74,14 @@ namespace UserHandler.Handlers.ThirdSection
                 ServiceOtherResult = model.ServiceOtherResult,
                 MechanizmForTrackingProgress = model.MechanizmForTrackingProgress,
                 TrackingProgressBy = model.TrackingProgressBy,
-                ReglamentPath = filePath,
                 ReglamentUpdated = model.ReglamentUpdated
             };
+            if (model.ReglamentFile != null)
+            {
+                var filePath = FileState.AddFile("basedDocs", model.ReglamentFile);
+                addModel.ReglamentPath = filePath;
+            }
+            
             _orgPublicServices.Add(addModel);
         }
         public void Update(OrgPublicServicesCommand model)
