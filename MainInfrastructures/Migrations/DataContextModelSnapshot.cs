@@ -252,6 +252,49 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("field","ranking");
                 });
 
+            modelBuilder.Entity("Domain.Models.FifthSection.DelaysOnProjects", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ProjectApplyingDate")
+                        .HasColumnName("project_applying_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ProjectApplyingMechanism")
+                        .HasColumnName("project_applying_mechanism")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ProjectDocumentDate")
+                        .HasColumnName("project_document_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ProjectDocumentNumber")
+                        .HasColumnName("project_document_number")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectFinancingSource")
+                        .HasColumnName("project_financing_source")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectName")
+                        .HasColumnName("project_name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("delays_on_projects","organizations");
+                });
+
             modelBuilder.Entity("Domain.Models.FifthSection.OrgInformationSystems", b =>
                 {
                     b.Property<int>("Id")
@@ -369,6 +412,169 @@ namespace MainInfrastructures.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("org_information_systems","organizations");
+                });
+
+            modelBuilder.Entity("Domain.Models.FifthSection.OrganizationIctSpecialForces", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<double>("AmountOfFunds")
+                        .HasColumnName("amount_of_funds")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("AmountOfSpentFund")
+                        .HasColumnName("amount_of_spent_fund")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("CentralofficeEmployees")
+                        .HasColumnName("central_office_employees")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CharacterizingDocument")
+                        .HasColumnName("characterizing_document")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnName("email")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("EmployeesResumesSentMinistry")
+                        .HasColumnName("employees_resumes_sent_ministry")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("EmployeesSertificates")
+                        .HasColumnName("employees_sertificates")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EmployeesSum")
+                        .HasColumnName("employees_sum")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("FinanceProvisionMaterial")
+                        .HasColumnName("finance_provision_material")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("FormOfSpecialForces")
+                        .HasColumnName("form_of_special_forces")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullNameDirector")
+                        .HasColumnName("full_name_head")
+                        .HasColumnType("text");
+
+                    b.Property<double>("FundForKeepingForces")
+                        .HasColumnName("fund_for_keeping_forces")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("HasCharacterizingDocument")
+                        .HasColumnName("has_characterizing_document")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("HasMinistryAgreedCharacterizingDocument")
+                        .HasColumnName("has_ministry_agreed_characterizing_document")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("HasSpecialForces")
+                        .HasColumnName("has_special_forces")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("HasWorkPlanOfSpecialForces")
+                        .HasColumnName("has_work_plan_of_special_forces")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("HeadPosition")
+                        .HasColumnName("head_position")
+                        .HasColumnType("text");
+
+                    b.Property<int>("InformationSecurityEmployees")
+                        .HasColumnName("information_security_employees")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("InformationSystemDatabaseEmployees")
+                        .HasColumnName("information_system_database_employees")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("LastYearAmountOfFunds")
+                        .HasColumnName("last_year_amount_of_funds")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("MinistryAgreedCharacterizingDocument")
+                        .HasColumnName("ministry_agreed_characterizing_document")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("MinistryAgreedHead")
+                        .HasColumnName("ministry_agreed_head")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("MobilePhone")
+                        .HasColumnName("mobile_phone")
+                        .HasColumnType("text");
+
+                    b.Property<double>("NextYearFundForKeepingForces")
+                        .HasColumnName("next_year_fund_for_keeping_forces")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("OrganizationalStructureFile")
+                        .HasColumnName("organizational_structure_file")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OutsourcingEmployees")
+                        .HasColumnName("outsourcing_employees")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("OutsourcingHasCertificates")
+                        .HasColumnName("outsourcing_has_certificates")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("OutsourcingHasWorkPlan")
+                        .HasColumnName("outsourcing_has_work_plan")
+                        .HasColumnType("boolean");
+
+                    b.Property<double>("OutsourcingSpentFund")
+                        .HasColumnName("outsourcing_spent_fund")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("QuarterlyReportOutsourcing")
+                        .HasColumnName("quarterly_report_outsourcing")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("RegionalEmployees")
+                        .HasColumnName("regional_employees")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SpecialForcesName")
+                        .HasColumnName("special_forces_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SpecialistsStuffingDocument")
+                        .HasColumnName("specialists_stuffing_document")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SubordinateEmployees")
+                        .HasColumnName("subordinate_employees")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("WorkPhone")
+                        .HasColumnName("work_phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkPlanOfSpecialForces")
+                        .HasColumnName("work_plan_of_special_forces")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("organization_ict_special_forces","organizations");
                 });
 
             modelBuilder.Entity("Domain.Models.OrganizationApps", b =>
@@ -1029,7 +1235,25 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Models.FifthSection.DelaysOnProjects", b =>
+                {
+                    b.HasOne("Domain.Models.Organizations", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Models.FifthSection.OrgInformationSystems", b =>
+                {
+                    b.HasOne("Domain.Models.Organizations", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.FifthSection.OrganizationIctSpecialForces", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organization")
                         .WithMany()

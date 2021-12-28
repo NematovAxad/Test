@@ -45,5 +45,7 @@ namespace MainInfrastructures.Db
         public DbSet<OrgHelpline> OrgHelpline { get; set; }
         public DbSet<OrganizationPublicServices> OrganizationPublicServices { get; set; }
         public DbSet<OrgInformationSystems> OrgInformationSystems { get; set; }
+        public DbSet<DelaysOnProjects> DelaysOnProjects { get; set; }
+        public DbSet<OrganizationIctSpecialForces> OrganizationIctSpecialForces { get; set; }
     }
 }

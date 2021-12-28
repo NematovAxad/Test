@@ -31,12 +31,6 @@ namespace UserHandler.Handlers.ThirdSection
 
         public async Task<OrgPublicServicesQueryResult> Handle(OrgPublicServicesQuery request, CancellationToken cancellationToken)
         {
-            var org = _organization.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
-            if (org == null)
-                throw ErrorStates.NotFound(request.OrganizationId.ToString());
-
-           
-
             var services = _orgPublicServices.GetAll();
 
             if (request.OrganizationId != 0)
