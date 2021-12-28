@@ -47,5 +47,7 @@ namespace MainInfrastructures.Db
         public DbSet<OrgInformationSystems> OrgInformationSystems { get; set; }
         public DbSet<DelaysOnProjects> DelaysOnProjects { get; set; }
         public DbSet<OrganizationIctSpecialForces> OrganizationIctSpecialForces { get; set; }
+        public DbSet<OrganizationEvents> OrganizationEvents { get; set; }
+        public DbSet<OrgFutureYearsStrategies> OrgFutureYearsStrategies { get; set; }
     }
 }

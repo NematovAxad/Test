@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JohaRepository;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text;
 namespace Domain.Models.FifthSection
 {
     [Table("organization_events", Schema = "organizations")]
-    public class OrganizationEvents
+    public class OrganizationEvents:IDomain<int>
     {
         [Column("id")]
         public int Id { get; set; }

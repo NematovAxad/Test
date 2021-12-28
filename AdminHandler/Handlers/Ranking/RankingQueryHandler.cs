@@ -42,6 +42,10 @@ namespace AdminHandler.Handlers.Ranking
             {
                 rank = rank.Where(r => r.Quarter == request.Quarter);
             }
+            if (request.FieldId != 0)
+            {
+                rank = rank.Where(r => r.FieldId == request.FieldId);
+            }
             result.Count = rank.Count();
             result.Data = rank.OrderBy(u => u.Id).ToList<object>();
             return result;
