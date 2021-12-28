@@ -1,4 +1,5 @@
-﻿using JohaRepository;
+﻿using Domain.Enums;
+using JohaRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,6 +22,8 @@ namespace Domain.Models.FifthSection
         public string ProjectDocumentNumber { get; set; }
         [Column("project_document_date")]
         public DateTime ProjectDocumentDate { get; set; }
+        [Column("project_status")]
+        public ProjectStatus ProjectStatus { get; set; }
         [Column("project_applying_mechanism")]
         public string ProjectApplyingMechanism { get; set; }
         [Column("project_applying_date")]

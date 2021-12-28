@@ -27,6 +27,7 @@ namespace UserHandler.Commands.ThirdSection
         public string ProjectName { get; set; }
         public string ProjectDocumentNumber { get; set; }
         public DateTime ProjectDocumentDate { get; set; }
+        public ProjectStatus ProjectStatus { get; set; }
         public string ProjectApplyingMechanism { get; set; }
         public DateTime ProjectApplyingDate { get; set; }
         public string ProjectFinancingSource { get; set; }

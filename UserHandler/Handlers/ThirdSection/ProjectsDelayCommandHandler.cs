@@ -64,6 +64,7 @@ namespace UserHandler.Handlers.ThirdSection
                 ProjectName = model.ProjectName,
                 ProjectDocumentNumber = model.ProjectDocumentNumber,
                 ProjectDocumentDate = model.ProjectDocumentDate,
+                ProjectStatus = model.ProjectStatus,
                 ProjectApplyingMechanism = model.ProjectApplyingMechanism,
                 ProjectApplyingDate = model.ProjectApplyingDate,
                 ProjectFinancingSource = model.ProjectFinancingSource
@@ -93,6 +94,7 @@ namespace UserHandler.Handlers.ThirdSection
             projectDelays.ProjectName = model.ProjectName;
             projectDelays.ProjectDocumentNumber = model.ProjectDocumentNumber;
             projectDelays.ProjectDocumentDate = model.ProjectDocumentDate;
+            projectDelays.ProjectStatus = model.ProjectStatus;
             projectDelays.ProjectApplyingMechanism = model.ProjectApplyingMechanism;
             projectDelays.ProjectApplyingDate = model.ProjectApplyingDate;
             projectDelays.ProjectFinancingSource = model.ProjectFinancingSource;

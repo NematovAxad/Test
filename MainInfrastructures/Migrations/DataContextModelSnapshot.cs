@@ -288,6 +288,10 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("project_name")
                         .HasColumnType("text");
 
+                    b.Property<int>("ProjectStatus")
+                        .HasColumnName("project_status")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
@@ -1087,6 +1091,208 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("org_social_sites","organizations");
                 });
 
+            modelBuilder.Entity("Domain.Models.SeventhSection.OrganizationComputers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("AllComputers")
+                        .HasColumnName("all_cmputers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralAllComputers")
+                        .HasColumnName("central_all_cmputers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralConnectedCorporateNetwork")
+                        .HasColumnName("central_connected_corporate_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralConnectedEijro")
+                        .HasColumnName("central_connected_eijro")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralConnectedExat")
+                        .HasColumnName("central_connected_exat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralConnectedLocalSet")
+                        .HasColumnName("central_connected_local_set")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralConnectedNetwork")
+                        .HasColumnName("central_connected_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralConnectedProjectGov")
+                        .HasColumnName("central_connected_project_gov")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralConnectedProjectMyWork")
+                        .HasColumnName("central_connected_project_my_work")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CentralWorkingComputers")
+                        .HasColumnName("central_working_cmputers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectedCorporateNetwork")
+                        .HasColumnName("connected_corporate_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectedEijro")
+                        .HasColumnName("connected_eijro")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectedExat")
+                        .HasColumnName("connected_exat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectedLocalSet")
+                        .HasColumnName("connected_local_set")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectedNetwork")
+                        .HasColumnName("connected_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectedProjectGov")
+                        .HasColumnName("connected_project_gov")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectedProjectMyWork")
+                        .HasColumnName("connected_project_my_work")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateAllComputers")
+                        .HasColumnName("subordinate_all_cmputers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateConnectedCorporateNetwork")
+                        .HasColumnName("subordinate_connected_corporate_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateConnectedEijro")
+                        .HasColumnName("subordinate_connected_eijro")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateConnectedExat")
+                        .HasColumnName("subordinate_connected_exat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateConnectedLocalSet")
+                        .HasColumnName("subordinate_connected_local_set")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateConnectedNetwork")
+                        .HasColumnName("subordinate_connected_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateConnectedProjectGov")
+                        .HasColumnName("subordinateconnected_project_gov")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateConnectedProjectMyWork")
+                        .HasColumnName("subordinate_connected_project_my_work")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubordinateWorkingComputers")
+                        .HasColumnName("subordinate_working_cmputers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialAllComputers")
+                        .HasColumnName("territorial_all_cmputers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialConnectedCorporateNetwork")
+                        .HasColumnName("territorial_connected_corporate_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialConnectedEijro")
+                        .HasColumnName("territorial_connected_eijro")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialConnectedExat")
+                        .HasColumnName("territorial_connected_exat")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialConnectedLocalSet")
+                        .HasColumnName("territorial_connected_local_set")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialConnectedNetwork")
+                        .HasColumnName("territorial_connected_network")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialConnectedProjectGov")
+                        .HasColumnName("territorial_connected_project_gov")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialConnectedProjectMyWork")
+                        .HasColumnName("territorial_connected_project_my_work")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TerritorialWorkingComputers")
+                        .HasColumnName("territorial_working_cmputers")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WorkingComputers")
+                        .HasColumnName("working_cmputers")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("organization_computers","organizations");
+                });
+
+            modelBuilder.Entity("Domain.Models.SeventhSection.OrganizationServers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("NumberOfServers")
+                        .HasColumnName("number_of_servers")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ServerAutomaticTasks")
+                        .HasColumnName("server_automatic_tasks")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ServerBrand")
+                        .HasColumnName("server_brand")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ServerConfig")
+                        .HasColumnName("server_config")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ServerType")
+                        .HasColumnName("server_type")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("organization_servers","organizations");
+                });
+
             modelBuilder.Entity("Domain.Models.Sphere", b =>
                 {
                     b.Property<int>("Id")
@@ -1429,6 +1635,24 @@ namespace MainInfrastructures.Migrations
             modelBuilder.Entity("Domain.Models.SecondSection.OrganizationSocialSites", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organizations")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.SeventhSection.OrganizationComputers", b =>
+                {
+                    b.HasOne("Domain.Models.Organizations", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.SeventhSection.OrganizationServers", b =>
+                {
+                    b.HasOne("Domain.Models.Organizations", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
