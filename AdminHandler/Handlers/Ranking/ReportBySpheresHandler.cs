@@ -35,10 +35,10 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline id " + request.DeadlineId.ToString());
-            var org = _organization.GetAll().Include(mbox => mbox.OrgRanks).ThenInclude(mbox => mbox.Field).Where(o => o.OrgRanks.All(r => r.Quarter == deadline.Quarter && r.Year == deadline.Year));
+            var org = _organization.GetAll().Include(mbox => mbox.OrgRanks).ThenInclude(mbox => mbox.Field).Select(o => new {Id = o.Id, ShortName = o.ShortName, Category = o.OrgCategory, OrgRanks = o.OrgRanks.Where(r => r.Quarter == deadline.Quarter && r.Year == deadline.Year)});
             if(request.OrganizationId != 0)
             {
-                org = org.Where(o => o.Id == request.OrganizationId).Include(mbox => mbox.OrgRanks).ThenInclude(mbox => mbox.Field).Where(o => o.OrgRanks.All(r => r.Quarter == deadline.Quarter && r.Year == deadline.Year));
+                org = org.Where(o => o.Id == request.OrganizationId);
             }
             double maxRate = _field.GetAll().Select(f => f.MaxRate).Sum();
             foreach (var o in org)
@@ -49,7 +49,7 @@ namespace AdminHandler.Handlers.Ranking
                     {
                         OrganizationId = o.Id,
                         OrgName = o.ShortName,
-                        Category = o.OrgCategory
+                        Category = o.Category
                     };
                     if (o.OrgRanks.Where(r => r.SphereId == 1).FirstOrDefault() != null)
                         model.SphereRate1 = o.OrgRanks.Where(r => r.SphereId == 1).Select(r => r.Rank).Sum();
