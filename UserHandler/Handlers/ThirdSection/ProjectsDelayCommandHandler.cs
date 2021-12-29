@@ -67,7 +67,9 @@ namespace UserHandler.Handlers.ThirdSection
                 ProjectStatus = model.ProjectStatus,
                 ProjectApplyingMechanism = model.ProjectApplyingMechanism,
                 ProjectApplyingDate = model.ProjectApplyingDate,
-                ProjectFinancingSource = model.ProjectFinancingSource
+                ProjectFinancingSource = model.ProjectFinancingSource,
+                ProjectPrice = model.ProjectPrice,
+                ProvidedFund = model.ProvidedFund
             };
             _delaysOnProjects.Add(addModel);
         }
@@ -98,6 +100,8 @@ namespace UserHandler.Handlers.ThirdSection
             projectDelays.ProjectApplyingMechanism = model.ProjectApplyingMechanism;
             projectDelays.ProjectApplyingDate = model.ProjectApplyingDate;
             projectDelays.ProjectFinancingSource = model.ProjectFinancingSource;
+            projectDelays.ProjectPrice = model.ProjectPrice;
+            projectDelays.ProvidedFund = model.ProvidedFund;
 
             _delaysOnProjects.Update(projectDelays);
         }

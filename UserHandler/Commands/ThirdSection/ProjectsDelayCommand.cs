@@ -31,5 +31,7 @@ namespace UserHandler.Commands.ThirdSection
         public string ProjectApplyingMechanism { get; set; }
         public DateTime ProjectApplyingDate { get; set; }
         public string ProjectFinancingSource { get; set; }
+        public long ProjectPrice { get; set; }
+        public long ProvidedFund { get; set; }
     }
 }

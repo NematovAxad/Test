@@ -30,5 +30,9 @@ namespace Domain.Models.FifthSection
         public DateTime ProjectApplyingDate { get; set; }
         [Column("project_financing_source")]
         public string ProjectFinancingSource { get; set; }
+        [Column("project_price")]
+        public long ProjectPrice { get; set; }
+        [Column("provided_fund")]
+        public long ProvidedFund { get; set; }
     }
 }
