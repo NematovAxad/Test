@@ -32,5 +32,7 @@ namespace Domain.Models
         [ForeignKey("Field")]
         public int FieldId { get; set; }
         public Field Field { get; set; }
+        [Column("comment")]
+        public string Comment { get; set; }
     }
 }

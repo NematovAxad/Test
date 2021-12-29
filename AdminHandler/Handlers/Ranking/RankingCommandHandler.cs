@@ -77,7 +77,8 @@ namespace AdminHandler.Handlers.Ranking
                 Rank = model.Rank,
                 IsException = model.IsException,
                 SphereId = field.SphereId,
-                FieldId = field.Id
+                FieldId = field.Id,
+                Comment = model.Comment
             };
             _rankTable.Add(addModel);
 
@@ -100,6 +101,7 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotAllowed("incorrect mark");
             rank.IsException = model.IsException;
             rank.Rank = model.Rank;
+            rank.Comment = model.Comment;
             _rankTable.Update(rank);
             ExceptionCases(model.OrganizationId, model.FieldId, deadline.Id);
         }
