@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Domain.Models.FifthSection;
+using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
 using Domain.Models.SeventhSection;
 using Domain.Models.ThirdSection;
@@ -52,5 +53,6 @@ namespace MainInfrastructures.Db
         public DbSet<OrgFutureYearsStrategies> OrgFutureYearsStrategies { get; set; }
         public DbSet<OrganizationComputers> OrganizationComputers { get; set; }
         public DbSet<OrganizationServers> OrganizationServers { get; set; }
+        public DbSet<IsFilledTable> IsFilledTable { get; set; }
     }
 }

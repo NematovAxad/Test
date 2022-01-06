@@ -67,7 +67,9 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotAllowed("incorrect mark");
             if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
-            
+            if (deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
 
             RankTable addModel = new RankTable()
             {
