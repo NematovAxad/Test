@@ -27,6 +27,7 @@ namespace AdminHandler.Commands.Ranking
         public int Year { get; set; }
         public Quarters Quarter { get; set; }
         public int FieldId { get; set; }
+        public int SubFieldId { get; set; }
         public double Rank { get; set; }
         public bool IsException { get; set; }
         public string Comment { get; set; }

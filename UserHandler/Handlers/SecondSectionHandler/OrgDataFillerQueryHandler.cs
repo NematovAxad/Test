@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
 using Domain.States;
 using JohaRepository;

@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Domain.Models.Ranking;
 using JohaRepository;
 using System;
 using System.Collections.Generic;

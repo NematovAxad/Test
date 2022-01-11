@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Domain.Models.Models;
+using Domain.Models.Ranking;
 using Domain.States;
 using JohaRepository;
 using MediatR;

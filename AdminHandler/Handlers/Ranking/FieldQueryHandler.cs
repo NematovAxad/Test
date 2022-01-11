@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Querys.Ranking;
 using AdminHandler.Results.Ranking;
 using Domain.Models;
+using Domain.Models.Ranking;
 using JohaRepository;
 using MediatR;
 using System;

@@ -2,6 +2,7 @@
 using AdminHandler.Results.Ranking;
 using Domain.Enums;
 using Domain.Models;
+using Domain.Models.Ranking;
 using Domain.Permission;
 using Domain.States;
 using EntityRepository;

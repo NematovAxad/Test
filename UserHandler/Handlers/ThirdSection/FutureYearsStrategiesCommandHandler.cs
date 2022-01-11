@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Domain.Models;
 using Domain.Models.FifthSection;
+using Domain.Models.Ranking;
 using Domain.Permission;
 using Domain.States;
 using JohaRepository;

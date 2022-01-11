@@ -3,10 +3,10 @@ E:\projects\NisSystem\nissystem\Domain\bin\Debug\netcoreapp3.1\Domain.runtimecon
 E:\projects\NisSystem\nissystem\Domain\bin\Debug\netcoreapp3.1\Domain.runtimeconfig.dev.json
 E:\projects\NisSystem\nissystem\Domain\bin\Debug\netcoreapp3.1\Domain.dll
 E:\projects\NisSystem\nissystem\Domain\bin\Debug\netcoreapp3.1\Domain.pdb
-E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.csprojAssemblyReference.cache
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.AssemblyInfoInputs.cache
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.AssemblyInfo.cs
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.csproj.CoreCompileInputs.cache
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.dll
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.pdb
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.genruntimeconfig.cache
+E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.csprojAssemblyReference.cache

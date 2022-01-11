@@ -11,6 +11,28 @@
     <Compile Remove="Migrations\20211215103605_ranktableadded.Designer.cs" />
     <Compile Remove="Migrations\20211227153900_delaytable.cs" />
     <Compile Remove="Migrations\20211227153900_delaytable.Designer.cs" />
+    <Compile Remove="Migrations\20220106094949_final.cs" />
+    <Compile Remove="Migrations\20220106094949_final.Designer.cs" />
+    <Compile Remove="Migrations\20220106095050_final.cs" />
+    <Compile Remove="Migrations\20220106095050_final.Designer.cs" />
+    <Compile Remove="Migrations\20220106095507_addedtable.cs" />
+    <Compile Remove="Migrations\20220106095507_addedtable.Designer.cs" />
+    <Compile Remove="Migrations\20220106100215_xif.cs" />
+    <Compile Remove="Migrations\20220106100215_xif.Designer.cs" />
+    <Compile Remove="Migrations\20220107042831_fieldfilled.cs" />
+    <Compile Remove="Migrations\20220107042831_fieldfilled.Designer.cs" />
+    <Compile Remove="Migrations\20220107042916_fieldfilled.cs" />
+    <Compile Remove="Migrations\20220107042916_fieldfilled.Designer.cs" />
+    <Compile Remove="Migrations\20220107043004_fieldfilled.cs" />
+    <Compile Remove="Migrations\20220107043004_fieldfilled.Designer.cs" />
+    <Compile Remove="Migrations\20220107043205_fieldfilled.cs" />
+    <Compile Remove="Migrations\20220107043205_fieldfilled.Designer.cs" />
+    <Compile Remove="Migrations\20220107043312_fieldfilled.cs" />
+    <Compile Remove="Migrations\20220107043312_fieldfilled.Designer.cs" />
+    <Compile Remove="Migrations\20220107045919_new.cs" />
+    <Compile Remove="Migrations\20220107045919_new.Designer.cs" />
+    <Compile Remove="Migrations\20220107054224_last.cs" />
+    <Compile Remove="Migrations\20220107054224_last.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿using JohaRepository;
+﻿using Domain.Enums;
+using Domain.Models.Ranking;
+using JohaRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,5 +15,6 @@ namespace Domain.Models
         public int Id { get; set; }
         [Column("name")]
         public string Name { get; set; }
+        public ICollection<Field> Fields { get; set; }
     }
 }

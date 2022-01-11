@@ -225,33 +225,6 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("employee_statistics","organizations");
                 });
 
-            modelBuilder.Entity("Domain.Models.Field", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<double>("MaxRate")
-                        .HasColumnName("max_rate")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("SphereId")
-                        .HasColumnName("sphere_id")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SphereId");
-
-                    b.ToTable("field","ranking");
-                });
-
             modelBuilder.Entity("Domain.Models.FifthSection.DelaysOnProjects", b =>
                 {
                     b.Property<int>("Id")
@@ -651,6 +624,82 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("organization_ict_special_forces","organizations");
                 });
 
+            modelBuilder.Entity("Domain.Models.GRankTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Comment")
+                        .HasColumnName("comment")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ElementId")
+                        .HasColumnName("element_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsException")
+                        .HasColumnName("is_exception")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quarter")
+                        .HasColumnName("quarter")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Rank")
+                        .HasColumnName("rank")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("SphereId")
+                        .HasColumnName("sphere_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubFieldId")
+                        .HasColumnName("sub_field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Year")
+                        .HasColumnName("year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("SphereId");
+
+                    b.ToTable("g_rank_table","ranking");
+                });
+
+            modelBuilder.Entity("Domain.Models.GSphere", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("g_sphere","ranking");
+                });
+
             modelBuilder.Entity("Domain.Models.OrganizationApps", b =>
                 {
                     b.Property<int>("Id")
@@ -888,6 +937,87 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("rank_table","ranking");
                 });
 
+            modelBuilder.Entity("Domain.Models.Ranking.Field", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<double>("MaxRate")
+                        .HasColumnName("max_rate")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SphereId")
+                        .HasColumnName("sphere_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SphereId");
+
+                    b.ToTable("field","ranking");
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.GField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<double>("MaxRate")
+                        .HasColumnName("max_rate")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SphereId")
+                        .HasColumnName("sphere_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SphereId");
+
+                    b.ToTable("g_field","ranking");
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.GSubField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("MaxRate")
+                        .HasColumnName("max_rate")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FieldId");
+
+                    b.ToTable("g_sub_field","ranking");
+                });
+
             modelBuilder.Entity("Domain.Models.Ranking.IsFilledTable", b =>
                 {
                     b.Property<int>("Id")
@@ -899,6 +1029,10 @@ namespace MainInfrastructures.Migrations
                     b.Property<string>("Comment")
                         .HasColumnName("comment")
                         .HasColumnType("text");
+
+                    b.Property<int>("ElementId")
+                        .HasColumnName("element_id")
+                        .HasColumnType("integer");
 
                     b.Property<int>("FieldId")
                         .HasColumnName("field_id")
@@ -933,6 +1067,91 @@ namespace MainInfrastructures.Migrations
                     b.HasIndex("SphereId");
 
                     b.ToTable("is_filled_table","ranking");
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.SubField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("Category")
+                        .HasColumnName("category")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("MaxRate")
+                        .HasColumnName("max_rate")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FieldId");
+
+                    b.ToTable("sub_field","ranking");
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.XField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<double>("MaxRate")
+                        .HasColumnName("max_rate")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SphereId")
+                        .HasColumnName("sphere_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SphereId");
+
+                    b.ToTable("x_field","ranking");
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.XSubField", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("MaxRate")
+                        .HasColumnName("max_rate")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FieldId");
+
+                    b.ToTable("x_sub_field","ranking");
                 });
 
             modelBuilder.Entity("Domain.Models.Regions", b =>
@@ -1526,6 +1745,82 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("organization_public_services","organizations");
                 });
 
+            modelBuilder.Entity("Domain.Models.XRankTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Comment")
+                        .HasColumnName("comment")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ElementId")
+                        .HasColumnName("element_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FieldId")
+                        .HasColumnName("field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsException")
+                        .HasColumnName("is_exception")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnName("organization_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quarter")
+                        .HasColumnName("quarter")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Rank")
+                        .HasColumnName("rank")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("SphereId")
+                        .HasColumnName("sphere_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubFieldId")
+                        .HasColumnName("sub_field_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Year")
+                        .HasColumnName("year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FieldId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("SphereId");
+
+                    b.ToTable("x_rank_table","ranking");
+                });
+
+            modelBuilder.Entity("Domain.Models.XSphere", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("x_sphere","ranking");
+                });
+
             modelBuilder.Entity("Domain.Models.BasedDocuments", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organization")
@@ -1549,15 +1844,6 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.Organizations", "Organizations")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.Field", b =>
-                {
-                    b.HasOne("Domain.Models.Sphere", "Sphere")
-                        .WithMany()
-                        .HasForeignKey("SphereId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1607,6 +1893,27 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Models.GRankTable", b =>
+                {
+                    b.HasOne("Domain.Models.Ranking.GField", "GField")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Organizations", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.GSphere", "GSphere")
+                        .WithMany()
+                        .HasForeignKey("SphereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Models.OrganizationApps", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organization")
@@ -1627,7 +1934,7 @@ namespace MainInfrastructures.Migrations
 
             modelBuilder.Entity("Domain.Models.RankTable", b =>
                 {
-                    b.HasOne("Domain.Models.Field", "Field")
+                    b.HasOne("Domain.Models.Ranking.Field", "Field")
                         .WithMany()
                         .HasForeignKey("FieldId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1646,9 +1953,36 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Models.Ranking.Field", b =>
+                {
+                    b.HasOne("Domain.Models.Sphere", "Sphere")
+                        .WithMany("Fields")
+                        .HasForeignKey("SphereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.GField", b =>
+                {
+                    b.HasOne("Domain.Models.GSphere", "GSphere")
+                        .WithMany("GFields")
+                        .HasForeignKey("SphereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.GSubField", b =>
+                {
+                    b.HasOne("Domain.Models.Ranking.GField", "GField")
+                        .WithMany("GSubFields")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Models.Ranking.IsFilledTable", b =>
                 {
-                    b.HasOne("Domain.Models.Field", "Field")
+                    b.HasOne("Domain.Models.Ranking.Field", "Field")
                         .WithMany()
                         .HasForeignKey("FieldId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1663,6 +1997,33 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.Sphere", "Sphere")
                         .WithMany()
                         .HasForeignKey("SphereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.SubField", b =>
+                {
+                    b.HasOne("Domain.Models.Ranking.Field", "Field")
+                        .WithMany("SubFields")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.XField", b =>
+                {
+                    b.HasOne("Domain.Models.XSphere", "XSphere")
+                        .WithMany("XFields")
+                        .HasForeignKey("SphereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Ranking.XSubField", b =>
+                {
+                    b.HasOne("Domain.Models.Ranking.XField", "XField")
+                        .WithMany("XSubFields")
+                        .HasForeignKey("FieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1762,6 +2123,27 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.Organizations", "Organizations")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.XRankTable", b =>
+                {
+                    b.HasOne("Domain.Models.Ranking.XField", "XField")
+                        .WithMany()
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Organizations", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.XSphere", "XSphere")
+                        .WithMany()
+                        .HasForeignKey("SphereId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

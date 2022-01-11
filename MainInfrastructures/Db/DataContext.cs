@@ -54,5 +54,14 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationComputers> OrganizationComputers { get; set; }
         public DbSet<OrganizationServers> OrganizationServers { get; set; }
         public DbSet<IsFilledTable> IsFilledTable { get; set; }
+        public DbSet<SubField> SubField { get; set; }
+        public DbSet<GSphere> GSphere { get; set; }
+        public DbSet<GField> GField { get; set; }
+        public DbSet<GSubField> GSubField { get; set; }
+        public DbSet<XSphere> XSphere { get; set; }
+        public DbSet<XField> XField { get; set; }
+        public DbSet<XSubField> XSubField { get; set; }
+        public DbSet<XRankTable> XRankTable { get; set; }
+        public DbSet<GRankTable> GRankTable { get; set; }
     }
 }

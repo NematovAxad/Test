@@ -1,10 +1,12 @@
-﻿using JohaRepository;
+﻿using Domain.Enums;
+using Domain.Models.Ranking;
+using JohaRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Domain.Models
+namespace Domain.Models.Ranking
 {
     [Table("field", Schema = "ranking")]
     public class Field:IDomain<int>
@@ -19,6 +21,7 @@ namespace Domain.Models
         public string Name { get; set; }
         [Column("max_rate")]
         public double MaxRate { get; set; }
-        
+        public ICollection<SubField> SubFields { get; set; }
+
     }
 }
