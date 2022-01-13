@@ -67,6 +67,7 @@ namespace AdminHandler.Handlers.Ranking
                         {
                             result.Rank = result.Rank + subFieldRankWithoutElements.Rank;
                             var subFieldToAdd = new Results.Ranking.SubField();
+                            subFieldToAdd.RankdId = subFieldRankWithoutElements.Id;
                             subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
                             subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
                             subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
@@ -82,7 +83,7 @@ namespace AdminHandler.Handlers.Ranking
                             subFieldToAdd.SubfieldRank = subfieldRankMedium;
                             foreach(var element in subFieldRankWithElements)
                             {
-                                subFieldToAdd.Elements.Add(new Elements() { ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                subFieldToAdd.Elements.Add(new Elements() {RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
                             }
                             result.SubFields.Add(subFieldToAdd);
                         }
