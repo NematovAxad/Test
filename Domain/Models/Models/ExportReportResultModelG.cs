@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.Models.Models
 {
-    public class ExportReportResultModel
+    public class ExportReportResultModelG
     {
         public int Count { get; set; }
         public string OrgName { get; set; }
@@ -15,7 +15,6 @@ namespace Domain.Models.Models
         public double FieldRate15 { get; set; }
         public double FieldRate16 { get; set; }
         public double FieldRate17 { get; set; }
-        public double FieldRate18 { get; set; }
         public double SphereRate1 { get; set; }
         public double FieldRate21 { get; set; }
         public double FieldRate22 { get; set; }

@@ -7,6 +7,6 @@ namespace UserHandler.Results.DownloadResult
 {
     public class ExportReportResult
     {
-        public List<ExportReportResultModel> Item { get; set; }
+        public List<ExportReportResultModelG> Item { get; set; }
     }
 }
