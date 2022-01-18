@@ -68,221 +68,286 @@ namespace AdminHandler.Handlers.Ranking
 
         public void Add(RankCommand model)
         {
-            var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
-            if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
-
-            var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
-            if (deadline == null || deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(model.Quarter.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
-                throw ErrorStates.NotAllowed("permission");
-
-
-            if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
+            if(model.Switch==true)
             {
-                var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
-                if (field == null)
-                    throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
-                GRankTable addModel = new GRankTable()
-                {
-                    OrganizationId = model.OrganizationId,
-                    Year = model.Year,
-                    Quarter = model.Quarter,
-                    Rank = model.Rank,
-                    IsException = model.IsException,
-                    SphereId = field.SphereId,
-                    FieldId = field.Id,
-                    Comment = model.Comment,
-                    SubFieldId = 0,
-                    ElementId = 0
-                };
-                if (model.SubFieldId!=0)
-                {
-                    var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
-                    if (subField == null)
-                        throw ErrorStates.NotFound("sub field ");
-                    if (model.Rank > subField.MaxRate)
-                        throw ErrorStates.NotAllowed("incorrect mark");
-
-                    addModel.SubFieldId = subField.Id;
-                    if (model.ElementId!=0)
-                    {
-                        var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
-                        if (rankWithoutElement != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-
-                        var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        addModel.ElementId = model.ElementId;
-                        _gRankTable.Add(addModel);
-                    }
-                    else
-                    {
-                        var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        _gRankTable.Add(addModel);
-                    }
-                    
-                }
-                else
-                {
-                    if (model.Rank > field.MaxRate)
-                        throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.ElementId != 0)
-                    {
-                        var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
-                        if (rankWithoutElement != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-
-                        var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        addModel.ElementId = model.ElementId;
-                        _gRankTable.Add(addModel);
-                    }
-                    else
-                    {
-                        var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        _gRankTable.Add(addModel);
-                    }
-                }
-                
+                ExceptionCase(model);
             }
-            if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
-            {
-                var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
-                if (field == null)
-                    throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
-                XRankTable addModel = new XRankTable()
-                {
-                    OrganizationId = model.OrganizationId,
-                    Year = model.Year,
-                    Quarter = model.Quarter,
-                    Rank = model.Rank,
-                    IsException = model.IsException,
-                    SphereId = field.SphereId,
-                    FieldId = field.Id,
-                    Comment = model.Comment,
-                    SubFieldId = 0,
-                    ElementId = 0
-                };
-                if (model.SubFieldId != 0)
-                {
-                    var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
-                    if (subField == null)
-                        throw ErrorStates.NotFound("sub field ");
-                    if (model.Rank > subField.MaxRate)
-                        throw ErrorStates.NotAllowed("incorrect mark");
+            else
+            { 
+                var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+                if (org == null)
+                    throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-                    addModel.SubFieldId = subField.Id;
-                    if (model.ElementId != 0)
+                var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
+                if (deadline == null || deadline.DeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(model.Quarter.ToString());
+                if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                    throw ErrorStates.NotAllowed("permission");
+
+
+                if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
+                {
+                    var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                    if (field == null)
+                        throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+                    GRankTable addModel = new GRankTable()
                     {
-                        var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
-                        if (rankWithoutElement != null)
-                            throw ErrorStates.NotAllowed("ranking ");
+                        OrganizationId = model.OrganizationId,
+                        Year = model.Year,
+                        Quarter = model.Quarter,
+                        Rank = model.Rank,
+                        IsException = model.IsException,
+                        SphereId = field.SphereId,
+                        FieldId = field.Id,
+                        Comment = model.Comment,
+                        SubFieldId = 0,
+                        ElementId = 0
+                    };
 
-                        var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        addModel.ElementId = model.ElementId;
-                        _xRankTable.Add(addModel);
+                    if (model.SubFieldId != 0)
+                    {
+                        var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        if (subField == null)
+                            throw ErrorStates.NotFound("sub field ");
+                        if (model.Rank > subField.MaxRate)
+                            throw ErrorStates.NotAllowed("incorrect mark");
+                        if (model.IsException == true)
+                        {
+                            addModel.Rank = subField.MaxRate;
+                        }
+                        addModel.SubFieldId = subField.Id;
+                        if (model.ElementId != 0)
+                        {
+                            var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
+                            if (rankWithoutElement != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+
+                            var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            addModel.ElementId = model.ElementId;
+                            _gRankTable.Add(addModel);
+                        }
+                        else
+                        {
+                            var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            _gRankTable.Add(addModel);
+                        }
+
                     }
                     else
                     {
-                        var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        _xRankTable.Add(addModel);
+                        if (model.Rank > field.MaxRate)
+                            throw ErrorStates.NotAllowed("incorrect mark");
+                        if (model.IsException == true)
+                        {
+                            addModel.Rank = field.MaxRate;
+                        }
+                        if (model.ElementId != 0)
+                        {
+                            var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
+                            if (rankWithoutElement != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+
+                            var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            addModel.ElementId = model.ElementId;
+                            _gRankTable.Add(addModel);
+                        }
+                        else
+                        {
+                            var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            _gRankTable.Add(addModel);
+                        }
                     }
 
                 }
-                else
+                if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
                 {
-                    if (model.Rank > field.MaxRate)
-                        throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.ElementId != 0)
+                    var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                    if (field == null)
+                        throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+                    XRankTable addModel = new XRankTable()
                     {
-                        var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
-                        if (rankWithoutElement != null)
-                            throw ErrorStates.NotAllowed("ranking ");
+                        OrganizationId = model.OrganizationId,
+                        Year = model.Year,
+                        Quarter = model.Quarter,
+                        Rank = model.Rank,
+                        IsException = model.IsException,
+                        SphereId = field.SphereId,
+                        FieldId = field.Id,
+                        Comment = model.Comment,
+                        SubFieldId = 0,
+                        ElementId = 0
+                    };
+                    if (model.SubFieldId != 0)
+                    {
+                        var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        if (subField == null)
+                            throw ErrorStates.NotFound("sub field ");
+                        if (model.Rank > subField.MaxRate)
+                            throw ErrorStates.NotAllowed("incorrect mark");
+                        if (model.IsException == true)
+                        {
+                            addModel.Rank = subField.MaxRate;
+                        }
+                        addModel.SubFieldId = subField.Id;
+                        if (model.ElementId != 0)
+                        {
+                            var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
+                            if (rankWithoutElement != null)
+                                throw ErrorStates.NotAllowed("ranking ");
 
-                        var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        addModel.ElementId = model.ElementId;
-                        _xRankTable.Add(addModel);
+                            var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            addModel.ElementId = model.ElementId;
+                            _xRankTable.Add(addModel);
+                        }
+                        else
+                        {
+                            var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            _xRankTable.Add(addModel);
+                        }
+
                     }
                     else
                     {
-                        var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).FirstOrDefault();
-                        if (rank != null)
-                            throw ErrorStates.NotAllowed("ranking ");
-                        _xRankTable.Add(addModel);
-                    }
-                }
+                        if (model.Rank > field.MaxRate)
+                            throw ErrorStates.NotAllowed("incorrect mark");
+                        if (model.IsException == true)
+                        {
+                            addModel.Rank = field.MaxRate;
+                        }
+                        if (model.ElementId != 0)
+                        {
+                            var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
+                            if (rankWithoutElement != null)
+                                throw ErrorStates.NotAllowed("ranking ");
 
+                            var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            addModel.ElementId = model.ElementId;
+                            _xRankTable.Add(addModel);
+                        }
+                        else
+                        {
+                            var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).FirstOrDefault();
+                            if (rank != null)
+                                throw ErrorStates.NotAllowed("ranking ");
+                            _xRankTable.Add(addModel);
+                        }
+                    }
+
+                }
             }
         }
         public void Update(RankCommand model)
         {
-            var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
-            if (deadline == null || deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(model.Quarter.ToString());
-            var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
-            if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            if(org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
+            if(model.Switch == true)
             {
-                var rank = _gRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
-                if (rank == null)
-                    throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
-                var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
-                if (field == null)
-                    throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
-                if (model.Rank > field.MaxRate)
-                    throw ErrorStates.NotAllowed("incorrect mark");
-                if (model.SubFieldId!=0)
-                {
-                    var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
-                    if (subField == null)
-                        throw ErrorStates.NotFound("sub field ");
-                    if (model.Rank > subField.MaxRate)
-                        throw ErrorStates.NotAllowed("incorrect mark");
-                }
-                rank.IsException = model.IsException;
-                rank.Rank = model.Rank;
-                rank.Comment = model.Comment;
-                _gRankTable.Update(rank);
+                ExceptionCase(model);
             }
-            if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
+            else
             {
-                var rank = _xRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
-                if (rank == null)
-                    throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
-                var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
-                if (field == null)
-                    throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
-                if (model.Rank > field.MaxRate)
-                    throw ErrorStates.NotAllowed("incorrect mark");
-                if (model.SubFieldId != 0)
+                var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
+                if (deadline == null || deadline.DeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(model.Quarter.ToString());
+                var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+                if (org == null)
+                    throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
-                    var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
-                    if (subField == null)
-                        throw ErrorStates.NotFound("sub field ");
-                    if (model.Rank > subField.MaxRate)
+                    var rank = _gRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
+                    if (rank == null)
+                        throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
+                    var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                    if (field == null)
+                        throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+                    if (model.Rank > field.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                }
-                rank.IsException = model.IsException;
-                rank.Rank = model.Rank;
-                rank.Comment = model.Comment;
-                _xRankTable.Update(rank);
-            }
+                    if (model.SubFieldId != 0)
+                    {
+                        var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        if (subField == null)
+                            throw ErrorStates.NotFound("sub field ");
+                        if (model.Rank > subField.MaxRate)
+                            throw ErrorStates.NotAllowed("incorrect mark");
+                        if (model.IsException == true)
+                        {
+                            rank.Rank = subField.MaxRate;
+                        }
+                        else
+                        {
+                            rank.Rank = model.Rank;
+                        }
 
+                    }
+                    else
+                    {
+                        if (model.IsException == true)
+                        {
+                            rank.Rank = field.MaxRate;
+                        }
+                        else
+                        {
+                            rank.Rank = model.Rank;
+                        }
+                    }
+                    rank.IsException = model.IsException;
+                    rank.Comment = model.Comment;
+                    _gRankTable.Update(rank);
+                }
+                if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
+                {
+                    var rank = _xRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
+                    if (rank == null)
+                        throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
+                    var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                    if (field == null)
+                        throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+                    if (model.Rank > field.MaxRate)
+                        throw ErrorStates.NotAllowed("incorrect mark");
+                    if (model.SubFieldId != 0)
+                    {
+                        var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        if (subField == null)
+                            throw ErrorStates.NotFound("sub field ");
+                        if (model.Rank > subField.MaxRate)
+                            throw ErrorStates.NotAllowed("incorrect mark");
+                        if (model.IsException == true)
+                        {
+                            rank.Rank = subField.MaxRate;
+                        }
+                        else
+                        {
+                            rank.Rank = model.Rank;
+                        }
+                    }
+                    else
+                    {
+                        if (model.IsException == true)
+                        {
+                            rank.Rank = field.MaxRate;
+                        }
+                        else
+                        {
+                            rank.Rank = model.Rank;
+                        }
+                    }
+                    rank.IsException = model.IsException;
+                    rank.Comment = model.Comment;
+                    _xRankTable.Update(rank);
+                }
+            }
         }
         public void Delete(RankCommand model)
         {
@@ -302,6 +367,128 @@ namespace AdminHandler.Handlers.Ranking
                 if (rank == null)
                     throw ErrorStates.NotFound(model.Id.ToString());
                 _xRankTable.Remove(rank);
+            }
+        }
+        public void ExceptionCase(RankCommand model)
+        {
+            var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+
+            var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
+            if (deadline == null || deadline.DeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(model.Quarter.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                throw ErrorStates.NotAllowed("permission");
+            if(org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
+            {
+                var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                if (field == null)
+                    throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+                
+                if(model.SubFieldId!=0)
+                {
+                    var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                    if (subField == null)
+                        throw ErrorStates.NotFound("sub field ");
+
+                    var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).ToList();
+                        
+                    if (rank.Count()>0 && model.SwitchValue == 1)
+                    {
+                        _db.Context.Set<GRankTable>().RemoveRange(rank);
+                        _db.Context.SaveChanges();
+                    }
+                    if (model.SwitchValue == 0)
+                    {
+                        if(rank.Count()>0)
+                        {
+                            _db.Context.Set<GRankTable>().RemoveRange(rank);
+                            _db.Context.SaveChanges();
+                        }
+                        GRankTable addModel = new GRankTable()
+                        {
+                            OrganizationId = model.OrganizationId,
+                            Year = model.Year,
+                            Quarter = model.Quarter,
+                            Rank = model.Rank,
+                            IsException = model.IsException,
+                            SphereId = field.SphereId,
+                            FieldId = field.Id,
+                            Comment = model.Comment,
+                            SubFieldId = 0,
+                            ElementId = 0
+                        };
+                        addModel.Rank = subField.MaxRate;
+                        addModel.IsException = true;
+                        addModel.SubFieldId = subField.Id;
+                        _gRankTable.Update(addModel);
+                    }
+                    
+                }
+                else
+                 {
+                    var ranks = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).ToList();
+                    if(ranks.Count()>0 && model.SwitchValue == 1)
+                    {
+                        _db.Context.Set<GRankTable>().RemoveRange(ranks);
+                        _db.Context.SaveChanges();
+                    }
+                    if(model.SwitchValue == 0)
+                    {
+                        if(ranks.Count()>0)
+                        {
+                            _db.Context.Set<GRankTable>().RemoveRange(ranks);
+                            _db.Context.SaveChanges();
+                        }
+                        var sFields = _gSubField.Find(f => f.FieldId == field.Id).ToList();
+                        if(sFields.Count()>0)
+                        {
+                            List<GRankTable> addList = new List<GRankTable>();
+                            foreach(var s in sFields)
+                            {
+                                GRankTable addModel = new GRankTable()
+                                {
+                                    OrganizationId = model.OrganizationId,
+                                    Year = model.Year,
+                                    Quarter = model.Quarter,
+                                    Rank = model.Rank,
+                                    IsException = model.IsException,
+                                    SphereId = field.SphereId,
+                                    FieldId = field.Id,
+                                    Comment = model.Comment,
+                                    SubFieldId = 0,
+                                    ElementId = 0
+                                };
+                                addModel.Rank = s.MaxRate;
+                                addModel.IsException = true;
+                                addModel.SubFieldId = s.Id;
+                                addList.Add(addModel);
+                            }
+                            _gRankTable.AddRange(addList);
+                        }
+                        else
+                        {
+                            GRankTable addModel = new GRankTable()
+                            {
+                                OrganizationId = model.OrganizationId,
+                                Year = model.Year,
+                                Quarter = model.Quarter,
+                                Rank = model.Rank,
+                                IsException = model.IsException,
+                                SphereId = field.SphereId,
+                                FieldId = field.Id,
+                                Comment = model.Comment,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+                            addModel.Rank = field.MaxRate;
+                            addModel.IsException = true;
+                            _gRankTable.Add(addModel);
+                        }
+                        
+                    }
+                }
             }
         }
     }

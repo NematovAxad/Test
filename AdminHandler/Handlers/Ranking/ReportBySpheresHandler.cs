@@ -75,7 +75,7 @@ namespace AdminHandler.Handlers.Ranking
                 if (o.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
                     var spheres = _gSphere.GetAll().ToList();
-                    double maxRate = 0;
+                    double maxRate = 20;
                     double reached = 0;
                     foreach (var s in spheres)
                     {
@@ -105,10 +105,15 @@ namespace AdminHandler.Handlers.Ranking
                             }
                             if(subfields.Count()==0)
                             {
-                                var fieldR = _gRankTable.Find(r => r.OrganizationId == request.OrganizationId && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
-                                if(fieldR.Count>0)
+                                var fieldR = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
+                                if (fieldR.Count() > 1)
+                                {
+                                    fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
+                                }
+                                if(fieldR.Count()==1)
+                                {
                                     fieldRate = fieldR.First().Rank;
-
+                                }
                             }
 
                             sphereRate = sphereRate + fieldRate;
@@ -160,7 +165,7 @@ namespace AdminHandler.Handlers.Ranking
                             }
                             if (subfields.Count() == 0)
                             {
-                                var fieldR = _xRankTable.Find(r => r.OrganizationId == request.OrganizationId && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
+                                var fieldR = _xRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
                                 if (fieldR.Count > 0)
                                     fieldRate = fieldR.First().Rank;
 

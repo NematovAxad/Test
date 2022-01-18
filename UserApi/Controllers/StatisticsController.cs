@@ -32,7 +32,7 @@ namespace UserApi.Controllers
                 
 
                 var path = Directory.GetCurrentDirectory();
-                path = Path.Combine(path, "Templates", "templateExport.xlsx");
+                path = Path.Combine(path, "Templates", "templateExportGov.xlsx");
 
                 var template = new XLTemplate(path);
 
@@ -52,7 +52,7 @@ namespace UserApi.Controllers
                 stream.Flush();
                 stream.Position = 0;
 
-                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgreport.xlsx");
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Шакл 1.xlsx");
             }
             catch (Exception ex)
             {

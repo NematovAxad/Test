@@ -51,7 +51,7 @@ namespace AdminHandler.Handlers.Ranking
                 }
 
                 _db.Context.Set<Deadline>().UpdateRange(list);
-                
+                _db.Context.SaveChanges();
             }
             Deadline addModel = new Deadline()
             {
@@ -78,7 +78,7 @@ namespace AdminHandler.Handlers.Ranking
                 }
 
                 _db.Context.Set<Deadline>().UpdateRange(list);
-
+                _db.Context.SaveChanges();
             }
             deadline.IsActive = model.IsActive;
             deadline.DeadlineDate = model.DeadlineDate;
