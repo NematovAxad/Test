@@ -20,5 +20,11 @@
     <ProjectReference Include="..\ApiConfigs\ApiConfigs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Templates\templateExportGov.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>
