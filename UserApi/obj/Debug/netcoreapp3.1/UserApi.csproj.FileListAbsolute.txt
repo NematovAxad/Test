@@ -102,3 +102,4 @@ E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.MvcAppli
 E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.csproj.CopyComplete
 E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\UserApi.xml
 E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Newtonsoft.dll
+E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\Templates\templateExportGov.xlsx

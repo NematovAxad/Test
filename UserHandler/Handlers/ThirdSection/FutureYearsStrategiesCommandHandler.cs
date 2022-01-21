@@ -103,11 +103,11 @@ namespace UserHandler.Handlers.ThirdSection
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
-            var futureStrategies = _futureStrategies.Find(h => h.OrganizationId == model.OrganizationId && h.DocumentNumber == model.DocumentNumber).FirstOrDefault();
+            var futureStrategies = _futureStrategies.Find(h=>h.Id == model.Id).FirstOrDefault();
             if (futureStrategies != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == futureStrategies.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == futureStrategies.Organization.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
