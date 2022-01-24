@@ -79,7 +79,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
             var futureStrategies = _futureStrategies.Find(h => h.Id == model.Id).FirstOrDefault();
-            if (futureStrategies != null)
+            if (futureStrategies == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == futureStrategies.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
