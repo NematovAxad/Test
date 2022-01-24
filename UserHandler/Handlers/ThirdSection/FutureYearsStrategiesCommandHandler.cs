@@ -78,7 +78,7 @@ namespace UserHandler.Handlers.ThirdSection
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
-            var futureStrategies = _futureStrategies.Find(h => h.OrganizationId == model.OrganizationId && h.DocumentNumber == model.DocumentNumber).FirstOrDefault();
+            var futureStrategies = _futureStrategies.Find(h => h.Id == model.Id).FirstOrDefault();
             if (futureStrategies != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
