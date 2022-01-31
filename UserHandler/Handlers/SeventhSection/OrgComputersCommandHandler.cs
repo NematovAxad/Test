@@ -96,7 +96,7 @@ namespace UserHandler.Handlers.SeventhSection
         {
             
             var orgComputers = _orgComputers.Find(h => h.Id == model.Id).FirstOrDefault();
-            if (orgComputers != null)
+            if (orgComputers == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgComputers.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
