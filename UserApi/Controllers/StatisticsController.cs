@@ -32,17 +32,35 @@ namespace UserApi.Controllers
                 
 
                 var path = Directory.GetCurrentDirectory();
-                path = Path.Combine(path, "Templates", "templateExportGov.xlsx");
-
-                var template = new XLTemplate(path);
-
-                var variable = new
+                string fileName = "";
+                
+                if (query.Category == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
-                    Items = data.Item
-                };
-
-
-                template.AddVariable(variable);
+                    path = Path.Combine(path, "Templates", "templateExportGov.xlsx");
+                    fileName = "Шакл 1.xlsx"; 
+                }
+                if(query.Category == Domain.Enums.OrgCategory.FarmOrganizations)
+                {
+                    path = Path.Combine(path, "Templates", "templateExportXoz.xlsx");
+                    fileName = "Форма 2.xlsx";
+                }
+                var template = new XLTemplate(path);
+                if(query.Category == Domain.Enums.OrgCategory.GovernmentOrganizations)
+                {
+                    var variable = new
+                    {
+                        Items = data.ItemGov
+                    };
+                    template.AddVariable(variable);
+                }
+                if (query.Category == Domain.Enums.OrgCategory.FarmOrganizations)
+                {
+                    var variable = new
+                    {
+                        Items = data.ItemXoz
+                    };
+                    template.AddVariable(variable);
+                }
                 template.Generate();
            
                 Stream stream = new MemoryStream();
@@ -52,7 +70,7 @@ namespace UserApi.Controllers
                 stream.Flush();
                 stream.Position = 0;
 
-                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Шакл 1.xlsx");
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
             }
             catch (Exception ex)
             {

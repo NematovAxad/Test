@@ -53,10 +53,13 @@ namespace UserHandler.Handlers.DownloadHandler
             _xField = xField;
             _xSubField = xSubField;
         }
-
+        public List<XRankTable> xRankTable;
+        public List<GRankTable> gRankTable;
         public async Task<ExportReportResult> Handle(ExportReportQuery request, CancellationToken cancellationToken)
         {
-            ExportReportResult result = new ExportReportResult() { Item = new List<ExportReportResultModelG>() };
+            xRankTable = _xRankTable.GetAll().ToList();
+            gRankTable = _gRankTable.GetAll().ToList();
+            ExportReportResult result = new ExportReportResult() { ItemGov = new List<ExportReportResultModelG>(), ItemXoz = new List<ExportReportResultModelX>() };
             string exception = "ИСТИСНО";
             var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
             if (deadline == null)
@@ -75,7 +78,7 @@ namespace UserHandler.Handlers.DownloadHandler
                 foreach(var o in org)
                 {
                     ExportReportResultModelG model = new ExportReportResultModelG();
-                    model.Count = result.Item.Count() + 1;
+                    model.Count = result.ItemGov.Count() + 1;
                     model.OrgName = o.ShortName;
 
                     double rateSum = 0;
@@ -173,31 +176,268 @@ namespace UserHandler.Handlers.DownloadHandler
                         }
                     }
 
-                    model.SphereRate1 = SphereRateCalculate(1, deadline, o).ToString();
-                    model.SphereRate2 = SphereRateCalculate(2, deadline, o).ToString();
-                    rateSum = Convert.ToDouble(model.SphereRate1) + Convert.ToDouble(model.SphereRate2) + SphereRateCalculate(4, deadline, o) + SphereRateCalculate(5, deadline, o);
+                    model.SphereRate1 = SphereRateCalculateG(1, deadline, o).ToString();
+                    model.SphereRate2 = SphereRateCalculateG(2, deadline, o).ToString();
+                    rateSum = Convert.ToDouble(model.SphereRate1) + Convert.ToDouble(model.SphereRate2) + SphereRateCalculateG(4, deadline, o).Result.Rate + SphereRateCalculateG(5, deadline, o).Result.Rate;
                     model.RateSum = rateSum.ToString();
                     model.RatePercent = Math.Round((rateSum / maxRate)*100, 2).ToString()+"%";
-                    result.Item.Add(model);
+                    result.ItemGov.Add(model);
+                }
+            }
+            if(request.Category == Domain.Enums.OrgCategory.FarmOrganizations)
+            {
+                double maxRate = _gField.GetAll().Select(f => f.MaxRate).Sum() + 20;
+                foreach(var o in org)
+                {
+                    ExportReportResultModelX model = new ExportReportResultModelX();
+                    model.Count = result.ItemGov.Count() + 1;
+                    model.OrgName = o.ShortName;
+
+                    double rateSumArifm = 0;
+                    double rateSum = 0;
+                    model.FieldRate23 = "0";
+                    model.FieldRate24 = FieldRateCalculateX(1, deadline, o).Result.IsException == false ? FieldRateCalculateX(1, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate25 = FieldRateCalculateX(2, deadline, o).Result.IsException == false ? FieldRateCalculateX(2, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate26 = FieldRateCalculateX(3, deadline, o).Result.IsException == false ? FieldRateCalculateX(3, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate27 = FieldRateCalculateX(4, deadline, o).Result.IsException == false ? FieldRateCalculateX(4, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate29 = FieldRateCalculateX(5, deadline, o).Result.IsException == false ? FieldRateCalculateX(5, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate210 = FieldRateCalculateX(6, deadline, o).Result.IsException == false ? FieldRateCalculateX(6, deadline, o).Result.Rate.ToString() : exception;
+                    model.Sphere1Arifm = ((FieldRateCalculateX(1, deadline, o).Result.IsException == false ? FieldRateCalculateX(1, deadline, o).Result.Rate : 0) +
+                                            (FieldRateCalculateX(2, deadline, o).Result.IsException == false ? FieldRateCalculateX(2, deadline, o).Result.Rate : 0) +
+                                            (FieldRateCalculateX(3, deadline, o).Result.IsException == false ? FieldRateCalculateX(3, deadline, o).Result.Rate : 0) +
+                                            (FieldRateCalculateX(4, deadline, o).Result.IsException == false ? FieldRateCalculateX(4, deadline, o).Result.Rate : 0) +
+                                            (FieldRateCalculateX(5, deadline, o).Result.IsException == false ? FieldRateCalculateX(5, deadline, o).Result.Rate : 0) +
+                                            (FieldRateCalculateX(6, deadline, o).Result.IsException == false ? FieldRateCalculateX(6, deadline, o).Result.Rate : 0)).ToString();
+                    rateSumArifm = rateSumArifm + Convert.ToDouble(model.Sphere1Arifm);
+                    model.Sphere1All = SphereRateCalculateX(1, deadline, o).Result.Rate.ToString();
+                    rateSum = rateSum + Convert.ToDouble(model.Sphere1All);
+
+
+                    model.FieldRate31 = (FieldRateCalculateX(7, deadline, o).Result.IsException == false && FieldRateCalculateX(8, deadline, o).Result.IsException == false && FieldRateCalculateX(9, deadline, o).Result.IsException == false && FieldRateCalculateX(10, deadline, o).Result.IsException == false) ? 
+                        (FieldRateCalculateX(7, deadline, o).Result.Rate + FieldRateCalculateX(8, deadline, o).Result.Rate + FieldRateCalculateX(9, deadline, o).Result.Rate + FieldRateCalculateX(10, deadline, o).Result.Rate).ToString() : exception;
+                    if(model.FieldRate31!=exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate31);
+                    model.FieldRate32 = FieldRateCalculateX(11, deadline, o).Result.IsException == false ? FieldRateCalculateX(11, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate32 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate32);
+                    model.FieldRate33 = exception;
+                    model.Sphere2All = SphereRateCalculateX(2, deadline, o).Result.Rate.ToString();
+                    rateSum = rateSum + Convert.ToDouble(model.Sphere2All);
+
+
+                    model.FieldRate41 = exception;
+                    model.FieldRate42 = exception;
+                    model.FieldRate43 = exception;
+                    model.Sphere3All = "0";
+
+
+                    model.FieldRate511 = FieldRateCalculateX(12, deadline, o).Result.IsException == false ? FieldRateCalculateX(12, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate511 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate511);
+                    model.FieldRate512 = ((SubFieldRateCalculateX(8, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(8, deadline, o).Result.Rate : 0) +
+                                            (SubFieldRateCalculateX(9, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(9, deadline, o).Result.Rate : 0) +
+                                            (SubFieldRateCalculateX(10, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(10, deadline, o).Result.Rate : 0) +
+                                            (SubFieldRateCalculateX(11, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(11, deadline, o).Result.Rate : 0) +
+                                            (SubFieldRateCalculateX(12, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(12, deadline, o).Result.Rate : 0) +
+                                            (SubFieldRateCalculateX(13, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(13, deadline, o).Result.Rate : 0)).ToString();
+                    if (model.FieldRate512 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate512);
+                    model.FieldRate513 = FieldRateCalculateX(14, deadline, o).Result.IsException == false ? FieldRateCalculateX(14, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate513 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate513);
+                    model.FieldRate52 = SubFieldRateCalculateX(19, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(19, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate52 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate52);
+                    model.Sphere4All = SphereRateCalculateX(4, deadline, o).Result.Rate.ToString();
+                    rateSum = rateSum + Convert.ToDouble(model.Sphere4All);
+
+
+                    model.FieldRate61 = FieldRateCalculateX(15, deadline, o).Result.IsException == false ? FieldRateCalculateX(15, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate61 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate61);
+                    model.FieldRate62 = FieldRateCalculateX(16, deadline, o).Result.IsException == false ? FieldRateCalculateX(16, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate62 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate62);
+                    model.Sphere5All = SphereRateCalculateX(5, deadline, o).Result.Rate.ToString();
+                    rateSum = rateSum + Convert.ToDouble(model.Sphere5All);
+
+
+                    model.AllArifm = rateSumArifm.ToString();
+                    model.Percentage = Math.Round((rateSum / maxRate) * 100, 2).ToString()+"%";
+                    result.ItemXoz.Add(model);
                 }
             }
             
-            
             return result;
         }
-        public double SphereRateCalculate(int sphereId, Deadline deadline, Organizations o)
+        public async Task<SubFieldRateCalculateResult> SubFieldRateCalculateX(int subFieldId, Deadline deadline, Organizations o)
         {
+            SubFieldRateCalculateResult result = new SubFieldRateCalculateResult();
+            double subFieldRate = 0;
+          
+            var fieldRates = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SubFieldId == subFieldId).ToList();
+            if (fieldRates.Count()>0 && fieldRates.All(r => r.IsException == true))
+            {
+                result.IsException = true;
+            }
+            if(fieldRates.Count() > 0 && !fieldRates.All(r => r.IsException == true))
+            {
+                result.IsException = false;
+            }
+            if (fieldRates.Count() > 1)
+            {
+                subFieldRate = subFieldRate + Math.Round(fieldRates.Select(r => r.Rank).Sum() / fieldRates.Count(), 2);
+            }
+            if (fieldRates.Count() == 1)
+            {
+                subFieldRate = subFieldRate + fieldRates.First().Rank;
+            }
+         
+            result.Rate = subFieldRate;
+            return result;
+        }
+        public async Task<SubFieldRateCalculateResult> SubFieldRateCalculateG(int subFieldId, Deadline deadline, Organizations o)
+        {
+            SubFieldRateCalculateResult result = new SubFieldRateCalculateResult();
+            double subFieldRate = 0;
+            
+            var fieldRates = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SubFieldId == subFieldId).ToList();
+            if (fieldRates.Count() > 0 && fieldRates.All(r => r.IsException == true))
+            {
+                result.IsException = true;
+            }
+            if (fieldRates.Count() > 0 && !fieldRates.All(r => r.IsException == true))
+            {
+                result.IsException = false;
+            }
+            if (fieldRates.Count() > 1)
+            {
+                subFieldRate = subFieldRate + Math.Round(fieldRates.Select(r => r.Rank).Sum() / fieldRates.Count(), 2);
+            }
+            if (fieldRates.Count() == 1)
+            {
+                subFieldRate = subFieldRate + fieldRates.First().Rank;
+            }
+
+            result.Rate = subFieldRate;
+            return result;
+        }
+        public async Task<FieldRateCalculateResult> FieldRateCalculateX(int fieldId, Deadline deadline, Organizations o)
+        {
+            FieldRateCalculateResult result = new FieldRateCalculateResult();
+            double fieldRate = 0;
+            
+            var fieldRates = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == fieldId).ToList();
+            if (fieldRates.Count()>0 && fieldRates.All(r => r.IsException == true))
+            {
+                result.IsException = true;
+            }
+            else
+            {
+                result.IsException = false;
+            }
+            var subfields = _xSubField.Find(s => s.FieldId == fieldId).ToList();
+            if (subfields.Count() > 0)
+            {
+                foreach (var sField in subfields)
+                {
+                    var ranks = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == fieldId && r.SubFieldId == sField.Id).ToList();
+                    if (ranks.Count() > 1)
+                    {
+                        fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
+                    }
+                    if (ranks.Count() == 1)
+                    {
+                        fieldRate = fieldRate + ranks.First().Rank;
+                    }
+                }
+
+            }
+            if (subfields.Count() == 0)
+            {
+                var fieldR = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == fieldId).ToList();
+                if (fieldR.Count() > 1)
+                {
+                    fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
+                }
+                if (fieldR.Count() == 1)
+                {
+                    fieldRate = fieldR.First().Rank;
+                }
+            }
+            result.Rate = fieldRate;
+            return result;
+        }
+        public async Task<FieldRateCalculateResult> FieldRateCalculateG(int fieldId, Deadline deadline, Organizations o)
+        {
+            FieldRateCalculateResult result = new FieldRateCalculateResult();
+            double fieldRate = 0;
+            
+            var fieldRates = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == fieldId).ToList();
+            if (fieldRates.All(r => r.IsException == true))
+            {
+                result.IsException = true;
+            }
+            else
+            {
+                result.IsException = false;
+            }
+            var subfields = _gSubField.Find(s => s.FieldId == fieldId).ToList();
+            if (subfields.Count() > 0)
+            {
+                foreach (var sField in subfields)
+                {
+                    var ranks = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == fieldId && r.SubFieldId == sField.Id).ToList();
+                    if (ranks.Count() > 1)
+                    {
+                        fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
+                    }
+                    if (ranks.Count() == 1)
+                    {
+                        fieldRate = fieldRate + ranks.First().Rank;
+                    }
+                }
+
+            }
+            if (subfields.Count() == 0)
+            {
+                var fieldR = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == fieldId).ToList();
+                if (fieldR.Count() > 1)
+                {
+                    fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
+                }
+                if (fieldR.Count() == 1)
+                {
+                    fieldRate = fieldR.First().Rank;
+                }
+            }
+            result.Rate = fieldRate;
+            return result;
+        }
+        public async Task<SphereRateCalculateResult> SphereRateCalculateX(int sphereId, Deadline deadline, Organizations o)
+        {
+            SphereRateCalculateResult result = new SphereRateCalculateResult();
+
             double sphereRate = 0;
-            var fields = _gField.Find(f => f.SphereId == sphereId).ToList();
+            var fields = _xField.Find(f => f.SphereId == sphereId).ToList();
+            var sphereRates = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == sphereId).ToList();
+            if (sphereRates.All(r => r.IsException == true))
+            {
+                result.IsException = true;
+            }
+            else
+            {
+                result.IsException = false;
+            }
             foreach (var f in fields)
             {
                 double fieldRate = 0;
-                var subfields = _gSubField.Find(s => s.FieldId == f.Id).ToList();
+                var subfields = _xSubField.Find(s => s.FieldId == f.Id).ToList();
                 if (subfields.Count() > 0)
                 {
                     foreach (var sField in subfields)
                     {
-                        var ranks = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id).ToList();
+                        var ranks = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id).ToList();
                         if (ranks.Count() > 1)
                         {
                             fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
@@ -211,7 +451,7 @@ namespace UserHandler.Handlers.DownloadHandler
                 }
                 if (subfields.Count() == 0)
                 {
-                    var fieldR = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
+                    var fieldR = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
                     if (fieldR.Count() > 1)
                     {
                         fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
@@ -221,10 +461,62 @@ namespace UserHandler.Handlers.DownloadHandler
                         fieldRate = fieldR.First().Rank;
                     }
                 }
-
                 sphereRate = sphereRate + fieldRate;
             }
-            return sphereRate;
+            result.Rate = sphereRate;
+            return result;
+        }
+        public async Task<SphereRateCalculateResult> SphereRateCalculateG(int sphereId, Deadline deadline, Organizations o)
+        {
+            SphereRateCalculateResult result = new SphereRateCalculateResult();
+
+            double sphereRate = 0;
+            var fields = _gField.Find(f => f.SphereId == sphereId).ToList();
+            var sphereRates = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == sphereId).ToList();
+            if(sphereRates.All(r=>r.IsException == true))
+            {
+                result.IsException = true;
+            }
+            else
+            {
+                result.IsException = false;
+            }
+            foreach (var f in fields)
+            {
+                double fieldRate = 0;
+                var subfields = _gSubField.Find(s => s.FieldId == f.Id).ToList();
+                if (subfields.Count() > 0)
+                {
+                    foreach (var sField in subfields)
+                    {
+                        var ranks = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id).ToList();
+                        if (ranks.Count() > 1)
+                        {
+                            fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
+                        }
+                        if (ranks.Count() == 1)
+                        {
+                            fieldRate = fieldRate + ranks.First().Rank;
+                        }
+                    }
+
+                }
+                if (subfields.Count() == 0)
+                {
+                    var fieldR = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
+                    if (fieldR.Count() > 1)
+                    {
+                        fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
+                    }
+                    if (fieldR.Count() == 1)
+                    {
+                        fieldRate = fieldR.First().Rank;
+                    }
+                }
+                sphereRate = sphereRate + fieldRate;
+            }
+            result.Rate = sphereRate;
+            return result;
         }
     }
 }
