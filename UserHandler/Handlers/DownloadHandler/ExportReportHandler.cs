@@ -176,8 +176,8 @@ namespace UserHandler.Handlers.DownloadHandler
                         }
                     }
 
-                    model.SphereRate1 = SphereRateCalculateG(1, deadline, o).ToString();
-                    model.SphereRate2 = SphereRateCalculateG(2, deadline, o).ToString();
+                    model.SphereRate1 = SphereRateCalculateG(1, deadline, o).Result.Rate.ToString();
+                    model.SphereRate2 = SphereRateCalculateG(2, deadline, o).Result.Rate.ToString();
                     rateSum = Convert.ToDouble(model.SphereRate1) + Convert.ToDouble(model.SphereRate2) + SphereRateCalculateG(4, deadline, o).Result.Rate + SphereRateCalculateG(5, deadline, o).Result.Rate;
                     model.RateSum = rateSum.ToString();
                     model.RatePercent = Math.Round((rateSum / maxRate)*100, 2).ToString()+"%";
