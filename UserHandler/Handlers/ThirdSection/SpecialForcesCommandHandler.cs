@@ -197,7 +197,7 @@ namespace UserHandler.Handlers.ThirdSection
         }
         public void Delete(SpecialForcesCommand model)
         {
-            var specialForces = _specialForces.Find(h => h.OrganizationId == model.OrganizationId).FirstOrDefault();
+            var specialForces = _specialForces.Find(h => h.Id == model.Id).FirstOrDefault();
             if (specialForces == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
