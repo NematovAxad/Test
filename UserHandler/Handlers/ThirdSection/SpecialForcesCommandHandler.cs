@@ -125,8 +125,8 @@ namespace UserHandler.Handlers.ThirdSection
         }
         public void Update(SpecialForcesCommand model)
         {
-            var specialForces = _specialForces.Find(h => h.OrganizationId == model.OrganizationId).FirstOrDefault();
-            if (specialForces != null)
+            var specialForces = _specialForces.Find(h => h.Id == model.Id).FirstOrDefault();
+            if (specialForces == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == specialForces.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
@@ -198,7 +198,7 @@ namespace UserHandler.Handlers.ThirdSection
         public void Delete(SpecialForcesCommand model)
         {
             var specialForces = _specialForces.Find(h => h.OrganizationId == model.OrganizationId).FirstOrDefault();
-            if (specialForces != null)
+            if (specialForces == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == specialForces.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))

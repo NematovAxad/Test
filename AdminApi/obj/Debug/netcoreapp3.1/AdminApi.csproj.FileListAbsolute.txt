@@ -67,6 +67,7 @@ E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Npgsql.dll
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Newtonsoft.dll
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.ReDoc.dll
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
 E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -103,4 +104,3 @@ E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.csproj
 E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.dll
 E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.pdb
 E:\projects\NisSystem\nissystem\AdminApi\obj\Debug\netcoreapp3.1\AdminApi.genruntimeconfig.cache
-E:\projects\NisSystem\nissystem\AdminApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Newtonsoft.dll

@@ -4,6 +4,7 @@ using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
 using Domain.Models.SeventhSection;
 using Domain.Models.ThirdSection;
+using Domain.MonitoringModels.Models;
 using EntityRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -63,5 +64,14 @@ namespace MainInfrastructures.Db
         public DbSet<XSubField> XSubField { get; set; }
         public DbSet<XRankTable> XRankTable { get; set; }
         public DbSet<GRankTable> GRankTable { get; set; }
+        public DbSet<Application> Application { get; set; }
+        public DbSet<Comment> Comment { get; set; }
+        public DbSet<Cooworkers> Cooworkers { get; set; }
+        public DbSet<FileStage> FileStage { get; set; }
+        public DbSet<Financier> Financier { get; set; }
+        public DbSet<NormativeLegalDocument> NormativeLegalDocument { get; set; }
+        public DbSet<Performencer> Performencer { get; set; }
+        public DbSet<Project> Project { get; set; }
+        public DbSet<Stage> Stage { get; set; }
     }
 }

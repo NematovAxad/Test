@@ -1821,6 +1821,324 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("x_sphere","ranking");
                 });
 
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Application", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("NameRu")
+                        .HasColumnName("name_ru")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameUz")
+                        .HasColumnName("name_uz")
+                        .HasColumnType("text");
+
+                    b.Property<int>("NormativeLegalDocumentId")
+                        .HasColumnName("normative_legal_document_id")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("PerformanceYear")
+                        .HasColumnName("performance_year")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ShortName")
+                        .HasColumnName("short_name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormativeLegalDocumentId");
+
+                    b.ToTable("application","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("DateComment")
+                        .HasColumnName("date_comment")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("StageId")
+                        .HasColumnName("stages_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .HasColumnName("text")
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnName("user_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserName")
+                        .HasColumnName("user_name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StageId");
+
+                    b.ToTable("comment","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Cooworkers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("PerformencerId")
+                        .HasColumnName("performencer_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnName("project_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PerformencerId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("cooworkers","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.FileStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("FileSaveDate")
+                        .HasColumnName("file_save_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .HasColumnName("path")
+                        .HasColumnType("text");
+
+                    b.Property<int>("StageId")
+                        .HasColumnName("stages_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserName")
+                        .HasColumnName("user_name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StageId");
+
+                    b.ToTable("file","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Financier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("NameRu")
+                        .HasColumnName("name_ru")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameUz")
+                        .HasColumnName("name_uz")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("financier","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.NormativeLegalDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("ApprovedDate")
+                        .HasColumnName("approved_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("DocumentType")
+                        .HasColumnName("document_type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NameRu")
+                        .HasColumnName("name_ru")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameUz")
+                        .HasColumnName("name_uz")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Number")
+                        .HasColumnName("number")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("normative_legal_document","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Performencer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("performencer","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnName("application_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CostEffective")
+                        .HasColumnName("cost_effective")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnName("end_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("NameRu")
+                        .HasColumnName("name_ru")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameUz")
+                        .HasColumnName("name_uz")
+                        .HasColumnType("text");
+
+                    b.Property<double>("Payouts")
+                        .HasColumnName("payouts")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("PerformencerId")
+                        .HasColumnName("performencer_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Problem")
+                        .HasColumnName("problem")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectPurpose")
+                        .HasColumnName("project_purpose")
+                        .HasColumnType("text");
+
+                    b.Property<double>("RaisedFunds")
+                        .HasColumnName("raised_funds")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnName("start_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("status")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("VolumeForecastFunds")
+                        .HasColumnName("volume_forecast_funds")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("PerformencerId");
+
+                    b.ToTable("project","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Stage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnName("creation_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("CreationUserId")
+                        .HasColumnName("creation_user_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CreationUserName")
+                        .HasColumnName("creation_username")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnName("end_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnName("project_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StageStatus")
+                        .HasColumnName("stage_status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnName("start_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("stage","module_regions");
+                });
+
             modelBuilder.Entity("Domain.Models.BasedDocuments", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organization")
@@ -2144,6 +2462,79 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.XSphere", "XSphere")
                         .WithMany()
                         .HasForeignKey("SphereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Application", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.NormativeLegalDocument", "NormativeLegalDocument")
+                        .WithMany("Applications")
+                        .HasForeignKey("NormativeLegalDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Comment", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Stage", "Stage")
+                        .WithMany("Comments")
+                        .HasForeignKey("StageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Cooworkers", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Performencer", "Performencer")
+                        .WithMany()
+                        .HasForeignKey("PerformencerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.MonitoringModels.Models.Project", "Project")
+                        .WithMany("Cooworkers")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.FileStage", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Stage", "Stage")
+                        .WithMany("Files")
+                        .HasForeignKey("StageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Financier", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Project", null)
+                        .WithMany("ProjectFinanciers")
+                        .HasForeignKey("ProjectId");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Project", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Application", "Applications")
+                        .WithMany("Projects")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.MonitoringModels.Models.Performencer", "Performencer")
+                        .WithMany()
+                        .HasForeignKey("PerformencerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Stage", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Project", "Projects")
+                        .WithMany("Stages")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
