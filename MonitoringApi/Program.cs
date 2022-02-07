@@ -15,7 +15,7 @@ namespace MonitoringApi
     {
         public static void Main(string[] args)
         {
-            Console.Title = "User Api";
+            Console.Title = "Monitoring Api";
             Console.WriteLine($@"Process Id: {Process.GetCurrentProcess().Id}");
 
             CreateHostBuilder(args).Build().Run();

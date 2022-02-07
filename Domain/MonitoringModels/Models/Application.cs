@@ -19,8 +19,10 @@ namespace Domain.MonitoringModels.Models
         public string NameRu { get; set; }
         [Column("short_name")]
         public string ShortName { get; set; }
-        [Column("performance_year")]
-        public DateTime PerformanceYear { get; set; }
+        [Column("performance_year_start")]
+        public DateTime PerformanceYearStart { get; set; }
+        [Column("performance_year_end")]
+        public DateTime PerformanceYearEnd { get; set; }
         [Column("normative_legal_document_id")]
         [ForeignKey("NormativeLegalDocument")]
         public int NormativeLegalDocumentId { get; set; }

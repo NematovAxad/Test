@@ -9,3 +9,4 @@ E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.csproj.Cor
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.dll
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.pdb
 E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.genruntimeconfig.cache
+E:\projects\NisSystem\nissystem\Domain\obj\Debug\netcoreapp3.1\Domain.csprojAssemblyReference.cache

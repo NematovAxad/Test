@@ -1841,8 +1841,12 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("normative_legal_document_id")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("PerformanceYear")
-                        .HasColumnName("performance_year")
+                    b.Property<DateTime>("PerformanceYearEnd")
+                        .HasColumnName("performance_year_end")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("PerformanceYearStart")
+                        .HasColumnName("performance_year_start")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ShortName")
@@ -1989,10 +1993,6 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("approved_date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("DocumentType")
-                        .HasColumnName("document_type")
-                        .HasColumnType("integer");
-
                     b.Property<string>("NameRu")
                         .HasColumnName("name_ru")
                         .HasColumnType("text");
@@ -2000,6 +2000,10 @@ namespace MainInfrastructures.Migrations
                     b.Property<string>("NameUz")
                         .HasColumnName("name_uz")
                         .HasColumnType("text");
+
+                    b.Property<int>("NormativType")
+                        .HasColumnName("document_type")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Number")
                         .HasColumnName("number")

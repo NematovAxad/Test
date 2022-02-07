@@ -104,3 +104,5 @@ E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.csproj.C
 E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.dll
 E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.pdb
 E:\projects\NisSystem\nissystem\UserApi\obj\Debug\netcoreapp3.1\UserApi.genruntimeconfig.cache
+E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\MonitoringHandler.dll
+E:\projects\NisSystem\nissystem\UserApi\bin\Debug\netcoreapp3.1\MonitoringHandler.pdb
