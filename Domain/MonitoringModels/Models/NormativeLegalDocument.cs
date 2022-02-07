@@ -27,7 +27,7 @@ namespace Domain.MonitoringModels.Models
         public DateTime ApprovedDate { get; set; }
 
         [Column("document_type")]
-        public NormativeType DocumentType { get; set; }
+        public NormativeType NormativType { get; set; }
         public ICollection<Application> Applications { get; set; }
 
     }

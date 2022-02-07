@@ -3208,6 +3208,22 @@
           "bin/placeholder/MainInfrastructures.dll": {}
         }
       },
+      "MonitoringHandler/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Autofac": "6.1.0",
+          "Domain": "1.0.0",
+          "MainInfrastructures": "1.0.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.12"
+        },
+        "compile": {
+          "bin/placeholder/MonitoringHandler.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MonitoringHandler.dll": {}
+        }
+      },
       "UserHandler/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -9396,6 +9412,11 @@
       "path": "../MainInfrastructures/MainInfrastructures.csproj",
       "msbuildProject": "../MainInfrastructures/MainInfrastructures.csproj"
     },
+    "MonitoringHandler/1.0.0": {
+      "type": "project",
+      "path": "../MonitoringHandler/MonitoringHandler.csproj",
+      "msbuildProject": "../MonitoringHandler/MonitoringHandler.csproj"
+    },
     "UserHandler/1.0.0": {
       "type": "project",
       "path": "../UserHandler/UserHandler.csproj",
@@ -9416,6 +9437,7 @@
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 3.1.9",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 3.1.9",
       "Microsoft.Extensions.DependencyInjection.Abstractions >= 5.0.0",
+      "MonitoringHandler >= 1.0.0",
       "Swashbuckle.AspNetCore.Newtonsoft >= 6.0.7",
       "Swashbuckle.AspNetCore.ReDoc >= 6.0.7",
       "Swashbuckle.AspNetCore.SwaggerGen >= 6.0.7",
@@ -9460,6 +9482,9 @@
             },
             "E:\\projects\\NisSystem\\nissystem\\MainInfrastructures\\MainInfrastructures.csproj": {
               "projectPath": "E:\\projects\\NisSystem\\nissystem\\MainInfrastructures\\MainInfrastructures.csproj"
+            },
+            "E:\\projects\\NisSystem\\nissystem\\MonitoringHandler\\MonitoringHandler.csproj": {
+              "projectPath": "E:\\projects\\NisSystem\\nissystem\\MonitoringHandler\\MonitoringHandler.csproj"
             },
             "E:\\projects\\NisSystem\\nissystem\\UserHandler\\UserHandler.csproj": {
               "projectPath": "E:\\projects\\NisSystem\\nissystem\\UserHandler\\UserHandler.csproj"

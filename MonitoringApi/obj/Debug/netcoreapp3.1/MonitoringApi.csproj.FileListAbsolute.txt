@@ -102,3 +102,5 @@ E:\projects\NisSystem\nissystem\MonitoringApi\obj\Debug\netcoreapp3.1\Monitoring
 E:\projects\NisSystem\nissystem\MonitoringApi\obj\Debug\netcoreapp3.1\MonitoringApi.dll
 E:\projects\NisSystem\nissystem\MonitoringApi\obj\Debug\netcoreapp3.1\MonitoringApi.pdb
 E:\projects\NisSystem\nissystem\MonitoringApi\obj\Debug\netcoreapp3.1\MonitoringApi.genruntimeconfig.cache
+E:\projects\NisSystem\nissystem\MonitoringApi\bin\Debug\netcoreapp3.1\MonitoringHandler.dll
+E:\projects\NisSystem\nissystem\MonitoringApi\bin\Debug\netcoreapp3.1\MonitoringHandler.pdb

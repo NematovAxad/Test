@@ -68,6 +68,7 @@ namespace ApiConfigs
 
             AdminHandler.Start.Builder(builder);
             UserHandler.Start.Builder(builder);
+            MonitoringHandler.Start.Builder(builder);
 
         }
         public static void PartialRegister(IServiceCollection services, ContainerBuilder builder)

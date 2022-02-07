@@ -23,7 +23,7 @@ namespace MonitoringApi
 
         public static IWebHostBuilder CreateHostBuilder(string[] args) =>
              WebHost.CreateDefaultBuilder(args)
-               .UseUrls("http://*:6052")
+               .UseUrls("http://*:6053")
                .UseStartup<Startup>();
     }
 }

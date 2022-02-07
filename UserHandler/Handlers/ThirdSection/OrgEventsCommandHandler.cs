@@ -66,7 +66,7 @@ namespace UserHandler.Handlers.ThirdSection
         public void Update(OrgEventsCommand model)
         {
             var orgEvents = _orgEvents.Find(h => h.Id == model.Id).FirstOrDefault();
-            if (orgEvents != null)
+            if (orgEvents == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgEvents.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
@@ -80,7 +80,7 @@ namespace UserHandler.Handlers.ThirdSection
         public void Delete(OrgEventsCommand model)
         {
             var orgEvents = _orgEvents.Find(h => h.Id == model.Id).FirstOrDefault();
-            if (orgEvents != null)
+            if (orgEvents == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgEvents.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))

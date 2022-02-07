@@ -32,6 +32,7 @@
     <ProjectReference Include="..\AdminHandler\AdminHandler.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\MainInfrastructures\MainInfrastructures.csproj" />
+    <ProjectReference Include="..\MonitoringHandler\MonitoringHandler.csproj" />
     <ProjectReference Include="..\UserHandler\UserHandler.csproj" />
   </ItemGroup>
 

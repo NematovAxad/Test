@@ -2513,6 +2513,7 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.9",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "3.1.9",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
+          "MonitoringHandler": "1.0.0",
           "Swashbuckle.AspNetCore.Newtonsoft": "6.0.7",
           "Swashbuckle.AspNetCore.ReDoc": "6.0.7",
           "Swashbuckle.AspNetCore.SwaggerGen": "6.0.7",
@@ -2558,6 +2559,20 @@
         },
         "compile": {
           "MainInfrastructures.dll": {}
+        }
+      },
+      "MonitoringHandler/1.0.0": {
+        "dependencies": {
+          "Autofac": "6.1.0",
+          "Domain": "1.0.0",
+          "MainInfrastructures": "1.0.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.12"
+        },
+        "runtime": {
+          "MonitoringHandler.dll": {}
+        },
+        "compile": {
+          "MonitoringHandler.dll": {}
         }
       },
       "UserHandler/1.0.0": {
@@ -5709,6 +5724,11 @@
       "sha512": ""
     },
     "MainInfrastructures/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonitoringHandler/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

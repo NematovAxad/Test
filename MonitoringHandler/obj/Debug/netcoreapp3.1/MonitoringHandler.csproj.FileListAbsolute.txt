@@ -1,0 +1,14 @@
+E:\projects\NisSystem\nissystem\MonitoringHandler\bin\Debug\netcoreapp3.1\MonitoringHandler.deps.json
+E:\projects\NisSystem\nissystem\MonitoringHandler\bin\Debug\netcoreapp3.1\MonitoringHandler.dll
+E:\projects\NisSystem\nissystem\MonitoringHandler\bin\Debug\netcoreapp3.1\MonitoringHandler.pdb
+E:\projects\NisSystem\nissystem\MonitoringHandler\bin\Debug\netcoreapp3.1\Domain.dll
+E:\projects\NisSystem\nissystem\MonitoringHandler\bin\Debug\netcoreapp3.1\MainInfrastructures.dll
+E:\projects\NisSystem\nissystem\MonitoringHandler\bin\Debug\netcoreapp3.1\Domain.pdb
+E:\projects\NisSystem\nissystem\MonitoringHandler\bin\Debug\netcoreapp3.1\MainInfrastructures.pdb
+E:\projects\NisSystem\nissystem\MonitoringHandler\obj\Debug\netcoreapp3.1\MonitoringHandler.csprojAssemblyReference.cache
+E:\projects\NisSystem\nissystem\MonitoringHandler\obj\Debug\netcoreapp3.1\MonitoringHandler.AssemblyInfoInputs.cache
+E:\projects\NisSystem\nissystem\MonitoringHandler\obj\Debug\netcoreapp3.1\MonitoringHandler.AssemblyInfo.cs
+E:\projects\NisSystem\nissystem\MonitoringHandler\obj\Debug\netcoreapp3.1\MonitoringHandler.csproj.CoreCompileInputs.cache
+E:\projects\NisSystem\nissystem\MonitoringHandler\obj\Debug\netcoreapp3.1\MonitoringHandler.csproj.CopyComplete
+E:\projects\NisSystem\nissystem\MonitoringHandler\obj\Debug\netcoreapp3.1\MonitoringHandler.dll
+E:\projects\NisSystem\nissystem\MonitoringHandler\obj\Debug\netcoreapp3.1\MonitoringHandler.pdb
