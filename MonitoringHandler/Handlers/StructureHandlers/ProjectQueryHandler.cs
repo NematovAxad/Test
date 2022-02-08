@@ -34,6 +34,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             ProjectQueryResult result = new ProjectQueryResult();
             result.Count = project.Count();
             result.Data = project.OrderBy(u => u.Id).ToList<object>();
+            result.Done = project.Where(p => p.Status == Domain.MonitoringProjectStatus.Done).Count();
+            result.InProgress = project.Where(p => p.Status == Domain.MonitoringProjectStatus.InProgress).Count();
+            result.NotDone = project.Where(p => p.Status == Domain.MonitoringProjectStatus.NotDone).Count();
+            result.ForApproval = project.Where(p => p.Status == Domain.MonitoringProjectStatus.ForApproval).Count();
+            result.ExecutedWithDelay = project.Where(p => p.Status == Domain.MonitoringProjectStatus.ExecutedWithDelay).Count();
+            result.Canceled = project.Where(p => p.Status == Domain.MonitoringProjectStatus.Canceled).Count();
+            result.FinalStage = project.Where(p => p.Status == Domain.MonitoringProjectStatus.FinalStage).Count();
+            result.ProjectsCount = project.Count();
             return result;
         }
     }
