@@ -13,6 +13,10 @@ namespace Domain.MonitoringModels.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int Id { get; set; }
+        [Column("name_ru")]
+        public string NameRu { get; set; }
+        [Column("name_uz")]
+        public string NameUz { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<FileStage> Files { get; set; }
         [Column("start_date")]
