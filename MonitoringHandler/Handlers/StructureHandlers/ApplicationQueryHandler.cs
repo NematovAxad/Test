@@ -26,28 +26,37 @@ namespace MonitoringHandler.Handlers.StructureHandlers
 
         public async Task<ApplicationQueryResult> Handle(ApplicationQuery request, CancellationToken cancellationToken)
         {
-            var application = _application.GetAll().Include(mbox=>mbox.Projects);
             var projects = _project.GetAll();
+            var application = _application.GetAll().Select(a=> new {application = a,   Done = projects.Where(p=>p.Status == Domain.MonitoringProjectStatus.Done && p.ApplicationId == a.Id).Count(),
+                                                                                        InProgress = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.InProgress && p.ApplicationId == a.Id).Count(),
+                                                                                        NotDone = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.NotDone && p.ApplicationId == a.Id).Count(),
+                                                                                        ForApproval = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.ForApproval && p.ApplicationId == a.Id).Count(),
+                                                                                        ExecutedWithDelay = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.ExecutedWithDelay && p.ApplicationId == a.Id).Count(),
+                                                                                        Canceled = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.Canceled && p.ApplicationId == a.Id).Count(),
+                                                                                        FinalStage = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.FinalStage && p.ApplicationId == a.Id).Count(),
+                                                                                        ProjectsCount = projects.Where(p=>p.ApplicationId == a.Id).Count(),
+                                                                                        }).ToList();
+            
             if (request.Id != 0)
             {
-                application = application.Where(n => n.Id == request.Id).Include(mbox => mbox.Projects);
+                application = application.Where(n => n.application.Id == request.Id).ToList();
             }
             if (request.NormativeId != 0)
             {
-                application = application.Where(n => n.NormativeLegalDocumentId == request.NormativeId).Include(mbox => mbox.Projects);
+                application = application.Where(n => n.application.NormativeLegalDocumentId == request.NormativeId).ToList();
             }
-            projects = projects.Where(p => application.Any(a => a.Id == p.ApplicationId));
-            ApplicationQueryResult result = new ApplicationQueryResult();
+            
+            ApplicationQueryResult result = new ApplicationQueryResult() { Statistics = new Statistics() };
             result.Count = application.Count();
-            result.Data = application.OrderBy(u => u.Id).ToList<object>();
-            result.Done = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.Done).Count();
-            result.InProgress = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.InProgress).Count();
-            result.NotDone = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.NotDone).Count();
-            result.ForApproval = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.ForApproval).Count();
-            result.ExecutedWithDelay = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.ExecutedWithDelay).Count();
-            result.Canceled = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.Canceled).Count();
-            result.FinalStage = projects.Where(p => p.Status == Domain.MonitoringProjectStatus.FinalStage).Count();
-            result.ProjectsCount = projects.Count();
+            result.Data = application.OrderBy(u => u.application.Id).ToList<object>();
+            result.Statistics.Done = application.Select(a => a.Done).Sum();
+            result.Statistics.InProgress = application.Select(a => a.InProgress).Sum();
+            result.Statistics.NotDone = application.Select(a => a.NotDone).Sum();
+            result.Statistics.ForApproval = application.Select(a => a.ForApproval).Sum();
+            result.Statistics.ExecutedWithDelay = application.Select(a => a.ExecutedWithDelay).Sum();
+            result.Statistics.Canceled = application.Select(a => a.Canceled).Sum();
+            result.Statistics.FinalStage = application.Select(a => a.FinalStage).Sum();
+            result.Statistics.ProjectsCount = application.Select(a => a.ProjectsCount).Sum();
             return result;
         }
     }

@@ -8,6 +8,10 @@ namespace MonitoringHandler.Results.StructureResults.QueryResults
     {
         public int Count { get; set; }
         public List<object> Data { get; set; }
+        public Statistics Statistics { get; set; }
+    }
+    public class Statistics
+    {
         public int Done { get; set; }
         public int InProgress { get; set; }
         public int NotDone { get; set; }
