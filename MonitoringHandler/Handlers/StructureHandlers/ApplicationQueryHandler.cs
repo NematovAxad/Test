@@ -28,6 +28,10 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             {
                 application = application.Where(n => n.Id == request.Id);
             }
+            if (request.NormativeId != 0)
+            {
+                application = application.Where(n => n.NormativeLegalDocumentId == request.NormativeId);
+            }
             ApplicationQueryResult result = new ApplicationQueryResult();
             result.Count = application.Count();
             result.Data = application.OrderBy(u => u.Id).ToList<object>();

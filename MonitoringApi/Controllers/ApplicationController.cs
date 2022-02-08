@@ -23,13 +23,14 @@ namespace MonitoringApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<ApplicationQueryResult>> Get([FromQuery] int id)
+        public async Task<ResponseCore<ApplicationQueryResult>> Get([FromQuery] int id, int normativeId)
         {
             try
             {
                 ApplicationQuery model = new ApplicationQuery()
                 {
-                    Id = id
+                    Id = id,
+                    NormativeId = normativeId
                 };
 
                 var result = await _mediator.Send<ApplicationQueryResult>(model);

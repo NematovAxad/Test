@@ -27,6 +27,10 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             {
                 project = project.Where(n => n.Id == request.Id);
             }
+            if (request.ApplicationId != 0)
+            {
+                project = project.Where(n => n.ApplicationId == request.ApplicationId);
+            }
             ProjectQueryResult result = new ProjectQueryResult();
             result.Count = project.Count();
             result.Data = project.OrderBy(u => u.Id).ToList<object>();

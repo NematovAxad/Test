@@ -9,5 +9,6 @@ namespace MonitoringHandler.Querys.StructureQuerys
     public class ProjectQuery:IRequest<ProjectQueryResult>
     {
         public int Id { get; set; }
+        public int ApplicationId { get; set; }
     }
 }

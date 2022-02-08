@@ -9,5 +9,6 @@ namespace MonitoringHandler.Querys.StructureQuerys
     public class ApplicationQuery:IRequest<ApplicationQueryResult>
     {
         public int Id { get; set; }
+        public int NormativeId { get; set; }
     }
 }
