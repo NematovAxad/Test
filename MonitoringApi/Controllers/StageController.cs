@@ -58,6 +58,23 @@ namespace MonitoringApi.Controllers
                 return ex;
             }
         }
+        [HttpPost]
+        public async Task<ResponseCore<CommentCommandResult>> AddComment([FromQuery] CommentCommand model)
+        {
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Add;
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send<CommentCommandResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
         [HttpPut]
         public async Task<ResponseCore<StageCommandResult>> Put([FromQuery] StageCommand model)
         {
@@ -82,6 +99,22 @@ namespace MonitoringApi.Controllers
             try
             {
                 StageCommand model = new StageCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpDelete]
+        public async Task<ResponseCore<CommentCommandResult>> DeleteComment([FromQuery] int id)
+        {
+            try
+            {
+                CommentCommand model = new CommentCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();

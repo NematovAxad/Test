@@ -17,11 +17,13 @@ namespace MonitoringHandler.Handlers.StructureHandlers
     {
         private readonly IRepository<Stage, int> _stage;
         private readonly IRepository<Project, int> _project;
+        private readonly IRepository<Comment, int> _comment;
 
-        public StageCommandHandler(IRepository<Stage, int> stage, IRepository<Project, int> project)
+        public StageCommandHandler(IRepository<Stage, int> stage, IRepository<Project, int> project, IRepository<Comment, int> comment)
         {
             _stage = stage;
             _project = project;
+            _comment = comment;
         }
 
         public async Task<StageCommandResult> Handle(StageCommand request, CancellationToken cancellationToken)
@@ -52,6 +54,18 @@ namespace MonitoringHandler.Handlers.StructureHandlers
                 CreationDate = DateTime.Now
             };
             _stage.Add(addModel);
+
+            Comment c = new Comment()
+            {
+                Text = model.Comment,
+                UserId = model.UserId,
+                UserRole = model.UserPermissions[0],
+                Action = "create",
+                UserName = model.UserId.ToString(),
+                DateComment = DateTime.Now,
+                StageId = addModel.Id
+            };
+            _comment.Add(c);
         }
         public void Update(StageCommand model)
         {
@@ -65,6 +79,18 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             stage.StageStatus = model.StageStatus;
 
             _stage.Update(stage);
+
+            Comment c = new Comment()
+            {
+                Text = model.Comment,
+                UserId = model.UserId,
+                UserRole = model.UserPermissions[0],
+                Action = "create",
+                UserName = model.UserId.ToString(),
+                DateComment = DateTime.Now,
+                StageId = stage.Id
+            };
+            _comment.Add(c);
         }
         public void Delete(StageCommand model)
         {

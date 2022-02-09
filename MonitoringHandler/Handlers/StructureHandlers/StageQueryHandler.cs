@@ -1,6 +1,7 @@
 ﻿using Domain.MonitoringModels.Models;
 using JohaRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MonitoringHandler.Commands.StructureCommands;
 using MonitoringHandler.Querys.StructureQuerys;
 using MonitoringHandler.Results.StructureResults.CommandResults;
@@ -26,14 +27,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
         }
         public async Task<StageQueryResult> Handle(StageQuery request, CancellationToken cancellationToken)
         {
-            var stage = _stage.GetAll();
+            var stage = _stage.GetAll().Include(mbox => mbox.Comments);
             if (request.Id != 0)
             {
-                stage = stage.Where(n => n.Id == request.Id);
+                stage = stage.Where(n => n.Id == request.Id).Include(mbox => mbox.Comments);
             }
             if (request.ProjectId != 0)
             {
-                stage = stage.Where(n => n.ProjectId == request.ProjectId);
+                stage = stage.Where(n => n.ProjectId == request.ProjectId).Include(mbox => mbox.Comments);
             }
             StageQueryResult result = new StageQueryResult();
             result.Count = stage.Count();

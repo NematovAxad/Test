@@ -19,6 +19,10 @@ namespace Domain.MonitoringModels.Models
 
         [Column("user_id")]
         public int UserId { get; set; }
+        [Column("user_role")]
+        public string UserRole { get; set; }
+        [Column("action")]
+        public string Action { get; set; }
 
         [Column("user_name")]
         public string UserName { get; set; }
