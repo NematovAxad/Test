@@ -1,7 +1,10 @@
 ﻿using Domain.MonitoringModels.Models;
 using Domain.States;
+using EntityRepository;
 using JohaRepository;
+using MainInfrastructures.Db;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MonitoringHandler.Commands.StructureCommands;
 using MonitoringHandler.Results.StructureResults.CommandResults;
 using System;
@@ -17,8 +20,10 @@ namespace MonitoringHandler.Handlers.StructureHandlers
     {
         private readonly IRepository<Project, int> _project;
         private readonly IRepository<Application, int> _application;
-        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application)
+        private IDataContext _db;
+        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application, IDataContext db)
         {
+            _db = db;
             _project = project;
             _application = application;
         }
@@ -55,6 +60,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
                 ApplicationId = model.ApplicationId
             };
             _project.Add(addModel);
+            if(model.ProjectFinanciers.Count>0)
+            {
+                ProjectFinanciers(addModel.Id, model.ProjectFinanciers);
+            }
+            if (model.CooworkersId.Count > 0)
+            {
+                ProjectCooworkers(addModel.Id, model.ProjectFinanciers);
+            }
         }
         public void Update(ProjectCommand model)
         {
@@ -82,6 +95,38 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             if (project == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
             _project.Remove(project);
+        }
+        public void ProjectFinanciers(int projectId, List<int> financiersId)
+        {
+            var project = _project.Find(p => p.Id == projectId).FirstOrDefault();
+            if (project == null)
+                throw ErrorStates.NotFound(projectId.ToString());
+            foreach (var f in financiersId)
+            {
+                ProjectFinanciers addModel = new ProjectFinanciers()
+                {
+                    ProjectId = project.Id,
+                    FinancierId = f
+                };
+                _db.Context.Set<ProjectFinanciers>().Add(addModel);
+                _db.Context.SaveChanges();
+            }
+        }
+        public void ProjectCooworkers(int projectId, List<int> cooworkersId)
+        {
+            var project = _project.Find(p => p.Id == projectId).FirstOrDefault();
+            if (project == null)
+                throw ErrorStates.NotFound(projectId.ToString());
+            foreach (var f in cooworkersId)
+            {
+                Cooworkers addModel = new Cooworkers()
+                {
+                    ProjectId = project.Id,
+                    PerformencerId = f
+                };
+                _db.Context.Set<Cooworkers>().Add(addModel);
+                _db.Context.SaveChanges();
+            }
         }
     }
 }

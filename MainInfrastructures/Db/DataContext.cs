@@ -73,5 +73,6 @@ namespace MainInfrastructures.Db
         public DbSet<Performencer> Performencer { get; set; }
         public DbSet<Project> Project { get; set; }
         public DbSet<Stage> Stage { get; set; }
+        public DbSet<ProjectFinanciers> ProjectFinanciers { get; set; }
     }
 }

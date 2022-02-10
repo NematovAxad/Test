@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220210071105_financiers")]
+    partial class financiers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1979,7 +1981,12 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("name_uz")
                         .HasColumnType("text");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("financier","module_regions");
                 });
@@ -2548,6 +2555,13 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.MonitoringModels.Models.Financier", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Project", null)
+                        .WithMany("ProjectFinanciers")
+                        .HasForeignKey("ProjectId");
+                });
+
             modelBuilder.Entity("Domain.MonitoringModels.Models.Project", b =>
                 {
                     b.HasOne("Domain.MonitoringModels.Models.Application", "Applications")
@@ -2572,7 +2586,7 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.MonitoringModels.Models.Project", "Project")
-                        .WithMany("ProjectFinanciers")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

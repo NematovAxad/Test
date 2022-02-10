@@ -1,6 +1,7 @@
 ﻿using Domain.MonitoringModels.Models;
 using JohaRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MonitoringHandler.Querys.StructureQuerys;
 using MonitoringHandler.Results.StructureResults.QueryResults;
 using System;
@@ -22,14 +23,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
         }
         public async Task<ProjectQueryResult> Handle(ProjectQuery request, CancellationToken cancellationToken)
         {
-            var project = _project.GetAll();
+            var project = _project.GetAll().Include(mbox=>mbox.ProjectFinanciers).Include(mbox=>mbox.Cooworkers);
             if (request.Id != 0)
             {
-                project = project.Where(n => n.Id == request.Id);
+                project = project.Where(n => n.Id == request.Id).Include(mbox => mbox.ProjectFinanciers).Include(mbox => mbox.Cooworkers); ;
             }
             if (request.ApplicationId != 0)
             {
-                project = project.Where(n => n.ApplicationId == request.ApplicationId);
+                project = project.Where(n => n.ApplicationId == request.ApplicationId).Include(mbox => mbox.ProjectFinanciers).Include(mbox => mbox.Cooworkers); ;
             }
             ProjectQueryResult result = new ProjectQueryResult();
             result.Count = project.Count();

@@ -22,7 +22,7 @@ namespace Domain.MonitoringModels.Models
         public MonitoringProjectStatus Status { get; set; }
         [Column("project_purpose")]
         public string ProjectPurpose { get; set; }
-        public ICollection<Financier> ProjectFinanciers { get; set; }
+        public ICollection<ProjectFinanciers> ProjectFinanciers { get; set; }
         [Column("cost_effective")]
         public string CostEffective { get; set; }
         [Column("problem")]

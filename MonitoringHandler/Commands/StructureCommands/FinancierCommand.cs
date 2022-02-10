@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Enums;
+﻿using Domain.Enums;
 using MediatR;
 using MonitoringHandler.Results.StructureResults.CommandResults;
 using System;
@@ -9,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace MonitoringHandler.Commands.StructureCommands
 {
-    public class ProjectCommand:IRequest<ProjectCommandResult>
+    public class FinancierCommand:IRequest<FinancierCommandResult>
     {
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
@@ -26,18 +25,5 @@ namespace MonitoringHandler.Commands.StructureCommands
         public int Id { get; set; }
         public string NameUz { get; set; }
         public string NameRu { get; set; }
-        public MonitoringProjectStatus Status { get; set; }
-        public string ProjectPurpose { get; set; }
-        public List<int> ProjectFinanciers { get; set; }
-        public string CostEffective { get; set; }
-        public string Problem { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public double VolumeForecastFunds { get; set; }
-        public double RaisedFunds { get; set; }
-        public double Payouts { get; set; }
-        public int PerformencerId { get; set; }
-        public int ApplicationId { get; set; }
-        public List<int> CooworkersId { get; set; }
     }
 }
