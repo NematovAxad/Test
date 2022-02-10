@@ -66,7 +66,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             }
             if (model.CooworkersId.Count > 0)
             {
-                ProjectCooworkers(addModel.Id, model.ProjectFinanciers);
+                ProjectCooworkers(addModel.Id, model.CooworkersId);
             }
         }
         public void Update(ProjectCommand model)

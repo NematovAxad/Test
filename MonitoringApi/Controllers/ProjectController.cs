@@ -58,6 +58,40 @@ namespace MonitoringApi.Controllers
                 return ex;
             }
         }
+        [HttpPost]
+        public async Task<ResponseCore<ProjectFinanciersCommandResult>> AddProjectFinancier([FromQuery] ProjectFinanciersCommand model)
+        {
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Add;
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send<ProjectFinanciersCommandResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpPost]
+        public async Task<ResponseCore<CooworkersCommandResult>> AddCoworker([FromQuery] CooworkersCommand model)
+        {
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Add;
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send<CooworkersCommandResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
         [HttpPut]
         public async Task<ResponseCore<ProjectCommandResult>> Put([FromQuery] ProjectCommand model)
         {
@@ -82,6 +116,38 @@ namespace MonitoringApi.Controllers
             try
             {
                 ProjectCommand model = new ProjectCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpDelete]
+        public async Task<ResponseCore<ProjectFinanciersCommandResult>> DeleteProjectFinancier([FromQuery] int id)
+        {
+            try
+            {
+                ProjectFinanciersCommand model = new ProjectFinanciersCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpDelete]
+        public async Task<ResponseCore<CooworkersCommandResult>> DeleteCooworker([FromQuery] int id)
+        {
+            try
+            {
+                CooworkersCommand model = new CooworkersCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
