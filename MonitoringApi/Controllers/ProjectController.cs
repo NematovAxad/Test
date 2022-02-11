@@ -59,6 +59,23 @@ namespace MonitoringApi.Controllers
             }
         }
         [HttpPost]
+        public async Task<ResponseCore<ProjectFileCommandResult>> AddProjectFile([FromQuery] ProjectFileCommand model)
+        {
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Add;
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send<ProjectFileCommandResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpPost]
         public async Task<ResponseCore<ProjectFinanciersCommandResult>> AddProjectFinancier([FromQuery] ProjectFinanciersCommand model)
         {
             try
@@ -116,6 +133,22 @@ namespace MonitoringApi.Controllers
             try
             {
                 ProjectCommand model = new ProjectCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpDelete]
+        public async Task<ResponseCore<ProjectFileCommandResult>> DeleteProjectFile([FromQuery] int id)
+        {
+            try
+            {
+                ProjectFileCommand model = new ProjectFileCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();

@@ -23,14 +23,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
         }
         public async Task<ProjectQueryResult> Handle(ProjectQuery request, CancellationToken cancellationToken)
         {
-            var project = _project.GetAll().Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+            var project = _project.GetAll().Include(mbox=>mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
             if (request.Id != 0)
             {
-                project = project.Where(n => n.Id == request.Id).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+                project = project.Where(n => n.Id == request.Id).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
             }
             if (request.ApplicationId != 0)
             {
-                project = project.Where(n => n.ApplicationId == request.ApplicationId).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+                project = project.Where(n => n.ApplicationId == request.ApplicationId).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
             }
             ProjectQueryResult result = new ProjectQueryResult();
             result.Count = project.Count();

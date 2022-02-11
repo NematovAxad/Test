@@ -59,6 +59,23 @@ namespace MonitoringApi.Controllers
             }
         }
         [HttpPost]
+        public async Task<ResponseCore<StageFileCommandResult>> AddStageFile([FromQuery] StageFileCommand model)
+        {
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Add;
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send<StageFileCommandResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpPost]
         public async Task<ResponseCore<CommentCommandResult>> AddComment([FromQuery] CommentCommand model)
         {
             try
@@ -99,6 +116,22 @@ namespace MonitoringApi.Controllers
             try
             {
                 StageCommand model = new StageCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpDelete]
+        public async Task<ResponseCore<StageFileCommandResult>> DeleteStageFile([FromQuery] int id)
+        {
+            try
+            {
+                StageFileCommand model = new StageFileCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();

@@ -85,7 +85,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
                 Text = model.Comment,
                 UserId = model.UserId,
                 UserRole = model.UserPermissions[0],
-                Action = "create",
+                Action = "update",
                 UserName = model.UserId.ToString(),
                 DateComment = DateTime.Now,
                 StageId = stage.Id

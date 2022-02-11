@@ -20,12 +20,15 @@ namespace MonitoringHandler.Handlers.StructureHandlers
     {
         private readonly IRepository<Project, int> _project;
         private readonly IRepository<Application, int> _application;
+        private readonly IRepository<ProjectComment, int> _projectComment;
+
         private IDataContext _db;
-        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application, IDataContext db)
+        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application, IDataContext db, IRepository<ProjectComment, int> projectComment)
         {
             _db = db;
             _project = project;
             _application = application;
+            _projectComment = projectComment;
         }
 
         public async Task<ProjectCommandResult> Handle(ProjectCommand request, CancellationToken cancellationToken)
@@ -68,6 +71,17 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             {
                 ProjectCooworkers(addModel.Id, model.CooworkersId);
             }
+            ProjectComment c = new ProjectComment()
+            {
+                Text = model.Comment,
+                UserId = model.UserId,
+                UserRole = model.UserPermissions[0],
+                Action = "create",
+                UserName = model.UserId.ToString(),
+                DateComment = DateTime.Now,
+                ProjectId = addModel.Id
+            };
+            _projectComment.Add(c);
         }
         public void Update(ProjectCommand model)
         {
@@ -88,6 +102,17 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             project.PerformencerId = model.PerformencerId;
 
             _project.Update(project);
+            ProjectComment c = new ProjectComment()
+            {
+                Text = model.Comment,
+                UserId = model.UserId,
+                UserRole = model.UserPermissions[0],
+                Action = "update",
+                UserName = model.UserId.ToString(),
+                DateComment = DateTime.Now,
+                ProjectId = project.Id
+            };
+            _projectComment.Add(c);
         }
         public void Delete(ProjectCommand model)
         {

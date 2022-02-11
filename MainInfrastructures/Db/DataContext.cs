@@ -74,5 +74,7 @@ namespace MainInfrastructures.Db
         public DbSet<Project> Project { get; set; }
         public DbSet<Stage> Stage { get; set; }
         public DbSet<ProjectFinanciers> ProjectFinanciers { get; set; }
+        public DbSet<ProjectComment> ProjectComment { get; set; }
+        public DbSet<FileProject> FileProject { get; set; }
     }
 }

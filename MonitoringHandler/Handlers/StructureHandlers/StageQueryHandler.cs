@@ -27,14 +27,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
         }
         public async Task<StageQueryResult> Handle(StageQuery request, CancellationToken cancellationToken)
         {
-            var stage = _stage.GetAll().Include(mbox => mbox.Comments);
+            var stage = _stage.GetAll().Include(mbox => mbox.Comments).Include(mbox=>mbox.Files);
             if (request.Id != 0)
             {
-                stage = stage.Where(n => n.Id == request.Id).Include(mbox => mbox.Comments);
+                stage = stage.Where(n => n.Id == request.Id).Include(mbox => mbox.Comments).Include(mbox => mbox.Files);
             }
             if (request.ProjectId != 0)
             {
-                stage = stage.Where(n => n.ProjectId == request.ProjectId).Include(mbox => mbox.Comments);
+                stage = stage.Where(n => n.ProjectId == request.ProjectId).Include(mbox => mbox.Comments).Include(mbox => mbox.Files);
             }
             StageQueryResult result = new StageQueryResult();
             result.Count = stage.Count();

@@ -39,5 +39,6 @@ namespace MonitoringHandler.Commands.StructureCommands
         public int PerformencerId { get; set; }
         public int ApplicationId { get; set; }
         public List<int> CooworkersId { get; set; }
+        public string Comment { get; set; }
     }
 }

@@ -47,5 +47,7 @@ namespace Domain.MonitoringModels.Models
         public int ApplicationId { get; set; }
         public Application Applications { get; set; }
         public ICollection<Cooworkers> Cooworkers { get; set; }
+        public ICollection<ProjectComment> ProjectComments { get; set; }
+        public ICollection<FileProject> ProjectFiles { get; set; }
     }
 }

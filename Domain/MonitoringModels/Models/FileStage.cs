@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Domain.MonitoringModels.Models
 {
-    [Table("file", Schema = "module_regions")]
+    [Table("file_stage", Schema = "module_regions")]
     public class FileStage : IDomain<int>
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,8 +17,8 @@ namespace Domain.MonitoringModels.Models
         public string Name { get; set; }
         [Column("path")]
         public string Path { get; set; }
-        [Column("user_name")]
-        public string UserName { get; set; }
+        [Column("user_id")]
+        public int UserId { get; set; }
         [Column("file_save_date")]
         public DateTime FileSaveDate { get; set; }
         [Column("stages_id")]

@@ -1928,6 +1928,41 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("cooworkers","module_regions");
                 });
 
+            modelBuilder.Entity("Domain.MonitoringModels.Models.FileProject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("FileSaveDate")
+                        .HasColumnName("file_save_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .HasColumnName("path")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnName("project_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnName("user_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("file_project","module_regions");
+                });
+
             modelBuilder.Entity("Domain.MonitoringModels.Models.FileStage", b =>
                 {
                     b.Property<int>("Id")
@@ -1952,15 +1987,15 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("stages_id")
                         .HasColumnType("integer");
 
-                    b.Property<string>("UserName")
-                        .HasColumnName("user_name")
-                        .HasColumnType("text");
+                    b.Property<int>("UserId")
+                        .HasColumnName("user_id")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StageId");
 
-                    b.ToTable("file","module_regions");
+                    b.ToTable("file_stage","module_regions");
                 });
 
             modelBuilder.Entity("Domain.MonitoringModels.Models.Financier", b =>
@@ -2101,6 +2136,49 @@ namespace MainInfrastructures.Migrations
                     b.HasIndex("PerformencerId");
 
                     b.ToTable("project","module_regions");
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.ProjectComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Action")
+                        .HasColumnName("action")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateComment")
+                        .HasColumnName("date_comment")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnName("project_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .HasColumnName("text")
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnName("user_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserName")
+                        .HasColumnName("user_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserRole")
+                        .HasColumnName("user_role")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("project_comment","module_regions");
                 });
 
             modelBuilder.Entity("Domain.MonitoringModels.Models.ProjectFinanciers", b =>
@@ -2539,6 +2617,15 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.MonitoringModels.Models.FileProject", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Project", "Project")
+                        .WithMany("ProjectFiles")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.MonitoringModels.Models.FileStage", b =>
                 {
                     b.HasOne("Domain.MonitoringModels.Models.Stage", "Stage")
@@ -2559,6 +2646,15 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.MonitoringModels.Models.Performencer", "Performencer")
                         .WithMany()
                         .HasForeignKey("PerformencerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.MonitoringModels.Models.ProjectComment", b =>
+                {
+                    b.HasOne("Domain.MonitoringModels.Models.Project", "Project")
+                        .WithMany("ProjectComments")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
