@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain;
+using MediatR;
 using MonitoringHandler.Results.StructureResults.QueryResults;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,6 @@ namespace MonitoringHandler.Querys.StructureQuerys
     {
         public int Id { get; set; }
         public int ProjectId { get; set; }
+        public StageStatus Status { get; set; }
     }
 }

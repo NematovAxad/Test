@@ -32,6 +32,10 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             {
                 stage = stage.Where(n => n.Id == request.Id).Include(mbox => mbox.Comments).Include(mbox => mbox.Files);
             }
+            if (request.Status != 0)
+            {
+                stage = stage.Where(n => n.StageStatus == request.Status).Include(mbox => mbox.Comments).Include(mbox => mbox.Files);
+            }
             if (request.ProjectId != 0)
             {
                 stage = stage.Where(n => n.ProjectId == request.ProjectId).Include(mbox => mbox.Comments).Include(mbox => mbox.Files);

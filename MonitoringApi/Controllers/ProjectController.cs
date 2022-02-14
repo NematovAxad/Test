@@ -1,5 +1,6 @@
 ﻿using ApiConfigs;
 using CoreResult.ResponseCores;
+using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +24,16 @@ namespace MonitoringApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<ProjectQueryResult>> Get([FromQuery] int id, int applicationId)
+        public async Task<ResponseCore<ProjectQueryResult>> Get([FromQuery] int id, int applicationId, int performencerId, MonitoringProjectStatus status)
         {
             try
             {
                 ProjectQuery model = new ProjectQuery()
                 {
                     Id = id,
-                    ApplicationId = applicationId
+                    ApplicationId = applicationId,
+                    PerformencerId = performencerId,
+                    Status = status
                 };
 
                 var result = await _mediator.Send<ProjectQueryResult>(model);

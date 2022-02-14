@@ -28,6 +28,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             {
                 project = project.Where(n => n.Id == request.Id).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
             }
+            if (request.PerformencerId != 0)
+            {
+                project = project.Where(n => n.PerformencerId == request.PerformencerId).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+            }
+            if (request.Status != 0)
+            {
+                project = project.Where(n => n.Status == request.Status).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+            }
             if (request.ApplicationId != 0)
             {
                 project = project.Where(n => n.ApplicationId == request.ApplicationId).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);

@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Domain;
+using Domain.Enums;
+using MediatR;
 using MonitoringHandler.Results.StructureResults.QueryResults;
 using System;
 using System.Collections.Generic;
@@ -10,5 +12,7 @@ namespace MonitoringHandler.Querys.StructureQuerys
     {
         public int Id { get; set; }
         public int ApplicationId { get; set; }
+        public int PerformencerId { get; set; }
+        public MonitoringProjectStatus Status { get; set; }
     }
 }
