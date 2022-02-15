@@ -51,7 +51,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (dataFiller != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
 
             OrgDataFiller addModel = new OrgDataFiller()
@@ -68,7 +68,10 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var orgDataFiller = _orgDataFiller.Find(h => h.Id == model.Id).FirstOrDefault();
             if (orgDataFiller == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgDataFiller.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            var org = _organization.Find(o => o.Id == orgDataFiller.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
 
             orgDataFiller.FullName = model.FullName;
@@ -82,7 +85,10 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var orgDataFiller = _orgDataFiller.Find(h => h.Id == model.Id).FirstOrDefault();
             if (orgDataFiller == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgDataFiller.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            var org = _organization.Find(o => o.Id == orgDataFiller.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             _orgDataFiller.Remove(orgDataFiller);
         }

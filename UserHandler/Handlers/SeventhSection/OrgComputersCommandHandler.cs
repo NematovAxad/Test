@@ -45,7 +45,7 @@ namespace UserHandler.Handlers.SeventhSection
             if (orgComputers != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             
 
@@ -99,7 +99,10 @@ namespace UserHandler.Handlers.SeventhSection
             if (orgComputers == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgComputers.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            var org = _organization.Find(o => o.Id == orgComputers.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
 
             orgComputers.AllComputers = model.AllComputers;
@@ -147,8 +150,10 @@ namespace UserHandler.Handlers.SeventhSection
             var orgComputers = _orgComputers.Find(h => h.Id == model.Id).FirstOrDefault();
             if (orgComputers == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgComputers.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            var org = _organization.Find(o => o.Id == orgComputers.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
 
             _orgComputers.Remove(orgComputers);

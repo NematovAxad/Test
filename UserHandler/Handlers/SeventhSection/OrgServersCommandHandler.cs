@@ -41,7 +41,7 @@ namespace UserHandler.Handlers.SeventhSection
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             OrganizationServers addModel = new OrganizationServers()
             {
@@ -59,6 +59,11 @@ namespace UserHandler.Handlers.SeventhSection
             var orgServers = _orgServers.Find(s => s.Id == model.Id).FirstOrDefault();
             if (orgServers == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
+            var org = _organization.Find(o => o.Id == orgServers.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.NotAllowed("permission");
 
             orgServers.OrganizationId = model.OrganizationId;
             orgServers.ServerType = model.ServerType;

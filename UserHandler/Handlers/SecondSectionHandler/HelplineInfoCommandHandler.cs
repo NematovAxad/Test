@@ -53,7 +53,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (helplineInfo != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());

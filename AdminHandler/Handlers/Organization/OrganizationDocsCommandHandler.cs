@@ -42,7 +42,7 @@ namespace AdminHandler.Handlers.Organization
             var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             var filePath = FileState.AddFile("orgDocs", model.File);
             OrganizationDocuments addModel = new OrganizationDocuments()
@@ -63,7 +63,10 @@ namespace AdminHandler.Handlers.Organization
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgDoc.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            var org = _organizations.Find(o => o.Id == orgDoc.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
 
             orgDoc.DocumentNo = model.DocumentNo;
@@ -84,7 +87,10 @@ namespace AdminHandler.Handlers.Organization
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == orgDoc.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            var org = _organizations.Find(o => o.Id == orgDoc.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             _orgDocuments.Remove(model.Id);
         }
