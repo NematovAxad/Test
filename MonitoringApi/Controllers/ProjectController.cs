@@ -113,7 +113,7 @@ namespace MonitoringApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<ProjectCommandResult>> Put([FromQuery] ProjectCommand model)
+        public async Task<ResponseCore<ProjectCommandResult>> Put([FromBody] ProjectCommand model)
         {
             try
             {
