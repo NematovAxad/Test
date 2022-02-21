@@ -21,14 +21,18 @@ namespace MonitoringHandler.Handlers.StructureHandlers
         private readonly IRepository<Project, int> _project;
         private readonly IRepository<Application, int> _application;
         private readonly IRepository<ProjectComment, int> _projectComment;
+        private readonly IRepository<ProjectFinanciers, int> _projectFinanciers;
+        private readonly IRepository<Cooworkers, int> _projectCoworkers;
 
         private IDataContext _db;
-        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application, IDataContext db, IRepository<ProjectComment, int> projectComment)
+        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application, IDataContext db, IRepository<ProjectComment, int> projectComment, IRepository<ProjectFinanciers, int> projectFinanciers, IRepository<Cooworkers, int> projectCoworkers)
         {
             _db = db;
             _project = project;
             _application = application;
             _projectComment = projectComment;
+            _projectFinanciers = projectFinanciers;
+            _projectCoworkers = projectCoworkers;
         }
 
         public async Task<ProjectCommandResult> Handle(ProjectCommand request, CancellationToken cancellationToken)
@@ -102,6 +106,14 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             project.PerformencerId = model.PerformencerId;
 
             _project.Update(project);
+            if (model.ProjectFinanciers.Count > 0)
+            {
+                ProjectFinanciers(project.Id, model.ProjectFinanciers);
+            }
+            if (model.CooworkersId.Count > 0)
+            {
+                ProjectCooworkers(project.Id, model.CooworkersId);
+            }
             ProjectComment c = new ProjectComment()
             {
                 Text = model.Comment,
@@ -126,6 +138,8 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             var project = _project.Find(p => p.Id == projectId).FirstOrDefault();
             if (project == null)
                 throw ErrorStates.NotFound(projectId.ToString());
+            var projectFinanciers = _projectFinanciers.Find(p => p.Id == projectId).ToList();
+            _projectFinanciers.RemoveRange(projectFinanciers);
             foreach (var f in financiersId)
             {
                 ProjectFinanciers addModel = new ProjectFinanciers()
@@ -142,6 +156,8 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             var project = _project.Find(p => p.Id == projectId).FirstOrDefault();
             if (project == null)
                 throw ErrorStates.NotFound(projectId.ToString());
+            var projectCoworkers = _projectCoworkers.Find(p => p.Id == projectId).ToList();
+            _projectCoworkers.RemoveRange(projectCoworkers);
             foreach (var f in cooworkersId)
             {
                 Cooworkers addModel = new Cooworkers()
