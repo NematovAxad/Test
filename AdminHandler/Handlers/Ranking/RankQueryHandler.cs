@@ -70,7 +70,7 @@ namespace AdminHandler.Handlers.Ranking
                             {
                                 data.Rank = data.Rank + subFieldRankWithoutElements.Rank;
                                 var subFieldToAdd = new Results.Ranking.SubField();
-                                subFieldToAdd.RankdId = subFieldRankWithoutElements.Id;
+                                subFieldToAdd.RankId = subFieldRankWithoutElements.Id;
                                 subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
