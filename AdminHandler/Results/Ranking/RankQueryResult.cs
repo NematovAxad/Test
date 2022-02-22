@@ -26,7 +26,7 @@ namespace AdminHandler.Results.Ranking
     }
     public class SubField
     {
-        public int RankdId { get; set; }
+        public int RankId { get; set; }
         public int SubFieldId { get; set; }
         public double SubfieldRank { get; set; }
         public string Comment { get; set; }

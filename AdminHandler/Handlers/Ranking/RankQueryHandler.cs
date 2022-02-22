@@ -161,6 +161,7 @@ namespace AdminHandler.Handlers.Ranking
                             {
                                 data.Rank = data.Rank + subFieldRankWithoutElements.Rank;
                                 var subFieldToAdd = new Results.Ranking.SubField();
+                                subFieldToAdd.RankId = subFieldRankWithoutElements.Id;
                                 subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
@@ -176,7 +177,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
                                 foreach (var element in subFieldRankWithElements)
                                 {
-                                    subFieldToAdd.Elements.Add(new Elements() { ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                    subFieldToAdd.Elements.Add(new Elements() {RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
