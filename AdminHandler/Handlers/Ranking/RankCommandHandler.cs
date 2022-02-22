@@ -106,7 +106,7 @@ namespace AdminHandler.Handlers.Ranking
 
                     if (model.SubFieldId != 0)
                     {
-                        var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        var subField = _gSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
                         if (model.Rank > subField.MaxRate)
@@ -187,7 +187,7 @@ namespace AdminHandler.Handlers.Ranking
                     };
                     if (model.SubFieldId != 0)
                     {
-                        var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        var subField = _xSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
                         if (model.Rank > subField.MaxRate)
@@ -276,7 +276,7 @@ namespace AdminHandler.Handlers.Ranking
                         throw ErrorStates.NotAllowed("incorrect mark");
                     if (model.SubFieldId != 0)
                     {
-                        var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        var subField = _gSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
                         if (model.Rank > subField.MaxRate)
@@ -318,7 +318,7 @@ namespace AdminHandler.Handlers.Ranking
                         throw ErrorStates.NotAllowed("incorrect mark");
                     if (model.SubFieldId != 0)
                     {
-                        var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                        var subField = _xSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
                         if (model.Rank > subField.MaxRate)
