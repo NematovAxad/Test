@@ -42,90 +42,97 @@ namespace AdminHandler.Handlers.Ranking
         }
         public async Task<RankQueryResult> Handle(RankQuery request, CancellationToken cancellationToken)
         {
-            RankQueryResult result = new RankQueryResult();
+            RankQueryResult result = new RankQueryResult() { Data = new List<Data>() };
 
             var org = _organization.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
             if(org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
             {
                 var rank = _gRankTable.Find(r=>r.OrganizationId == request.OrganizationId && r.Year == request.Year && r.Quarter == request.Quarter && r.SphereId == request.SphereId && r.FieldId == request.FieldId).ToList();
-                var subField = _gSubField.Find(s => s.FieldId == request.FieldId).ToList();
-                if(subField.Count()>0)
+                if (rank.Count > 0)
                 {
-                    result.OrganizationId = rank.First().OrganizationId;
-                    result.Year = rank.First().Year;
-                    result.Quarter = rank.First().Quarter;
-                    result.Rank = 0;
-                    result.SphereId = rank.First().SphereId;
-                    result.FieldId = rank.First().FieldId;
-                    result.SubFields = new List<Results.Ranking.SubField>();
-
-                    foreach (var sField in subField)
+                    var subField = _gSubField.Find(s => s.FieldId == request.FieldId).ToList();
+                    if (subField.Count() > 0)
                     {
-                        var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
-                        var subFieldRankWithoutElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId == 0).FirstOrDefault();
-                        if (subFieldRankWithoutElements != null)
-                        {
-                            result.Rank = result.Rank + subFieldRankWithoutElements.Rank;
-                            var subFieldToAdd = new Results.Ranking.SubField();
-                            subFieldToAdd.RankdId = subFieldRankWithoutElements.Id;
-                            subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
-                            subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
-                            subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
+                        Data data = new Data();
+                        data.OrganizationId = rank.First().OrganizationId;
+                        data.Year = rank.First().Year;
+                        data.Quarter = rank.First().Quarter;
+                        data.Rank = 0;
+                        data.SphereId = rank.First().SphereId;
+                        data.FieldId = rank.First().FieldId;
+                        data.SubFields = new List<Results.Ranking.SubField>();
 
-                            result.SubFields.Add(subFieldToAdd);
-                        }
-                        if(subFieldRankWithElements.Count()>0)
+                        foreach (var sField in subField)
                         {
-                            var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
-                            result.Rank = result.Rank + subfieldRankMedium;
-                            var subFieldToAdd = new Results.Ranking.SubField() { Elements = new List<Elements>()};
-                            subFieldToAdd.SubFieldId = subFieldRankWithElements.FirstOrDefault().SubFieldId;
-                            subFieldToAdd.SubfieldRank = subfieldRankMedium;
-                            foreach(var element in subFieldRankWithElements)
+                            var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
+                            var subFieldRankWithoutElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId == 0).FirstOrDefault();
+                            if (subFieldRankWithoutElements != null)
                             {
-                                subFieldToAdd.Elements.Add(new Elements() {RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Rank = data.Rank + subFieldRankWithoutElements.Rank;
+                                var subFieldToAdd = new Results.Ranking.SubField();
+                                subFieldToAdd.RankdId = subFieldRankWithoutElements.Id;
+                                subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
+                                subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
+                                subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
+
+                                data.SubFields.Add(subFieldToAdd);
                             }
-                            result.SubFields.Add(subFieldToAdd);
+                            if (subFieldRankWithElements.Count() > 0)
+                            {
+                                var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
+                                data.Rank = data.Rank + subfieldRankMedium;
+                                var subFieldToAdd = new Results.Ranking.SubField() { Elements = new List<Elements>() };
+                                subFieldToAdd.SubFieldId = subFieldRankWithElements.FirstOrDefault().SubFieldId;
+                                subFieldToAdd.SubfieldRank = subfieldRankMedium;
+                                foreach (var element in subFieldRankWithElements)
+                                {
+                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                }
+                                data.SubFields.Add(subFieldToAdd);
+                            }
                         }
+                        result.Count++;
+                        result.Data.Add(data);
                     }
-                }
-                else
-                {
-                    var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
-                    var rankWithouthElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId == 0).FirstOrDefault();
-                    if (rankWithouthElements!=null)
+                    else
                     {
-                        result.Id = rankWithouthElements.Id;
-                        result.OrganizationId = rankWithouthElements.OrganizationId;
-                        result.Year = rankWithouthElements.Year;
-                        result.Quarter = rankWithouthElements.Quarter;
-                        result.Rank = rankWithouthElements.Rank;
-                        result.IsException = rankWithouthElements.IsException;
-                        result.SphereId = rankWithouthElements.SphereId; 
-                        result.FieldId = rankWithouthElements.FieldId;
-                        result.Comment = rankWithouthElements.Comment;
-                    }
-                    if(rankWithElements.Count()>0)
-                    {
-                        result.Id = rankWithElements.First().Id;
-                        result.OrganizationId = rankWithElements.First().OrganizationId;
-                        result.Year = rankWithElements.First().Year;
-                        result.Quarter = rankWithElements.First().Quarter;
-                        result.Rank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
-                        result.IsException = rankWithElements.First().IsException;
-                        result.SphereId = rankWithElements.First().SphereId;
-                        result.FieldId = rankWithElements.First().FieldId;
-                        result.Comment = rankWithElements.First().Comment;
-
-                        result.Elements = new List<Elements>();
-                        
-                        foreach(var element in rankWithElements)
+                        Data data = new Data();
+                        var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
+                        var rankWithouthElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId == 0).FirstOrDefault();
+                        if (rankWithouthElements != null)
                         {
-                            result.Elements.Add(new Elements() { ElementId = element.Id, ElementRank = element.Rank, Comment = element.Comment });
+                            data.Id = rankWithouthElements.Id;
+                            data.OrganizationId = rankWithouthElements.OrganizationId;
+                            data.Year = rankWithouthElements.Year;
+                            data.Quarter = rankWithouthElements.Quarter;
+                            data.Rank = rankWithouthElements.Rank;
+                            data.IsException = rankWithouthElements.IsException;
+                            data.SphereId = rankWithouthElements.SphereId;
+                            data.FieldId = rankWithouthElements.FieldId;
+                            data.Comment = rankWithouthElements.Comment;
                         }
-                        
-                    }
+                        if (rankWithElements.Count() > 0)
+                        {
+                            data.Id = rankWithElements.First().Id;
+                            data.OrganizationId = rankWithElements.First().OrganizationId;
+                            data.Year = rankWithElements.First().Year;
+                            data.Quarter = rankWithElements.First().Quarter;
+                            data.Rank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                            data.IsException = rankWithElements.First().IsException;
+                            data.SphereId = rankWithElements.First().SphereId;
+                            data.FieldId = rankWithElements.First().FieldId;
+                            data.Comment = rankWithElements.First().Comment;
 
+                            data.Elements = new List<Elements>();
+
+                            foreach (var element in rankWithElements)
+                            {
+                                data.Elements.Add(new Elements() { ElementId = element.Id, ElementRank = element.Rank, Comment = element.Comment });
+                            }
+                        }
+                        result.Count++;
+                        result.Data.Add(data);
+                    }
                 }
             }
 
@@ -137,13 +144,14 @@ namespace AdminHandler.Handlers.Ranking
                     var subField = _xSubField.Find(s => s.FieldId == request.FieldId).ToList();
                     if (subField.Count() > 0)
                     {
-                        result.OrganizationId = rank.First().OrganizationId;
-                        result.Year = rank.First().Year;
-                        result.Quarter = rank.First().Quarter;
-                        result.Rank = 0;
-                        result.SphereId = rank.First().SphereId;
-                        result.FieldId = rank.First().FieldId;
-                        result.SubFields = new List<Results.Ranking.SubField>();
+                        Data data = new Data();
+                        data.OrganizationId = rank.First().OrganizationId;
+                        data.Year = rank.First().Year;
+                        data.Quarter = rank.First().Quarter;
+                        data.Rank = 0;
+                        data.SphereId = rank.First().SphereId;
+                        data.FieldId = rank.First().FieldId;
+                        data.SubFields = new List<Results.Ranking.SubField>();
 
                         foreach (var sField in subField)
                         {
@@ -151,18 +159,18 @@ namespace AdminHandler.Handlers.Ranking
                             var subFieldRankWithoutElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId == 0).FirstOrDefault();
                             if (subFieldRankWithoutElements != null)
                             {
-                                result.Rank = result.Rank + subFieldRankWithoutElements.Rank;
+                                data.Rank = data.Rank + subFieldRankWithoutElements.Rank;
                                 var subFieldToAdd = new Results.Ranking.SubField();
                                 subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
 
-                                result.SubFields.Add(subFieldToAdd);
+                                data.SubFields.Add(subFieldToAdd);
                             }
                             if (subFieldRankWithElements.Count() > 0)
                             {
                                 var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
-                                result.Rank = result.Rank + subfieldRankMedium;
+                                data.Rank = data.Rank + subfieldRankMedium;
                                 var subFieldToAdd = new Results.Ranking.SubField() { Elements = new List<Elements>() };
                                 subFieldToAdd.SubFieldId = subFieldRankWithElements.FirstOrDefault().SubFieldId;
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
@@ -170,46 +178,50 @@ namespace AdminHandler.Handlers.Ranking
                                 {
                                     subFieldToAdd.Elements.Add(new Elements() { ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
                                 }
-                                result.SubFields.Add(subFieldToAdd);
+                                data.SubFields.Add(subFieldToAdd);
                             }
                         }
+                        result.Count++;
+                        result.Data.Add(data);
                     }
                     else
                     {
+                        Data data = new Data();
                         var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
                         var rankWithouthElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId == 0).FirstOrDefault();
                         if (rankWithouthElements != null)
                         {
-                            result.Id = rankWithouthElements.Id;
-                            result.OrganizationId = rankWithouthElements.OrganizationId;
-                            result.Year = rankWithouthElements.Year;
-                            result.Quarter = rankWithouthElements.Quarter;
-                            result.Rank = rankWithouthElements.Rank;
-                            result.IsException = rankWithouthElements.IsException;
-                            result.SphereId = rankWithouthElements.SphereId;
-                            result.FieldId = rankWithouthElements.FieldId;
-                            result.Comment = rankWithouthElements.Comment;
+                            data.Id = rankWithouthElements.Id;
+                            data.OrganizationId = rankWithouthElements.OrganizationId;
+                            data.Year = rankWithouthElements.Year;
+                            data.Quarter = rankWithouthElements.Quarter;
+                            data.Rank = rankWithouthElements.Rank;
+                            data.IsException = rankWithouthElements.IsException;
+                            data.SphereId = rankWithouthElements.SphereId;
+                            data.FieldId = rankWithouthElements.FieldId;
+                            data.Comment = rankWithouthElements.Comment;
                         }
                         if (rankWithElements.Count() > 0)
                         {
-                            result.Id = rankWithElements.First().Id;
-                            result.OrganizationId = rankWithElements.First().OrganizationId;
-                            result.Year = rankWithElements.First().Year;
-                            result.Quarter = rankWithElements.First().Quarter;
-                            result.Rank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
-                            result.IsException = rankWithElements.First().IsException;
-                            result.SphereId = rankWithElements.First().SphereId;
-                            result.FieldId = rankWithElements.First().FieldId;
-                            result.Comment = rankWithElements.First().Comment;
+                            data.Id = rankWithElements.First().Id;
+                            data.OrganizationId = rankWithElements.First().OrganizationId;
+                            data.Year = rankWithElements.First().Year;
+                            data.Quarter = rankWithElements.First().Quarter;
+                            data.Rank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                            data.IsException = rankWithElements.First().IsException;
+                            data.SphereId = rankWithElements.First().SphereId;
+                            data.FieldId = rankWithElements.First().FieldId;
+                            data.Comment = rankWithElements.First().Comment;
 
-                            result.Elements = new List<Elements>();
+                            data.Elements = new List<Elements>();
 
                             foreach (var element in rankWithElements)
                             {
-                                result.Elements.Add(new Elements() { ElementId = element.Id, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { ElementId = element.Id, ElementRank = element.Rank, Comment = element.Comment });
                             }
-
                         }
+                        result.Count++;
+                        result.Data.Add(data);
                     }
                 }
             }

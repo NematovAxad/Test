@@ -7,6 +7,11 @@ namespace AdminHandler.Results.Ranking
 {
     public class RankQueryResult
     {
+        public int Count { get; set; }
+        public List<Data> Data { get; set; }
+    }
+    public class Data
+    {
         public int Id { get; set; }
         public int OrganizationId { get; set; }
         public int Year { get; set; }
