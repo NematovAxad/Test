@@ -58,6 +58,8 @@ namespace Domain.Models
         public ICollection<SubOrganizations> SubOrganizations { get; set; }
         public ICollection<RankTable> OrgRanks { get; set; }
         public bool IsActive { get; set; }
+        public bool IsIct { get; set; }
+        public bool IsMonitoring { get; set; }
 
     }
 }

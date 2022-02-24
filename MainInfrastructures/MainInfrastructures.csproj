@@ -37,6 +37,10 @@
     <Compile Remove="Migrations\20220210071015_financiers.Designer.cs" />
     <Compile Remove="Migrations\20220211071034_projectfile.cs" />
     <Compile Remove="Migrations\20220211071034_projectfile.Designer.cs" />
+    <Compile Remove="Migrations\20220224064421_bools.cs" />
+    <Compile Remove="Migrations\20220224064421_bools.Designer.cs" />
+    <Compile Remove="Migrations\20220224064538_bools.cs" />
+    <Compile Remove="Migrations\20220224064538_bools.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
