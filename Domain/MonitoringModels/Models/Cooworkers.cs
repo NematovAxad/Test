@@ -1,4 +1,5 @@
-﻿using JohaRepository;
+﻿using Domain.Models;
+using JohaRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,9 +18,9 @@ namespace Domain.MonitoringModels.Models
         [ForeignKey("Project")]
         public int ProjectId { get; set; }
         public Project Project { get; set; }
-        [Column("performencer_id")]
-        [ForeignKey("Performencer")]
-        public int PerformencerId { get; set; }
-        public Performencer Performencer { get; set; }
+        [Column("organization_id")]
+        [ForeignKey("Organizations")]
+        public int OrganizationId { get; set; }
+        public Organizations Organization { get; set; }
     }
 }

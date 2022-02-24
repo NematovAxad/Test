@@ -12,7 +12,7 @@ namespace MonitoringHandler.Querys.StructureQuerys
     {
         public int Id { get; set; }
         public int ApplicationId { get; set; }
-        public int PerformencerId { get; set; }
+        public int OrganizationId { get; set; }
         public MonitoringProjectStatus Status { get; set; }
     }
 }

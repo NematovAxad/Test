@@ -23,22 +23,22 @@ namespace MonitoringHandler.Handlers.StructureHandlers
         }
         public async Task<ProjectQueryResult> Handle(ProjectQuery request, CancellationToken cancellationToken)
         {
-            var project = _project.GetAll().Include(mbox=>mbox.Performencer).Include(mbox=>mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+            var project = _project.GetAll().Include(mbox=>mbox.Organization).Include(mbox=>mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Organization);
             if (request.Id != 0)
             {
-                project = project.Where(n => n.Id == request.Id).Include(mbox => mbox.Performencer).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+                project = project.Where(n => n.Id == request.Id).Include(mbox => mbox.Organization).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Organization);
             }
-            if (request.PerformencerId != 0)
+            if (request.OrganizationId != 0)
             {
-                project = project.Where(n => n.PerformencerId == request.PerformencerId).Include(mbox => mbox.Performencer).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+                project = project.Where(n => n.OrganizationId == request.OrganizationId).Include(mbox => mbox.Organization).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Organization);
             }
             if (request.Status != 0)
             {
-                project = project.Where(n => n.Status == request.Status).Include(mbox => mbox.Performencer).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+                project = project.Where(n => n.Status == request.Status).Include(mbox => mbox.Organization).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Organization);
             }
             if (request.ApplicationId != 0)
             {
-                project = project.Where(n => n.ApplicationId == request.ApplicationId).Include(mbox => mbox.Performencer).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Performencer);
+                project = project.Where(n => n.ApplicationId == request.ApplicationId).Include(mbox => mbox.Organization).Include(mbox => mbox.ProjectComments).Include(mbox => mbox.ProjectFiles).Include(mbox => mbox.ProjectFinanciers).ThenInclude(mbox => mbox.Financier).Include(mbox => mbox.Cooworkers).ThenInclude(mbox => mbox.Organization);
             }
             ProjectQueryResult result = new ProjectQueryResult();
             result.Count = project.Count();

@@ -1,4 +1,5 @@
-﻿using Domain.MonitoringModels.Models;
+﻿using Domain.Models;
+using Domain.MonitoringModels.Models;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -17,13 +18,13 @@ namespace MonitoringHandler.Handlers.StructureHandlers
     {
         private readonly IRepository<Cooworkers, int> _cooworkers;
         private readonly IRepository<Project, int> _project;
-        private readonly IRepository<Performencer, int> _performencer;
+        private readonly IRepository<Organizations, int> _organizations;
 
-        public CooworkersCommandHandler(IRepository<Cooworkers, int> cooworkers, IRepository<Project, int> project, IRepository<Performencer, int> performencer)
+        public CooworkersCommandHandler(IRepository<Cooworkers, int> cooworkers, IRepository<Project, int> project, IRepository<Organizations, int> organizations)
         {
             _cooworkers = cooworkers;
             _project = project;
-            _performencer = performencer;
+            _organizations = organizations;
         }
 
         public async Task<CooworkersCommandResult> Handle(CooworkersCommand request, CancellationToken cancellationToken)
@@ -40,17 +41,17 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             var project = _project.Find(p => p.Id == model.ProjectId).FirstOrDefault();
             if (project == null)
                 throw ErrorStates.NotFound(model.ProjectId.ToString());
-            var financier = _performencer.Find(f => f.Id == model.PerformencerId).FirstOrDefault();
+            var financier = _organizations.Find(f => f.Id == model.OrganizationId).FirstOrDefault();
             if (financier == null)
-                throw ErrorStates.NotFound(model.PerformencerId.ToString());
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-            var cooworkers = _cooworkers.Find(p => p.ProjectId == model.ProjectId && p.PerformencerId == model.PerformencerId).FirstOrDefault();
+            var cooworkers = _cooworkers.Find(p => p.ProjectId == model.ProjectId && p.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (cooworkers != null)
                 throw ErrorStates.NotAllowed(model.ProjectId.ToString());
             Cooworkers addModel = new Cooworkers()
             {
                 ProjectId = model.ProjectId,
-                PerformencerId = model.PerformencerId
+                OrganizationId = model.OrganizationId
             };
             _cooworkers.Add(addModel);
         }

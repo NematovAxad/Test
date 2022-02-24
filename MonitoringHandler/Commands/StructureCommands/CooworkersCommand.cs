@@ -24,6 +24,6 @@ namespace MonitoringHandler.Commands.StructureCommands
         public EventType EventType { get; set; }
         public int Id { get; set; }
         public int ProjectId { get; set; }
-        public int PerformencerId { get; set; }
+        public int OrganizationId { get; set; }
     }
 }

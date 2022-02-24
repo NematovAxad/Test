@@ -36,7 +36,7 @@ namespace MonitoringHandler.Commands.StructureCommands
         public double VolumeForecastFunds { get; set; }
         public double RaisedFunds { get; set; }
         public double Payouts { get; set; }
-        public int PerformencerId { get; set; }
+        public int OrganizationId { get; set; }
         public int ApplicationId { get; set; }
         public List<int> CooworkersId { get; set; }
         public string Comment { get; set; }

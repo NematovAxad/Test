@@ -37,10 +37,10 @@ namespace Domain.MonitoringModels.Models
         public double RaisedFunds { get; set; }
         [Column("payouts")]
         public double Payouts { get; set; }
-        [Column("performencer_id")]
-        [ForeignKey("Performencer")]
-        public int PerformencerId { get; set; }
-        public Performencer Performencer { get; set; }
+        [Column("organization_id")]
+        [ForeignKey("Organizations")]
+        public int OrganizationId { get; set; }
+        public Organizations Organization { get; set; }
         public ICollection<Stage> Stages { get; set; }
         [Column("application_id")]
         [ForeignKey("Applications")]

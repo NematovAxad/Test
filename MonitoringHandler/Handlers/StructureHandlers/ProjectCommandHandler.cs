@@ -1,4 +1,5 @@
-﻿using Domain.MonitoringModels.Models;
+﻿using Domain.Models;
+using Domain.MonitoringModels.Models;
 using Domain.States;
 using EntityRepository;
 using JohaRepository;
@@ -23,9 +24,11 @@ namespace MonitoringHandler.Handlers.StructureHandlers
         private readonly IRepository<ProjectComment, int> _projectComment;
         private readonly IRepository<ProjectFinanciers, int> _projectFinanciers;
         private readonly IRepository<Cooworkers, int> _projectCoworkers;
+        private readonly IRepository<Organizations, int> _organizations;
+
 
         private IDataContext _db;
-        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application, IDataContext db, IRepository<ProjectComment, int> projectComment, IRepository<ProjectFinanciers, int> projectFinanciers, IRepository<Cooworkers, int> projectCoworkers)
+        public ProjectCommandHandler(IRepository<Project, int> project, IRepository<Application, int> application, IDataContext db, IRepository<ProjectComment, int> projectComment, IRepository<ProjectFinanciers, int> projectFinanciers, IRepository<Cooworkers, int> projectCoworkers, IRepository<Organizations, int> organizations)
         {
             _db = db;
             _project = project;
@@ -33,6 +36,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             _projectComment = projectComment;
             _projectFinanciers = projectFinanciers;
             _projectCoworkers = projectCoworkers;
+            _organizations = organizations;
         }
 
         public async Task<ProjectCommandResult> Handle(ProjectCommand request, CancellationToken cancellationToken)
@@ -50,6 +54,9 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             var project = _project.Find(p => p.NameRu == model.NameRu || p.NameUz == model.NameUz).FirstOrDefault();
             if (project != null)
                 throw ErrorStates.NotAllowed(model.NameUz);
+            var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            if (org != null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
             Project addModel = new Project()
             {
                 NameUz = model.NameUz,
@@ -63,7 +70,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
                 VolumeForecastFunds = model.VolumeForecastFunds,
                 RaisedFunds = model.RaisedFunds,
                 Payouts = model.Payouts,
-                PerformencerId = model.PerformencerId,
+                OrganizationId = model.OrganizationId,
                 ApplicationId = model.ApplicationId
             };
             _project.Add(addModel);
@@ -103,7 +110,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             project.VolumeForecastFunds = model.VolumeForecastFunds;
             project.RaisedFunds = model.RaisedFunds;
             project.Payouts = model.Payouts;
-            project.PerformencerId = model.PerformencerId;
+            project.OrganizationId = model.OrganizationId;
 
             _project.Update(project);
             if (model.ProjectFinanciers.Count > 0)
@@ -163,7 +170,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
                 Cooworkers addModel = new Cooworkers()
                 {
                     ProjectId = project.Id,
-                    PerformencerId = f
+                    OrganizationId = f
                 };
                 _db.Context.Set<Cooworkers>().Add(addModel);
                 _db.Context.SaveChanges();

@@ -32,7 +32,7 @@ namespace MonitoringApi.Controllers
                 {
                     Id = id,
                     ApplicationId = applicationId,
-                    PerformencerId = performencerId,
+                    OrganizationId = performencerId,
                     Status = status
                 };
 
