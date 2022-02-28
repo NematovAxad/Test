@@ -58,6 +58,7 @@ namespace AdminHandler.Handlers.Ranking
                 Year = model.Year,
                 Quarter = model.Quarter,
                 DeadlineDate = model.DeadlineDate,
+                OperatorDeadlineDate = model.OperatorDeadlineDate,
                 IsActive = model.IsActive
             };
             _deadline.Add(addModel);
@@ -82,6 +83,7 @@ namespace AdminHandler.Handlers.Ranking
             }
             deadline.IsActive = model.IsActive;
             deadline.DeadlineDate = model.DeadlineDate;
+            deadline.OperatorDeadlineDate = model.OperatorDeadlineDate;
             _deadline.Update(deadline);
         }
         public void Delete(DeadlineCommand model)

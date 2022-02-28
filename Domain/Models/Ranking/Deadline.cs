@@ -18,6 +18,8 @@ namespace Domain.Models
         public Quarters Quarter { get; set; }
         [Column("deadline_date")]
         public DateTime DeadlineDate { get; set; }
+        [Column("operator_deadline_date")]
+        public DateTime OperatorDeadlineDate { get; set; }
         [Column("is_active")]
         public bool IsActive { get; set; }
 
