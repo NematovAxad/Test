@@ -24,7 +24,7 @@ namespace MonitoringApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<ProjectQueryResult>> Get([FromQuery] int id, int applicationId, int performencerId, MonitoringProjectStatus status)
+        public async Task<ResponseCore<ProjectQueryResult>> Get([FromQuery] int id, int applicationId, int organizationId, MonitoringProjectStatus status)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace MonitoringApi.Controllers
                 {
                     Id = id,
                     ApplicationId = applicationId,
-                    OrganizationId = performencerId,
+                    OrganizationId = organizationId,
                     Status = status
                 };
 
