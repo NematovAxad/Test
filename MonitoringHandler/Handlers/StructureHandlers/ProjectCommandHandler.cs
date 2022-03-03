@@ -55,7 +55,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
             if (project != null)
                 throw ErrorStates.NotAllowed(model.NameUz);
             var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
-            if (org != null)
+            if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             Project addModel = new Project()
             {
