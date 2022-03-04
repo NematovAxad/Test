@@ -65,7 +65,9 @@ namespace AdminHandler.Handlers.Organization
                 OrgType = model.OrgType,
                 Fax = model.Fax,
                 OrgCategory = model.OrgCategory,
-                IsActive = model.IsActive
+                IsActive = model.IsActive,
+                IsIct = model.IsIct,
+                IsMonitoring = model.IsMonitoring
             };
             _organization.Add(addModel);
         }
@@ -102,6 +104,8 @@ namespace AdminHandler.Handlers.Organization
             org.Fax = model.Fax;
             org.OrgCategory = model.OrgCategory;
             org.IsActive = model.IsActive;
+            org.IsIct = model.IsIct;
+            org.IsMonitoring = model.IsMonitoring;
 
             _organization.Update(org);
 
