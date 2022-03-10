@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Domain.Models.FifthSection;
+using Domain.Models.Organization;
 using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
 using Domain.Models.SeventhSection;
@@ -78,5 +79,6 @@ namespace MainInfrastructures.Db
         public DbSet<FileProject> FileProject { get; set; }
         public DbSet<OrgProcesses> OrgProcesses { get; set; }
         public DbSet<OrgFinance> OrgFinance { get; set; }
+        public DbSet<WebSiteAvailability> WebSiteAvailabilitie { get; set; }
     }
 }

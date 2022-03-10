@@ -41,6 +41,8 @@
     <Compile Remove="Migrations\20220224064421_bools.Designer.cs" />
     <Compile Remove="Migrations\20220224064538_bools.cs" />
     <Compile Remove="Migrations\20220224064538_bools.Designer.cs" />
+    <Compile Remove="Migrations\20220310055114_addtable.cs" />
+    <Compile Remove="Migrations\20220310055114_addtable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -123,6 +123,7 @@ namespace ApiConfigs
             services.AddSwaggerGenNewtonsoftSupport();
             AddJwt(services);
             // CoreResult.Start.ConfigureService(services);
+            services.AddHostedService<WebsitePingService>();
             services.AddSession();
             services.AddHttpContextAccessor();
             services.AddCors();

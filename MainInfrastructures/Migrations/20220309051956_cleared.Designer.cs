@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220309051956_cleared")]
+    partial class cleared
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -764,41 +766,6 @@ namespace MainInfrastructures.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("g_sphere","ranking");
-                });
-
-            modelBuilder.Entity("Domain.Models.Organization.WebSiteAvailability", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("DeadlineId")
-                        .HasColumnName("deadline_id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FailedPing")
-                        .HasColumnName("failed_ping")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnName("organization_id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SuccessfulPing")
-                        .HasColumnName("successful_ping")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Website")
-                        .HasColumnName("website")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("WebSiteAvailability","organizations");
                 });
 
             modelBuilder.Entity("Domain.Models.OrganizationApps", b =>
@@ -2471,15 +2438,6 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.GSphere", "GSphere")
                         .WithMany()
                         .HasForeignKey("SphereId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.Organization.WebSiteAvailability", b =>
-                {
-                    b.HasOne("Domain.Models.Organizations", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
