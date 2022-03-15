@@ -43,7 +43,11 @@ namespace ApiConfigs
                 {
                     Ping p = new Ping();
                     PingReply r;
-                    r = p.Send(o.WebSite);
+                    string uri = o.WebSite;
+                    uri = uri.Replace("www.", string.Empty);
+                    uri = uri.Replace("https://", string.Empty);
+                    uri = uri.Replace("http://", string.Empty);
+                    r = p.Send(uri);
                     if (r.Status == IPStatus.Success)
                     {
                         if (ws == null)
