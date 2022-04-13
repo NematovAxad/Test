@@ -412,7 +412,7 @@ namespace AdminHandler.Handlers.Ranking
                             Year = model.Year,
                             Quarter = model.Quarter,
                             Rank = model.Rank,
-                            IsException = model.IsException,
+                            IsException = true,
                             SphereId = field.SphereId,
                             FieldId = field.Id,
                             Comment = model.Comment,
@@ -453,7 +453,7 @@ namespace AdminHandler.Handlers.Ranking
                                     Year = model.Year,
                                     Quarter = model.Quarter,
                                     Rank = model.Rank,
-                                    IsException = model.IsException,
+                                    IsException = true,
                                     SphereId = field.SphereId,
                                     FieldId = field.Id,
                                     Comment = model.Comment,
@@ -487,6 +487,116 @@ namespace AdminHandler.Handlers.Ranking
                             _gRankTable.Add(addModel);
                         }
                         
+                    }
+                }
+            }
+            if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
+            {
+                var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                if (field == null)
+                    throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+
+                if (model.SubFieldId != 0)
+                {
+                    var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
+                    if (subField == null)
+                        throw ErrorStates.NotFound("sub field ");
+
+                    var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).ToList();
+
+                    if (rank.Count() > 0 && model.SwitchValue == 1)
+                    {
+                        _db.Context.Set<XRankTable>().RemoveRange(rank);
+                        _db.Context.SaveChanges();
+                    }
+                    if (model.SwitchValue == 0)
+                    {
+                        if (rank.Count() > 0)
+                        {
+                            _db.Context.Set<XRankTable>().RemoveRange(rank);
+                            _db.Context.SaveChanges();
+                        }
+                        XRankTable addModel = new XRankTable()
+                        {
+                            OrganizationId = model.OrganizationId,
+                            Year = model.Year,
+                            Quarter = model.Quarter,
+                            Rank = model.Rank,
+                            IsException = model.IsException,
+                            SphereId = field.SphereId,
+                            FieldId = field.Id,
+                            Comment = model.Comment,
+                            SubFieldId = 0,
+                            ElementId = 0
+                        };
+                        addModel.Rank = subField.MaxRate;
+                        addModel.IsException = true;
+                        addModel.SubFieldId = subField.Id;
+                        _xRankTable.Update(addModel);
+                    }
+
+                }
+                else
+                {
+                    var ranks = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).ToList();
+                    if (ranks.Count() > 0 && model.SwitchValue == 1)
+                    {
+                        _db.Context.Set<XRankTable>().RemoveRange(ranks);
+                        _db.Context.SaveChanges();
+                    }
+                    if (model.SwitchValue == 0)
+                    {
+                        if (ranks.Count() > 0)
+                        {
+                            _db.Context.Set<XRankTable>().RemoveRange(ranks);
+                            _db.Context.SaveChanges();
+                        }
+                        var sFields = _xSubField.Find(f => f.FieldId == field.Id).ToList();
+                        if (sFields.Count() > 0)
+                        {
+                            List<XRankTable> addList = new List<XRankTable>();
+                            foreach (var s in sFields)
+                            {
+                                XRankTable addModel = new XRankTable()
+                                {
+                                    OrganizationId = model.OrganizationId,
+                                    Year = model.Year,
+                                    Quarter = model.Quarter,
+                                    Rank = model.Rank,
+                                    IsException = model.IsException,
+                                    SphereId = field.SphereId,
+                                    FieldId = field.Id,
+                                    Comment = model.Comment,
+                                    SubFieldId = 0,
+                                    ElementId = 0
+                                };
+                                addModel.Rank = s.MaxRate;
+                                addModel.IsException = true;
+                                addModel.SubFieldId = s.Id;
+                                addList.Add(addModel);
+                            }
+                            _xRankTable.AddRange(addList);
+                        }
+                        else
+                        {
+                            XRankTable addModel = new XRankTable()
+                            {
+                                OrganizationId = model.OrganizationId,
+                                Year = model.Year,
+                                Quarter = model.Quarter,
+                                Rank = model.Rank,
+                                IsException = model.IsException,
+                                SphereId = field.SphereId,
+                                FieldId = field.Id,
+                                Comment = model.Comment,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+                            addModel.Rank = field.MaxRate;
+                            addModel.IsException = true;
+                            _xRankTable.Add(addModel);
+                        }
+
                     }
                 }
             }
