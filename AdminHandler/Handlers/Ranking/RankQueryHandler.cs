@@ -73,6 +73,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.RankId = subFieldRankWithoutElements.Id;
                                 subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
+                                subFieldToAdd.IsException = subFieldRankWithoutElements.IsException;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
 
                                 data.SubFields.Add(subFieldToAdd);
@@ -90,6 +91,10 @@ namespace AdminHandler.Handlers.Ranking
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
+                        }
+                        if(data.SubFields.All(s=>s.IsException == true))
+                        {
+                            data.IsException = true;
                         }
                         result.Count++;
                         result.Data.Add(data);
@@ -164,6 +169,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.RankId = subFieldRankWithoutElements.Id;
                                 subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
+                                subFieldToAdd.IsException = subFieldRankWithoutElements.IsException;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
 
                                 data.SubFields.Add(subFieldToAdd);
@@ -181,6 +187,10 @@ namespace AdminHandler.Handlers.Ranking
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
+                        }
+                        if (data.SubFields.All(s => s.IsException == true))
+                        {
+                            data.IsException = true;
                         }
                         result.Count++;
                         result.Data.Add(data);
