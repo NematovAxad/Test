@@ -43,7 +43,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var apps = _organizationApps.Find(a => a.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (apps != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             OrganizationApps addModel = new OrganizationApps()
             {
@@ -60,11 +60,13 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Update(OrganizationAppCommand model)
         {
-            
+            var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
             var apps = _organizationApps.Find(a => a.Id == model.Id).FirstOrDefault();
             if (apps == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == apps.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
 
             apps.HasAndroidApp = model.HasAndroidApp;
@@ -79,10 +81,13 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Delete(OrganizationAppCommand model)
         {
+            var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
             var apps = _organizationApps.Find(a => a.Id == model.Id).FirstOrDefault();
             if (apps == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == apps.OrganizationId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             _organizationApps.Remove(apps);
         }

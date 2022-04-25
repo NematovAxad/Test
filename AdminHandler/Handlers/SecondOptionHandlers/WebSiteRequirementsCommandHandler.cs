@@ -44,10 +44,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var requirement = _websiteRequirements.Find(m => m.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (requirement != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             WebSiteRequirements addModel = new WebSiteRequirements()
             {
+                OrganizationId = org.Id,
                 Requirement1 = model.Requirement1,
                 Requirement2 = model.Requirement2,
                 Requirement3 = model.Requirement3,
@@ -98,10 +99,13 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Update(WebSiteRequirementsCommand model)
         {
+            var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
             var requirement = _websiteRequirements.Find(m => m.Id == model.Id).FirstOrDefault();
             if (requirement != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == requirement.Id) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             requirement.Requirement1 = model.Requirement1;
             requirement.Requirement2 = model.Requirement2;
