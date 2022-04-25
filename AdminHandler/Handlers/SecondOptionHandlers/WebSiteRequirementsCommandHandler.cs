@@ -103,7 +103,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             var requirement = _websiteRequirements.Find(m => m.Id == model.Id).FirstOrDefault();
-            if (requirement != null)
+            if (requirement == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
