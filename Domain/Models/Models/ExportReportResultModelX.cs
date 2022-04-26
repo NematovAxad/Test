@@ -20,6 +20,7 @@ namespace Domain.Models.Models
         public string FieldRate31 { get; set; }
         public string FieldRate32 { get; set; }
         public string FieldRate33 { get; set; }
+        public string FieldRate34 { get; set; }
         public string Sphere2All { get; set; }
         public string FieldRate41 { get; set; }
         public string FieldRate42 { get; set; }
@@ -28,10 +29,11 @@ namespace Domain.Models.Models
         public string FieldRate511 { get; set; }
         public string FieldRate512 { get; set; }
         public string FieldRate513 { get; set; }
-        public string FieldRate52 { get; set; }
+        public string FieldRate514 { get; set; }
         public string Sphere4All { get; set; }
         public string FieldRate61 { get; set; }
         public string FieldRate62 { get; set; }
+        public string FieldRate63 { get; set; }
         public string Sphere5All { get; set; }
         public string AllArifm { get; set; }
         public string Percentage { get; set; }

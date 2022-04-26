@@ -18,6 +18,8 @@ namespace Domain.Models.Models
         public string SphereRate1 { get; set; }
         public string FieldRate21 { get; set; }
         public string FieldRate22 { get; set; }
+        public string FieldRate23 { get; set; }
+        public string FieldRate24 { get; set; }
         public string SphereRate2 { get; set; }
         public string FieldRate31 { get; set; }
         public string FieldRate41 { get; set; }

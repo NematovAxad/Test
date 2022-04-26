@@ -82,101 +82,19 @@ namespace UserHandler.Handlers.DownloadHandler
                     model.OrgName = o.ShortName;
 
                     double rateSum = 0;
-                    var field = _gField.GetAll().ToList();
-                    foreach(var f in field)
-                    {
-                        string fieldRank = "0";
-                        var fRanks = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
-
-                        var subfields = _gSubField.Find(s => s.FieldId == f.Id).ToList();
-                        if (subfields.Count() > 0)
-                        {
-                            if(fRanks.Count()>0 && fRanks.All(r=>r.IsException == true))
-                            {
-                                fieldRank = exception;
-                            }
-                            else
-                            {
-                                foreach (var s in subfields)
-                                {
-                                    double sFieldRank = 0;
-                                    var ranks = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == s.Id).ToList();
-                                    if (ranks.Count() > 1)
-                                    {
-                                        sFieldRank = Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
-                                    }
-                                    if (ranks.Count() == 1)
-                                    {
-                                        sFieldRank = ranks.First().Rank;
-                                    }
-                                    fieldRank = (Convert.ToDouble(fieldRank) + sFieldRank).ToString();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (fRanks.Count() > 1)
-                            {
-                                fieldRank = Math.Round(fRanks.Select(r => r.Rank).Sum() / fRanks.Count(), 2).ToString();
-                            }
-                            if (fRanks.Count() == 1)
-                            {
-                                fieldRank = fRanks.First().Rank.ToString();
-                            }
-                            if(fRanks.Count() > 0 && fRanks.All(r=>r.IsException == true))
-                            {
-                                fieldRank = exception;
-                            }
-
-                        }
-                        switch (f.Id)
-                        {
-                            case 1:
-                                model.FieldRate11 = fieldRank;
-                                break;
-                            case 2:
-                                model.FieldRate12 = fieldRank;
-                                break;
-                            case 3:
-                                model.FieldRate13 = fieldRank;
-                                break;
-                            case 4:
-                                model.FieldRate14 = fieldRank;
-                                break;
-                            case 5:
-                                model.FieldRate15 = fieldRank;
-                                break;
-                            case 6:
-                                model.FieldRate16 = fieldRank;
-                                break;
-                            case 7:
-                                model.FieldRate17 = fieldRank;
-                                break;
-                            case 8:
-                                model.FieldRate21 = fieldRank;
-                                break;
-                            case 9:
-                                model.FieldRate21 = fieldRank;
-                                break;
-                            case 10:
-                                model.FieldRate21 = fieldRank;
-                                break;
-                            case 11:
-                                model.FieldRate21 = fieldRank;
-                                break;
-                            case 12:
-                                model.FieldRate22 = fieldRank;
-                                break;
-                            case 13:
-                                model.FieldRate41 = fieldRank;
-                                break;
-                            case 14:
-                                model.FieldRate51 = fieldRank;
-                                break;
-                        }
-                    }
-
+                    
+                    model.FieldRate11 = FieldRateCalculateG(15, deadline, o).Result.IsException == false ? FieldRateCalculateG(15, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate12 = FieldRateCalculateG(2, deadline, o).Result.IsException == false ? FieldRateCalculateG(2, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate13 = FieldRateCalculateG(3, deadline, o).Result.IsException == false ? FieldRateCalculateG(3, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate14 = FieldRateCalculateG(4, deadline, o).Result.IsException == false ? FieldRateCalculateG(4, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate15 = FieldRateCalculateG(5, deadline, o).Result.IsException == false ? FieldRateCalculateG(5, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate16 = FieldRateCalculateG(6, deadline, o).Result.IsException == false ? FieldRateCalculateG(6, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate17 = FieldRateCalculateG(7, deadline, o).Result.IsException == false ? FieldRateCalculateG(7, deadline, o).Result.Rate.ToString() : exception;
                     model.SphereRate1 = SphereRateCalculateG(1, deadline, o).Result.Rate.ToString();
+                    model.FieldRate21 = FieldRateCalculateG(8, deadline, o).Result.IsException == false ? FieldRateCalculateG(8, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate22 = FieldRateCalculateG(9, deadline, o).Result.IsException == false ? FieldRateCalculateG(9, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate23 = FieldRateCalculateG(10, deadline, o).Result.IsException == false ? FieldRateCalculateG(10, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate24 = FieldRateCalculateG(11, deadline, o).Result.IsException == false ? FieldRateCalculateG(11, deadline, o).Result.Rate.ToString() : exception;
                     model.SphereRate2 = SphereRateCalculateG(2, deadline, o).Result.Rate.ToString();
                     rateSum = Convert.ToDouble(model.SphereRate1) + Convert.ToDouble(model.SphereRate2) + SphereRateCalculateG(4, deadline, o).Result.Rate + SphereRateCalculateG(5, deadline, o).Result.Rate;
                     model.RateSum = rateSum.ToString();
@@ -195,32 +113,41 @@ namespace UserHandler.Handlers.DownloadHandler
 
                     double rateSumArifm = 0;
                     double rateSum = 0;
-                    model.FieldRate23 = "0";
-                    model.FieldRate24 = FieldRateCalculateX(1, deadline, o).Result.IsException == false ? FieldRateCalculateX(1, deadline, o).Result.Rate.ToString() : exception;
-                    model.FieldRate25 = FieldRateCalculateX(2, deadline, o).Result.IsException == false ? FieldRateCalculateX(2, deadline, o).Result.Rate.ToString() : exception;
-                    model.FieldRate26 = FieldRateCalculateX(3, deadline, o).Result.IsException == false ? FieldRateCalculateX(3, deadline, o).Result.Rate.ToString() : exception;
-                    model.FieldRate27 = FieldRateCalculateX(4, deadline, o).Result.IsException == false ? FieldRateCalculateX(4, deadline, o).Result.Rate.ToString() : exception;
-                    model.FieldRate29 = FieldRateCalculateX(5, deadline, o).Result.IsException == false ? FieldRateCalculateX(5, deadline, o).Result.Rate.ToString() : exception;
-                    model.FieldRate210 = FieldRateCalculateX(6, deadline, o).Result.IsException == false ? FieldRateCalculateX(6, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate23 = FieldRateCalculateX(1, deadline, o).Result.IsException == false ? FieldRateCalculateX(1, deadline, o).Result.Rate.ToString() : exception; 
+                    model.FieldRate24 = FieldRateCalculateX(2, deadline, o).Result.IsException == false ? FieldRateCalculateX(2, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate25 = FieldRateCalculateX(3, deadline, o).Result.IsException == false ? FieldRateCalculateX(3, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate26 = FieldRateCalculateX(4, deadline, o).Result.IsException == false ? FieldRateCalculateX(4, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate27 = FieldRateCalculateX(5, deadline, o).Result.IsException == false ? FieldRateCalculateX(5, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate29 = FieldRateCalculateX(6, deadline, o).Result.IsException == false ? FieldRateCalculateX(6, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate210 = FieldRateCalculateX(17, deadline, o).Result.IsException == false ? FieldRateCalculateX(17, deadline, o).Result.Rate.ToString() : exception;
                     model.Sphere1Arifm = ((FieldRateCalculateX(1, deadline, o).Result.IsException == false ? FieldRateCalculateX(1, deadline, o).Result.Rate : 0) +
                                             (FieldRateCalculateX(2, deadline, o).Result.IsException == false ? FieldRateCalculateX(2, deadline, o).Result.Rate : 0) +
                                             (FieldRateCalculateX(3, deadline, o).Result.IsException == false ? FieldRateCalculateX(3, deadline, o).Result.Rate : 0) +
                                             (FieldRateCalculateX(4, deadline, o).Result.IsException == false ? FieldRateCalculateX(4, deadline, o).Result.Rate : 0) +
                                             (FieldRateCalculateX(5, deadline, o).Result.IsException == false ? FieldRateCalculateX(5, deadline, o).Result.Rate : 0) +
-                                            (FieldRateCalculateX(6, deadline, o).Result.IsException == false ? FieldRateCalculateX(6, deadline, o).Result.Rate : 0)).ToString();
+                                            (FieldRateCalculateX(6, deadline, o).Result.IsException == false ? FieldRateCalculateX(6, deadline, o).Result.Rate : 0) +
+                                            (FieldRateCalculateX(17, deadline, o).Result.IsException == false ? FieldRateCalculateX(17, deadline, o).Result.Rate : 0)).ToString();
                     rateSumArifm = rateSumArifm + Convert.ToDouble(model.Sphere1Arifm);
                     model.Sphere1All = SphereRateCalculateX(1, deadline, o).Result.Rate.ToString();
                     rateSum = rateSum + Convert.ToDouble(model.Sphere1All);
 
 
-                    model.FieldRate31 = (FieldRateCalculateX(7, deadline, o).Result.IsException == false && FieldRateCalculateX(8, deadline, o).Result.IsException == false && FieldRateCalculateX(9, deadline, o).Result.IsException == false && FieldRateCalculateX(10, deadline, o).Result.IsException == false) ? 
-                        (FieldRateCalculateX(7, deadline, o).Result.Rate + FieldRateCalculateX(8, deadline, o).Result.Rate + FieldRateCalculateX(9, deadline, o).Result.Rate + FieldRateCalculateX(10, deadline, o).Result.Rate).ToString() : exception;
-                    if(model.FieldRate31!=exception)
+                    model.FieldRate31 = FieldRateCalculateX(7, deadline, o).Result.IsException == false ? FieldRateCalculateX(7, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate31!=exception)
                         rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate31);
-                    model.FieldRate32 = FieldRateCalculateX(11, deadline, o).Result.IsException == false ? FieldRateCalculateX(11, deadline, o).Result.Rate.ToString() : exception;
+
+                    model.FieldRate32 = FieldRateCalculateX(8, deadline, o).Result.IsException == false ? FieldRateCalculateX(8, deadline, o).Result.Rate.ToString() : exception;
                     if (model.FieldRate32 != exception)
                         rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate32);
-                    model.FieldRate33 = exception;
+                    
+                    model.FieldRate33 = FieldRateCalculateX(9, deadline, o).Result.IsException == false ? FieldRateCalculateX(9, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate33 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate33);
+
+                    model.FieldRate34 = FieldRateCalculateX(10, deadline, o).Result.IsException == false ? FieldRateCalculateX(10, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate34 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate34);
+
                     model.Sphere2All = SphereRateCalculateX(2, deadline, o).Result.Rate.ToString();
                     rateSum = rateSum + Convert.ToDouble(model.Sphere2All);
 
@@ -231,33 +158,35 @@ namespace UserHandler.Handlers.DownloadHandler
                     model.Sphere3All = "0";
 
 
-                    model.FieldRate511 = FieldRateCalculateX(12, deadline, o).Result.IsException == false ? FieldRateCalculateX(12, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate511 = FieldRateCalculateX(18, deadline, o).Result.IsException == false ? FieldRateCalculateX(18, deadline, o).Result.Rate.ToString() : exception;
                     if (model.FieldRate511 != exception)
                         rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate511);
-                    model.FieldRate512 = ((SubFieldRateCalculateX(8, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(8, deadline, o).Result.Rate : 0) +
-                                            (SubFieldRateCalculateX(9, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(9, deadline, o).Result.Rate : 0) +
-                                            (SubFieldRateCalculateX(10, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(10, deadline, o).Result.Rate : 0) +
-                                            (SubFieldRateCalculateX(11, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(11, deadline, o).Result.Rate : 0) +
-                                            (SubFieldRateCalculateX(12, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(12, deadline, o).Result.Rate : 0) +
-                                            (SubFieldRateCalculateX(13, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(13, deadline, o).Result.Rate : 0)).ToString();
+
+                    model.FieldRate512 = FieldRateCalculateX(12, deadline, o).Result.IsException == false ? FieldRateCalculateX(12, deadline, o).Result.Rate.ToString() : exception;
                     if (model.FieldRate512 != exception)
                         rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate512);
+
                     model.FieldRate513 = FieldRateCalculateX(14, deadline, o).Result.IsException == false ? FieldRateCalculateX(14, deadline, o).Result.Rate.ToString() : exception;
                     if (model.FieldRate513 != exception)
                         rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate513);
-                    model.FieldRate52 = SubFieldRateCalculateX(19, deadline, o).Result.IsException == false ? SubFieldRateCalculateX(19, deadline, o).Result.Rate.ToString() : exception;
-                    if (model.FieldRate52 != exception)
-                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate52);
+
+                    model.FieldRate514 = FieldRateCalculateX(13, deadline, o).Result.IsException == false ? FieldRateCalculateX(13, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate514 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate514);
+
                     model.Sphere4All = SphereRateCalculateX(4, deadline, o).Result.Rate.ToString();
                     rateSum = rateSum + Convert.ToDouble(model.Sphere4All);
 
 
-                    model.FieldRate61 = FieldRateCalculateX(15, deadline, o).Result.IsException == false ? FieldRateCalculateX(15, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate61 = FieldRateCalculateX(21, deadline, o).Result.IsException == false ? FieldRateCalculateX(21, deadline, o).Result.Rate.ToString() : exception;
                     if (model.FieldRate61 != exception)
                         rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate61);
-                    model.FieldRate62 = FieldRateCalculateX(16, deadline, o).Result.IsException == false ? FieldRateCalculateX(16, deadline, o).Result.Rate.ToString() : exception;
+                    model.FieldRate62 = FieldRateCalculateX(15, deadline, o).Result.IsException == false ? FieldRateCalculateX(15, deadline, o).Result.Rate.ToString() : exception;
                     if (model.FieldRate62 != exception)
                         rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate62);
+                    model.FieldRate63 = FieldRateCalculateX(16, deadline, o).Result.IsException == false ? FieldRateCalculateX(16, deadline, o).Result.Rate.ToString() : exception;
+                    if (model.FieldRate63 != exception)
+                        rateSumArifm = rateSumArifm + Convert.ToDouble(model.FieldRate63);
                     model.Sphere5All = SphereRateCalculateX(5, deadline, o).Result.Rate.ToString();
                     rateSum = rateSum + Convert.ToDouble(model.Sphere5All);
 
