@@ -303,7 +303,7 @@ namespace UserHandler.Handlers.DownloadHandler
             double fieldRate = 0;
             
             var fieldRates = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == fieldId).ToList();
-            if (fieldRates.All(r => r.IsException == true))
+            if (fieldRates.All(r => r.IsException == true) && fieldRates.Count()>0)
             {
                 result.IsException = true;
             }
@@ -350,7 +350,7 @@ namespace UserHandler.Handlers.DownloadHandler
             double sphereRate = 0;
             var fields = _xField.Find(f => f.SphereId == sphereId).ToList();
             var sphereRates = xRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == sphereId).ToList();
-            if (sphereRates.All(r => r.IsException == true))
+            if (sphereRates.Count()>0 && sphereRates.All(r => r.IsException == true))
             {
                 result.IsException = true;
             }
@@ -402,7 +402,7 @@ namespace UserHandler.Handlers.DownloadHandler
             double sphereRate = 0;
             var fields = _gField.Find(f => f.SphereId == sphereId).ToList();
             var sphereRates = gRankTable.Where(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == sphereId).ToList();
-            if(sphereRates.All(r=>r.IsException == true))
+            if(sphereRates.Count()>0 && sphereRates.All(r=>r.IsException == true))
             {
                 result.IsException = true;
             }
