@@ -96,13 +96,13 @@ namespace AdminHandler.Handlers.Organization
             if (!String.IsNullOrEmpty(model.WebSite))
                 addModel.WebSite = model.WebSite;
 
-            if (model.OrgType == 0)
+            if (model.OrgType != 0)
                 addModel.OrgType = model.OrgType;
 
             if (!String.IsNullOrEmpty(model.Fax))
                 addModel.Fax = model.Fax;
 
-            if (model.OrgCategory == 0)
+            if (model.OrgCategory != 0)
                 addModel.OrgCategory = model.OrgCategory;
 
             addModel.IsActive = model.IsActive;
