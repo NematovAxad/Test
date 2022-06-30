@@ -43,32 +43,72 @@ namespace AdminHandler.Handlers.Organization
             }
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER))
                 throw ErrorStates.NotAllowed("permission");
-            Organizations addModel = new Organizations()
-            {
-                UserServiceId = model.UserServiceId,
-                FullName = model.FullName,
-                ShortName = model.ShortName,
-                DirectorFirstName = model.DirectorFirstName,
-                DirectorLastName = model.DirectorLastName,
-                DirectorMidName = model.DirectorMidName,
-                DirectorPosition = model.DirectorPosition,
-                PhoneNumber = model.PhoneNumber,
-                AddressHomeNo = model.AddressHomeNo,
-                AddressStreet = model.AddressStreet,
-                AddressProvince = model.AddressProvince,
-                AddressDistrict = model.AddressDistrict,
-                PostIndex = model.PostIndex,
-                Department = model.Department,
-                DirectorMail = model.DirectorMail,
-                OrgMail = model.OrgMail,
-                WebSite = model.WebSite,
-                OrgType = model.OrgType,
-                Fax = model.Fax,
-                OrgCategory = model.OrgCategory,
-                IsActive = model.IsActive,
-                IsIct = model.IsIct,
-                IsMonitoring = model.IsMonitoring
-            };
+            Organizations addModel = new Organizations();
+
+            if (model.UserServiceId != 0)
+                addModel.UserServiceId = model.UserServiceId;
+
+            if (!String.IsNullOrEmpty(model.FullName))
+                addModel.FullName = model.FullName;
+            
+            if (!String.IsNullOrEmpty(model.ShortName))
+                addModel.ShortName = model.ShortName;
+
+            if (!String.IsNullOrEmpty(model.DirectorFirstName))
+                addModel.DirectorFirstName = model.DirectorFirstName;
+
+            if (!String.IsNullOrEmpty(model.DirectorLastName))
+                addModel.DirectorLastName = model.DirectorLastName;
+
+            if (!String.IsNullOrEmpty(model.DirectorMidName))
+                addModel.DirectorMidName = model.DirectorMidName;
+
+            if (!String.IsNullOrEmpty(model.DirectorPosition))
+                addModel.DirectorPosition = model.DirectorPosition;
+
+            if (!String.IsNullOrEmpty(model.PhoneNumber))
+                addModel.PhoneNumber = model.PhoneNumber;
+
+            if (!String.IsNullOrEmpty(model.AddressHomeNo))
+                addModel.AddressHomeNo = model.AddressHomeNo;
+
+            if (!String.IsNullOrEmpty(model.AddressStreet))
+                addModel.AddressStreet = model.AddressStreet;
+
+            if (!String.IsNullOrEmpty(model.AddressProvince))
+                addModel.AddressProvince = model.AddressProvince;
+
+            if (!String.IsNullOrEmpty(model.AddressDistrict))
+                addModel.AddressDistrict = model.AddressDistrict;
+
+            if (!String.IsNullOrEmpty(model.PostIndex))
+                addModel.PostIndex = model.PostIndex;
+
+            if (!String.IsNullOrEmpty(model.Department))
+                addModel.Department = model.Department;
+
+            if (!String.IsNullOrEmpty(model.DirectorMail))
+                addModel.DirectorMail = model.DirectorMail;
+
+            if (!String.IsNullOrEmpty(model.OrgMail))
+                addModel.OrgMail = model.OrgMail;
+
+            if (!String.IsNullOrEmpty(model.WebSite))
+                addModel.WebSite = model.WebSite;
+
+            if (model.OrgType == 0)
+                addModel.OrgType = model.OrgType;
+
+            if (!String.IsNullOrEmpty(model.Fax))
+                addModel.Fax = model.Fax;
+
+            if (model.OrgCategory == 0)
+                addModel.OrgCategory = model.OrgCategory;
+
+            addModel.IsActive = model.IsActive;
+            addModel.IsIct = model.IsIct;
+            addModel.IsMonitoring = model.IsMonitoring;
+            
             _organization.Add(addModel);
         }
         public void UpdateOrg(OrgCommand model)
