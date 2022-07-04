@@ -59,7 +59,7 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline id " + request.DeadlineId.ToString());
-            var org = _organization.GetAll().ToList();
+            var org = _organization.Find(o=>o.IsActive == true && o.IsIct == true).ToList();
             if (request.OrganizationId != 0)
             {
                 org = org.Where(o => o.Id == request.OrganizationId).ToList();
