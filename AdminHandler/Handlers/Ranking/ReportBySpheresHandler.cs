@@ -56,56 +56,66 @@ namespace AdminHandler.Handlers.Ranking
 
         public async Task<ReportBySpheresResult> Handle(ReportBySpheresQuery request, CancellationToken cancellationToken)
         {
-            ReportBySpheresResult result = new ReportBySpheresResult() {Count = 0, Data = new List<ReportBySpheresModel>() };
-
             var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline id " + request.DeadlineId.ToString());
-            var org = _organization.GetAll();
-            if(request.OrganizationId != 0)
+            var org = _organization.GetAll().ToList();
+            if (request.OrganizationId != 0)
             {
-                org = org.Where(o => o.Id == request.OrganizationId);
+                org = org.Where(o => o.Id == request.OrganizationId).ToList();
             }
-            
+
+            ReportBySpheresResult result = new ReportBySpheresResult() {Count = 0, Data = new List<ReportBySpheresModel>() };
+            var gSpheres = _gSphere.GetAll().ToList();
+            var xSpheres = _xSphere.GetAll().ToList();
+            var gFields = _gField.GetAll().ToList();
+            var xFields = _xField.GetAll().ToList();
+            var gSubFields = _gSubField.GetAll().ToList();
+            var xSubFields = _xSubField.GetAll().ToList();
+            var gRankTable = _gRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
+            var xRankTable = _xRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
+
+
+
             //ReportBySpheresModel model = new ReportBySpheresModel() {Spheres = new List<SphereRateElement>()};
-           
+
             foreach (var o in org)
             {
                 ReportBySpheresModel model = new ReportBySpheresModel() {OrganizationId = o.Id, OrgName = o.ShortName, Category = o.OrgCategory, Spheres = new List<SphereRateElement>() };
                 if (o.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
-                    var spheres = _gSphere.GetAll();
+                    
                     double maxRate = 20;
                     double reached = 0;
-                    foreach (var s in spheres)
+                    foreach (var s in gSpheres)
                     {
                        
                         double sphereRate = 0;
-                        var fields = _gField.Find(f => f.SphereId == s.Id);
+                        var fields = gFields.Where(f => f.SphereId == s.Id).ToList();
                         foreach(var f in fields)
                         {
                             maxRate = maxRate + f.MaxRate;
                             double fieldRate = 0;
-                            var subfields = _gSubField.Find(s => s.FieldId == f.Id);
+                            var subfields = gSubFields.Where(s => s.FieldId == f.Id).ToList();
                             if(subfields.Count()>0)
                             {
                                 foreach(var sField in subfields)
                                 {
-                                    var ranks = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id);
+                                    var ranks = gRankTable.Where(a => a.OrganizationId == o.Id && a.FieldId == f.Id && a.SubFieldId == sField.Id);
                                     if(ranks.Count()>1)
                                     {
-                                        fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
+                                        fieldRate += Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
                                     }
                                     if(ranks.Count()==1)
                                     {
-                                        fieldRate = fieldRate + ranks.First().Rank;
+                                        fieldRate += ranks.First().Rank;
                                     }
                                 }
                                 
                             }
                             if(subfields.Count()==0)
                             {
-                                var fieldR = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id);
+                                var fieldR = gRankTable.Where(r => r.OrganizationId == o.Id && r.FieldId == f.Id);
                                 if (fieldR.Count() > 1)
                                 {
                                     fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
@@ -116,14 +126,14 @@ namespace AdminHandler.Handlers.Ranking
                                 }
                             }
 
-                            sphereRate = sphereRate + fieldRate;
+                            sphereRate += fieldRate;
                         }
                         SphereRateElement addElement = new SphereRateElement();
                         addElement.SphereId = s.Id;
                         addElement.SphereName = s.Name;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
-                        reached = reached + sphereRate;
+                        reached += sphereRate;
                     }
                     model.RateSum = reached;
                     model.RatePercent = Math.Round((reached / maxRate) * 100, 2);
@@ -134,56 +144,55 @@ namespace AdminHandler.Handlers.Ranking
 
                 if (o.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
                 {
-                    var spheres = _xSphere.GetAll().ToList();
                     double maxRate = 0;
                     double reached = 0;
-                    foreach (var s in spheres)
+                    foreach (var s in xSpheres)
                     {
 
                         double sphereRate = 0;
-                        var fields = _xField.Find(f => f.SphereId == s.Id);
+                        var fields = xFields.Where(f => f.SphereId == s.Id).ToList();
                         foreach (var f in fields)
                         {
                             maxRate = maxRate + f.MaxRate;
                             double fieldRate = 0;
-                            var subfields = _xSubField.Find(s => s.FieldId == f.Id);
+                            var subfields = xSubFields.Where(s => s.FieldId == f.Id);
                             if (subfields.Count() > 0)
                             {
                                 foreach (var sField in subfields)
                                 {
-                                    var ranks = _xRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id);
+                                    var ranks = xRankTable.Where(a => a.OrganizationId == o.Id && a.FieldId == f.Id && a.SubFieldId == sField.Id);
                                     if (ranks.Count() > 1)
                                     {
-                                        fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
+                                        fieldRate += Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
                                     }
                                     if (ranks.Count() == 1)
                                     {
-                                        fieldRate = fieldRate + ranks.First().Rank;
+                                        fieldRate += ranks.First().Rank;
                                     }
                                 }
 
                             }
                             if (subfields.Count() == 0)
                             {
-                                var fieldR = _xRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id);
+                                var fieldR = xRankTable.Where(b => b.OrganizationId == o.Id && b.FieldId == f.Id);
                                 if (fieldR.Count() > 0)
                                     fieldRate = fieldR.First().Rank;
 
                             }
 
-                            sphereRate = sphereRate + fieldRate;
+                            sphereRate += fieldRate;
                         }
                         SphereRateElement addElement = new SphereRateElement();
                         addElement.SphereId = s.Id;
                         addElement.SphereName = s.Name;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
-                        reached = reached + sphereRate;
+                        reached += sphereRate;
                     }
                     model.RateSum = reached;
                     model.RatePercent = Math.Round((reached / maxRate) * 100, 2);
 
-                    result.Count = result.Count + 1;
+                    result.Count++;
                     result.Data.Add(model);
                 }
             }
