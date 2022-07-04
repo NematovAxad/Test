@@ -61,10 +61,10 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline id " + request.DeadlineId.ToString());
-            var org = _organization.GetAll().ToList();
+            var org = _organization.GetAll();
             if(request.OrganizationId != 0)
             {
-                org = org.Where(o => o.Id == request.OrganizationId).ToList();
+                org = org.Where(o => o.Id == request.OrganizationId);
             }
             
             //ReportBySpheresModel model = new ReportBySpheresModel() {Spheres = new List<SphereRateElement>()};
@@ -74,24 +74,24 @@ namespace AdminHandler.Handlers.Ranking
                 ReportBySpheresModel model = new ReportBySpheresModel() {OrganizationId = o.Id, OrgName = o.ShortName, Category = o.OrgCategory, Spheres = new List<SphereRateElement>() };
                 if (o.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
-                    var spheres = _gSphere.GetAll().ToList();
+                    var spheres = _gSphere.GetAll();
                     double maxRate = 20;
                     double reached = 0;
                     foreach (var s in spheres)
                     {
                        
                         double sphereRate = 0;
-                        var fields = _gField.Find(f => f.SphereId == s.Id).ToList();
+                        var fields = _gField.Find(f => f.SphereId == s.Id);
                         foreach(var f in fields)
                         {
                             maxRate = maxRate + f.MaxRate;
                             double fieldRate = 0;
-                            var subfields = _gSubField.Find(s => s.FieldId == f.Id).ToList();
+                            var subfields = _gSubField.Find(s => s.FieldId == f.Id);
                             if(subfields.Count()>0)
                             {
                                 foreach(var sField in subfields)
                                 {
-                                    var ranks = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id).ToList();
+                                    var ranks = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id);
                                     if(ranks.Count()>1)
                                     {
                                         fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
@@ -105,7 +105,7 @@ namespace AdminHandler.Handlers.Ranking
                             }
                             if(subfields.Count()==0)
                             {
-                                var fieldR = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
+                                var fieldR = _gRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id);
                                 if (fieldR.Count() > 1)
                                 {
                                     fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
@@ -141,17 +141,17 @@ namespace AdminHandler.Handlers.Ranking
                     {
 
                         double sphereRate = 0;
-                        var fields = _xField.Find(f => f.SphereId == s.Id).ToList();
+                        var fields = _xField.Find(f => f.SphereId == s.Id);
                         foreach (var f in fields)
                         {
                             maxRate = maxRate + f.MaxRate;
                             double fieldRate = 0;
-                            var subfields = _xSubField.Find(s => s.FieldId == f.Id).ToList();
+                            var subfields = _xSubField.Find(s => s.FieldId == f.Id);
                             if (subfields.Count() > 0)
                             {
                                 foreach (var sField in subfields)
                                 {
-                                    var ranks = _xRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id).ToList();
+                                    var ranks = _xRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id && r.SubFieldId == sField.Id);
                                     if (ranks.Count() > 1)
                                     {
                                         fieldRate = fieldRate + Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
@@ -165,8 +165,8 @@ namespace AdminHandler.Handlers.Ranking
                             }
                             if (subfields.Count() == 0)
                             {
-                                var fieldR = _xRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id).ToList();
-                                if (fieldR.Count > 0)
+                                var fieldR = _xRankTable.Find(r => r.OrganizationId == o.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.FieldId == f.Id);
+                                if (fieldR.Count() > 0)
                                     fieldRate = fieldR.First().Rank;
 
                             }
