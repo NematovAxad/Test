@@ -44,8 +44,8 @@ namespace AdminHandler.Commands.Organization
         public OrgTypes OrgType { get; set; }
         public string Fax { get; set; }
         public OrgCategory OrgCategory { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsIct { get; set; }
-        public bool IsMonitoring { get; set; }
+        public bool? IsActive { get; set; }
+        public bool? IsIct { get; set; }
+        public bool? IsMonitoring { get; set; }
     }
 }
