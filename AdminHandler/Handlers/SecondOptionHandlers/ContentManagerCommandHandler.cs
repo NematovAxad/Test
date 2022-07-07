@@ -46,16 +46,21 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            var filePath = "";
 
-            var filePath = FileState.AddFile("headDocs", model.File);
             ContentManager addModel = new ContentManager()
             {
                 OrganizationId = model.OrganizationId,
                 FullName = model.FullName,
                 Position = model.Position,
-                Phone = model.Phone,
-                FilePath = filePath
+                Phone = model.Phone
             };
+            if(model.File !=null)
+            {
+                filePath = FileState.AddFile("headDocs", model.File);
+                addModel.FilePath = filePath;
+            }    
+            
             _contentManager.Add(addModel);
         }
         public void Update(ContentManagerCommand model)
