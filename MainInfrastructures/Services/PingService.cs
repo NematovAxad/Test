@@ -39,7 +39,7 @@ namespace ApiConfigs
                 throw ErrorStates.NotFound("org");
             foreach (var o in organizations)
             {
-                var ws = _webSiteAvailability.Find(w =>w.DeadlineId == deadline.Id && w.OrganizationId == o.Id).First();
+                var ws = _webSiteAvailability.Find(w =>w.DeadlineId == deadline.Id && w.OrganizationId == o.Id).FirstOrDefault();
                 HttpWebResponse response = null;
                 try
                 {
