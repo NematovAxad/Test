@@ -31,6 +31,9 @@ namespace ApiConfigs
 
         public void CheckPing(object state)
         {
+            var addList = new List<WebSiteAvailability>();
+            var updateList = new List<WebSiteAvailability>();
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
@@ -60,15 +63,13 @@ namespace ApiConfigs
                                 SuccessfulPing = 1,
                                 FailedPing = 0
                             };
-                            _db.Context.Add(addModel);
-                            _db.Context.SaveChanges();
+                            addList.Add(addModel);
                         }
                         if (ws != null)
                         {
                             ws.SuccessfulPing = ws.SuccessfulPing + 1;
                             ws.Website = o.WebSite;
-                            _db.Context.Update(ws);
-                            _db.Context.SaveChanges();
+                            updateList.Add(ws);
                         }
                     }
                     else
@@ -83,15 +84,13 @@ namespace ApiConfigs
                                 SuccessfulPing = 0,
                                 FailedPing = 1
                             };
-                            _db.Context.Add(addModel);
-                            _db.Context.SaveChanges();
+                            addList.Add(addModel);
                         }
                         if (ws != null)
                         {
                             ws.FailedPing = ws.FailedPing + 1;
                             ws.Website = o.WebSite;
-                            _db.Context.Update(ws);
-                            _db.Context.SaveChanges();
+                            updateList.Add(ws);
                         }
                     }
                 }
@@ -107,19 +106,25 @@ namespace ApiConfigs
                             SuccessfulPing = 0,
                             FailedPing = 1
                         };
-                        _db.Context.Add(addModel);
-                        _db.Context.SaveChanges();
+                        addList.Add(addModel);
                     }
                     if (ws != null)
                     {
                         ws.FailedPing = ws.FailedPing + 1;
                         ws.Website = o.WebSite;
-                        _db.Context.Update(ws);
-                        _db.Context.SaveChanges();
+                        updateList.Add(ws);
                     }
                 }
             }
 
+            if(addList.Count()>0)
+            {
+                _db.Context.AddRange(addList);
+            }
+            if(updateList.Count()>0)
+            {
+                _db.Context.UpdateRange(updateList);
+            }
         }
     }
 }
