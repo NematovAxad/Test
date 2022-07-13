@@ -25,7 +25,7 @@ namespace ApiConfigs
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(_pingService.CheckPing, null, TimeSpan.Zero, TimeSpan.FromMinutes(10));
+            _timer = new Timer(_pingService.CheckPing, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
             return Task.CompletedTask;
         }
 

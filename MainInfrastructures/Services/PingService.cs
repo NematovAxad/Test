@@ -31,19 +31,15 @@ namespace ApiConfigs
 
         public void CheckPing(object state)
         {
-            var addList = new List<WebSiteAvailability>();
-            var updateList = new List<WebSiteAvailability>();
-
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
             var organizations = _org.GetAll().ToList();
             if (organizations.Count() == 0)
                 throw ErrorStates.NotFound("org");
-            var webSiteAvailability = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
             foreach (var o in organizations)
             {
-                var ws = webSiteAvailability.Where(w => w.OrganizationId == o.Id).FirstOrDefault();
+                var ws = _webSiteAvailability.Find(w =>w.DeadlineId == deadline.Id && w.OrganizationId == o.Id).First();
                 HttpWebResponse response = null;
                 try
                 {
@@ -53,7 +49,7 @@ namespace ApiConfigs
                     response = (HttpWebResponse)request.GetResponse();
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        if (ws == null)
+                        if (ws==null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
                             {
@@ -63,18 +59,18 @@ namespace ApiConfigs
                                 SuccessfulPing = 1,
                                 FailedPing = 0
                             };
-                            addList.Add(addModel);
+                            _webSiteAvailability.Add(addModel);
                         }
-                        if (ws != null)
+                        if (ws!=null)
                         {
                             ws.SuccessfulPing = ws.SuccessfulPing + 1;
                             ws.Website = o.WebSite;
-                            updateList.Add(ws);
+                            _webSiteAvailability.Update(ws);
                         }
                     }
                     else
                     {
-                        if (ws == null)
+                        if (ws==null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
                             {
@@ -84,19 +80,19 @@ namespace ApiConfigs
                                 SuccessfulPing = 0,
                                 FailedPing = 1
                             };
-                            addList.Add(addModel);
+                            _webSiteAvailability.Add(addModel);
                         }
-                        if (ws != null)
+                        if (ws!=null)
                         {
                             ws.FailedPing = ws.FailedPing + 1;
                             ws.Website = o.WebSite;
-                            updateList.Add(ws);
+                            _webSiteAvailability.Update(ws);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    if (ws == null)
+                    if (ws==null)
                     {
                         WebSiteAvailability addModel = new WebSiteAvailability()
                         {
@@ -106,26 +102,15 @@ namespace ApiConfigs
                             SuccessfulPing = 0,
                             FailedPing = 1
                         };
-                        addList.Add(addModel);
+                        _webSiteAvailability.Add(addModel);
                     }
-                    if (ws != null)
+                    if (ws!=null)
                     {
                         ws.FailedPing = ws.FailedPing + 1;
                         ws.Website = o.WebSite;
-                        updateList.Add(ws);
+                        _webSiteAvailability.Update(ws);
                     }
                 }
-            }
-
-            if(addList.Count()>0)
-            {
-                _db.Context.AddRange(addList);
-                _db.Context.SaveChanges();
-            }
-            if(updateList.Count()>0)
-            {
-                _db.Context.UpdateRange(updateList);
-                _db.Context.SaveChanges();
             }
         }
     }
