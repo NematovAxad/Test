@@ -7,6 +7,7 @@ using MainInfrastructures.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,16 +40,14 @@ namespace ApiConfigs
             foreach (var o in organizations)
             {
                 var ws = _webSiteAvailability.Find(w => w.OrganizationId == o.Id && w.DeadlineId == deadline.Id).FirstOrDefault();
+                HttpWebResponse response = null;
                 try
                 {
-                    Ping p = new Ping();
-                    PingReply r;
-                    string uri = o.WebSite;
-                    uri = uri.Replace("www.", string.Empty);
-                    uri = uri.Replace("https://", string.Empty);
-                    uri = uri.Replace("http://", string.Empty);
-                    r = p.Send(uri);
-                    if (r.Status == IPStatus.Success)
+                    string uri = o.WebSite.Replace("www.", string.Empty);
+                    WebRequest request = System.Net.WebRequest.Create(o.WebSite);
+                    request.Credentials = CredentialCache.DefaultCredentials;
+                    response = (HttpWebResponse)request.GetResponse();
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
                         if (ws == null)
                         {
@@ -60,18 +59,18 @@ namespace ApiConfigs
                                 SuccessfulPing = 1,
                                 FailedPing = 0
                             };
-                            _webSiteAvailability.Add(addModel);
-                            //_webSiteAvailability.SaveChanges();
+                            _db.Context.Add(addModel);
+                            _db.Context.SaveChanges();
                         }
                         if (ws != null)
                         {
                             ws.SuccessfulPing = ws.SuccessfulPing + 1;
                             ws.Website = o.WebSite;
-                            _webSiteAvailability.Update(ws);
-                            //_db.Context.SaveChanges();
+                            _db.Context.Update(ws);
+                            _db.Context.SaveChanges();
                         }
                     }
-                    if (r.Status != IPStatus.Success)
+                    else
                     {
                         if (ws == null)
                         {
@@ -83,15 +82,15 @@ namespace ApiConfigs
                                 SuccessfulPing = 0,
                                 FailedPing = 1
                             };
-                            _webSiteAvailability.Add(addModel);
-                            //_db.Context.SaveChanges();
+                            _db.Context.Add(addModel);
+                            _db.Context.SaveChanges();
                         }
                         if (ws != null)
                         {
                             ws.FailedPing = ws.FailedPing + 1;
                             ws.Website = o.WebSite;
-                            _webSiteAvailability.Update(ws);
-                            //_db.Context.SaveChanges();
+                            _db.Context.Update(ws);
+                            _db.Context.SaveChanges();
                         }
                     }
                 }
@@ -107,15 +106,15 @@ namespace ApiConfigs
                             SuccessfulPing = 0,
                             FailedPing = 1
                         };
-                        _webSiteAvailability.Add(addModel);
-                        //_db.Context.SaveChanges();
+                        _db.Context.Add(addModel);
+                        _db.Context.SaveChanges();
                     }
                     if (ws != null)
                     {
                         ws.FailedPing = ws.FailedPing + 1;
                         ws.Website = o.WebSite;
-                        _webSiteAvailability.Update(ws);
-                        //_db.Context.SaveChanges();
+                        _db.Context.Update(ws);
+                        _db.Context.SaveChanges();
                     }
                 }
             }
