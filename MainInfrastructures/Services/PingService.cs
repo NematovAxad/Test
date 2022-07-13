@@ -120,10 +120,12 @@ namespace ApiConfigs
             if(addList.Count()>0)
             {
                 _db.Context.AddRange(addList);
+                _db.Context.SaveChanges();
             }
             if(updateList.Count()>0)
             {
                 _db.Context.UpdateRange(updateList);
+                _db.Context.SaveChanges();
             }
         }
     }
