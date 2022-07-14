@@ -37,9 +37,10 @@ namespace ApiConfigs
             var organizations = _org.GetAll().ToList();
             if (organizations.Count() == 0)
                 throw ErrorStates.NotFound("org");
+            var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
             foreach (var o in organizations)
             {
-                var ws = _webSiteAvailability.Find(w =>w.DeadlineId == deadline.Id && w.OrganizationId == o.Id).FirstOrDefault();
+                var ws = webSite.Where(w => w.OrganizationId == o.Id).FirstOrDefault();
                 HttpWebResponse response = null;
                 try
                 {
