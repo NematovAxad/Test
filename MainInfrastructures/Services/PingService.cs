@@ -126,6 +126,7 @@ namespace ApiConfigs
             if(updateModelList.Count()>0)
             {
                 _db.Context.UpdateRange(updateModelList);
+                _db.Context.SaveChanges();
             }
         }
     }
