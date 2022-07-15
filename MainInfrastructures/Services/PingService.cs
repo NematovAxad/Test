@@ -31,6 +31,9 @@ namespace ApiConfigs
 
         public void CheckPing(object state)
         {
+            List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
+            List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
@@ -48,48 +51,6 @@ namespace ApiConfigs
                     WebRequest request = System.Net.WebRequest.Create(o.WebSite);
                     request.Credentials = CredentialCache.DefaultCredentials;
                     response = (HttpWebResponse)request.GetResponse();
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        if (ws==null)
-                        {
-                            WebSiteAvailability addModel = new WebSiteAvailability()
-                            {
-                                OrganizationId = o.Id,
-                                DeadlineId = deadline.Id,
-                                Website = o.WebSite,
-                                SuccessfulPing = 1,
-                                FailedPing = 0
-                            };
-                            _webSiteAvailability.Add(addModel);
-                        }
-                        if (ws!=null)
-                        {
-                            ws.SuccessfulPing = ws.SuccessfulPing + 1;
-                            ws.Website = o.WebSite;
-                            _webSiteAvailability.Update(ws);
-                        }
-                    }
-                    else
-                    {
-                        if (ws==null)
-                        {
-                            WebSiteAvailability addModel = new WebSiteAvailability()
-                            {
-                                OrganizationId = o.Id,
-                                DeadlineId = deadline.Id,
-                                Website = o.WebSite,
-                                SuccessfulPing = 0,
-                                FailedPing = 1
-                            };
-                            _webSiteAvailability.Add(addModel);
-                        }
-                        if (ws!=null)
-                        {
-                            ws.FailedPing = ws.FailedPing + 1;
-                            ws.Website = o.WebSite;
-                            _webSiteAvailability.Update(ws);
-                        }
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -103,15 +64,68 @@ namespace ApiConfigs
                             SuccessfulPing = 0,
                             FailedPing = 1
                         };
-                        _webSiteAvailability.Add(addModel);
+                        addModelList.Add(addModel);
                     }
                     if (ws!=null)
                     {
                         ws.FailedPing = ws.FailedPing + 1;
                         ws.Website = o.WebSite;
-                        _webSiteAvailability.Update(ws);
+                        updateModelList.Add(ws);
                     }
                 }
+                if (response != null)
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        if (ws == null)
+                        {
+                            WebSiteAvailability addModel = new WebSiteAvailability()
+                            {
+                                OrganizationId = o.Id,
+                                DeadlineId = deadline.Id,
+                                Website = o.WebSite,
+                                SuccessfulPing = 1,
+                                FailedPing = 0
+                            };
+                            addModelList.Add(addModel);
+                        }
+                        if (ws != null)
+                        {
+                            ws.SuccessfulPing = ws.SuccessfulPing + 1;
+                            ws.Website = o.WebSite;
+                            updateModelList.Add(ws);
+                        }
+                    }
+                    else
+                    {
+                        if (ws == null)
+                        {
+                            WebSiteAvailability addModel = new WebSiteAvailability()
+                            {
+                                OrganizationId = o.Id,
+                                DeadlineId = deadline.Id,
+                                Website = o.WebSite,
+                                SuccessfulPing = 0,
+                                FailedPing = 1
+                            };
+                            addModelList.Add(addModel);
+                        }
+                        if (ws != null)
+                        {
+                            ws.FailedPing = ws.FailedPing + 1;
+                            ws.Website = o.WebSite;
+                            updateModelList.Add(ws);
+                        }
+                    }
+                }
+            }
+            if(addModelList.Count()>0)
+            {
+                _webSiteAvailability.AddRange(addModelList);
+            }
+            if(updateModelList.Count()>0)
+            {
+                _db.Context.UpdateRange(updateModelList);
             }
         }
     }
