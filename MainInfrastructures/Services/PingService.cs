@@ -201,7 +201,8 @@ namespace ApiConfigs
             }
             if(webSiteFailsList.Count()>0)
             {
-                _websiteFails.AddRange(webSiteFailsList);
+                _db.Context.AddRange(webSiteFailsList);
+                _db.Context.SaveChanges();
             }
         }
     }
