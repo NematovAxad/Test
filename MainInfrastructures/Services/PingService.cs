@@ -30,7 +30,34 @@ namespace ApiConfigs
             _db = db;
             _websiteFails = websiteFails;
         }
-
+        public bool Ping(string website)
+        {
+            bool pingable = false;
+            Ping pinger = null;
+            try
+            {
+                string uri = website;
+                uri = uri.Replace("www.", string.Empty);
+                uri = uri.Replace("https://", string.Empty);
+                uri = uri.Replace("http://", string.Empty);
+                uri = uri.Replace("/", string.Empty);
+                pinger = new Ping();
+                PingReply reply = pinger.Send(uri);
+                pingable = reply.Status == IPStatus.Success;
+            }
+            catch (PingException exc)
+            {
+                return false;
+            }
+            finally
+            {
+                if (pinger != null)
+                {
+                    pinger.Dispose();
+                }
+            }
+            return pingable;
+        }
         public void CheckPing(object state)
         {
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
@@ -46,6 +73,7 @@ namespace ApiConfigs
             var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
             foreach (var o in organizations)
             {
+                bool pingCheck = Ping(o.WebSite);
                 var ws = webSite.Where(w => w.OrganizationId == o.Id).FirstOrDefault();
                 HttpWebResponse response = null;
                 try
@@ -57,36 +85,60 @@ namespace ApiConfigs
                 }
                 catch (Exception ex)
                 {
-                    if (ws==null)
+                    if(pingCheck == false)
                     {
-                        WebSiteAvailability addModel = new WebSiteAvailability()
+                        if (ws == null)
+                        {
+                            WebSiteAvailability addModel = new WebSiteAvailability()
+                            {
+                                OrganizationId = o.Id,
+                                DeadlineId = deadline.Id,
+                                Website = o.WebSite,
+                                SuccessfulPing = 0,
+                                FailedPing = 1
+                            };
+                            addModelList.Add(addModel);
+                        }
+                        if (ws != null)
+                        {
+                            ws.FailedPing = ws.FailedPing + 1;
+                            ws.Website = o.WebSite;
+                            updateModelList.Add(ws);
+                        }
+                        WebSiteFails fail = new WebSiteFails()
                         {
                             OrganizationId = o.Id,
                             DeadlineId = deadline.Id,
                             Website = o.WebSite,
-                            SuccessfulPing = 0,
-                            FailedPing = 1
+                            FailedTime = DateTime.Now
                         };
-                        addModelList.Add(addModel);
+                        webSiteFailsList.Add(fail);
                     }
-                    if (ws!=null)
+                    if(pingCheck == true)
                     {
-                        ws.FailedPing = ws.FailedPing + 1;
-                        ws.Website = o.WebSite;
-                        updateModelList.Add(ws);
+                        if (ws == null)
+                        {
+                            WebSiteAvailability addModel = new WebSiteAvailability()
+                            {
+                                OrganizationId = o.Id,
+                                DeadlineId = deadline.Id,
+                                Website = o.WebSite,
+                                SuccessfulPing = 1,
+                                FailedPing = 0
+                            };
+                            addModelList.Add(addModel);
+                        }
+                        if (ws != null)
+                        {
+                            ws.SuccessfulPing = ws.SuccessfulPing + 1;
+                            ws.Website = o.WebSite;
+                            updateModelList.Add(ws);
+                        }
                     }
-                    WebSiteFails fail = new WebSiteFails()
-                    {
-                        OrganizationId = o.Id,
-                        DeadlineId = deadline.Id,
-                        Website = o.WebSite,
-                        FailedTime = DateTime.Now
-                    };
-                    webSiteFailsList.Add(fail);
                 }
                 if (response != null)
                 {
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    if (response.StatusCode == HttpStatusCode.OK || pingCheck == true)
                     {
                         if (ws == null)
                         {
