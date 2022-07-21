@@ -19,20 +19,23 @@ namespace ApiConfigs
         private readonly IRepository<Organizations, int> _org;
         private readonly IRepository<WebSiteAvailability, int> _webSiteAvailability;
         private readonly IRepository<Deadline, int> _deadline;
+        private readonly IRepository<WebSiteFails, int> _websiteFails;
         private IDataContext _db;
 
-        public PingService(IRepository<Organizations, int> org, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<Deadline, int> deadline, IDataContext db)
+        public PingService(IRepository<Organizations, int> org, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<Deadline, int> deadline, IDataContext db, IRepository<WebSiteFails, int> websiteFails)
         {
             _org = org;
             _webSiteAvailability = webSiteAvailability;
             _deadline = deadline;
             _db = db;
+            _websiteFails = websiteFails;
         }
 
         public void CheckPing(object state)
         {
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
             List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
+            List<WebSiteFails> webSiteFailsList = new List<WebSiteFails>();
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -72,6 +75,14 @@ namespace ApiConfigs
                         ws.Website = o.WebSite;
                         updateModelList.Add(ws);
                     }
+                    WebSiteFails fail = new WebSiteFails()
+                    {
+                        OrganizationId = o.Id,
+                        DeadlineId = deadline.Id,
+                        Website = o.WebSite,
+                        FailedTime = DateTime.Now
+                    };
+                    webSiteFailsList.Add(fail);
                 }
                 if (response != null)
                 {
@@ -116,6 +127,14 @@ namespace ApiConfigs
                             ws.Website = o.WebSite;
                             updateModelList.Add(ws);
                         }
+                        WebSiteFails fail = new WebSiteFails()
+                        {
+                            OrganizationId = o.Id,
+                            DeadlineId = deadline.Id,
+                            Website = o.WebSite,
+                            FailedTime = DateTime.Now
+                        };
+                        webSiteFailsList.Add(fail);
                     }
                 }
             }
@@ -127,6 +146,10 @@ namespace ApiConfigs
             {
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
+            }
+            if(webSiteFailsList.Count()>0)
+            {
+                _websiteFails.AddRange(webSiteFailsList);
             }
         }
     }

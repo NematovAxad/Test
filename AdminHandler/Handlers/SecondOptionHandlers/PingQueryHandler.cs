@@ -19,13 +19,15 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         private readonly IRepository<Organizations, int> _org;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<WebSiteAvailability, int> _webSiteAvailability;
+        private readonly IRepository<WebSiteFails, int> _websiteFails;
 
 
-        public PingQueryHandler(IRepository<Organizations, int> org, IRepository<Deadline, int> deadline, IRepository<WebSiteAvailability, int> webSiteAvailability)
+        public PingQueryHandler(IRepository<Organizations, int> org, IRepository<Deadline, int> deadline, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<WebSiteFails, int> websiteFails)
         {
             _org = org;
             _deadline = deadline;
             _webSiteAvailability = webSiteAvailability;
+            _websiteFails = websiteFails;
 
         }
         public async Task<PingQueryResult> Handle(PingQuery request, CancellationToken cancellationToken)
@@ -37,6 +39,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline " + request.DeadlineId.ToString());
 
+            var fails = _websiteFails.Find(f => f.DeadlineId == deadline.Id && f.OrganizationId == org.Id).ToList();
             var ping = _webSiteAvailability.GetAll();
             if (request.OrganizationId != 0)
                 ping = ping.Where(m => m.OrganizationId == request.OrganizationId);
@@ -46,6 +49,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             PingQueryResult result = new PingQueryResult();
             result.Count = ping.Count();
             result.Data = ping.OrderBy(u => u.Id).ToList<object>();
+            result.Fails = fails.OrderBy(f => f.FailedTime).ToList<object>();
             return result;
         }
     }

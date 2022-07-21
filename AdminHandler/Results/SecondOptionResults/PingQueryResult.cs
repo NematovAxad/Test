@@ -8,5 +8,6 @@ namespace AdminHandler.Results.SecondOptionResults
     {
         public int Count { get; set; }
         public List<object> Data { get; set; }
+        public List<object> Fails { get; set; }
     }
 }
