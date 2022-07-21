@@ -87,6 +87,14 @@ namespace ApiConfigs
                 {
                     if(pingCheck == false)
                     {
+                        WebSiteFails fail = new WebSiteFails()
+                        {
+                            OrganizationId = o.Id,
+                            DeadlineId = deadline.Id,
+                            Website = o.WebSite,
+                            FailedTime = DateTime.Now
+                        };
+                        webSiteFailsList.Add(fail);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -105,14 +113,6 @@ namespace ApiConfigs
                             ws.Website = o.WebSite;
                             updateModelList.Add(ws);
                         }
-                        WebSiteFails fail = new WebSiteFails()
-                        {
-                            OrganizationId = o.Id,
-                            DeadlineId = deadline.Id,
-                            Website = o.WebSite,
-                            FailedTime = DateTime.Now
-                        };
-                        webSiteFailsList.Add(fail);
                     }
                     if(pingCheck == true)
                     {
@@ -159,8 +159,16 @@ namespace ApiConfigs
                             updateModelList.Add(ws);
                         }
                     }
-                    else
+                    if(response.StatusCode != HttpStatusCode.OK && pingCheck != true)
                     {
+                        WebSiteFails fail = new WebSiteFails()
+                        {
+                            OrganizationId = o.Id,
+                            DeadlineId = deadline.Id,
+                            Website = o.WebSite,
+                            FailedTime = DateTime.Now
+                        };
+                        webSiteFailsList.Add(fail);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -179,14 +187,6 @@ namespace ApiConfigs
                             ws.Website = o.WebSite;
                             updateModelList.Add(ws);
                         }
-                        WebSiteFails fail = new WebSiteFails()
-                        {
-                            OrganizationId = o.Id,
-                            DeadlineId = deadline.Id,
-                            Website = o.WebSite,
-                            FailedTime = DateTime.Now
-                        };
-                        webSiteFailsList.Add(fail);
                     }
                 }
             }
