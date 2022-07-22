@@ -94,7 +94,7 @@ namespace ApiConfigs
                             Website = o.WebSite,
                             FailedTime = DateTime.Now
                         };
-                        webSiteFailsList.Add(fail);
+                        _websiteFails.Add(fail);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -168,7 +168,7 @@ namespace ApiConfigs
                             Website = o.WebSite,
                             FailedTime = DateTime.Now
                         };
-                        webSiteFailsList.Add(fail);
+                        _websiteFails.Add(fail);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -198,10 +198,6 @@ namespace ApiConfigs
             {
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
-            }
-            if(webSiteFailsList.Count()>0)
-            {
-                _websiteFails.AddRange(webSiteFailsList);
             }
         }
     }
