@@ -84,6 +84,7 @@ namespace ApiConfigs
             var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
             foreach (var o in organizations)
             {
+                bool hasFail = false;
                 bool pingCheck = Ping(o.WebSite);
                 var ws = webSite.Where(w => w.OrganizationId == o.Id).FirstOrDefault();
                 HttpWebResponse response = null;
@@ -98,7 +99,7 @@ namespace ApiConfigs
                 {
                     if(pingCheck == false)
                     {
-                        AddFail(deadline, o);
+                        hasFail = true;
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -165,7 +166,7 @@ namespace ApiConfigs
                     }
                     if(response.StatusCode != HttpStatusCode.OK && pingCheck != true)
                     {
-                        AddFail(deadline, o);
+                        hasFail = true;
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -185,6 +186,10 @@ namespace ApiConfigs
                             updateModelList.Add(ws);
                         }
                     }
+                }
+                if(hasFail == true)
+                {
+                    AddFail(deadline, o);
                 }
             }
             if(addModelList.Count()>0)
