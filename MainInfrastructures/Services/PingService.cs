@@ -197,7 +197,10 @@ namespace ApiConfigs
                         Website = o.WebSite,
                         FailedTime = DateTime.Now
                     };
-                    webSiteFailsList.Add(fail);
+                    if(!webSiteFailsList.Any(f=>f.OrganizationId == fail.OrganizationId))
+                    {
+                        webSiteFailsList.Add(fail);
+                    }
                 }
             }
             if(addModelList.Count()>0)
