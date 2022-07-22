@@ -58,6 +58,17 @@ namespace ApiConfigs
             }
             return pingable;
         }
+        public void AddFail(Deadline deadline, Organizations org)
+        {
+            WebSiteFails fail = new WebSiteFails()
+            {
+                OrganizationId = org.Id,
+                DeadlineId = deadline.Id,
+                Website = org.WebSite,
+                FailedTime = DateTime.Now
+            };
+            _websiteFails.Add(fail);
+        }
         public void CheckPing(object state)
         {
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
@@ -87,14 +98,7 @@ namespace ApiConfigs
                 {
                     if(pingCheck == false)
                     {
-                        WebSiteFails fail = new WebSiteFails()
-                        {
-                            OrganizationId = o.Id,
-                            DeadlineId = deadline.Id,
-                            Website = o.WebSite,
-                            FailedTime = DateTime.Now
-                        };
-                        _websiteFails.Add(fail);
+                        AddFail(deadline, o);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -161,14 +165,7 @@ namespace ApiConfigs
                     }
                     if(response.StatusCode != HttpStatusCode.OK && pingCheck != true)
                     {
-                        WebSiteFails fail = new WebSiteFails()
-                        {
-                            OrganizationId = o.Id,
-                            DeadlineId = deadline.Id,
-                            Website = o.WebSite,
-                            FailedTime = DateTime.Now
-                        };
-                        _websiteFails.Add(fail);
+                        AddFail(deadline, o);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
