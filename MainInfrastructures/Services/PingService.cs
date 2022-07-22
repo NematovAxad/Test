@@ -68,6 +68,7 @@ namespace ApiConfigs
                 FailedTime = DateTime.Now
             };
             _websiteFails.Add(fail);
+            Console.WriteLine("added");
         }
         public void CheckPing(object state)
         {
@@ -84,7 +85,6 @@ namespace ApiConfigs
             var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
             foreach (var o in organizations)
             {
-                bool hasFail = false;
                 bool pingCheck = Ping(o.WebSite);
                 var ws = webSite.Where(w => w.OrganizationId == o.Id).FirstOrDefault();
                 HttpWebResponse response = null;
@@ -99,7 +99,14 @@ namespace ApiConfigs
                 {
                     if(pingCheck == false)
                     {
-                        hasFail = true;
+                        WebSiteFails fail = new WebSiteFails()
+                        {
+                            OrganizationId = o.Id,
+                            DeadlineId = deadline.Id,
+                            Website = o.WebSite,
+                            FailedTime = DateTime.Now
+                        };
+                        webSiteFailsList.Add(fail);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -166,7 +173,14 @@ namespace ApiConfigs
                     }
                     if(response.StatusCode != HttpStatusCode.OK && pingCheck != true)
                     {
-                        hasFail = true;
+                        WebSiteFails fail = new WebSiteFails()
+                        {
+                            OrganizationId = o.Id,
+                            DeadlineId = deadline.Id,
+                            Website = o.WebSite,
+                            FailedTime = DateTime.Now
+                        };
+                        webSiteFailsList.Add(fail);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -187,10 +201,6 @@ namespace ApiConfigs
                         }
                     }
                 }
-                if(hasFail == true)
-                {
-                    AddFail(deadline, o);
-                }
             }
             if(addModelList.Count()>0)
             {
@@ -200,6 +210,17 @@ namespace ApiConfigs
             {
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
+            }
+            if(webSiteFailsList.Count()>0)
+            {
+                foreach(WebSiteFails f in webSiteFailsList)
+                {
+                    if(webSiteFailsList.Any(a=>a.OrganizationId == f.OrganizationId && a.DeadlineId == f.DeadlineId && a.Website == f.Website && a.FailedTime.Year == f.FailedTime.Year && a.FailedTime.Month == f.FailedTime.Month && a.FailedTime.Day == f.FailedTime.Day && a.FailedTime.Hour == f.FailedTime.Hour && a.FailedTime.Minute == f.FailedTime.Minute))
+                    {
+                        webSiteFailsList.Remove(f);
+                    }
+                }
+                _websiteFails.AddRange(webSiteFailsList);
             }
         }
     }
