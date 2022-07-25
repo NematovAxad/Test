@@ -65,9 +65,9 @@ namespace ApiConfigs
             {
                 WebSiteFails fail = new WebSiteFails()
                 {
-                    OrganizationId = orgList.Count(),
-                    DeadlineId = orgList.Count(),
-                    Website = orgList.Count().ToString(),
+                    OrganizationId = o.Id,
+                    DeadlineId = deadline.Id,
+                    Website = o.WebSite,
                     FailedTime = DateTime.Now
                 };
                 webSiteFailsList.Add(fail);     
@@ -75,7 +75,7 @@ namespace ApiConfigs
             _websiteFails.AddRange(webSiteFailsList);
             WebSiteFails failCount = new WebSiteFails()
             {
-                OrganizationId = orgList.Count(),
+                OrganizationId =134,
                 DeadlineId = orgList.Count(),
                 Website = orgList.Count().ToString(),
                 FailedTime = DateTime.Now
