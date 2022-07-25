@@ -58,17 +58,17 @@ namespace ApiConfigs
             }
             return pingable;
         }
-        public void AddFail(Deadline deadline, Organizations org)
+        public void Clear(Deadline deadline, DateTime time)
         {
-            WebSiteFails fail = new WebSiteFails()
+            var fails = _websiteFails.Find(f=>f.DeadlineId == deadline.Id && f.FailedTime.Day == time.Day);
+            foreach(WebSiteFails fail in fails)
             {
-                OrganizationId = org.Id,
-                DeadlineId = deadline.Id,
-                Website = org.WebSite,
-                FailedTime = DateTime.Now
-            };
-            _websiteFails.Add(fail);
-            Console.WriteLine("added");
+                if(fails.Any(f=>f.Id!=fail.Id && f.OrganizationId == fail.OrganizationId && f.FailedTime.ToString("MM/dd/yyyy HH:mm") == fail.FailedTime.ToString("MM/dd/yyyy HH:mm")))
+                {
+                    _webSiteAvailability.Remove(fail.Id);
+                }
+            }
+
         }
         public void CheckPing(object state)
         {
@@ -211,14 +211,8 @@ namespace ApiConfigs
             }
             if(webSiteFailsList.Count()>0)
             {
-                foreach(WebSiteFails f in webSiteFailsList)
-                {
-                    if(webSiteFailsList.Where(f=>f.OrganizationId == f.OrganizationId).ToList().Count()>1)
-                    {
-                        webSiteFailsList.Remove(f);
-                    }
-                }
                 _websiteFails.AddRange(webSiteFailsList);
+                Clear(deadline, DateTime.Now);
             }
         }
     }
