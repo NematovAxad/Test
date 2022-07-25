@@ -211,7 +211,7 @@ namespace ApiConfigs
                 }
                 _siteFails.AddRange(webSiteFailsList);
             }
-            D
+            Clear(deadline, DateTime.Now);
         }
     }
 }
