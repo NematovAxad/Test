@@ -21,7 +21,6 @@ namespace ApiConfigs
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<SiteFails, int> _siteFails;
         private IDataContext _db;
-        public bool AddDone = false;
 
         public PingService(IRepository<Organizations, int> org, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<Deadline, int> deadline, IDataContext db, IRepository<SiteFails, int> siteFails)
         {
@@ -59,26 +58,19 @@ namespace ApiConfigs
             }
             return pingable;
         }
-        public void AddList(Deadline deadline, List<Organizations> orgList)
+        public void Clear(Deadline deadline, DateTime time)
         {
-            List<SiteFails> webSiteFailsList = new List<SiteFails>();
-            foreach (Organizations o in orgList)
+            var fails = _siteFails.Find(f => f.DeadlineId == deadline.Id && f.FailedTime.Day == time.Day).ToList();
+            foreach(SiteFails fail in fails)
             {
-                SiteFails fail = new SiteFails()
+                if(fails.Any(f=>f.OrganizationId == fail.OrganizationId && f.FailedTime.ToString("MM/dd/yyyy HH:mm") == fail.FailedTime.ToString("MM/dd/yyyy HH:mm") && f.Id!=fail.Id))
                 {
-                    OrganizationId = o.Id,
-                    DeadlineId = deadline.Id,
-                    Website = o.WebSite,
-                    FailedTime = DateTime.Now
-                };
-                webSiteFailsList.Add(fail);
+                    _siteFails.Remove(fail);
+                }
             }
-            _siteFails.AddRange(webSiteFailsList);
-            AddDone = true;
         }
         public void CheckPing(object state)
         {
-            AddDone = false;
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
             List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
             List<Organizations> OrgList = new List<Organizations>();
@@ -203,10 +195,23 @@ namespace ApiConfigs
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
             }
-            if(OrgList.Count()>0 && AddDone == false)
+            if(OrgList.Count()>0)
             {
-                AddList(deadline, OrgList);
+                List<SiteFails> webSiteFailsList = new List<SiteFails>();
+                foreach (Organizations o in OrgList)
+                {
+                    SiteFails fail = new SiteFails()
+                    {
+                        OrganizationId = o.Id,
+                        DeadlineId = deadline.Id,
+                        Website = o.WebSite,
+                        FailedTime = DateTime.Now
+                    };
+                    webSiteFailsList.Add(fail);
+                }
+                _siteFails.AddRange(webSiteFailsList);
             }
+            D
         }
     }
 }
