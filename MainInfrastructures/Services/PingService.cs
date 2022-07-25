@@ -197,10 +197,7 @@ namespace ApiConfigs
                         Website = o.WebSite,
                         FailedTime = DateTime.Now
                     };
-                    if(!webSiteFailsList.Any(f=>f.OrganizationId == fail.OrganizationId))
-                    {
-                        webSiteFailsList.Add(fail);
-                    }
+                    webSiteFailsList.Add(fail);
                 }
             }
             if(addModelList.Count()>0)
@@ -214,6 +211,13 @@ namespace ApiConfigs
             }
             if(webSiteFailsList.Count()>0)
             {
+                foreach(WebSiteFails f in webSiteFailsList)
+                {
+                    if(webSiteFailsList.Where(f=>f.OrganizationId == f.OrganizationId).ToList().Count()>1)
+                    {
+                        webSiteFailsList.Remove(f);
+                    }
+                }
                 _websiteFails.AddRange(webSiteFailsList);
             }
         }
