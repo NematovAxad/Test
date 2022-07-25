@@ -82,5 +82,6 @@ namespace MainInfrastructures.Db
         public DbSet<WebSiteAvailability> WebSiteAvailabilitie { get; set; }
         public DbSet<WebSiteRequirements> WebSiteRequirements { get; set; }
         public DbSet<WebSiteFails> WebSiteFails { get; set; }
+        public DbSet<SiteFails> SiteFails { get; set; }
     }
 }

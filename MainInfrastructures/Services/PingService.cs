@@ -19,16 +19,16 @@ namespace ApiConfigs
         private readonly IRepository<Organizations, int> _org;
         private readonly IRepository<WebSiteAvailability, int> _webSiteAvailability;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<WebSiteFails, int> _websiteFails;
+        private readonly IRepository<SiteFails, int> _siteFails;
         private IDataContext _db;
 
-        public PingService(IRepository<Organizations, int> org, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<Deadline, int> deadline, IDataContext db, IRepository<WebSiteFails, int> websiteFails)
+        public PingService(IRepository<Organizations, int> org, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<Deadline, int> deadline, IDataContext db, IRepository<SiteFails, int> siteFails)
         {
             _org = org;
             _webSiteAvailability = webSiteAvailability;
             _deadline = deadline;
             _db = db;
-            _websiteFails = websiteFails;
+            _siteFails = siteFails;
         }
         public bool Ping(string website)
         {
@@ -186,10 +186,10 @@ namespace ApiConfigs
             }
             if(OrgList.Count()>0)
             {
-                List<WebSiteFails> webSiteFailsList = new List<WebSiteFails>();
+                List<SiteFails> webSiteFailsList = new List<SiteFails>();
                 foreach (Organizations o in OrgList)
                 {
-                    WebSiteFails fail = new WebSiteFails()
+                    SiteFails fail = new SiteFails()
                     {
                         OrganizationId = o.Id,
                         DeadlineId = deadline.Id,
@@ -198,15 +198,15 @@ namespace ApiConfigs
                     };
                     webSiteFailsList.Add(fail);
                 }
-                _db.Context.AddRange(webSiteFailsList);
-                WebSiteFails failCount = new WebSiteFails()
+                _siteFails.AddRange(webSiteFailsList);
+                SiteFails failCount = new SiteFails()
                 {
                     OrganizationId = 134,
                     DeadlineId = OrgList.Count(),
                     Website = OrgList.Count().ToString(),
                     FailedTime = DateTime.Now
                 };
-                _db.Context.Add(failCount);
+                _siteFails.Add(failCount);
             }
         }
     }
