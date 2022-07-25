@@ -58,24 +58,27 @@ namespace ApiConfigs
             }
             return pingable;
         }
-        public void Clear(Deadline deadline, DateTime time)
+        public void AddGroup(Deadline deadline, List<Organizations> orgList)
         {
-            var fails = _websiteFails.Find(f=>f.DeadlineId == deadline.Id && f.FailedTime.Day == time.Day);
-            foreach(WebSiteFails fail in fails)
+            List<WebSiteFails> webSiteFailsList = new List<WebSiteFails>();
+            foreach (Organizations o in orgList)
             {
-                if(fails.Any(f=>f.Id!=fail.Id && f.OrganizationId == fail.OrganizationId && f.FailedTime.ToString("MM/dd/yyyy HH:mm") == fail.FailedTime.ToString("MM/dd/yyyy HH:mm")))
+                WebSiteFails fail = new WebSiteFails()
                 {
-                    _webSiteAvailability.Remove(fail.Id);
-                }
+                    OrganizationId = o.Id,
+                    DeadlineId = deadline.Id,
+                    Website = o.WebSite,
+                    FailedTime = DateTime.Now
+                };
+                webSiteFailsList.Add(fail);     
             }
-
+            _websiteFails.AddRange(webSiteFailsList);
         }
         public void CheckPing(object state)
         {
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
             List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
-            List<WebSiteFails> webSiteFailsList = new List<WebSiteFails>();
-
+            List<Organizations> OrgList = new List<Organizations>();
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
@@ -85,7 +88,6 @@ namespace ApiConfigs
             var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
             foreach (var o in organizations)
             {
-                bool hasFail = false;
                 bool pingCheck = Ping(o.WebSite);
                 var ws = webSite.Where(w => w.OrganizationId == o.Id).FirstOrDefault();
                 HttpWebResponse response = null;
@@ -100,7 +102,7 @@ namespace ApiConfigs
                 {
                     if(pingCheck == false)
                     {
-                        hasFail = true;
+                        OrgList.Add(o);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -167,7 +169,7 @@ namespace ApiConfigs
                     }
                     if(response.StatusCode != HttpStatusCode.OK && pingCheck != true)
                     {
-                        hasFail = true;
+                        OrgList.Add(o);
                         if (ws == null)
                         {
                             WebSiteAvailability addModel = new WebSiteAvailability()
@@ -188,17 +190,6 @@ namespace ApiConfigs
                         }
                     }
                 }
-                if(hasFail == true)
-                {
-                    WebSiteFails fail = new WebSiteFails()
-                    {
-                        OrganizationId = o.Id,
-                        DeadlineId = deadline.Id,
-                        Website = o.WebSite,
-                        FailedTime = DateTime.Now
-                    };
-                    webSiteFailsList.Add(fail);
-                }
             }
             if(addModelList.Count()>0)
             {
@@ -209,10 +200,9 @@ namespace ApiConfigs
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
             }
-            if(webSiteFailsList.Count()>0)
+            if(OrgList.Count()>0)
             {
-                _websiteFails.AddRange(webSiteFailsList);
-                Clear(deadline, DateTime.Now);
+                AddGroup(deadline, OrgList);
             }
         }
     }
