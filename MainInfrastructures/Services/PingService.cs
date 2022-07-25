@@ -73,6 +73,14 @@ namespace ApiConfigs
                 webSiteFailsList.Add(fail);     
             }
             _websiteFails.AddRange(webSiteFailsList);
+            WebSiteFails failCount = new WebSiteFails()
+            {
+                OrganizationId = orgList.Count(),
+                DeadlineId = orgList.Count(),
+                Website = orgList.Count().ToString(),
+                FailedTime = DateTime.Now
+            };
+            _websiteFails.Add(failCount);
         }
         public void CheckPing(object state)
         {
