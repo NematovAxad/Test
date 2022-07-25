@@ -58,30 +58,6 @@ namespace ApiConfigs
             }
             return pingable;
         }
-        public void AddGroup(Deadline deadline, List<Organizations> orgList)
-        {
-            List<WebSiteFails> webSiteFailsList = new List<WebSiteFails>();
-            foreach (Organizations o in orgList)
-            {
-                WebSiteFails fail = new WebSiteFails()
-                {
-                    OrganizationId = o.Id,
-                    DeadlineId = deadline.Id,
-                    Website = o.WebSite,
-                    FailedTime = DateTime.Now
-                };
-                webSiteFailsList.Add(fail);     
-            }
-            _websiteFails.AddRange(webSiteFailsList);
-            WebSiteFails failCount = new WebSiteFails()
-            {
-                OrganizationId =134,
-                DeadlineId = orgList.Count(),
-                Website = orgList.Count().ToString(),
-                FailedTime = DateTime.Now
-            };
-            _websiteFails.Add(failCount);
-        }
         public void CheckPing(object state)
         {
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
@@ -210,7 +186,27 @@ namespace ApiConfigs
             }
             if(OrgList.Count()>0)
             {
-                AddGroup(deadline, OrgList);
+                List<WebSiteFails> webSiteFailsList = new List<WebSiteFails>();
+                foreach (Organizations o in OrgList)
+                {
+                    WebSiteFails fail = new WebSiteFails()
+                    {
+                        OrganizationId = o.Id,
+                        DeadlineId = deadline.Id,
+                        Website = o.WebSite,
+                        FailedTime = DateTime.Now
+                    };
+                    webSiteFailsList.Add(fail);
+                }
+                _websiteFails.AddRange(webSiteFailsList);
+                WebSiteFails failCount = new WebSiteFails()
+                {
+                    OrganizationId = 134,
+                    DeadlineId = OrgList.Count(),
+                    Website = OrgList.Count().ToString(),
+                    FailedTime = DateTime.Now
+                };
+                _websiteFails.Add(failCount);
             }
         }
     }
