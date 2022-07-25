@@ -198,7 +198,7 @@ namespace ApiConfigs
                     };
                     webSiteFailsList.Add(fail);
                 }
-                _websiteFails.AddRange(webSiteFailsList);
+                _db.Context.AddRange(webSiteFailsList);
                 WebSiteFails failCount = new WebSiteFails()
                 {
                     OrganizationId = 134,
@@ -206,7 +206,7 @@ namespace ApiConfigs
                     Website = OrgList.Count().ToString(),
                     FailedTime = DateTime.Now
                 };
-                _websiteFails.Add(failCount);
+                _db.Context.Add(failCount);
             }
         }
     }
