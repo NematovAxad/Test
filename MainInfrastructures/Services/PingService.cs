@@ -203,23 +203,23 @@ namespace ApiConfigs
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
             }
-            if(OrgList.Count()>0)
-            {
-                List<SiteFails> webSiteFailsList = new List<SiteFails>();
-                foreach (Organizations o in OrgList)
-                {
-                    SiteFails fail = new SiteFails()
-                    {
-                        OrganizationId = o.Id,
-                        DeadlineId = deadline.Id,
-                        Website = o.WebSite,
-                        FailedTime = DateTime.Now
-                    };
-                    webSiteFailsList.Add(fail);
-                }
-                _siteFails.AddRange(webSiteFailsList);
-            }
-            Clear(deadline, DateTime.Now);
+            //if(OrgList.Count()>0)
+            //{
+            //    List<SiteFails> webSiteFailsList = new List<SiteFails>();
+            //    foreach (Organizations o in OrgList)
+            //    {
+            //        SiteFails fail = new SiteFails()
+            //        {
+            //            OrganizationId = o.Id,
+            //            DeadlineId = deadline.Id,
+            //            Website = o.WebSite,
+            //            FailedTime = DateTime.Now
+            //        };
+            //        webSiteFailsList.Add(fail);
+            //    }
+            //    _siteFails.AddRange(webSiteFailsList);
+            //}
+            //Clear(deadline, DateTime.Now);
         }
     }
 }
