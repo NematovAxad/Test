@@ -71,14 +71,6 @@ namespace ApiConfigs
         }
         public void CheckPing(object state)
         {
-            SiteFails failCheck = new SiteFails()
-            {
-                OrganizationId = 134,
-                DeadlineId = 46,
-                Website = "fails added",
-                FailedTime = DateTime.Now
-            };
-            _siteFails.Add(failCheck);
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
             List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
             List<Organizations> OrgList = new List<Organizations>();
@@ -203,6 +195,14 @@ namespace ApiConfigs
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
             }
+            SiteFails failCheck = new SiteFails()
+            {
+                OrganizationId = 134,
+                DeadlineId = 46,
+                Website = "fails added",
+                FailedTime = DateTime.Now
+            };
+            _siteFails.Add(failCheck);
             //if(OrgList.Count()>0)
             //{
             //    List<SiteFails> webSiteFailsList = new List<SiteFails>();
