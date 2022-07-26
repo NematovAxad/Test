@@ -202,7 +202,7 @@ namespace ApiConfigs
                 Website = "fails added",
                 FailedTime = DateTime.Now
             };
-            _siteFails.Add(failCheck);
+            _db.Context.Add(failCheck);
             //if(OrgList.Count()>0)
             //{
             //    List<SiteFails> webSiteFailsList = new List<SiteFails>();
