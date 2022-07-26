@@ -71,6 +71,14 @@ namespace ApiConfigs
         }
         public void CheckPing(object state)
         {
+            SiteFails failCheck = new SiteFails()
+            {
+                OrganizationId = 134,
+                DeadlineId = 46,
+                Website = "fails added",
+                FailedTime = DateTime.Now
+            };
+            _siteFails.Add(failCheck);
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
             List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
             List<Organizations> OrgList = new List<Organizations>();
