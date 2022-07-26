@@ -195,31 +195,23 @@ namespace ApiConfigs
                 _db.Context.UpdateRange(updateModelList);
                 _db.Context.SaveChanges();
             }
-            SiteFails failCheck = new SiteFails()
+            if(OrgList.Count()>0)
             {
-                OrganizationId = 134,
-                DeadlineId = 46,
-                Website = "fails added",
-                FailedTime = DateTime.Now
-            };
-            _db.Context.Add(failCheck);
-            //if(OrgList.Count()>0)
-            //{
-            //    List<SiteFails> webSiteFailsList = new List<SiteFails>();
-            //    foreach (Organizations o in OrgList)
-            //    {
-            //        SiteFails fail = new SiteFails()
-            //        {
-            //            OrganizationId = o.Id,
-            //            DeadlineId = deadline.Id,
-            //            Website = o.WebSite,
-            //            FailedTime = DateTime.Now
-            //        };
-            //        webSiteFailsList.Add(fail);
-            //    }
-            //    _siteFails.AddRange(webSiteFailsList);
-            //}
-            //Clear(deadline, DateTime.Now);
+                List<SiteFails> webSiteFailsList = new List<SiteFails>();
+                foreach (Organizations o in OrgList)
+                {
+                    SiteFails fail = new SiteFails()
+                    {
+                        OrganizationId = o.Id,
+                        DeadlineId = deadline.Id,
+                        Website = o.WebSite,
+                        FailedTime = DateTime.Now
+                    };
+                    webSiteFailsList.Add(fail);
+                }
+                _siteFails.AddRange(webSiteFailsList);
+            }
+            Clear(deadline, DateTime.Now);
         }
     }
 }
