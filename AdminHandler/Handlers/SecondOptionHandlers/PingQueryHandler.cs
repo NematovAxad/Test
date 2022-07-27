@@ -40,6 +40,13 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotFound("deadline " + request.DeadlineId.ToString());
 
             var fails = _siteFails.Find(f => f.DeadlineId == deadline.Id && f.OrganizationId == org.Id).ToList();
+            foreach(SiteFails fail in fails)
+            {
+                if(fails.Any(f=>f.OrganizationId==fail.OrganizationId && f.FailedTime.ToString("MM/dd/yyyy HH:mm") == fail.FailedTime.ToString("MM/dd/yyyy HH:mm") && f.Id!=fail.Id))
+                {
+                    fails.Remove(fail);
+                }
+            }
             var ping = _webSiteAvailability.GetAll();
             if (request.OrganizationId != 0)
                 ping = ping.Where(m => m.OrganizationId == request.OrganizationId);
