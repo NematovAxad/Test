@@ -32,6 +32,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public async Task<PingQueryResult> Handle(PingQuery request, CancellationToken cancellationToken)
         {
+            List<SiteFails> failsList = new List<SiteFails>();
             var org = _org.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound("organization " + request.OrganizationId.ToString());
@@ -40,11 +41,12 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotFound("deadline " + request.DeadlineId.ToString());
 
             var fails = _siteFails.Find(f => f.DeadlineId == deadline.Id && f.OrganizationId == org.Id).ToList();
+
             foreach(SiteFails fail in fails)
             {
-                if(fails.Any(f=>f.OrganizationId==fail.OrganizationId && f.FailedTime.ToString("MM/dd/yyyy HH:mm") == fail.FailedTime.ToString("MM/dd/yyyy HH:mm") && f.Id!=fail.Id))
+                if(!failsList.Any(f=>f.OrganizationId==fail.OrganizationId && Math.Abs((f.FailedTime-fail.FailedTime).TotalMinutes)<10))
                 {
-                    fails.Remove(fail);
+                    failsList.Add(fail);
                 }
             }
             var ping = _webSiteAvailability.GetAll();
@@ -56,7 +58,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             PingQueryResult result = new PingQueryResult();
             result.Count = ping.Count();
             result.Data = ping.OrderBy(u => u.Id).ToList<object>();
-            result.Fails = fails.OrderBy(f => f.FailedTime).ToList<object>();
+            result.Fails = failsList.OrderBy(f => f.FailedTime).ToList<object>();
             return result;
         }
     }
