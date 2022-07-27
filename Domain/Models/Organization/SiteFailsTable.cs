@@ -6,8 +6,8 @@ using System.Text;
 
 namespace Domain.Models.Organization
 {
-    [Table("site_fails", Schema = "organizations")]
-    public class SiteFails:IDomain<int>
+    [Table("site_fails_table", Schema = "organizations")]
+    public class SiteFailsTable : IDomain<int>
     {
         [Column("id")]
         public int Id { get; set; }
@@ -22,5 +22,6 @@ namespace Domain.Models.Organization
         public string Website { get; set; }
         [Column("failed_time")]
         public DateTime FailedTime { get; set; }
+        
     }
 }

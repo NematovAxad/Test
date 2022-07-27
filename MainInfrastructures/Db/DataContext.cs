@@ -81,6 +81,6 @@ namespace MainInfrastructures.Db
         public DbSet<OrgFinance> OrgFinance { get; set; }
         public DbSet<WebSiteAvailability> WebSiteAvailabilitie { get; set; }
         public DbSet<WebSiteRequirements> WebSiteRequirements { get; set; }
-        public DbSet<SiteFails> SiteFails { get; set; }
+        public DbSet<SiteFailsTable> SiteFailsTable { get; set; }
     }
 }

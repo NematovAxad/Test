@@ -19,10 +19,10 @@ namespace ApiConfigs
         private readonly IRepository<Organizations, int> _org;
         private readonly IRepository<WebSiteAvailability, int> _webSiteAvailability;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<SiteFails, int> _siteFails;
+        private readonly IRepository<SiteFailsTable, int> _siteFails;
         private IDataContext _db;
 
-        public PingService(IRepository<Organizations, int> org, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<Deadline, int> deadline, IDataContext db, IRepository<SiteFails, int> siteFails)
+        public PingService(IRepository<Organizations, int> org, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<Deadline, int> deadline, IDataContext db, IRepository<SiteFailsTable, int> siteFails)
         {
             _org = org;
             _webSiteAvailability = webSiteAvailability;
@@ -60,7 +60,7 @@ namespace ApiConfigs
         }
         public void CheckPing(object state)
         {
-            List<SiteFails> webSiteFailsList = new List<SiteFails>();
+            List<SiteFailsTable> webSiteFailsList = new List<SiteFailsTable>();
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
             List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
             List<Organizations> OrgList = new List<Organizations>();
@@ -189,7 +189,7 @@ namespace ApiConfigs
             {
                 foreach (Organizations o in OrgList)
                 {
-                    SiteFails fail = new SiteFails()
+                    SiteFailsTable fail = new SiteFailsTable()
                     {
                         OrganizationId = o.Id,
                         DeadlineId = deadline.Id,

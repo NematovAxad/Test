@@ -19,10 +19,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         private readonly IRepository<Organizations, int> _org;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<WebSiteAvailability, int> _webSiteAvailability;
-        private readonly IRepository<SiteFails, int> _siteFails;
+        private readonly IRepository<SiteFailsTable, int> _siteFails;
 
 
-        public PingQueryHandler(IRepository<Organizations, int> org, IRepository<Deadline, int> deadline, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<SiteFails, int> siteFails)
+        public PingQueryHandler(IRepository<Organizations, int> org, IRepository<Deadline, int> deadline, IRepository<WebSiteAvailability, int> webSiteAvailability, IRepository<SiteFailsTable, int> siteFails)
         {
             _org = org;
             _deadline = deadline;
@@ -32,7 +32,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public async Task<PingQueryResult> Handle(PingQuery request, CancellationToken cancellationToken)
         {
-            List<SiteFails> failsList = new List<SiteFails>();
+            List<SiteFailsTable> failsList = new List<SiteFailsTable>();
             var org = _org.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound("organization " + request.OrganizationId.ToString());
@@ -42,7 +42,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
             var fails = _siteFails.Find(f => f.DeadlineId == deadline.Id && f.OrganizationId == org.Id).ToList();
 
-            foreach(SiteFails fail in fails)
+            foreach(SiteFailsTable fail in fails)
             {
                 if(!failsList.Any(f=>f.OrganizationId==fail.OrganizationId && Math.Abs((f.FailedTime-fail.FailedTime).TotalMinutes)<10))
                 {
