@@ -17,10 +17,9 @@ namespace Domain.OpenDataModels
     {
         public string DataName { get; set; }
         public string OrgName { get; set; }
-        public bool Status { get; set; }
-        public bool GeoType { get; set; }
-        public bool IsWebUrl { get; set; }
-        public string Weburl { get; set; }
+        public string Id { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public int Status { get; set; }
         public string Link { get; set; }
     }
 }
