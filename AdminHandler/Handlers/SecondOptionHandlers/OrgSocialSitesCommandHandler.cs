@@ -44,7 +44,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Add(OrgSocialSitesCommand model)
         {
-           if(model.Social != null)
+           if(model.Social.OrganizationId != 0)
             {
                 var org = _organization.Find(o => o.Id == model.Social.OrganizationId).FirstOrDefault();
                 if (org == null)
@@ -71,7 +71,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 }
                 _orgSocials.Add(addModel);
             }
-            if (model.SocialParameter != null)
+            if (model.SocialParameter.OrganizationId != 0)
             {
                 var org = _organization.Find(o => o.Id == model.SocialParameter.OrganizationId).FirstOrDefault();
                 if (org == null)
@@ -89,6 +89,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                     throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
                 OrganizationSocialParameters addModel = new OrganizationSocialParameters();
+                addModel.OrganizationId = model.SocialParameter.OrganizationId;
                 addModel.DeadlineId = deadline.Id;
                 if (model.SocialParameter.OrgFullName != null)
                 {
