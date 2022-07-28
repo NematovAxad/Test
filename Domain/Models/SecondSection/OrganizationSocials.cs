@@ -7,8 +7,8 @@ using System.Text.Json.Serialization;
 
 namespace Domain.Models.SecondSection
 {
-    [Table("organization_messengers", Schema = "organizations")]
-    public class OrganizationMessengers:IDomain<int>
+    [Table("organization_socials", Schema = "organizations")]
+    public class OrganizationSocials : IDomain<int>
     {
         [Column("id")]
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace Domain.Models.SecondSection
         public Organizations Organizations { get; set; }
         [Column("messenger_link")]
         public string MessengerLink { get; set; }
-        [Column("reason_not_filling")]
-        public string ReasonNotFilling { get; set; }
+        [Column("verified")]
+        public bool? Verified {get;set;}
     }
 }

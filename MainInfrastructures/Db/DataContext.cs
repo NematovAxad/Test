@@ -42,8 +42,8 @@ namespace MainInfrastructures.Db
         public DbSet<RankTable> RankTable { get; set; }
         public DbSet<Sphere> Sphere { get; set; }
         public DbSet<Field> Field { get; set; }
-        public DbSet<OrganizationSocialSites> OrganizationSocialSites { get; set; }
-        public DbSet<OrganizationMessengers> OrganizationMessengers { get; set; }
+        public DbSet<OrganizationSocialParameters> OrganizationSocialParameters { get; set; }
+        public DbSet<OrganizationSocials> OrganizationSocials { get; set; }
         public DbSet<HelplineInfo> HelplineInfo { get; set; }
         public DbSet<OrgDataFiller> OrgDataFiller { get; set; }
         public DbSet<OrgHelpline> OrgHelpline { get; set; }

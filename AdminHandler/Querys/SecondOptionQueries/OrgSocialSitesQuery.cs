@@ -8,7 +8,6 @@ namespace AdminHandler.Querys.SecondOptionQueries
 {
     public class OrgSocialSitesQuery:IRequest<OrgSocialSitesQueryResult>
     {
-        public int Id { get; set; }
         public int OrganizationId { get; set; }
     }
 }

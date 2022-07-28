@@ -4,6 +4,7 @@
     {
         Done = 1,
         PartialDone,
-        NotDone
+        NotDone,
+        Exception
     }
 }

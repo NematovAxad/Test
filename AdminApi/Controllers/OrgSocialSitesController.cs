@@ -22,13 +22,12 @@ namespace AdminApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<OrgSocialSitesQueryResult>> Get([FromQuery] int id, int orgId, int deadlineId)
+        public async Task<ResponseCore<OrgSocialSitesQueryResult>> Get([FromQuery] int orgId)
         {
             try
             {
                 OrgSocialSitesQuery model = new OrgSocialSitesQuery()
                 {
-                    Id = id,
                    OrganizationId = orgId
                 };
 
@@ -76,11 +75,11 @@ namespace AdminApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseCore<OrgSocialSitesCommandResult>> Delete([FromQuery] int id)
+        public async Task<ResponseCore<OrgSocialSitesCommandResult>> Delete([FromQuery] int socialId, int socialParameterId)
         {
             try
             {
-                OrgSocialSitesCommand model = new OrgSocialSitesCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                OrgSocialSitesCommand model = new OrgSocialSitesCommand() { EventType = Domain.Enums.EventType.Delete, Social = new Social { Id = socialId }, SocialParameter = new SocialParameter {Id = socialParameterId } };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
