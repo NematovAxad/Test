@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace AdminHandler.Handlers.SecondOptionHandlers
 {
-    public class OrgSocialSitesQueryHandler : IRequestHandler<OrgSocialSitesQuery, OrgSocialSitesQueryResult>
+    class OrgSocialParametersQueryHandler : IRequestHandler<OrgSocialParametersQuery, OrgSocialParametersQueryResult>
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
@@ -23,7 +23,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         private readonly IRepository<OrganizationSocials, int> _orgSocials;
         private readonly IRepository<OrganizationSocialParameters, int> _orgSocialParameters;
 
-        public OrgSocialSitesQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationSocials, int> orgSocials, IRepository<OrganizationSocialParameters, int> orgSocialParameters)
+        public OrgSocialParametersQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationSocials, int> orgSocials, IRepository<OrganizationSocialParameters, int> orgSocialParameters)
         {
             _organization = organization;
             _deadline = deadline;
@@ -31,7 +31,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             _orgSocials = orgSocials;
             _orgSocialParameters = orgSocialParameters;
         }
-        public async Task<OrgSocialSitesQueryResult> Handle(OrgSocialSitesQuery request, CancellationToken cancellationToken)
+        public async Task<OrgSocialParametersQueryResult> Handle(OrgSocialParametersQuery request, CancellationToken cancellationToken)
         {
             var org = _organization.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -39,16 +39,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-
-            var socials = _orgSocials.Find(s=>s.OrganizationId == request.OrganizationId).ToList();
             var socialParameters = _orgSocialParameters.Find(s => s.OrganizationId == request.OrganizationId && s.DeadlineId == deadline.Id).FirstOrDefault();
-            
-            
 
-            OrgSocialSitesQueryResult result = new OrgSocialSitesQueryResult();
-            result.Count = socials.Count();
-            result.Socials = socials.OrderBy(u => u.Id).ToList<OrganizationSocials>();
-            result.SocialParameters = socialParameters;
+            OrgSocialParametersQueryResult result = new OrgSocialParametersQueryResult();
+            result.Parameter = socialParameters;
             return result;
         }
     }

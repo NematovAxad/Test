@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AdminHandler.Querys.SecondOptionQueries
 {
-    public class OrgSocialSitesQuery:IRequest<OrgSocialSitesQueryResult>
+    public class OrgSocialQuery:IRequest<OrgSocialQueryResult>
     {
         public int OrganizationId { get; set; }
     }

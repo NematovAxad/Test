@@ -14,21 +14,21 @@ using System.Threading.Tasks;
 namespace AdminApi.Controllers
 {
     [Route("apiAdmin/[controller]/[action]")]
-    public class OrgSocialSites : Controller
+    public class OrgSocialParameters : Controller
     {
         IMediator _mediator;
-        public OrgSocialSites(IMediator mediator)
+        public OrgSocialParameters(IMediator mediator)
         {
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<OrgSocialQueryResult>> Get([FromQuery] int orgId)
+        public async Task<ResponseCore<OrgSocialParametersQueryResult>> Get([FromQuery] int orgId)
         {
             try
             {
-                OrgSocialQuery model = new OrgSocialQuery()
+                OrgSocialParametersQuery model = new OrgSocialParametersQuery()
                 {
-                   OrganizationId = orgId
+                    OrganizationId = orgId
                 };
 
                 var result = await _mediator.Send<OrgSocialQueryResult>(model);
@@ -40,7 +40,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<OrgSocialCommandResult>> Add([FromBody] OrgSocialCommand model)
+        public async Task<ResponseCore<OrgSocialParametersCommandResult>> Add([FromBody] OrgSocialParametersCommand model)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace AdminApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                var result = await _mediator.Send<OrgSocialCommandResult>(model);
+                var result = await _mediator.Send<OrgSocialParametersCommandResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<OrgSocialCommandResult>> Put([FromBody] OrgSocialCommand model)
+        public async Task<ResponseCore<OrgSocialParametersCommandResult>> Put([FromBody] OrgSocialParametersCommand model)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace AdminApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                var result = await _mediator.Send<OrgSocialCommandResult>(model);
+                var result = await _mediator.Send<OrgSocialParametersCommandResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -75,11 +75,11 @@ namespace AdminApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseCore<OrgSocialCommandResult>> Delete([FromQuery] int id)
+        public async Task<ResponseCore<OrgSocialParametersCommandResult>> Delete([FromQuery] int id)
         {
             try
             {
-                OrgSocialCommand model = new OrgSocialCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                OrgSocialParametersCommand model = new OrgSocialParametersCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();

@@ -5,10 +5,9 @@ using System.Text;
 
 namespace AdminHandler.Results.SecondOptionResults
 {
-    public class OrgSocialSitesQueryResult
+    public class OrgSocialParametersQueryResult
     {
         public int Count { get; set; }
-        public List<OrganizationSocials> Socials { get; set; }
-        public OrganizationSocialParameters SocialParameters { get; set; }
+        public OrganizationSocialParameters Parameter { get; set; }
     }
 }
