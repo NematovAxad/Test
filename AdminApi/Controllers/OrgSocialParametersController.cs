@@ -31,7 +31,7 @@ namespace AdminApi.Controllers
                     OrganizationId = orgId
                 };
 
-                var result = await _mediator.Send<OrgSocialQueryResult>(model);
+                var result = await _mediator.Send<OrgSocialParametersQueryResult>(model);
                 return result;
             }
             catch (Exception ex)
