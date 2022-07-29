@@ -16,7 +16,9 @@ namespace Domain.Models.SecondSection
         public int OrganizationId { get; set; }
         public Organizations Organizations { get; set; }
         [Column("deadline_id")]
+        [ForeignKey("Deadline")]
         public int DeadlineId { get; set; }
+        public Deadline Deadline { get; set; }
         [Column("org_full_name")]
         public bool? OrgFullName { get; set; }
         [Column("org_legal_site")]

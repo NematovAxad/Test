@@ -23,14 +23,13 @@ namespace UserApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<HelplineInfoQueryResult>> Get([FromQuery] int deadlineId, int organizationId, int id)
+        public async Task<ResponseCore<HelplineInfoQueryResult>> Get([FromQuery] int organizationId)
         {
             try
             {
                 HelplineInfoQuery model = new HelplineInfoQuery()
                 {
                     OrganizationId = organizationId,
-                    Id = id
                 };
 
                 var result = await _mediator.Send<HelplineInfoQueryResult>(model);

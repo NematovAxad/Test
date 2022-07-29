@@ -8,7 +8,6 @@ namespace UserHandler.Queries.SecondSectionQuery
 {
     public class HelplineInfoQuery:IRequest<HelplineInfoQueryResult>
     {
-        public int Id { get; set; }
         public int OrganizationId { get; set; }
     }
 }

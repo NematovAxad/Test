@@ -15,12 +15,8 @@ namespace Domain.Models.SecondSection
         [ForeignKey("Organizations")]
         public int OrganizationId { get; set; }
         public Organizations Organizations { get; set; }
-        [Column("has_online_consultant")]
-        public bool HasOnlineConsultant { get; set; }
-        [Column("operates_in_working_day")]
-        public bool OperatesInWorkingDay { get; set; }
-        [Column("acceptable_response_time")]
-        public bool AcceptableResponseTime { get; set; }
+        [Column("helpline_number")]
+        public string HelplineNumber { get; set; }
 
     }
 }

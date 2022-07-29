@@ -61,9 +61,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             OrgHelpline addModel = new OrgHelpline()
             {
                 OrganizationId = model.OrganizationId,
-                HasOnlineConsultant = model.HasOnlineConsultant,
-                OperatesInWorkingDay = model.OperatesInWorkingDay,
-                AcceptableResponseTime = model.AcceptableResponseTime
+                HelplineNumber = model.HelplineNumber
             };
             _orgHelpline.Add(addModel);
         }
@@ -83,9 +81,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            orgHelpline.HasOnlineConsultant = model.HasOnlineConsultant;
-            orgHelpline.OperatesInWorkingDay = model.OperatesInWorkingDay;
-            orgHelpline.AcceptableResponseTime = model.AcceptableResponseTime;
+            orgHelpline.HelplineNumber = model.HelplineNumber;
 
             _orgHelpline.Update(orgHelpline);
         }

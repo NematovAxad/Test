@@ -35,19 +35,15 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var org = _organization.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(request.OrganizationId.ToString());
-
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("deadline");
             
 
-            var helpLine = _helplineInfo.GetAll();
+            var helpLine = _helplineInfo.Find(h=>h.OrganizationId == request.OrganizationId && h.DeadlineId == deadline.Id).FirstOrDefault();
 
-            if (request.OrganizationId != 0)
-            {
-                helpLine = helpLine.Where(s => s.OrganizationId == request.OrganizationId);
-            }
-           
             HelplineInfoQueryResult result = new HelplineInfoQueryResult();
-            result.Count = helpLine.Count();
-            result.Data = helpLine.OrderBy(u => u.Id).ToList<object>();
+            result.Data = helpLine;
             return result;
         }
     }

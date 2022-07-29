@@ -24,8 +24,6 @@ namespace UserHandler.Commands.SecondSectionCommand
         public EventType EventType { get; set; }
         public int Id { get; set; }
         public int OrganizationId { get; set; }
-        public bool HasOnlineConsultant { get; set; }
-        public bool OperatesInWorkingDay { get; set; }
-        public bool AcceptableResponseTime { get; set; }
+        public string HelplineNumber { get; set; }
     }
 }

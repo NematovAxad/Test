@@ -49,7 +49,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            var helplineInfo = _helplineInfo.Find(h => h.OrganizationId == model.OrganizationId && h.HelplineNumber == model.HelplineNumber).FirstOrDefault();
+            var helplineInfo = _helplineInfo.Find(h => h.OrganizationId == model.OrganizationId && h.DeadlineId == deadline.Id).FirstOrDefault();
             if (helplineInfo != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
@@ -61,10 +61,21 @@ namespace UserHandler.Handlers.SecondSectionHandler
             HelplineInfo addModel = new HelplineInfo()
             {
                 OrganizationId = model.OrganizationId,
-                HelplineNumber = model.HelplineNumber,
-                OfficialSiteHasHelpline = model.OfficialSiteHasHelpline,
-                CanGiveFeedbackToHelpline = model.CanGiveFeedbackToHelpline,
-                OfficialSiteHasHelplinefeedback = model.OfficialSiteHasHelplinefeedback
+                DeadlineId = deadline.Id,
+                RegulationShowsPhone = model.RegulationShowsPhone,
+                RegulationShowsTimetable = model.RegulationShowsTimetable,
+                RegulationShowsServices = model.RegulationShowsServices,
+                RegulationShowsRequestProcedure = model.RegulationShowsRequestProcedure,
+                RegulationShowsReplayDeadline = model.RegulationShowsReplayDeadline,
+                RegulationShowsClientRights = model.RegulationShowsClientRights,
+                RegulationVerified = model.RegulationVerified,
+                HelplinePhoneWorkStatus = model.HelplinePhoneWorkStatus,
+                HelplinePhoneRatingOption = model.HelplinePhoneRatingOption,
+                WebsiteHasHelplineStatistics = model.WebsiteHasHelplineStatistics,
+                HelplineStatisticsByTime = model.HelplineStatisticsByTime,
+                HelplineStatisticsByRank = model.HelplineStatisticsByRank,
+                HelplineStatisticsArchiving = model.HelplineStatisticsArchiving,
+                HelplineStatisticsIntime = model.HelplineStatisticsIntime,
             };
             _helplineInfo.Add(addModel);
         }
@@ -83,12 +94,62 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotFound("available deadline");
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
-
-            helplineInfo.HelplineNumber = model.HelplineNumber;
-            helplineInfo.OfficialSiteHasHelpline = model.OfficialSiteHasHelpline;
-            helplineInfo.CanGiveFeedbackToHelpline = model.CanGiveFeedbackToHelpline;
-            helplineInfo.OfficialSiteHasHelplinefeedback = model.OfficialSiteHasHelplinefeedback;
-
+            if(model.RegulationShowsPhone != null)
+            {
+                helplineInfo.RegulationShowsPhone = model.RegulationShowsPhone;
+            }
+            if (model.RegulationShowsTimetable != null)
+            {
+                helplineInfo.RegulationShowsTimetable = model.RegulationShowsTimetable;
+            }
+            if (model.RegulationShowsServices != null)
+            {
+                helplineInfo.RegulationShowsServices = model.RegulationShowsServices;
+            }
+            if (model.RegulationShowsRequestProcedure != null)
+            {
+                helplineInfo.RegulationShowsRequestProcedure = model.RegulationShowsRequestProcedure;
+            }
+            if (model.RegulationShowsReplayDeadline != null)
+            {
+                helplineInfo.RegulationShowsReplayDeadline = model.RegulationShowsReplayDeadline;
+            }
+            if (model.RegulationShowsClientRights != null)
+            {
+                helplineInfo.RegulationShowsClientRights = model.RegulationShowsClientRights;
+            }
+            if (model.RegulationVerified != null)
+            {
+                helplineInfo.RegulationVerified = model.RegulationVerified;
+            }
+            if (model.HelplinePhoneWorkStatus != null)
+            {
+                helplineInfo.HelplinePhoneWorkStatus = model.HelplinePhoneWorkStatus;
+            }
+            if (model.HelplinePhoneRatingOption != null)
+            {
+                helplineInfo.HelplinePhoneRatingOption = model.HelplinePhoneRatingOption;
+            }
+            if (model.WebsiteHasHelplineStatistics != null)
+            {
+                helplineInfo.WebsiteHasHelplineStatistics = model.WebsiteHasHelplineStatistics;
+            }
+            if (model.HelplineStatisticsByTime != null)
+            {
+                helplineInfo.HelplineStatisticsByTime = model.HelplineStatisticsByTime;
+            }
+            if (model.HelplineStatisticsByRank != null)
+            {
+                helplineInfo.HelplineStatisticsByRank = model.HelplineStatisticsByRank;
+            }
+            if (model.HelplineStatisticsArchiving != null)
+            {
+                helplineInfo.HelplineStatisticsArchiving = model.HelplineStatisticsArchiving;
+            }
+            if (model.HelplineStatisticsIntime != null)
+            {
+                helplineInfo.HelplineStatisticsIntime = model.HelplineStatisticsIntime;
+            }
             _helplineInfo.Update(helplineInfo);
         }
         public void Delete(HelplineInfoCommand model)
