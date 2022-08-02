@@ -22,6 +22,21 @@ namespace AdminApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
+        public async Task<ResponseCore<SiteRequirementSampleQueryResult>> Get([FromQuery] SiteRequirementSampleQuery query)
+        {
+            try
+            {
+                
+
+                var result = await _mediator.Send<SiteRequirementSampleQueryResult>(query);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpGet]
         public async Task<ResponseCore<WebSiteRequirementsQueryResult>> Get([FromQuery] int id, int organizationId)
         {
             try
@@ -81,7 +96,7 @@ namespace AdminApi.Controllers
         {
             try
             {
-                WebSiteRequirementsCommand model = new WebSiteRequirementsCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                WebSiteRequirementsCommand model = new WebSiteRequirementsCommand() { EventType = Domain.Enums.EventType.Delete };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();

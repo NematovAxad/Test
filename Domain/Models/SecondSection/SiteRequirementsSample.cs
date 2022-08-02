@@ -7,15 +7,11 @@ using System.Text;
 
 namespace Domain.Models.SecondSection
 {
-    [Table("website_requirements", Schema = "organizations")]
-    public class WebSiteRequirements:IDomain<int>
+    [Table("site_requirements_sample", Schema = "organizations")]
+    public class SiteRequirementsSample:IDomain<int>
     {
         [Column("id")]
         public int Id { get; set; }
-        [Column("organization_id")]
-        [ForeignKey("Organizations")]
-        public int OrganizationId { get; set; }
-        public Organizations Organizations { get; set; }
         [Column("name")]
         public string Name { get; set; }
         [Column("number")]
