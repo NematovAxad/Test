@@ -85,7 +85,7 @@ namespace AdminHandler.Handlers.Ranking
                 if (o.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
                     
-                    double maxRate = 20;
+                    double maxRate = 0;
                     double reached = 0;
                     foreach (var s in gSpheres)
                     {
