@@ -23,6 +23,6 @@ namespace Domain.Models.SecondSection
         [Column("comment")]
         public string Comment { get; set; }
         [Column("status")]
-        public Steps RequirementStatus { get; set; }
+        public Steps? RequirementStatus { get; set; }
     }
 }

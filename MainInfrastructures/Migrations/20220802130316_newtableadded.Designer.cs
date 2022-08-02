@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220802130316_newtableadded")]
+    partial class newtableadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1599,7 +1601,7 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("number")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RequirementStatus")
+                    b.Property<int>("RequirementStatus")
                         .HasColumnName("status")
                         .HasColumnType("integer");
 

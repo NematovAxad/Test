@@ -47,6 +47,8 @@
     <Compile Remove="Migrations\20220725134455_failtableadded.Designer.cs" />
     <Compile Remove="Migrations\20220727101641_tableadded.cs" />
     <Compile Remove="Migrations\20220727101641_tableadded.Designer.cs" />
+    <Compile Remove="Migrations\20220802130204_newtableadded.cs" />
+    <Compile Remove="Migrations\20220802130204_newtableadded.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
