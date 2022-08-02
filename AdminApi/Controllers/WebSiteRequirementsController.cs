@@ -22,7 +22,7 @@ namespace AdminApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<SiteRequirementSampleQueryResult>> Get([FromQuery] SiteRequirementSampleQuery query)
+        public async Task<ResponseCore<SiteRequirementSampleQueryResult>> GetSample([FromQuery] SiteRequirementSampleQuery query)
         {
             try
             {
