@@ -94,7 +94,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             {
                 List<WebSiteRequirements> updateList = new List<WebSiteRequirements>();
 
-                var org = _organizations.Find(o => o.Id == model.Requirements[0].Id).FirstOrDefault();
+                var org = _organizations.Find(o => o.Id == model.Requirements[0].OrganizationId).FirstOrDefault();
                 if (org == null)
                     throw ErrorStates.NotFound(model.Requirements[0].Id.ToString());
                 foreach (var r in model.Requirements)
