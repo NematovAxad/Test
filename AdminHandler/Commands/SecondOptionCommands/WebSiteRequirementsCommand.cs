@@ -2,8 +2,10 @@
 using Domain.Enums;
 using Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -32,7 +34,7 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public string Name { get; set; }
         public int Number { get; set; }
         public string SiteLink { get; set; }
-        public string ScreenLink { get; set; }
+        public string Screenshot { get; set; }
         public string Comment { get; set; }
         public Steps RequirementStatus { get; set; }
     }

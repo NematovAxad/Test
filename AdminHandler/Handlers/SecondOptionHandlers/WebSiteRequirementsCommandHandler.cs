@@ -1,5 +1,6 @@
 ﻿using AdminHandler.Commands.SecondOptionCommands;
 using AdminHandler.Results.SecondOptionResults;
+using Domain;
 using Domain.Models;
 using Domain.Models.SecondSection;
 using Domain.Permission;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AdminHandler.Handlers.SecondOptionHandlers
 {
@@ -58,10 +60,15 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                             Name = r.Name,
                             Number = r.Number,
                             SiteLink = r.SiteLink,
-                            ScreenLink = r.ScreenLink,
                             Comment = r.Comment,
                             RequirementStatus = r.RequirementStatus,
                         };
+                        if(!String.IsNullOrEmpty(r.Screenshot))
+                        {
+                            var filePath = FileState.AddFile("screens", r.Screenshot);
+                            requirement.ScreenLink = filePath;
+                        }
+                        addList.Add(requirement);
                     }
                 }
                 catch(Exception ex)
@@ -99,10 +106,15 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                         Name = r.Name,
                         Number = r.Number,
                         SiteLink = r.SiteLink,
-                        ScreenLink = r.ScreenLink,
                         Comment = r.Comment,
                         RequirementStatus = r.RequirementStatus,
                     };
+                    if (!String.IsNullOrEmpty(r.Screenshot))
+                    {
+                        var filePath = FileState.AddFile("screens", r.Screenshot);
+                        requirement.ScreenLink = filePath;
+                    }
+                    updateList.Add(requirement);
                 }
 
                 if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))

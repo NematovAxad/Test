@@ -30,5 +30,9 @@
     <ProjectReference Include="..\ApiConfigs\ApiConfigs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\documents\screens\" />
+  </ItemGroup>
+
 
 </Project>

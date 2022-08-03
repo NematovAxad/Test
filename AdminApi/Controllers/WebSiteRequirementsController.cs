@@ -56,7 +56,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<WebSiteRequirementsCommandResult>> Add([FromQuery] WebSiteRequirementsCommand model)
+        public async Task<ResponseCore<WebSiteRequirementsCommandResult>> Add([FromBody] WebSiteRequirementsCommand model)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<WebSiteRequirementsCommandResult>> Put([FromQuery] WebSiteRequirementsCommand model)
+        public async Task<ResponseCore<WebSiteRequirementsCommandResult>> Put([FromBody] WebSiteRequirementsCommand model)
         {
             try
             {

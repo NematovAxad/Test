@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using Domain.States;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Domain
 {
@@ -37,7 +38,32 @@ namespace Domain
             return FileUrl(dirName, fileName);
 
         }
+        public static string AddFile(string dirName, string newFile)
+        {
+            var path = Directory.GetCurrentDirectory();
+            var name = $"{Guid.NewGuid()}.jpg";
+            //dirName = "reestrfiles/" + dirName;
+            path = Path.Combine(path, "wwwroot", "documents", dirName);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+             
+            byte[] bytes = Convert.FromBase64String(newFile);
 
+            path = Path.Combine(path, name);
+            if (bytes.Length == 0)
+            {
+
+            }
+
+            
+
+            Console.WriteLine(path);
+            File.WriteAllBytes(path, bytes);
+            return FileUrl(dirName, name);
+
+        }
         public static string FileUrl(string dirName, string fileName)
         {
             return AuthOptions.FilePath + "/" + "documents/" + dirName + "/" + fileName;
