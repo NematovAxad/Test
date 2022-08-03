@@ -120,7 +120,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                     throw ErrorStates.NotAllowed("permission");
 
-                _db.Context.UpdateRange(updateList);
+                _db.Context.Set<WebSiteRequirements>().UpdateRange(updateList);
+                _db.Context.SaveChanges();
             }
             else
             {
