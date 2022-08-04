@@ -34,6 +34,7 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public string Name { get; set; }
         public int Number { get; set; }
         public string SiteLink { get; set; }
+        public string ScreenLink { get; set; }
         public string Screenshot { get; set; }
         public string Comment { get; set; }
         public Steps RequirementStatus { get; set; }

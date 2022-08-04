@@ -7,6 +7,6 @@ namespace MainInfrastructures.Interfaces
 {
     public interface IPingService
     {
-        public void CheckPing(object state);
+        public void CheckPing();
     }
 }

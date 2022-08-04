@@ -58,8 +58,9 @@ namespace ApiConfigs
             }
             return pingable;
         }
-        public void CheckPing(object state)
+        public void CheckPing()
         {
+            Console.WriteLine("STARTED");
             List<SiteFailsTable> webSiteFailsList = new List<SiteFailsTable>();
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
             List<WebSiteAvailability> updateModelList = new List<WebSiteAvailability>();
@@ -193,12 +194,13 @@ namespace ApiConfigs
                     {
                         OrganizationId = o.Id,
                         DeadlineId = deadline.Id,
-                        Website = o.WebSite,
+                        Website = "website",
                         FailedTime = DateTime.Now
                     };
                     webSiteFailsList.Add(fail);
                 }
                 _siteFails.AddRange(webSiteFailsList);
+                Console.WriteLine("WRITTEN FAILS");
             }
         }
     }

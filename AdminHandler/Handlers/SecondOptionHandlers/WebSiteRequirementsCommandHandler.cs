@@ -97,8 +97,14 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 var org = _organizations.Find(o => o.Id == model.Requirements[0].OrganizationId).FirstOrDefault();
                 if (org == null)
                     throw ErrorStates.NotFound(model.Requirements[0].Id.ToString());
+                
                 foreach (var r in model.Requirements)
                 {
+                    if (!String.IsNullOrEmpty(r.Screenshot))
+                    {
+                        var filePath = FileState.AddFile("screens", r.Screenshot);
+                        r.ScreenLink = filePath;
+                    }
                     WebSiteRequirements requirement = new WebSiteRequirements
                     {
                         Id = r.Id,
@@ -106,14 +112,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                         Name = r.Name,
                         Number = r.Number,
                         SiteLink = r.SiteLink,
+                        ScreenLink = r.ScreenLink,
                         Comment = r.Comment,
-                        RequirementStatus = r.RequirementStatus,
+                        RequirementStatus = r.RequirementStatus
                     };
-                    if (!String.IsNullOrEmpty(r.Screenshot))
-                    {
-                        var filePath = FileState.AddFile("screens", r.Screenshot);
-                        requirement.ScreenLink = filePath;
-                    }
+                    
                     updateList.Add(requirement);
                 }
 
