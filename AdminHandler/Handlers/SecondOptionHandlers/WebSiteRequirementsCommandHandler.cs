@@ -59,14 +59,26 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                             OrganizationId = r.OrganizationId,
                             Name = r.Name,
                             Number = r.Number,
-                            SiteLink = r.SiteLink,
+                            SiteLink1 = r.SiteLink1,
+                            SiteLink2 = r.SiteLink2,
+                            SiteLink3 = r.SiteLink3,
                             Comment = r.Comment,
                             RequirementStatus = r.RequirementStatus,
                         };
-                        if(!String.IsNullOrEmpty(r.Screenshot))
+                        if(!String.IsNullOrEmpty(r.Screenshot1))
                         {
-                            var filePath = FileState.AddFile("screens", r.Screenshot);
-                            requirement.ScreenLink = filePath;
+                            var filePath = FileState.AddFile("screens", r.Screenshot1);
+                            requirement.ScreenLink1 = filePath;
+                        }
+                        if (!String.IsNullOrEmpty(r.Screenshot2))
+                        {
+                            var filePath = FileState.AddFile("screens", r.Screenshot2);
+                            requirement.ScreenLink2 = filePath;
+                        }
+                        if (!String.IsNullOrEmpty(r.Screenshot3))
+                        {
+                            var filePath = FileState.AddFile("screens", r.Screenshot3);
+                            requirement.ScreenLink3 = filePath;
                         }
                         addList.Add(requirement);
                     }
@@ -100,10 +112,20 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 
                 foreach (var r in model.Requirements)
                 {
-                    if (!String.IsNullOrEmpty(r.Screenshot))
+                    if (!String.IsNullOrEmpty(r.Screenshot1))
                     {
-                        var filePath = FileState.AddFile("screens", r.Screenshot);
-                        r.ScreenLink = filePath;
+                        var filePath = FileState.AddFile("screens", r.Screenshot1);
+                        r.ScreenLink1 = filePath;
+                    }
+                    if (!String.IsNullOrEmpty(r.Screenshot2))
+                    {
+                        var filePath = FileState.AddFile("screens", r.Screenshot2);
+                        r.ScreenLink2 = filePath;
+                    }
+                    if (!String.IsNullOrEmpty(r.Screenshot3))
+                    {
+                        var filePath = FileState.AddFile("screens", r.Screenshot3);
+                        r.ScreenLink3 = filePath;
                     }
                     WebSiteRequirements requirement = new WebSiteRequirements
                     {
@@ -111,8 +133,12 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                         OrganizationId = r.OrganizationId,
                         Name = r.Name,
                         Number = r.Number,
-                        SiteLink = r.SiteLink,
-                        ScreenLink = r.ScreenLink,
+                        SiteLink1 = r.SiteLink1,
+                        ScreenLink1 = r.ScreenLink1,
+                        SiteLink2 = r.SiteLink2,
+                        ScreenLink2 = r.ScreenLink2,
+                        SiteLink3 = r.SiteLink3,
+                        ScreenLink3 = r.ScreenLink3,
                         Comment = r.Comment,
                         RequirementStatus = r.RequirementStatus
                     };

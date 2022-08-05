@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220804150439_tablestructure")]
+    partial class tablestructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1603,28 +1605,12 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("status")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ScreenLink1")
-                        .HasColumnName("screen_link_1")
+                    b.Property<string>("ScreenLink")
+                        .HasColumnName("ScreenLink")
                         .HasColumnType("text");
 
-                    b.Property<string>("ScreenLink2")
-                        .HasColumnName("screen_link_2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ScreenLink3")
-                        .HasColumnName("screen_link_3")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SiteLink1")
-                        .HasColumnName("site_link_1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SiteLink2")
-                        .HasColumnName("site_link_2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SiteLink3")
-                        .HasColumnName("site_link_3")
+                    b.Property<string>("SiteLink")
+                        .HasColumnName("site_link")
                         .HasColumnType("text");
 
                     b.HasKey("Id");

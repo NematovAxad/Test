@@ -6,7 +6,6 @@ using Domain;
 using EntityRepository;
 using JohaRepository;
 using MainInfrastructures.Db;
-using MainInfrastructures.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -124,9 +123,6 @@ namespace ApiConfigs
             });
             services.AddSwaggerGenNewtonsoftSupport();
             AddJwt(services);
-            // CoreResult.Start.ConfigureService(services);
-            //services.AddHostedService<WebsitePingService>();
-            //services.AddSingleton<IHostedService, PingTask>();
             services.AddSession();
             services.AddHttpContextAccessor();
             services.AddCors();

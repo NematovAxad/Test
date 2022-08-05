@@ -33,9 +33,15 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public int OrganizationId { get; set; }
         public string Name { get; set; }
         public int Number { get; set; }
-        public string SiteLink { get; set; }
-        public string ScreenLink { get; set; }
-        public string Screenshot { get; set; }
+        public string SiteLink1 { get; set; }
+        public string ScreenLink1 { get; set; }
+        public string Screenshot1 { get; set; }
+        public string SiteLink2 { get; set; }
+        public string ScreenLink2 { get; set; }
+        public string Screenshot2 { get; set; }
+        public string SiteLink3 { get; set; }
+        public string ScreenLink3 { get; set; }
+        public string Screenshot3 { get; set; }
         public string Comment { get; set; }
         public Steps RequirementStatus { get; set; }
     }

@@ -22,10 +22,12 @@ namespace AdminApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            
             services.AddControllers().AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
             var builder = new ContainerBuilder();
+            services.AddHostedService<WebsitePingService>();
             services.ConfigureServices(builder);
             services.AddBeatPulse(setup =>
             {

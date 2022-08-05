@@ -16,12 +16,20 @@ namespace Domain.Models.SecondSection
         public string Name { get; set; }
         [Column("number")]
         public int Number { get; set; }
-        [Column("site_link")]
-        public string SiteLink { get; set; }
-        [Column("ScreenLink")]
-        public string ScreenLink { get; set; }
         [Column("comment")]
         public string Comment { get; set; }
+        [Column("site_link_1")]
+        public string SiteLink1 { get; set; }
+        [Column("screen_link_1")]
+        public string ScreenLink1 { get; set; }
+        [Column("site_link_2")]
+        public string SiteLink2 { get; set; }
+        [Column("screen_link_2")]
+        public string ScreenLink2 { get; set; }
+        [Column("site_link_3")]
+        public string SiteLink3 { get; set; }
+        [Column("screen_link_3")]
+        public string ScreenLink3 { get; set; }
         [Column("status")]
         public Steps? RequirementStatus { get; set; }
     }

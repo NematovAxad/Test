@@ -58,7 +58,7 @@ namespace ApiConfigs
             }
             return pingable;
         }
-        public void CheckPing()
+        public void CheckPing(object obj)
         {
             Console.WriteLine("STARTED");
             List<SiteFailsTable> webSiteFailsList = new List<SiteFailsTable>();
