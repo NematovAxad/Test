@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain;
+using Domain.Models;
 using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
 using Domain.Permission;
@@ -49,7 +50,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            var helplineInfo = _helplineInfo.Find(h => h.OrganizationId == model.OrganizationId && h.DeadlineId == deadline.Id).FirstOrDefault();
+            var helplineInfo = _helplineInfo.Find(h => h.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (helplineInfo != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
@@ -61,7 +62,6 @@ namespace UserHandler.Handlers.SecondSectionHandler
             HelplineInfo addModel = new HelplineInfo()
             {
                 OrganizationId = model.OrganizationId,
-                DeadlineId = deadline.Id,
                 RegulationShowsPhone = model.RegulationShowsPhone,
                 RegulationShowsTimetable = model.RegulationShowsTimetable,
                 RegulationShowsServices = model.RegulationShowsServices,
@@ -77,6 +77,77 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 HelplineStatisticsArchiving = model.HelplineStatisticsArchiving,
                 HelplineStatisticsIntime = model.HelplineStatisticsIntime,
             };
+            if(!String.IsNullOrEmpty(model.Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot);
+                addModel.ScreenshotLink = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot2))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot2);
+                addModel.Screenshot2Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot3))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot3);
+                addModel.Screenshot3Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot4))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot4);
+                addModel.Screenshot4Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot5))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot5);
+                addModel.Screenshot5Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot6))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot6);
+                addModel.Screenshot6Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot7))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot7);
+                addModel.Screenshot7Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot8))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot8);
+                addModel.Screenshot8Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot9))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot9);
+                addModel.Screenshot9Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot10))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot10);
+                addModel.Screenshot10Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot11))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot11);
+                addModel.Screenshot11Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot12))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot12);
+                addModel.Screenshot12Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot13))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot13);
+                addModel.Screenshot13Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot14))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot14);
+                addModel.Screenshot14Link = filePath;
+            }
+
             _helplineInfo.Add(addModel);
         }
         public void Update(HelplineInfoCommand model)
@@ -149,6 +220,76 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (model.HelplineStatisticsIntime != null)
             {
                 helplineInfo.HelplineStatisticsIntime = model.HelplineStatisticsIntime;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot);
+                helplineInfo.ScreenshotLink = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot2))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot2);
+                helplineInfo.Screenshot2Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot3))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot3);
+                helplineInfo.Screenshot3Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot4))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot4);
+                helplineInfo.Screenshot4Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot5))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot5);
+                helplineInfo.Screenshot5Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot6))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot6);
+                helplineInfo.Screenshot6Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot7))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot7);
+                helplineInfo.Screenshot7Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot8))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot8);
+                helplineInfo.Screenshot8Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot9))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot9);
+                helplineInfo.Screenshot9Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot10))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot10);
+                helplineInfo.Screenshot10Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot11))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot11);
+                helplineInfo.Screenshot11Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot12))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot12);
+                helplineInfo.Screenshot12Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot13))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot13);
+                helplineInfo.Screenshot13Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Screenshot14))
+            {
+                var filePath = FileState.AddFile("screens", model.Screenshot14);
+                helplineInfo.Screenshot14Link = filePath;
             }
             _helplineInfo.Update(helplineInfo);
         }

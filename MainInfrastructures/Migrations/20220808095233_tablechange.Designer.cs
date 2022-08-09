@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220808095233_tablechange")]
+    partial class tablechange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1368,61 +1370,9 @@ namespace MainInfrastructures.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Comment")
-                        .HasColumnName("Comment")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment10")
-                        .HasColumnName("Comment10")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment11")
-                        .HasColumnName("Comment11")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment12")
-                        .HasColumnName("Comment12")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment13")
-                        .HasColumnName("Comment13")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment14")
-                        .HasColumnName("Comment14")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment2")
-                        .HasColumnName("Comment2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment3")
-                        .HasColumnName("Comment3")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment4")
-                        .HasColumnName("Comment4")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment5")
-                        .HasColumnName("Comment5")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment6")
-                        .HasColumnName("Comment6")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment7")
-                        .HasColumnName("Comment7")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment8")
-                        .HasColumnName("Comment8")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment9")
-                        .HasColumnName("Comment9")
-                        .HasColumnType("text");
+                    b.Property<int>("DeadlineId")
+                        .HasColumnName("deadline_id")
+                        .HasColumnType("integer");
 
                     b.Property<bool?>("HelplinePhoneRatingOption")
                         .HasColumnName("helpline_phone_rating_option")
@@ -1480,67 +1430,13 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("regulation_verified")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Screenshot10Link")
-                        .HasColumnName("screenshot10_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot11Link")
-                        .HasColumnName("screenshot11_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot12Link")
-                        .HasColumnName("screenshot12_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot13Link")
-                        .HasColumnName("screenshot13_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot14Link")
-                        .HasColumnName("screenshot14_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot2Link")
-                        .HasColumnName("screenshot2_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot3Link")
-                        .HasColumnName("screenshot3_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot4Link")
-                        .HasColumnName("screenshot4_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot5Link")
-                        .HasColumnName("screenshot5_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot6Link")
-                        .HasColumnName("screenshot6_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot7Link")
-                        .HasColumnName("screenshot7_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot8Link")
-                        .HasColumnName("screenshot8_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Screenshot9Link")
-                        .HasColumnName("screenshot9_link")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ScreenshotLink")
-                        .HasColumnName("screenshot_link")
-                        .HasColumnType("text");
-
                     b.Property<bool?>("WebsiteHasHelplineStatistics")
                         .HasColumnName("website_has_helpline_statistics")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeadlineId");
 
                     b.HasIndex("OrganizationId");
 
@@ -3015,6 +2911,12 @@ namespace MainInfrastructures.Migrations
 
             modelBuilder.Entity("Domain.Models.SecondSection.HelplineInfo", b =>
                 {
+                    b.HasOne("Domain.Models.Deadline", "Deadline")
+                        .WithMany()
+                        .HasForeignKey("DeadlineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Models.Organizations", "Organizations")
                         .WithMany()
                         .HasForeignKey("OrganizationId")

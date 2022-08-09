@@ -1,5 +1,6 @@
 ﻿using AdminHandler.Commands.SecondOptionCommands;
 using AdminHandler.Results.SecondOptionResults;
+using Domain;
 using Domain.Models;
 using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
@@ -63,9 +64,72 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 OrganizationId = model.OrganizationId,
                 MessengerLink = model.MessengerLink
             };
-            if(model.Verified != null)
+            if (model.OrgFullName != null)
+            {
+                addModel.OrgFullName = model.OrgFullName;
+            }
+            if (model.OrgLegalSite != null)
+            {
+                addModel.OrgLegalSite = model.OrgLegalSite;
+            }
+            if (model.OrgPhone != null)
+            {
+                addModel.OrgPhone = model.OrgPhone;
+            }
+            if (model.OrgLegalAddress != null)
+            {
+                addModel.OrgLegalAddress = model.OrgLegalAddress;
+            }
+            if (model.OrgEmail != null)
+            {
+                addModel.OrgEmail = model.OrgEmail;
+            }
+            if (model.LinksToOtherSocials != null)
+            {
+                addModel.LinksToOtherSocials = model.LinksToOtherSocials;
+            }
+            if (model.SyncronizedPosts != null)
+            {
+                addModel.SyncronizedPosts = model.SyncronizedPosts;
+            }
+            if (model.Pool != null)
+            {
+                addModel.Pool = model.Pool;
+            }
+            if (model.Verified != null)
             {
                 addModel.Verified = model.Verified;
+            }
+            addModel.IsMain = model.IsMain;
+            addModel.Post1 = model.Post1;
+            addModel.Post2 = model.Post2;
+            addModel.Post3 = model.Post3;
+            addModel.Post4 = model.Post4;
+            addModel.Post5 = model.Post5;
+            if (!String.IsNullOrEmpty(model.Post1Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post1Screenshot);
+                addModel.Post1Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post2Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post2Screenshot);
+                addModel.Post2Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post3Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post3Screenshot);
+                addModel.Post3Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post4Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post4Screenshot);
+                addModel.Post4Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post5Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post5Screenshot);
+                addModel.Post5Link = filePath;
             }
             _orgSocials.Add(addModel);
         }
@@ -89,6 +153,69 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (model.Verified != null)
             {
                 socialSite.Verified = model.Verified;
+            }
+            if (model.OrgFullName != null)
+            {
+                socialSite.OrgFullName = model.OrgFullName;
+            }
+            if (model.OrgLegalSite != null)
+            {
+                socialSite.OrgLegalSite = model.OrgLegalSite;
+            }
+            if (model.OrgPhone != null)
+            {
+                socialSite.OrgPhone = model.OrgPhone;
+            }
+            if (model.OrgLegalAddress != null)
+            {
+                socialSite.OrgLegalAddress = model.OrgLegalAddress;
+            }
+            if (model.OrgEmail != null)
+            {
+                socialSite.OrgEmail = model.OrgEmail;
+            }
+            if (model.LinksToOtherSocials != null)
+            {
+                socialSite.LinksToOtherSocials = model.LinksToOtherSocials;
+            }
+            if (model.SyncronizedPosts != null)
+            {
+                socialSite.SyncronizedPosts = model.SyncronizedPosts;
+            }
+            if (model.Pool != null)
+            {
+                socialSite.Pool = model.Pool;
+            }
+            socialSite.IsMain = model.IsMain;
+            socialSite.Post1 = model.Post1;
+            socialSite.Post2 = model.Post2;
+            socialSite.Post3 = model.Post3;
+            socialSite.Post4 = model.Post4;
+            socialSite.Post5 = model.Post5;
+            if (!String.IsNullOrEmpty(model.Post1Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post1Screenshot);
+                socialSite.Post1Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post2Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post2Screenshot);
+                socialSite.Post2Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post3Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post3Screenshot);
+                socialSite.Post3Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post4Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post4Screenshot);
+                socialSite.Post4Link = filePath;
+            }
+            if (!String.IsNullOrEmpty(model.Post5Screenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.Post5Screenshot);
+                socialSite.Post5Link = filePath;
             }
             _orgSocials.Update(socialSite);
         }

@@ -194,7 +194,7 @@ namespace ApiConfigs
                     {
                         OrganizationId = o.Id,
                         DeadlineId = deadline.Id,
-                        Website = "website",
+                        Website = o.WebSite,
                         FailedTime = DateTime.Now
                     };
                     webSiteFailsList.Add(fail);

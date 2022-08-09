@@ -18,7 +18,45 @@ namespace Domain.Models.SecondSection
         public Organizations Organizations { get; set; }
         [Column("messenger_link")]
         public string MessengerLink { get; set; }
+        [Column("org_full_name")]
+        public bool? OrgFullName { get; set; }
+        [Column("org_legal_site")]
+        public bool? OrgLegalSite { get; set; }
+        [Column("org_phone")]
+        public bool? OrgPhone { get; set; }
+        [Column("org_legal_address")]
+        public bool? OrgLegalAddress { get; set; }
+        [Column("org_email")]
+        public bool? OrgEmail { get; set; }
+        [Column("links_to_other_socials")]
+        public bool? LinksToOtherSocials { get; set; }
+        [Column("post1")]
+        public bool Post1 { get; set; }
+        [Column("post1_link")]
+        public string Post1Link { get; set; }
+        [Column("post2")]
+        public bool Post2 { get; set; }
+        [Column("post2_link")]
+        public string Post2Link { get; set; }
+        [Column("post3")]
+        public bool Post3 { get; set; }
+        [Column("post3_link")]
+        public string Post3Link { get; set; }
+        [Column("post4")]
+        public bool Post4 { get; set; }
+        [Column("post4_link")]
+        public string Post4Link { get; set; }
+        [Column("post5")]
+        public bool Post5 { get; set; }
+        [Column("post5_link")]
+        public string Post5Link { get; set; }
+        [Column("pool")]
+        public bool? Pool { get; set; }
+        [Column("is_main")]
+        public bool IsMain { get; set; }
         [Column("verified")]
         public bool? Verified {get;set;}
+        [Column("syncronized_posts")]
+        public bool? SyncronizedPosts { get; set; }
     }
 }

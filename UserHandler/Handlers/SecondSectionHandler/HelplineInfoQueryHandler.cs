@@ -40,7 +40,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotFound("deadline");
             
 
-            var helpLine = _helplineInfo.Find(h=>h.OrganizationId == request.OrganizationId && h.DeadlineId == deadline.Id).FirstOrDefault();
+            var helpLine = _helplineInfo.Find(h=>h.OrganizationId == request.OrganizationId).FirstOrDefault();
 
             HelplineInfoQueryResult result = new HelplineInfoQueryResult();
             result.Data = helpLine;
