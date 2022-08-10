@@ -41,7 +41,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<HelplineInfoCommandResult>> Add([FromQuery] HelplineInfoCommand model)
+        public async Task<ResponseCore<HelplineInfoCommandResult>> Add([FromBody] HelplineInfoCommand model)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<HelplineInfoCommandResult>> Put([FromQuery] HelplineInfoCommand model)
+        public async Task<ResponseCore<HelplineInfoCommandResult>> Put([FromBody] HelplineInfoCommand model)
         {
             try
             {

@@ -30,26 +30,54 @@ namespace Domain.Models.SecondSection
         public bool? OrgEmail { get; set; }
         [Column("links_to_other_socials")]
         public bool? LinksToOtherSocials { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("link1")]
+        public string Link1 { get; set; }
         [Column("post1")]
         public bool Post1 { get; set; }
         [Column("post1_link")]
         public string Post1Link { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("link2")]
+        public string Link2 { get; set; }
         [Column("post2")]
         public bool Post2 { get; set; }
         [Column("post2_link")]
         public string Post2Link { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("link3")]
+        public string Link3 { get; set; }
         [Column("post3")]
         public bool Post3 { get; set; }
         [Column("post3_link")]
         public string Post3Link { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("link4")]
+        public string Link4 { get; set; }
         [Column("post4")]
         public bool Post4 { get; set; }
         [Column("post4_link")]
         public string Post4Link { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("link5")]
+        public string Link5 { get; set; }
         [Column("post5")]
         public bool Post5 { get; set; }
         [Column("post5_link")]
         public string Post5Link { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         [Column("pool")]
         public bool? Pool { get; set; }
         [Column("is_main")]

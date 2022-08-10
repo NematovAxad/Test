@@ -101,6 +101,12 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 addModel.Verified = model.Verified;
             }
             addModel.IsMain = model.IsMain;
+            addModel.Link1 = model.Link1;
+            addModel.Link2 = model.Link2;
+            addModel.Link3 = model.Link3;
+            addModel.Link4 = model.Link4;
+            addModel.Link5 = model.Link5;
+
             addModel.Post1 = model.Post1;
             addModel.Post2 = model.Post2;
             addModel.Post3 = model.Post3;
@@ -187,6 +193,12 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 socialSite.Pool = model.Pool;
             }
             socialSite.IsMain = model.IsMain;
+            socialSite.Link1 = model.Link1;
+            socialSite.Link2 = model.Link2;
+            socialSite.Link3 = model.Link3;
+            socialSite.Link4 = model.Link4;
+            socialSite.Link5 = model.Link5;
+
             socialSite.Post1 = model.Post1;
             socialSite.Post2 = model.Post2;
             socialSite.Post3 = model.Post3;
