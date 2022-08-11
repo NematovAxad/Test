@@ -72,7 +72,7 @@ namespace ApiConfigs
             var organizations = _org.GetAll().ToList();
             if (organizations.Count() == 0)
                 throw ErrorStates.NotFound("org");
-            var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
+            var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id);
             foreach (var o in organizations)
             {
                 bool pingCheck = Ping(o.WebSite);
