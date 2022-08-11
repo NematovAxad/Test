@@ -306,6 +306,20 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 var filePath = FileState.AddFile("screens", model.Screenshot14);
                 helplineInfo.Screenshot14Link = filePath;
             }
+            helplineInfo.Comment = model.Comment;
+            helplineInfo.Comment14 = model.Comment14;
+            helplineInfo.Comment2 = model.Comment2;
+            helplineInfo.Comment3 = model.Comment3;
+            helplineInfo.Comment4 = model.Comment4;
+            helplineInfo.Comment5 = model.Comment5;
+            helplineInfo.Comment6 = model.Comment6;
+            helplineInfo.Comment7 = model.Comment7;
+            helplineInfo.Comment8 = model.Comment8;
+            helplineInfo.Comment9 = model.Comment9;
+            helplineInfo.Comment10 = model.Comment10;
+            helplineInfo.Comment11 = model.Comment11;
+            helplineInfo.Comment12 = model.Comment12;
+            helplineInfo.Comment13 = model.Comment13;
             _helplineInfo.Update(helplineInfo);
         }
         public void Delete(HelplineInfoCommand model)
