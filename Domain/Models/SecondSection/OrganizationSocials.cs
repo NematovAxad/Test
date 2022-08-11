@@ -80,6 +80,15 @@ namespace Domain.Models.SecondSection
         /// </summary>
         [Column("pool")]
         public bool? Pool { get; set; }
+        [Column("pool_link")]
+        public string PoolLink { get; set; }
+        [Column("pool_screenshot_link")]
+        public string PoolScreenshotLink { get; set; }
+        [Column("pool_comment")]
+        public string PoolComment { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         [Column("is_main")]
         public bool IsMain { get; set; }
         [Column("verified")]
