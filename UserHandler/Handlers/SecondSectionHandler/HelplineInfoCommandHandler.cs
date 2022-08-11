@@ -77,7 +77,22 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 HelplineStatisticsArchiving = model.HelplineStatisticsArchiving,
                 HelplineStatisticsIntime = model.HelplineStatisticsIntime,
             };
-            if(!String.IsNullOrEmpty(model.Screenshot))
+            addModel.Comment = model.Comment;
+            addModel.Comment14 = model.Comment14;
+            addModel.Comment2 = model.Comment2;
+            addModel.Comment3 = model.Comment3;
+            addModel.Comment4 = model.Comment4;
+            addModel.Comment5 = model.Comment5;
+            addModel.Comment6 = model.Comment6;
+            addModel.Comment7 = model.Comment7;
+            addModel.Comment8 = model.Comment8;
+            addModel.Comment9 = model.Comment9;
+            addModel.Comment10 = model.Comment10;
+            addModel.Comment11 = model.Comment11;
+            addModel.Comment12 = model.Comment12;
+            addModel.Comment13 = model.Comment13;
+
+            if (!String.IsNullOrEmpty(model.Screenshot))
             {
                 var filePath = FileState.AddFile("screens", model.Screenshot);
                 addModel.ScreenshotLink = filePath;
