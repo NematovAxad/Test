@@ -27,6 +27,7 @@ namespace AdminApi
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
             var builder = new ContainerBuilder();
+
             services.AddHostedService<WebsitePingService>();
             services.ConfigureServices(builder);
             services.AddBeatPulse(setup =>
