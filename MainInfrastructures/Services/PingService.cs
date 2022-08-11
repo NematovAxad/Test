@@ -60,7 +60,6 @@ namespace ApiConfigs
         }
         public void CheckPing(object obj)
         {
-
             Console.WriteLine("STARTED");
             List<SiteFailsTable> webSiteFailsList = new List<SiteFailsTable>();
             List<WebSiteAvailability> addModelList = new List<WebSiteAvailability>();
