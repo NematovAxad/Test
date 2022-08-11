@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   AdminApi:
-    image: registry.egov.uz/axadjon/nissystem:adminapi
+    image: registry.egov.uz/axad/nissystem:adminapi
     labels:
      NAME: "Admin Api"
     
@@ -12,7 +12,7 @@ services:
     ports:
      - "6051:6051"
   UserApi:
-    image: registry.egov.uz/axadjon/nissystem:userapi
+    image: registry.egov.uz/axad/nissystem:userapi
     labels:
      NAME: "User Api"
     
@@ -22,7 +22,7 @@ services:
     ports:
      - "6052:6052"
   MonitoringApi:
-    image: registry.egov.uz/axadjon/nissystem:monitoringapi
+    image: registry.egov.uz/axad/nissystem:monitoringapi
     labels:
      NAME: "Monitoring Api"
     
