@@ -52,6 +52,10 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public string Post5Link { get; set; }
         public string Post5Screenshot { get; set; }
         public bool? Pool { get; set; }
+        public string PoolLink { get; set; }
+        public string PoolScreenshot { get; set; }
+        public string PoolScreenshotLink { get; set; }
+        public string PoolComment { get; set; }
         public bool IsMain { get; set; }
         public bool? Verified { get; set; }
         public bool? SyncronizedPosts { get; set; }

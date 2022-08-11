@@ -96,6 +96,14 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             {
                 addModel.Pool = model.Pool;
             }
+            if (!String.IsNullOrEmpty(model.PoolScreenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.PoolScreenshot);
+                addModel.PoolScreenshotLink = filePath;
+            }
+            addModel.PoolLink = model.PoolLink;
+            addModel.PoolComment = model.PoolComment;
+
             if (model.Verified != null)
             {
                 addModel.Verified = model.Verified;
@@ -192,6 +200,14 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             {
                 socialSite.Pool = model.Pool;
             }
+            if (!String.IsNullOrEmpty(model.PoolScreenshot))
+            {
+                var filePath = FileState.AddFile("screens", model.PoolScreenshot);
+                socialSite.PoolScreenshotLink = filePath;
+            }
+            socialSite.PoolLink = model.PoolLink;
+            socialSite.PoolComment = model.PoolComment;
+
             socialSite.IsMain = model.IsMain;
             socialSite.Link1 = model.Link1;
             socialSite.Link2 = model.Link2;
