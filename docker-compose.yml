@@ -21,7 +21,7 @@ services:
       dockerfile: UserApi/Dockerfile
     ports:
      - "6052:6052"
-  ClientApi:
+  MonitoringApi:
     image: registry.egov.uz/Axad/nissystem:monitoringapi
     labels:
      NAME: "Monitoring Api"
