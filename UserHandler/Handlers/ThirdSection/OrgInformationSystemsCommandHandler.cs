@@ -49,7 +49,7 @@ namespace UserHandler.Handlers.ThirdSection
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
-            var orgInfoSystems = _orgInfoSystem.Find(h => h.OrganizationId == model.OrganizationId && h.SystemName == model.SystemName).FirstOrDefault();
+            var orgInfoSystems = _orgInfoSystem.Find(h => h.OrganizationId == model.OrganizationId && h.SystemId == model.SystemId).FirstOrDefault();
             if (orgInfoSystems != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
@@ -62,31 +62,7 @@ namespace UserHandler.Handlers.ThirdSection
             OrgInformationSystems addModel = new OrgInformationSystems()
             {
                 OrganizationId = model.OrganizationId,
-                SystemName = model.SystemName,
-                SystemAppointment = model.SystemAppointment,
-                SystemReestrNumber = model.SystemReestrNumber,
-                SystemCondition = model.SystemCondition,
-                CommissioningDate = model.CommissioningDate,
-                ExpertOpinionDate = model.ExpertOpinionDate,
-                ExpertOpinionNumber = model.ExpertOpinionNumber,
-                ListOfServices = model.ListOfServices,
-                UsersCount = model.UsersCount,
-                UsesClassifiers = model.UsesClassifiers,
-                UsedClassifiers = model.UsedClassifiers,
-                OtherClassifiers = model.OtherClassifiers,
-                HasIntegrationWithEgovernment = model.HasIntegrationWithEgovernment,
-                IntegrationInterdepartmentalPlatform = model.IntegrationInterdepartmentalPlatform,
-                TransmittingInformationsFirst = model.TransmittingInformationsFirst,
-                IntegratedRegisterClassifiers = model.IntegratedRegisterClassifiers,
-                TransmittingInformationsSecond = model.TransmittingInformationsSecond,
-                IntegratedCentralDatabase = model.IntegratedCentralDatabase,
-                TransmittingInformationsThird = model.TransmittingInformationsThird,
-                IntegratedComplexesOfSystems = model.IntegratedComplexesOfSystems,
-                TransmittingInformationsFourth = model.TransmittingInformationsFourth,
-                IntegratedPaymentSystem = model.IntegratedPaymentSystem,
-                PaymentSystemName = model.PaymentSystemName,
-                AvailabilityAutomationOfService = model.AvailabilityAutomationOfService,
-                AutomatedServices = model.AutomatedServices
+               
             };
             _orgInfoSystem.Add(addModel);
         }
@@ -106,31 +82,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            system.SystemName = model.SystemName;
-            system.SystemAppointment = model.SystemAppointment;
-            system.SystemReestrNumber = model.SystemReestrNumber;
-            system.SystemCondition = model.SystemCondition;
-            system.CommissioningDate = model.CommissioningDate;
-            system.ExpertOpinionDate = model.ExpertOpinionDate;
-            system.ExpertOpinionNumber = model.ExpertOpinionNumber;
-            system.ListOfServices = model.ListOfServices;
-            system.UsersCount = model.UsersCount;
-            system.UsesClassifiers = model.UsesClassifiers;
-            system.UsedClassifiers = model.UsedClassifiers;
-            system.OtherClassifiers = model.OtherClassifiers;
-            system.HasIntegrationWithEgovernment = model.HasIntegrationWithEgovernment;
-            system.IntegrationInterdepartmentalPlatform = model.IntegrationInterdepartmentalPlatform;
-            system.TransmittingInformationsFirst = model.TransmittingInformationsFirst;
-            system.IntegratedRegisterClassifiers = model.IntegratedRegisterClassifiers;
-            system.TransmittingInformationsSecond = model.TransmittingInformationsSecond;
-            system.IntegratedCentralDatabase = model.IntegratedCentralDatabase;
-            system.TransmittingInformationsThird = model.TransmittingInformationsThird;
-            system.IntegratedComplexesOfSystems = model.IntegratedComplexesOfSystems;
-            system.TransmittingInformationsFourth = model.TransmittingInformationsFourth;
-            system.IntegratedPaymentSystem = model.IntegratedPaymentSystem;
-            system.PaymentSystemName = model.PaymentSystemName;
-            system.AvailabilityAutomationOfService = model.AvailabilityAutomationOfService;
-            system.AutomatedServices = model.AutomatedServices;
+            
 
             _orgInfoSystem.Update(system);
         }

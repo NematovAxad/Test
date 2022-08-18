@@ -22,6 +22,7 @@ namespace Domain.Models
         public DateTime OperatorDeadlineDate { get; set; }
         [Column("is_active")]
         public bool IsActive { get; set; }
-
+        [Column("ping_service")]
+        public bool PingService { get; set; }
     }
 }

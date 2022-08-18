@@ -86,6 +86,7 @@ namespace UserHandler.Handlers.ThirdSection
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            _orgEvents.Remove(orgEvents);
         }
     }
 }

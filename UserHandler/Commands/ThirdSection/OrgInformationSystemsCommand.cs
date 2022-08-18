@@ -24,30 +24,17 @@ namespace UserHandler.Commands.ThirdSection
         public EventType EventType { get; set; }
         public int Id { get; set; }
         public int OrganizationId { get; set; }
-        public string SystemName { get; set; }
-        public string SystemAppointment { get; set; }
-        public string SystemReestrNumber { get; set; }
-        public string SystemCondition { get; set; }
-        public DateTime CommissioningDate { get; set; }
-        public DateTime ExpertOpinionDate { get; set; }
-        public string ExpertOpinionNumber { get; set; }
-        public string ListOfServices { get; set; }
-        public int UsersCount { get; set; }
-        public bool UsesClassifiers { get; set; }
-        public string UsedClassifiers { get; set; }
-        public string OtherClassifiers { get; set; }
-        public bool HasIntegrationWithEgovernment { get; set; }
-        public bool IntegrationInterdepartmentalPlatform { get; set; }
-        public string TransmittingInformationsFirst { get; set; }
-        public bool IntegratedRegisterClassifiers { get; set; }
-        public string TransmittingInformationsSecond { get; set; }
-        public bool IntegratedCentralDatabase { get; set; }
-        public string TransmittingInformationsThird { get; set; }
-        public bool IntegratedComplexesOfSystems { get; set; }
-        public string TransmittingInformationsFourth { get; set; }
-        public bool IntegratedPaymentSystem { get; set; }
-        public string PaymentSystemName { get; set; }
-        public bool AvailabilityAutomationOfService { get; set; }
-        public string AutomatedServices { get; set; }
+        public string SystemFullName { get; set; }
+        public string SystemShortName { get; set; }
+        public ReestrStatus SystemStatus { get; set; }
+        public string SystemId { get; set; }
+        public string SystemLink { get; set; }
+        public string SystemBasis { get; set; }
+        public string SystemPurpose { get; set; }
+        public bool SystemConnections { get; set; }
+        public bool ClassifiersUsed { get; set; }
+        public bool SystemUniqueIds { get; set; }
+        public bool ExpertDecision { get; set; }
+        public bool SybersecurityDecision { get; set; }
     }
 }

@@ -59,7 +59,8 @@ namespace AdminHandler.Handlers.Ranking
                 Quarter = model.Quarter,
                 DeadlineDate = model.DeadlineDate,
                 OperatorDeadlineDate = model.OperatorDeadlineDate,
-                IsActive = model.IsActive
+                IsActive = model.IsActive,
+                PingService = false
             };
             _deadline.Add(addModel);
         }
