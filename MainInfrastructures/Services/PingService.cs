@@ -63,6 +63,7 @@ namespace ApiConfigs
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
+
             if(deadline.PingService == true)
             {
                 Console.WriteLine("STARTED");
