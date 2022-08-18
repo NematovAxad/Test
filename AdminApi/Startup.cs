@@ -28,7 +28,7 @@ namespace AdminApi
                 );
             var builder = new ContainerBuilder();
 
-            services.AddHostedService<WebsitePingService>();
+            //services.AddHostedService<WebsitePingService>();
             services.ConfigureServices(builder);
             services.AddBeatPulse(setup =>
             {
