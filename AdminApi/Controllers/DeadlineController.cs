@@ -43,7 +43,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<DeadlineCommandResult>> Add([FromQuery] DeadlineCommand model)
+        public async Task<ResponseCore<DeadlineCommandResult>> AddDeadline([FromQuery] DeadlineCommand model)
         {
             try
             {
