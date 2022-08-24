@@ -108,7 +108,7 @@ namespace UserHandler.Handlers.DownloadHandler
                 foreach(var o in org)
                 {
                     ExportReportResultModelX model = new ExportReportResultModelX();
-                    model.Count = result.ItemGov.Count() + 1;
+                    model.Count = result.ItemXoz.Count() + 1;
                     model.OrgName = o.ShortName;
 
                     double rateSumArifm = 0;

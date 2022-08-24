@@ -78,6 +78,42 @@ namespace UserApi.Controllers
             }
         }
         [HttpGet]
+        public async Task<IActionResult> DownloadSiteStatistics([FromQuery] SiteReportQuery query)
+        {
+            try
+            {
+                var data = await _mediator.Send(query);
+
+
+                var path = Directory.GetCurrentDirectory();
+                string fileName = "";
+
+                path = Path.Combine(path, "Templates", "templateSiteReport.xlsx");
+                fileName = "SiteReport.xlsx";
+                var template = new XLTemplate(path);
+                var variable = new
+                {
+                    Items = data.Items
+                };
+                template.AddVariable(variable);
+
+                template.Generate();
+
+                Stream stream = new MemoryStream();
+
+                template.SaveAs(stream);
+
+                stream.Flush();
+                stream.Position = 0;
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        [HttpGet]
         public async Task<ActionResult<ReportBySpheresResult>> ReportBySphere([FromQuery] int deadlineId, int organizationId)
         {
             try
