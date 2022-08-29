@@ -25,7 +25,7 @@ namespace MainInfrastructures.Services
                 HttpClientHandler clientHandler = new HttpClientHandler();
                 clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
                 HttpClient client = new HttpClient(clientHandler);
-                client.Timeout = TimeSpan.FromSeconds(2);
+                client.Timeout = TimeSpan.FromSeconds(5);
                 var byteArray = Encoding.ASCII.GetBytes("reestr:Tf0TJ&3C78B1&rj3WTOD8j3cvhk5*1Vs$x#kF#GB");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 var url = Links.ReesterFirstLink;
@@ -73,7 +73,7 @@ namespace MainInfrastructures.Services
                 HttpClientHandler clientHandler = new HttpClientHandler();
                 clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
                 HttpClient client = new HttpClient(clientHandler);
-                client.Timeout = TimeSpan.FromSeconds(2);
+                client.Timeout = TimeSpan.FromSeconds(5);
                 var byteArray = Encoding.ASCII.GetBytes("reestr:Tf0TJ&3C78B1&rj3WTOD8j3cvhk5*1Vs$x#kF#GB");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 var url = Links.ReesterSecondLink;
