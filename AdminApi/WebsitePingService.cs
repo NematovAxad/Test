@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApiConfigs
+namespace AdminApi
 {
     public class WebsitePingService :IHostedService
     {
@@ -16,7 +16,7 @@ namespace ApiConfigs
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(_pingService.CheckPing, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
+            _timer = new Timer(_pingService.CheckPing, null, TimeSpan.Zero, TimeSpan.FromMinutes(60));
             return Task.CompletedTask;
         }
 
