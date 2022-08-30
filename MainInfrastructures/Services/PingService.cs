@@ -75,7 +75,7 @@ namespace ApiConfigs
                 var organizations = _org.GetAll().ToList();
                 if (organizations.Count() == 0)
                     throw ErrorStates.NotFound("org");
-                var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id);
+                var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
                 foreach (var o in organizations)
                 {
                     bool pingCheck = Ping(o.WebSite);
@@ -109,7 +109,7 @@ namespace ApiConfigs
                             {
                                 ws.FailedPing = ws.FailedPing + 1;
                                 ws.Website = o.WebSite;
-                                updateModelList.Add(ws);
+                                _webSiteAvailability.Update(ws);
                             }
                         }
                         if (pingCheck == true)
@@ -130,7 +130,7 @@ namespace ApiConfigs
                             {
                                 ws.SuccessfulPing = ws.SuccessfulPing + 1;
                                 ws.Website = o.WebSite;
-                                updateModelList.Add(ws);
+                                _webSiteAvailability.Update(ws);
                             }
                         }
                     }
@@ -154,7 +154,7 @@ namespace ApiConfigs
                             {
                                 ws.SuccessfulPing = ws.SuccessfulPing + 1;
                                 ws.Website = o.WebSite;
-                                updateModelList.Add(ws);
+                                _webSiteAvailability.Update(ws);
                             }
                         }
                         if (response.StatusCode != HttpStatusCode.OK && pingCheck != true)
@@ -176,7 +176,7 @@ namespace ApiConfigs
                             {
                                 ws.FailedPing = ws.FailedPing + 1;
                                 ws.Website = o.WebSite;
-                                updateModelList.Add(ws);
+                                _webSiteAvailability.Update(ws);
                             }
                         }
                     }
@@ -185,11 +185,7 @@ namespace ApiConfigs
                 {
                     _webSiteAvailability.AddRange(addModelList);
                 }
-                if (updateModelList.Count() > 0)
-                {
-                    _db.Context.Set<WebSiteAvailability>().UpdateRange(updateModelList);
-                    _db.Context.SaveChanges();
-                }
+                
                 if (OrgList.Count() > 0)
                 {
                     foreach (Organizations o in OrgList)

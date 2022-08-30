@@ -16,7 +16,7 @@ namespace AdminApi
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(_pingService.CheckPing, null, TimeSpan.Zero, TimeSpan.FromMinutes(60));
+            _timer = new Timer(_pingService.CheckPing, null, TimeSpan.Zero, TimeSpan.FromMinutes(20));
             return Task.CompletedTask;
         }
 
