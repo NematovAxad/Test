@@ -59,7 +59,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpGet]
-        public async Task<ResponseCore<SecondRequestQueryResult>> ReesterProjectDetail([FromQuery] int id)
+        public async Task<ResponseCore<SecondRequestQueryResult>> ReesterProjectDetails([FromQuery] int id)
         {
             try
             {
