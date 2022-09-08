@@ -84,5 +84,6 @@ namespace MainInfrastructures.Db
         public DbSet<SiteFailsTable> SiteFailsTable { get; set; }
         public DbSet<SiteRequirementsSample> SiteRequirementsSamples { get; set; }
         public DbSet<ReestrProjectPosition> ReestrProjectPosition { get; set; }
+        public DbSet<ReestrProjectIdentities> ReestrProjectIdentities { get; set; }
     }
 }
