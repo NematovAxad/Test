@@ -45,7 +45,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<ReestrProjectIdentityCommandResult>> Add([FromBody] ReestrProjectIdentityCommand model)
+        public async Task<ResponseCore<ReestrProjectIdentityCommandResult>> Add([FromQuery] ReestrProjectIdentityCommand model)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<ReestrProjectIdentityCommandResult>> Put([FromBody] ReestrProjectIdentityCommand model)
+        public async Task<ResponseCore<ReestrProjectIdentityCommandResult>> Put([FromQuery] ReestrProjectIdentityCommand model)
         {
             try
             {
