@@ -32,6 +32,8 @@ namespace ApiConfigs
         }
         public bool Ping(string website)
         {
+            if (String.IsNullOrEmpty(website))
+                website = "test";
             bool pingable = false;
             Ping pinger = null;
             try
