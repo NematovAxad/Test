@@ -80,13 +80,14 @@ namespace ApiConfigs
                 var webSite = _webSiteAvailability.Find(w => w.DeadlineId == deadline.Id).ToList();
                 foreach (var o in organizations)
                 {
-                    bool pingCheck = Ping(o.WebSite);
+                    string orgWebsite = String.IsNullOrEmpty(o.WebSite) ? "test" : o.WebSite;
+                    bool pingCheck = Ping(orgWebsite);
                     var ws = webSite.Where(w => w.OrganizationId == o.Id).FirstOrDefault();
                     HttpWebResponse response = null;
                     try
                     {
-                        string uri = o.WebSite.Replace("www.", string.Empty);
-                        WebRequest request = System.Net.WebRequest.Create(o.WebSite);
+                        string uri = orgWebsite.Replace("www.", string.Empty);
+                        WebRequest request = System.Net.WebRequest.Create(uri);
                         request.Credentials = CredentialCache.DefaultCredentials;
                         response = (HttpWebResponse)request.GetResponse();
                     }
