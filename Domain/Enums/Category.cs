@@ -4,6 +4,6 @@
     {
         GovernmentOrganizations = 1,
         FarmOrganizations,
-        Both
+        Governorship
     }
 }
