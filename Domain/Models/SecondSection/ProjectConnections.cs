@@ -13,13 +13,13 @@ namespace Domain.Models.SecondSection
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("reestr_project_connection_id")]
+        [Column("parent_id")]
         [ForeignKey("ReestrProjectConnection")]
-        public int ReestrProjectConnectionId { get; set; }
+        public int ParentId { get; set; }
         public ReestrProjectConnection ReestrProjectConnection { get; set; }
 
         [Column("connection_type")]
-        public ReestrProjectConnectionType ReestrProjectConnectionType { get; set; }
+        public ReestrProjectConnectionType ConnectionType { get; set; }
 
         [Column("platform_reestr_id")]
         public string PlatformReestrId { get; set; }

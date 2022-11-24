@@ -31,7 +31,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         {
             if (request.OrgId == 0 || request.ReestrProjectId == 0)
                 throw ErrorStates.NotEntered("id not entered");
-            var projectPosition = _projectConnection.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId).Include(mbox=>mbox.ProjectConnections).FirstOrDefault();
+            var projectPosition = _projectConnection.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId).Include(mbox=>mbox.Connections).FirstOrDefault();
 
             
 

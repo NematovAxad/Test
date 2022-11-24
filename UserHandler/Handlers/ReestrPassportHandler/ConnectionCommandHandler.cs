@@ -53,9 +53,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
 
 
-            var projectConnection = _reestrProjectConnection.Find(p => p.Id == model.ReestrProjectConnectionId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
+            var projectConnection = _reestrProjectConnection.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
             if (projectConnection == null)
-                throw ErrorStates.NotFound(model.ReestrProjectConnectionId.ToString());
+                throw ErrorStates.NotFound(model.ParentId.ToString());
 
             var connection = _projectConnection.Find(p => p.PlatformReestrId == model.PlatformReestrId).FirstOrDefault();
             if (connection != null)
@@ -67,8 +67,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
             if (((model.UserOrgId == projectConnection.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
-                addModel.ReestrProjectConnectionId = model.ReestrProjectConnectionId;
-                addModel.ReestrProjectConnectionType = model.ReestrProjectConnectionType;
+                addModel.ParentId = model.ParentId;
+                addModel.ConnectionType = model.ConnectionType;
                 addModel.PlatformReestrId = model.PlatformReestrId;
                 addModel.FilePath = model.FilePath;
             }
@@ -89,18 +89,18 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
 
-            var projectConnection = _reestrProjectConnection.Find(p => p.Id == model.ReestrProjectConnectionId).Include(mbox => mbox.Organizations).FirstOrDefault();
+            var projectConnection = _reestrProjectConnection.Find(p => p.Id == model.ParentId).Include(mbox => mbox.Organizations).FirstOrDefault();
             if (projectConnection == null)
-                throw ErrorStates.NotAllowed(model.ReestrProjectConnectionId.ToString());
+                throw ErrorStates.NotAllowed(model.ParentId.ToString());
 
             var connection = _projectConnection.Find(p => p.Id == model.Id).FirstOrDefault();
             if (connection == null)
-                throw ErrorStates.NotAllowed(model.ReestrProjectConnectionId.ToString());
+                throw ErrorStates.NotAllowed(model.ParentId.ToString());
 
 
             if (((model.UserOrgId == projectConnection.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
-                connection.ReestrProjectConnectionType = model.ReestrProjectConnectionType;
+                connection.ConnectionType = model.ConnectionType;
                 connection.PlatformReestrId = model.PlatformReestrId;
                 connection.FilePath = model.FilePath;
             }
@@ -115,7 +115,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         {
             var connection = _projectConnection.Find(p => p.PlatformReestrId == model.PlatformReestrId).FirstOrDefault();
             if (connection == null)
-                throw ErrorStates.NotAllowed(model.ReestrProjectConnectionId.ToString());
+                throw ErrorStates.NotFound(model.Id.ToString());
             _projectConnection.Remove(connection);
         }
     }

@@ -26,7 +26,7 @@ namespace Domain.Models.SecondSection
         [Column("org_comment")]
         public string OrgComment { get; set; }
 
-        public ICollection<ProjectConnections> ProjectConnections { get; set; }
+        public ICollection<ProjectConnections> Connections { get; set; }
 
         [Column("expert_except")]
         public bool ExpertExcept { get; set; }

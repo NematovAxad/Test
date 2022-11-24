@@ -25,9 +25,9 @@ namespace UserHandler.Commands.ReestrPassportCommands
         public EventType EventType { get; set; }
         public int Id { get; set; }
 
-        public int ReestrProjectConnectionId { get; set; }
+        public int ParentId { get; set; }
 
-        public ReestrProjectConnectionType ReestrProjectConnectionType { get; set; }
+        public ReestrProjectConnectionType ConnectionType { get; set; }
 
         public string PlatformReestrId { get; set; }
 

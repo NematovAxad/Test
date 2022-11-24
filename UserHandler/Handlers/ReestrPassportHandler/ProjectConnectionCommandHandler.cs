@@ -92,7 +92,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox => mbox.ProjectConnections).FirstOrDefault();
+            var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox => mbox.Connections).FirstOrDefault();
             if (projectConnection == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
             
@@ -105,7 +105,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
                 if(model.Exist == false)
                 {
-                    _connections.RemoveRange(projectConnection.ProjectConnections);
+                    _connections.RemoveRange(projectConnection.Connections);
                 }
             }
                 
