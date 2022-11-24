@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221124063541_reestrprojectposition")]
+    partial class reestrprojectposition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1745,41 +1747,6 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("organization_socials","organizations");
                 });
 
-            modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectConnection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("ExpertComment")
-                        .HasColumnName("expert_comment")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("ExpertExcept")
-                        .HasColumnName("expert_except")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("OrgComment")
-                        .HasColumnName("org_comment")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnName("organization_id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ReestrProjectId")
-                        .HasColumnName("reestr_project_id")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("reestr_project_connection","reestrprojects");
-                });
-
             modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectIdentities", b =>
                 {
                     b.Property<int>("Id")
@@ -1828,7 +1795,7 @@ namespace MainInfrastructures.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("reestr_project_identities","reestrprojects");
+                    b.ToTable("reestr_project_identities","organizations");
                 });
 
             modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectPosition", b =>
@@ -1863,7 +1830,7 @@ namespace MainInfrastructures.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("reestr_project_position","reestrprojects");
+                    b.ToTable("reestr_project_position","organizations");
                 });
 
             modelBuilder.Entity("Domain.Models.SecondSection.SiteRequirementsSample", b =>
@@ -3161,15 +3128,6 @@ namespace MainInfrastructures.Migrations
                 });
 
             modelBuilder.Entity("Domain.Models.SecondSection.OrganizationSocials", b =>
-                {
-                    b.HasOne("Domain.Models.Organizations", "Organizations")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectConnection", b =>
                 {
                     b.HasOne("Domain.Models.Organizations", "Organizations")
                         .WithMany()

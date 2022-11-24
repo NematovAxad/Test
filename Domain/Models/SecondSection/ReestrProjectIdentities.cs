@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Models.SecondSection
 {
-    [Table("reestr_project_identities", Schema = "organizations")]
+    [Table("reestr_project_identities", Schema = "reestrprojects")]
     public class ReestrProjectIdentities:IDomain<int>
     {
         [Column("id")]

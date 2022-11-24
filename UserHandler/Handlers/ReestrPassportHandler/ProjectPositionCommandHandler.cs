@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using DocumentFormat.OpenXml.Office2013.Excel;
+using Domain;
 using Domain.Models;
 using Domain.Models.SecondSection;
 using Domain.Permission;
@@ -59,15 +60,11 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             {
                 OrganizationId = model.OrganizationId,
                 ReestrProjectId = model.ReestrProjectId,
-                OrgComment = model.OrgComment,
                 ExpertExcept = model.ExpertExcept,
-                ExpertComment = model.ExpertComment
+                ExpertComment = model.ExpertComment,
+                FilePath = model.FilePath
             };
-            if (!String.IsNullOrEmpty(model.Screenshot))
-            {
-                var filePath = FileState.AddFile("screens", model.Screenshot);
-                addModel.ScreenLink = filePath;
-            }
+            
             _projectPosition.Add(addModel);
         }
         public void Update(ProjectPositionCommand model)
@@ -87,14 +84,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (projectPosition == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-            projectPosition.OrgComment = model.OrgComment;
             projectPosition.ExpertExcept = model.ExpertExcept;
             projectPosition.ExpertComment = model.ExpertComment;
 
-            if (!String.IsNullOrEmpty(model.Screenshot))
+            if (!String.IsNullOrEmpty(model.FilePath))
             {
-                var filePath = FileState.AddFile("screens", model.Screenshot);
-                projectPosition.ScreenLink = filePath;
+                
+                projectPosition.FilePath = model.FilePath;
             }
             _projectPosition.Update(projectPosition);
         }
