@@ -1,33 +1,33 @@
 ﻿using Domain.Models;
-using Domain.Models.SecondSection;
-using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 using UserHandler.Commands.ReestrPassportCommands;
 using UserHandler.Results.ReestrPassportResult;
+using Domain.Models.SecondSection;
+using System.Linq;
+using Domain.Permission;
 
 namespace UserHandler.Handlers.ReestrPassportHandler
 {
-    public class ProjectConnectionCommandHandler : IRequestHandler<ProjectConnectionCommand, ProjectConnectionResult>
+    public class ProjectExpertDecisionCommandHandler : IRequestHandler<ProjectExpertDecisionCommand, ProjectExpertDecisionCommandResult>
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<ReestrProjectConnection, int> _projectConnection;
+        private readonly IRepository<ReestrProjectExpertDecision, int> _projectExpertDecision;
 
-        public ProjectConnectionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectConnection, int> projectConnection)
+        public ProjectExpertDecisionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectExpertDecision, int> projectExpertDecision)
         {
             _organization = organization;
             _deadline = deadline;
-            _projectConnection = projectConnection;
+            _projectExpertDecision = projectExpertDecision;
         }
-        public async Task<ProjectConnectionResult> Handle(ProjectConnectionCommand request, CancellationToken cancellationToken)
+        public async Task<ProjectExpertDecisionCommandResult> Handle(ProjectExpertDecisionCommand request, CancellationToken cancellationToken)
         {
             switch (request.EventType)
             {
@@ -35,9 +35,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 case Domain.Enums.EventType.Update: Update(request); break;
                 case Domain.Enums.EventType.Delete: Delete(request); break;
             }
-            return new ProjectConnectionResult() { IsSuccess = true };
+            return new ProjectExpertDecisionCommandResult() { IsSuccess = true };
         }
-        public void Add(ProjectConnectionCommand model)
+        public void Add(ProjectExpertDecisionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -50,14 +50,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
-            if (projectConnection != null)
+            var projectExpertDecision = _projectExpertDecision.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
+            if (projectExpertDecision != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectConnection addModel = new ReestrProjectConnection();
+            ReestrProjectExpertDecision addModel = new ReestrProjectExpertDecision();
 
-            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                addModel.OrgComment = model.OrgComment;
-            if(!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p==Permissions.OPERATOR_RIGHTS))
+            
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 addModel.OrganizationId = model.OrganizationId;
                 addModel.ReestrProjectId = model.ReestrProjectId;
@@ -65,9 +64,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 addModel.ExpertExcept = model.ExpertExcept;
             }
 
-            _projectConnection.Add(addModel);    
+            _projectExpertDecision.Add(addModel);
         }
-        public void Update(ProjectConnectionCommand model)
+        public void Update(ProjectExpertDecisionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -80,32 +79,29 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
-            if (projectConnection == null)
+            var projectExpertDecision = _projectExpertDecision.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
+            if (projectExpertDecision == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
-            ReestrProjectConnection updateModel = new ReestrProjectConnection();
+            ReestrProjectExpertDecision updateModel = new ReestrProjectExpertDecision();
 
-            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-            {
-                if(!String.IsNullOrEmpty(model.OrgComment))
-                    updateModel.OrgComment = model.OrgComment;
-            }
-                
+            
+
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
-                if (!String.IsNullOrEmpty(model.ExpertComment))
+                if(!String.IsNullOrEmpty(model.ExpertComment))
                     updateModel.ExpertComment = model.ExpertComment;
                 updateModel.ExpertExcept = model.ExpertExcept;
             }
-            _projectConnection.Update(updateModel);
+
+            _projectExpertDecision.Update(updateModel);
         }
 
-        public void Delete(ProjectConnectionCommand model)
+        public void Delete(ProjectExpertDecisionCommand model)
         {
-            var projectConnection = _projectConnection.Find(p => p.Id == model.Id).FirstOrDefault();
-            if (projectConnection == null)
+            var projectExpertDecision = _projectExpertDecision.Find(p => p.Id == model.Id).FirstOrDefault();
+            if (projectExpertDecision == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
-            _projectConnection.Remove(projectConnection);
+            _projectExpertDecision.Remove(projectExpertDecision);
         }
     }
 }
