@@ -26,12 +26,7 @@ namespace UserHandler.Commands.ReestrProjectIdentityCommand
         public int Id { get; set; }
         public int OrganizationId { get; set; }
         public int ReestrProjectId { get; set; }
-        public int IdentityId { get; set; }
-        public IFormFile File { get; set; }
-        public string ScreenshotLink { get; set; }
-        public string Screenshot { get; set; }
-        public string ProjectOrg { get; set; }
-        public string ProjectName { get; set; }
+        
         public bool ExpertExcept { get; set; }
         public string ExpertComment { get; set; }
     }

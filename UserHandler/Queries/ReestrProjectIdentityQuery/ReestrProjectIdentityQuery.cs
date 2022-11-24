@@ -10,6 +10,5 @@ namespace UserHandler.Queries.ReestrProjectIdentityQuery
     {
         public int OrgId { get; set; }
         public int ReestrProjectId { get; set; }
-        public int IdentityId { get; set; }
     }
 }

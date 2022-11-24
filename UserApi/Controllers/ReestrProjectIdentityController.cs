@@ -25,15 +25,14 @@ namespace UserApi.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<ResponseCore<ReestrProjectIdentityQueryResult>> Get([FromQuery] int organizationId, int reestrProjectId, int identityId)
+        public async Task<ResponseCore<ReestrProjectIdentityQueryResult>> Get([FromQuery] int organizationId, int reestrProjectId)
         {
             try
             {
                 ReestrProjectIdentityQuery model = new ReestrProjectIdentityQuery()
                 {
                     OrgId = organizationId,
-                    ReestrProjectId = reestrProjectId,
-                    IdentityId = identityId
+                    ReestrProjectId = reestrProjectId
                 };
 
                 var result = await _mediator.Send<ReestrProjectIdentityQueryResult>(model);

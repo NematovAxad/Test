@@ -51,29 +51,17 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId && p.IdentityId == model.IdentityId).FirstOrDefault();
+            var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectIdentities != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             ReestrProjectIdentities addModel = new ReestrProjectIdentities
             {
                 OrganizationId = model.OrganizationId,
                 ReestrProjectId = model.ReestrProjectId,
-                IdentityId = model.IdentityId,
-                ProjectOrg = model.ProjectOrg,
-                ProjectName = model.ProjectName,
                 ExpertComment = model.ExpertComment,
                 ExpertExcept = model.ExpertExcept
             };
-            if (!String.IsNullOrEmpty(model.Screenshot))
-            {
-                var filePath = FileState.AddFile("screens", model.Screenshot);
-                addModel.ScreenshotLink = filePath;
-            }
-            if(model.File != null)
-            {
-                var filePath = FileState.AddFile("commonDocs", model.File);
-                addModel.FileLink = filePath;
-            }
+           
             _projectIdentities.Add(addModel);
         }
         public void Update(ReestrProjectIdentityCommand model)
@@ -89,25 +77,14 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId && p.IdentityId == model.IdentityId).FirstOrDefault();
+            var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectIdentities == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            projectIdentities.ProjectOrg = model.ProjectOrg;
-            projectIdentities.ProjectName = model.ProjectName;
+            
             projectIdentities.ExpertComment = model.ExpertComment;
             projectIdentities.ExpertExcept = model.ExpertExcept;
 
-            if (!String.IsNullOrEmpty(model.Screenshot))
-            {
-                var filePath = FileState.AddFile("screens", model.Screenshot);
-                projectIdentities.ScreenshotLink = filePath;
-            }
-            if (model.File != null)
-            {
-                var filePath = FileState.AddFile("commonDocs", model.File);
-                projectIdentities.FileLink = filePath;
-            }
             _projectIdentities.Update(projectIdentities);
         }
         public void Delete(ReestrProjectIdentityCommand model)

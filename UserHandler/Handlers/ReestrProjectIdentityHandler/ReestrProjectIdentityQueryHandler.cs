@@ -28,9 +28,9 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
         }
         public async Task<ReestrProjectIdentityQueryResult> Handle(ReestrProjectIdentityQuery request, CancellationToken cancellationToken)
         {
-            if (request.OrgId == 0 || request.ReestrProjectId == 0 || request.IdentityId == 0)
+            if (request.OrgId == 0 || request.ReestrProjectId == 0)
                 throw ErrorStates.NotEntered("id not entered");
-            var projectIdentity = _projectIdentities.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId && p.IdentityId == request.IdentityId).FirstOrDefault();
+            var projectIdentity = _projectIdentities.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId).FirstOrDefault();
 
             ReestrProjectIdentityQueryResult result = new ReestrProjectIdentityQueryResult();
             result.Identities = projectIdentity;
