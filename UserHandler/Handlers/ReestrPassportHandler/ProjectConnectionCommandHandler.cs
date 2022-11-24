@@ -4,6 +4,7 @@ using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,14 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectConnection, int> _projectConnection;
+        private readonly IRepository<ProjectConnections, int> _connections;
 
-        public ProjectConnectionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectConnection, int> projectConnection)
+        public ProjectConnectionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectConnection, int> projectConnection, IRepository<ProjectConnections, int> connections)
         {
             _organization = organization;
             _deadline = deadline;
             _projectConnection = projectConnection;
+            _connections = connections;
         }
         public async Task<ProjectConnectionResult> Handle(ProjectConnectionCommand request, CancellationToken cancellationToken)
         {
@@ -50,20 +53,24 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
+           
+
             var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectConnection != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+
             ReestrProjectConnection addModel = new ReestrProjectConnection();
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
 
-            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
                 if(!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
+                addModel.Exist = model.Exist;
             }
                
-            if(!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p==Permissions.OPERATOR_RIGHTS))
+            if(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p==Permissions.OPERATOR_RIGHTS))
             {
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
@@ -85,18 +92,24 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
+            var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox => mbox.ProjectConnections).FirstOrDefault();
             if (projectConnection == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
             
 
-            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
                 if(!String.IsNullOrEmpty(model.OrgComment))
                     projectConnection.OrgComment = model.OrgComment;
+                projectConnection.Exist = model.Exist;
+
+                if(model.Exist == false)
+                {
+                    _connections.RemoveRange(projectConnection.ProjectConnections);
+                }
             }
                 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectConnection.ExpertComment = model.ExpertComment;

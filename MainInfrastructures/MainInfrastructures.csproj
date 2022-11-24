@@ -51,6 +51,10 @@
     <Compile Remove="Migrations\20220802130204_newtableadded.Designer.cs" />
     <Compile Remove="Migrations\20220907072431_newtable.cs" />
     <Compile Remove="Migrations\20220907072431_newtable.Designer.cs" />
+    <Compile Remove="Migrations\20221124144711_itemsadded.cs" />
+    <Compile Remove="Migrations\20221124144711_itemsadded.Designer.cs" />
+    <Compile Remove="Migrations\20221124145005_itemsadded.cs" />
+    <Compile Remove="Migrations\20221124145005_itemsadded.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -86,5 +86,6 @@ namespace MainInfrastructures.Db
         public DbSet<ReestrProjectPosition> ReestrProjectPosition { get; set; }
         public DbSet<ReestrProjectIdentities> ReestrProjectIdentities { get; set; }
         public DbSet<ReestrProjectConnection> ReestrProjectConnection { get; set; }
+        public DbSet<ProjectConnections> ProjectConnections { get; set; }
     }
 }

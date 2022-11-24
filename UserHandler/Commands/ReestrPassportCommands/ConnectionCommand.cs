@@ -1,5 +1,4 @@
 ﻿using Domain.Enums;
-using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using UserHandler.Results.ReestrPassportResult;
 
 namespace UserHandler.Commands.ReestrPassportCommands
 {
-    public class ProjectConnectionCommand : IRequest<ProjectConnectionResult>
+    public class ConnectionCommand:IRequest<ConnectionCommandResult>
     {
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
@@ -24,19 +23,14 @@ namespace UserHandler.Commands.ReestrPassportCommands
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public EventType EventType { get; set; }
-
         public int Id { get; set; }
 
-        public int OrganizationId { get; set; }
+        public int ReestrProjectConnectionId { get; set; }
 
-        public int ReestrProjectId { get; set; }
+        public ReestrProjectConnectionType ReestrProjectConnectionType { get; set; }
 
-        public bool Exist { get; set; }
+        public string PlatformReestrId { get; set; }
 
-        public string OrgComment { get; set; }
-
-        public bool ExpertExcept { get; set; }
-
-        public string ExpertComment { get; set; }
+        public string FilePath { get; set; }
     }
 }

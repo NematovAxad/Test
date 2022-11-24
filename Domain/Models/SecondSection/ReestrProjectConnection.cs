@@ -1,4 +1,5 @@
-﻿using JohaRepository;
+﻿using Domain.Enums;
+using JohaRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,10 +16,18 @@ namespace Domain.Models.SecondSection
         [ForeignKey("Organizations")]
         public int OrganizationId { get; set; }
         public Organizations Organizations { get; set; }
+
         [Column("reestr_project_id")]
         public int ReestrProjectId { get; set; }
+
+        [Column("exist")]
+        public bool Exist { get; set; }
+        
         [Column("org_comment")]
         public string OrgComment { get; set; }
+
+        public ICollection<ProjectConnections> ProjectConnections { get; set; }
+
         [Column("expert_except")]
         public bool ExpertExcept { get; set; }
         [Column("expert_comment")]

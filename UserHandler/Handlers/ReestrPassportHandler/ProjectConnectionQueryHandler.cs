@@ -11,6 +11,7 @@ using UserHandler.Queries.ReestrPassportQuery;
 using UserHandler.Results.ReestrPassportResult;
 using Domain.States;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace UserHandler.Handlers.ReestrPassportHandler
 {
@@ -30,7 +31,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         {
             if (request.OrgId == 0 || request.ReestrProjectId == 0)
                 throw ErrorStates.NotEntered("id not entered");
-            var projectPosition = _projectConnection.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId).FirstOrDefault();
+            var projectPosition = _projectConnection.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId).Include(mbox=>mbox.ProjectConnections).FirstOrDefault();
+
+            
 
             ProjectConnectionQueryResult result = new ProjectConnectionQueryResult();
             result.ProjectConnection = projectPosition;
