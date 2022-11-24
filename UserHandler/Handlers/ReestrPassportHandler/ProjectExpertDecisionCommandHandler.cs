@@ -54,13 +54,14 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (projectExpertDecision != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             ReestrProjectExpertDecision addModel = new ReestrProjectExpertDecision();
+            addModel.OrganizationId = model.OrganizationId;
+            addModel.ReestrProjectId = model.ReestrProjectId;
 
-            
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
-                addModel.OrganizationId = model.OrganizationId;
-                addModel.ReestrProjectId = model.ReestrProjectId;
-                addModel.ExpertComment = model.ExpertComment;
+                
+                if (!String.IsNullOrEmpty(model.ExpertComment))
+                    addModel.ExpertComment = model.ExpertComment;
                 addModel.ExpertExcept = model.ExpertExcept;
             }
 
@@ -82,18 +83,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             var projectExpertDecision = _projectExpertDecision.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectExpertDecision == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
-            ReestrProjectExpertDecision updateModel = new ReestrProjectExpertDecision();
 
-            
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if(!String.IsNullOrEmpty(model.ExpertComment))
-                    updateModel.ExpertComment = model.ExpertComment;
-                updateModel.ExpertExcept = model.ExpertExcept;
+                    projectExpertDecision.ExpertComment = model.ExpertComment;
+                projectExpertDecision.ExpertExcept = model.ExpertExcept;
             }
 
-            _projectExpertDecision.Update(updateModel);
+            _projectExpertDecision.Update(projectExpertDecision);
         }
 
         public void Delete(ProjectExpertDecisionCommand model)

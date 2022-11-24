@@ -54,14 +54,19 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectIdentities != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectIdentities addModel = new ReestrProjectIdentities
+            ReestrProjectIdentities addModel = new ReestrProjectIdentities();
+
+            addModel.OrganizationId = model.OrganizationId;
+            addModel.ReestrProjectId = model.ReestrProjectId;
+
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
-                OrganizationId = model.OrganizationId,
-                ReestrProjectId = model.ReestrProjectId,
-                ExpertComment = model.ExpertComment,
-                ExpertExcept = model.ExpertExcept
-            };
-           
+                if (!String.IsNullOrEmpty(model.ExpertComment))
+                    addModel.ExpertComment = model.ExpertComment;
+                addModel.ExpertExcept = model.ExpertExcept;
+            }
+
+
             _projectIdentities.Add(addModel);
         }
         public void Update(ReestrProjectIdentityCommand model)
@@ -81,9 +86,13 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (projectIdentities == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            
-            projectIdentities.ExpertComment = model.ExpertComment;
-            projectIdentities.ExpertExcept = model.ExpertExcept;
+
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            {
+                if (!String.IsNullOrEmpty(model.ExpertComment))
+                    projectIdentities.ExpertComment = model.ExpertComment;
+                projectIdentities.ExpertExcept = model.ExpertExcept;
+            }
 
             _projectIdentities.Update(projectIdentities);
         }

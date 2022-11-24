@@ -54,14 +54,19 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (projectConnection != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             ReestrProjectConnection addModel = new ReestrProjectConnection();
+            addModel.OrganizationId = model.OrganizationId;
+            addModel.ReestrProjectId = model.ReestrProjectId;
 
             if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                addModel.OrgComment = model.OrgComment;
+            {
+                if(!String.IsNullOrEmpty(model.OrgComment))
+                    addModel.OrgComment = model.OrgComment;
+            }
+               
             if(!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p==Permissions.OPERATOR_RIGHTS))
             {
-                addModel.OrganizationId = model.OrganizationId;
-                addModel.ReestrProjectId = model.ReestrProjectId;
-                addModel.ExpertComment = model.ExpertComment;
+                if(!String.IsNullOrEmpty(model.ExpertComment))
+                    addModel.ExpertComment = model.ExpertComment;
                 addModel.ExpertExcept = model.ExpertExcept;
             }
 
@@ -83,21 +88,21 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectConnection == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
-            ReestrProjectConnection updateModel = new ReestrProjectConnection();
+            
 
             if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 if(!String.IsNullOrEmpty(model.OrgComment))
-                    updateModel.OrgComment = model.OrgComment;
+                    projectConnection.OrgComment = model.OrgComment;
             }
                 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
-                    updateModel.ExpertComment = model.ExpertComment;
-                updateModel.ExpertExcept = model.ExpertExcept;
+                    projectConnection.ExpertComment = model.ExpertComment;
+                projectConnection.ExpertExcept = model.ExpertExcept;
             }
-            _projectConnection.Update(updateModel);
+            _projectConnection.Update(projectConnection);
         }
 
         public void Delete(ProjectConnectionCommand model)

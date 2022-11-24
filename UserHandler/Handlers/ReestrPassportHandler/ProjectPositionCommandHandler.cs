@@ -56,16 +56,24 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             var projectPosition = _projectPosition.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectPosition != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectPosition addModel = new ReestrProjectPosition()
+            ReestrProjectPosition addModel = new ReestrProjectPosition();
+            addModel.OrganizationId = model.OrganizationId;
+            addModel.ReestrProjectId = model.ReestrProjectId;
+
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
-                OrganizationId = model.OrganizationId,
-                ReestrProjectId = model.ReestrProjectId,
-                ExpertExcept = model.ExpertExcept,
-                ExpertComment = model.ExpertComment,
-                FilePath = model.FilePath
-            };
-            
-            _projectPosition.Add(addModel);
+                addModel.ExpertExcept = model.ExpertExcept;
+                if(!String.IsNullOrEmpty(model.ExpertComment))
+                    addModel.ExpertComment = model.ExpertComment;
+            }
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            {
+                if(!String.IsNullOrEmpty(model.FilePath))
+                    addModel.FilePath = model.FilePath;
+            }
+                
+
+                _projectPosition.Add(addModel);
         }
         public void Update(ProjectPositionCommand model)
         {
@@ -84,14 +92,19 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (projectPosition == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-            projectPosition.ExpertExcept = model.ExpertExcept;
-            projectPosition.ExpertComment = model.ExpertComment;
-
-            if (!String.IsNullOrEmpty(model.FilePath))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
-                
-                projectPosition.FilePath = model.FilePath;
+                projectPosition.ExpertExcept = model.ExpertExcept;
+                if(!String.IsNullOrEmpty(model.ExpertComment))
+                    projectPosition.ExpertComment = model.ExpertComment;
+
             }
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            {
+                if(!String.IsNullOrEmpty(model.FilePath))
+                    projectPosition.FilePath = model.FilePath;
+            }
+               
             _projectPosition.Update(projectPosition);
         }
         public void Delete(ProjectPositionCommand model)
