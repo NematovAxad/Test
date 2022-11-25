@@ -7,8 +7,8 @@ using System.Text;
 
 namespace Domain.Models.SecondSection
 {
-    [Table("project_connections", Schema = "reestrprojects")]
-    public class ProjectConnections:IDomain<int>
+    [Table("project_classifications", Schema = "reestrprojects")]
+    public class ProjectClassifications:IDomain<int>
     {
         [Column("id")]
         public int Id { get; set; }
@@ -16,13 +16,13 @@ namespace Domain.Models.SecondSection
         [Column("parent_id")]
         public int ParentId { get; set; }
         [ForeignKey(nameof(ParentId))]
-        public ReestrProjectConnection ReestrProjectConnection { get; set; }
+        public ReestrProjectClassifications ReestrProjectClassifications { get; set; }
 
-        [Column("connection_type")]
-        public ReestrProjectConnectionType ConnectionType { get; set; }
+        [Column("classification_type")]
+        public ReestrProjectClassificationType ClassificationType { get; set; }
 
-        [Column("platform_reestr_id")]
-        public string PlatformReestrId { get; set; }
+        [Column("classification_uri")]
+        public string ClassificationUri { get; set; }
 
 
         [Column("file_path")]

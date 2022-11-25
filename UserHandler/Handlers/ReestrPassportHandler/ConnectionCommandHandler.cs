@@ -57,7 +57,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (projectConnection == null)
                 throw ErrorStates.NotFound(model.ParentId.ToString());
 
-            var connection = _projectConnection.Find(p => p.PlatformReestrId == model.PlatformReestrId).FirstOrDefault();
+            var connection = _projectConnection.Find(p => p.ParentId == model.ParentId && p.PlatformReestrId == model.PlatformReestrId).FirstOrDefault();
             if (connection != null)
                 throw ErrorStates.NotAllowed(model.PlatformReestrId.ToString());
 
@@ -102,7 +102,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             {
                 connection.ConnectionType = model.ConnectionType;
                 connection.PlatformReestrId = model.PlatformReestrId;
-                connection.FilePath = model.FilePath;
+                if(!String.IsNullOrEmpty(model.FilePath))
+                    connection.FilePath = model.FilePath;
+
             }
             else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 

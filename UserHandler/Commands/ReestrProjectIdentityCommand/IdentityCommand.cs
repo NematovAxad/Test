@@ -1,8 +1,6 @@
 ﻿using Domain.Enums;
 using Domain.Models.SecondSection;
-using Domain.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,7 +10,7 @@ using UserHandler.Results.ReestrProjectIdentityResult;
 
 namespace UserHandler.Commands.ReestrProjectIdentityCommand
 {
-    public class ReestrProjectIdentityCommand:IRequest<ReestrProjectIdentityCommandResult>
+    public class IdentityCommand:IRequest<IdentitiyCommandResult>
     {
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
@@ -27,11 +25,9 @@ namespace UserHandler.Commands.ReestrProjectIdentityCommand
         [Newtonsoft.Json.JsonIgnore]
         public EventType EventType { get; set; }
         public int Id { get; set; }
-        public int OrganizationId { get; set; }
-        public int ReestrProjectId { get; set; }
-        public bool Exist { get; set; }
-        public string OrgComment { get; set; }
-        public bool ExpertExcept { get; set; }
-        public string ExpertComment { get; set; }
+        public int ParentId { get; set; }
+        public ReestrProjectIdentityType IdentitiyType { get; set; }
+        public string IdentityUrl { get; set; }
+        public string FilePath { get; set; }
     }
 }

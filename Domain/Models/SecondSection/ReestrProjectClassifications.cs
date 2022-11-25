@@ -6,8 +6,8 @@ using System.Text;
 
 namespace Domain.Models.SecondSection
 {
-    [Table("reestr_project_identities", Schema = "reestrprojects")]
-    public class ReestrProjectIdentities:IDomain<int>
+    [Table("reestr_project_classifications", Schema = "reestrprojects")]
+    public class ReestrProjectClassifications:IDomain<int>
     {
         [Column("id")]
         public int Id { get; set; }
@@ -25,12 +25,11 @@ namespace Domain.Models.SecondSection
         [Column("org_comment")]
         public string OrgComment { get; set; }
 
-        public ICollection<ProjectIdentities> Identities { get; set; }
+        public ICollection<ProjectClassifications> Classifications { get; set; }
 
         [Column("expert_except")]
         public bool ExpertExcept { get; set; }
         [Column("expert_comment")]
         public string ExpertComment { get; set; }
-
     }
 }

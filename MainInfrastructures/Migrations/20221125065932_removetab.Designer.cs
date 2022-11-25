@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221125065932_removetab")]
+    partial class removetab
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1745,37 +1747,6 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("organization_socials","organizations");
                 });
 
-            modelBuilder.Entity("Domain.Models.SecondSection.ProjectClassifications", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("ClassificationType")
-                        .HasColumnName("classification_type")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ClassificationUri")
-                        .HasColumnName("classification_uri")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnName("file_path")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnName("parent_id")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("project_classifications","reestrprojects");
-                });
-
             modelBuilder.Entity("Domain.Models.SecondSection.ProjectConnections", b =>
                 {
                     b.Property<int>("Id")
@@ -1836,45 +1807,6 @@ namespace MainInfrastructures.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("project_identities","reestrprojects");
-                });
-
-            modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectClassifications", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("Exist")
-                        .HasColumnName("exist")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ExpertComment")
-                        .HasColumnName("expert_comment")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("ExpertExcept")
-                        .HasColumnName("expert_except")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("OrgComment")
-                        .HasColumnName("org_comment")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnName("organization_id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ReestrProjectId")
-                        .HasColumnName("reestr_project_id")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("reestr_project_classifications","reestrprojects");
                 });
 
             modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectConnection", b =>
@@ -3293,15 +3225,6 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.SecondSection.ProjectClassifications", b =>
-                {
-                    b.HasOne("Domain.Models.SecondSection.ReestrProjectClassifications", "ReestrProjectClassifications")
-                        .WithMany("Classifications")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Models.SecondSection.ProjectConnections", b =>
                 {
                     b.HasOne("Domain.Models.SecondSection.ReestrProjectConnection", "ReestrProjectConnection")
@@ -3316,15 +3239,6 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.SecondSection.ReestrProjectIdentities", "ReestrProjectIdentities")
                         .WithMany("Identities")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectClassifications", b =>
-                {
-                    b.HasOne("Domain.Models.Organizations", "Organizations")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

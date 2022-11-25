@@ -55,6 +55,10 @@
     <Compile Remove="Migrations\20221124144711_itemsadded.Designer.cs" />
     <Compile Remove="Migrations\20221124145005_itemsadded.cs" />
     <Compile Remove="Migrations\20221124145005_itemsadded.Designer.cs" />
+    <Compile Remove="Migrations\20221125064917_addtablenew.cs" />
+    <Compile Remove="Migrations\20221125064917_addtablenew.Designer.cs" />
+    <Compile Remove="Migrations\20221125065538_itemsidentityadded.cs" />
+    <Compile Remove="Migrations\20221125065538_itemsidentityadded.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

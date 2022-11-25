@@ -1,18 +1,14 @@
 ﻿using Domain.Enums;
-using Domain.Models.SecondSection;
-using Domain.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Text.Json.Serialization;
-using UserHandler.Results.ReestrProjectIdentityResult;
+using UserHandler.Results.ReestrProjectClassificationResult;
 
-namespace UserHandler.Commands.ReestrProjectIdentityCommand
+namespace UserHandler.Commands.ReestrProjectClassificationCommand
 {
-    public class ReestrProjectIdentityCommand:IRequest<ReestrProjectIdentityCommandResult>
+    public class ReestrProjectClassificationCommand:IRequest<ReestrProjectClassificationCommandResult>
     {
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]

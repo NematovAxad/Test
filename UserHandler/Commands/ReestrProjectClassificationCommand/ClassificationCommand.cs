@@ -1,18 +1,16 @@
 ﻿using Domain.Enums;
 using Domain.Models.SecondSection;
-using Domain.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Text.Json.Serialization;
-using UserHandler.Results.ReestrProjectIdentityResult;
+using UserHandler.Results.ReestrProjectClassificationCommandResult;
 
-namespace UserHandler.Commands.ReestrProjectIdentityCommand
+namespace UserHandler.Commands.ReestrProjectClassificationCommand
 {
-    public class ReestrProjectIdentityCommand:IRequest<ReestrProjectIdentityCommandResult>
+    public class ClassificationCommand:IRequest<ClassificationCommandResult>
     {
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
@@ -27,11 +25,9 @@ namespace UserHandler.Commands.ReestrProjectIdentityCommand
         [Newtonsoft.Json.JsonIgnore]
         public EventType EventType { get; set; }
         public int Id { get; set; }
-        public int OrganizationId { get; set; }
-        public int ReestrProjectId { get; set; }
-        public bool Exist { get; set; }
-        public string OrgComment { get; set; }
-        public bool ExpertExcept { get; set; }
-        public string ExpertComment { get; set; }
+        public int ParentId { get; set; }
+        public ReestrProjectClassificationType ClassificationType { get; set; }
+        public string ClassificationUri { get; set; }
+        public string FilePath { get; set; }
     }
 }

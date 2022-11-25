@@ -3,6 +3,7 @@ using Domain.Models.SecondSection;
 using Domain.States;
 using JohaRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
         {
             if (request.OrgId == 0 || request.ReestrProjectId == 0)
                 throw ErrorStates.NotEntered("id not entered");
-            var projectIdentity = _projectIdentities.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId).FirstOrDefault();
+            var projectIdentity = _projectIdentities.Find(p => p.OrganizationId == request.OrgId && p.ReestrProjectId == request.ReestrProjectId).Include(mbox=>mbox.Identities).FirstOrDefault();
 
             ReestrProjectIdentityQueryResult result = new ReestrProjectIdentityQueryResult();
             result.Identities = projectIdentity;
