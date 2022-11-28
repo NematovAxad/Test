@@ -75,6 +75,7 @@ namespace UserApi.Controllers
             }
         }
 
+
         [HttpDelete]
         public async Task<ResponseCore<ProjectConnectionResult>> Delete([FromQuery] int id)
         {
