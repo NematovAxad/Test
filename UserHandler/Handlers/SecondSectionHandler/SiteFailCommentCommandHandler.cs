@@ -51,7 +51,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER && p == Permissions.OPERATOR_RIGHTS))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
 
             SiteFailComments addModel = new SiteFailComments();
@@ -79,7 +79,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if(fail is null)
                 throw ErrorStates.NotFound("comment not found!!!");
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER && p == Permissions.OPERATOR_RIGHTS))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
 
             if (!String.IsNullOrEmpty(model.ScreenBase64))
@@ -98,7 +98,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
 
         public void Delete(SiteFailCommentCommand model)
         {
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER && p == Permissions.OPERATOR_RIGHTS))
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
             _fails.Remove(model.Id);
         }
