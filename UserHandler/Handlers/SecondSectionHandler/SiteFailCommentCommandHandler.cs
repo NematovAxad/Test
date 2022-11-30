@@ -90,7 +90,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             }
             if (!String.IsNullOrEmpty(model.ExpertComment))
             {
-                fail.ScreenPath = model.ExpertComment;
+                fail.ExpertComment = model.ExpertComment;
             }
 
             _fails.Update(fail);
@@ -100,7 +100,13 @@ namespace UserHandler.Handlers.SecondSectionHandler
         {
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
-            _fails.Remove(model.Id);
+
+            var fail = _fails.Find(f => f.Id == model.Id).FirstOrDefault();
+
+            if (fail is null)
+                throw ErrorStates.NotFound("comment not found!!!");
+
+            _fails.Remove(fail);
         }
     }
 }
