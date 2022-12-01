@@ -60,13 +60,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 addModel.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
             }
-            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
                 if(!String.IsNullOrEmpty(model.FilePath))
                     addModel.FilePath = model.FilePath;
@@ -92,14 +92,14 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (projectPosition == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 projectPosition.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     projectPosition.ExpertComment = model.ExpertComment;
 
             }
-            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
                 if(!String.IsNullOrEmpty(model.FilePath))
                     projectPosition.FilePath = model.FilePath;
