@@ -74,7 +74,12 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             {
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
-                addModel.ExpertExcept = model.ExpertExcept;
+
+                if (model.AllItems > 0)
+                    addModel.AllItems = model.AllItems;
+
+                if (model.ExceptedItems > 0)
+                    addModel.Exceptedtems = model.ExceptedItems;
             }
 
             _projectConnection.Add(addModel);    
@@ -113,7 +118,12 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectConnection.ExpertComment = model.ExpertComment;
-                projectConnection.ExpertExcept = model.ExpertExcept;
+
+                if (model.AllItems > 0)
+                    projectConnection.AllItems = model.AllItems;
+
+                if (model.ExceptedItems > 0)
+                    projectConnection.Exceptedtems = model.ExceptedItems;
             }
             _projectConnection.Update(projectConnection);
         }

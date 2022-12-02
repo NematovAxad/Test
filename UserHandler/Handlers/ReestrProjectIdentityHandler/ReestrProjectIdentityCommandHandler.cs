@@ -74,7 +74,12 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
-                addModel.ExpertExcept = model.ExpertExcept;
+                
+                if (model.AllItems > 0)
+                    addModel.AllItems = model.AllItems;
+
+                if (model.ExceptedItems > 0)
+                    addModel.Exceptedtems = model.ExceptedItems;
             }
 
 
@@ -113,7 +118,12 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectIdentities.ExpertComment = model.ExpertComment;
-                projectIdentities.ExpertExcept = model.ExpertExcept;
+                
+                if (model.AllItems > 0)
+                    projectIdentities.AllItems = model.AllItems;
+
+                if (model.ExceptedItems > 0)
+                    projectIdentities.Exceptedtems = model.ExceptedItems;
             }
 
             _projectIdentities.Update(projectIdentities);

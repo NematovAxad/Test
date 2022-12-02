@@ -35,7 +35,9 @@ namespace UserHandler.Commands.ReestrPassportCommands
 
         public string OrgComment { get; set; }
 
-        public bool ExpertExcept { get; set; }
+        public int AllItems { get; set; }
+
+        public int ExceptedItems { get; set; }
 
         public string ExpertComment { get; set; }
     }

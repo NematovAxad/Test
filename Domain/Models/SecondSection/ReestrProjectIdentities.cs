@@ -27,8 +27,11 @@ namespace Domain.Models.SecondSection
 
         public ICollection<ProjectIdentities> Identities { get; set; }
 
-        [Column("expert_except")]
-        public bool ExpertExcept { get; set; }
+        [Column("all_items")]
+        public int AllItems { get; set; }
+
+        [Column("excepted_items")]
+        public int Exceptedtems { get; set; }
         [Column("expert_comment")]
         public string ExpertComment { get; set; }
 

@@ -27,7 +27,8 @@ namespace UserHandler.Commands.ReestrProjectClassificationCommand
         public int ReestrProjectId { get; set; }
         public bool Exist { get; set; }
         public string OrgComment { get; set; }
-        public bool ExpertExcept { get; set; }
+        public int AllItems { get; set; }
+        public int ExceptedItems { get; set; }
         public string ExpertComment { get; set; }
     }
 }
