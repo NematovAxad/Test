@@ -58,6 +58,7 @@ namespace UserApi.Controllers
                 return ex;
             }
         }
+
         [HttpGet]
         public async Task<ResponseCore<SecondRequestQueryResult>> ReesterProjectDetails([FromQuery] int id)
         {
