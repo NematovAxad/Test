@@ -35,5 +35,9 @@ namespace Domain.States
         {
             return new RepoException(504, "OneId not Responding");
         }
+        public static RepoException CyberSecurityServiceNotWorking()
+        {
+            return new RepoException(504, "CyberSecurity not Responding");
+        }
     }
 }

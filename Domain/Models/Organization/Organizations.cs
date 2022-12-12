@@ -50,6 +50,8 @@ namespace Domain.Models
         public string WebSite { get; set; }
         [Column("org_type")]
         public OrgTypes OrgType { get; set; }
+        [Column("cyber_security_id")]
+        public int CyberSecurityId { get; set; }
         [Column("fax")]
         public string Fax { get; set; }
         [Column("org_category")]

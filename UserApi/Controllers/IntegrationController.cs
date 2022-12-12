@@ -1,6 +1,8 @@
 ﻿using CoreResult.ResponseCores;
+using Domain.CyberSecurityModels;
 using Domain.OpenDataModels;
 using Domain.ReesterModels;
+using MainInfrastructures.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +17,12 @@ namespace UserApi.Controllers
     public class Integration : Controller
     {
         IMediator _mediator;
-        public Integration(IMediator mediator)
+        ICyberSecurityService _cyberSecurityService;
+
+        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService)
         {
             _mediator = mediator;
+            _cyberSecurityService = cyberSecurityService;
         }
 
         [HttpGet]
@@ -70,6 +75,25 @@ namespace UserApi.Controllers
                 };
 
                 var result = await _mediator.Send<SecondRequestQueryResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpGet]
+        public async Task<ResponseCore<GetOrgRanksResult>> GetCyberSecurityRank([FromQuery] int orgId, int deadlineId)
+        {
+            try
+            {
+                GetOrgRanksQuery model = new GetOrgRanksQuery()
+                {
+                    OrgId = orgId,
+                    DeadlineId = deadlineId
+                };
+
+                var result = await _cyberSecurityService.GetOrgRank(model);
                 return result;
             }
             catch (Exception ex)
