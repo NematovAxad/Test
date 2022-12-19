@@ -67,17 +67,17 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                         };
                         if(!String.IsNullOrEmpty(r.Screenshot1))
                         {
-                            var filePath = FileState.AddFile("screens", r.Screenshot1);
+                            var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot1);
                             requirement.ScreenLink1 = filePath;
                         }
                         if (!String.IsNullOrEmpty(r.Screenshot2))
                         {
-                            var filePath = FileState.AddFile("screens", r.Screenshot2);
+                            var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot2);
                             requirement.ScreenLink2 = filePath;
                         }
                         if (!String.IsNullOrEmpty(r.Screenshot3))
                         {
-                            var filePath = FileState.AddFile("screens", r.Screenshot3);
+                            var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot3);
                             requirement.ScreenLink3 = filePath;
                         }
                         addList.Add(requirement);
@@ -114,17 +114,17 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 {
                     if (!String.IsNullOrEmpty(r.Screenshot1))
                     {
-                        var filePath = FileState.AddFile("screens", r.Screenshot1);
+                        var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot1);
                         r.ScreenLink1 = filePath;
                     }
                     if (!String.IsNullOrEmpty(r.Screenshot2))
                     {
-                        var filePath = FileState.AddFile("screens", r.Screenshot2);
+                        var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot2);
                         r.ScreenLink2 = filePath;
                     }
                     if (!String.IsNullOrEmpty(r.Screenshot3))
                     {
-                        var filePath = FileState.AddFile("screens", r.Screenshot3);
+                        var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot3);
                         r.ScreenLink3 = filePath;
                     }
                     WebSiteRequirements requirement = new WebSiteRequirements

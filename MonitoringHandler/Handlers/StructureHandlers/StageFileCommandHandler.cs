@@ -41,7 +41,7 @@ namespace MonitoringHandler.Handlers.StructureHandlers
                 throw ErrorStates.NotFound(model.StageId.ToString());
             var path = "";
             if (model.File != null)
-                path = FileState.AddFile("stageFiles", model.File);
+                path = FileState.AddFile("apiMonitoring","stageFiles", model.File);
             FileStage addModel = new FileStage()
             {
                 Name = model.Name,

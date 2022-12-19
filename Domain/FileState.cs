@@ -11,12 +11,12 @@ namespace Domain
 {
     public static class FileState
     {
-        public static string AddFile(string dirName, IFormFile newFile)
+        public static string AddFile(string apiName, string dirName, IFormFile newFile)
         {
             var path = Directory.GetCurrentDirectory();
             var name = Guid.NewGuid().ToString();
             //dirName = "reestrfiles/" + dirName;
-            path = Path.Combine(path, "wwwroot", "documents", dirName);
+            path = Path.Combine(path, "wwwroot", apiName, "documents", dirName);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -35,15 +35,15 @@ namespace Domain
             }
             Console.WriteLine(path);
             File.WriteAllBytes(path, bytes);
-            return FileUrl(dirName, fileName);
+            return FileUrl(apiName, dirName, fileName);
 
         }
-        public static string AddFile(string dirName, string newFile)
+        public static string AddFile(string apiName, string dirName, string newFile)
         {
             var path = Directory.GetCurrentDirectory();
             var name = $"{Guid.NewGuid()}.jpg";
             //dirName = "reestrfiles/" + dirName;
-            path = Path.Combine(path, "wwwroot", "documents", dirName);
+            path = Path.Combine(path, "wwwroot", apiName, "documents", dirName);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -61,12 +61,12 @@ namespace Domain
 
             Console.WriteLine(path);
             File.WriteAllBytes(path, bytes);
-            return FileUrl(dirName, name);
+            return FileUrl(apiName, dirName, name);
 
         }
-        public static string FileUrl(string dirName, string fileName)
+        public static string FileUrl(string apiName, string dirName, string fileName)
         {
-            return AuthOptions.FilePath + "/" + "documents/" + dirName + "/" + fileName;
+            return AuthOptions.FilePath + "/" + apiName + "/" + "documents/" + dirName + "/" + fileName;
         }
 
         public static string CombinateFileName(string fileName)

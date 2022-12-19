@@ -58,7 +58,7 @@ namespace UserHandler.Handlers.ThirdSection
             };
             if (model.File != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.File);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.File);
                 addModel.FilePath = filePath;
             }
             _orgProcesses.Add(addModel);
@@ -85,7 +85,7 @@ namespace UserHandler.Handlers.ThirdSection
            
             if (model.File != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.File);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.File);
                 orgProcesses.FilePath = filePath;
             }
             _orgProcesses.Update(orgProcesses);

@@ -63,7 +63,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             
             if(!String.IsNullOrEmpty(model.ScreenBase64))
             {
-                var path = FileState.AddFile("siteFails", model.ScreenBase64);
+                var path = FileState.AddFile("apiUser", "siteFails", model.ScreenBase64);
 
                 addModel.ScreenPath = path;
             }
@@ -84,7 +84,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
 
             if (!String.IsNullOrEmpty(model.ScreenBase64))
             {
-                var path = FileState.AddFile("siteFails", model.ScreenBase64);
+                var path = FileState.AddFile("apiUser", "siteFails", model.ScreenBase64);
 
                 fail.ScreenPath = path;
             }

@@ -85,6 +85,7 @@ namespace MainInfrastructures.Db
         public DbSet<SiteRequirementsSample> SiteRequirementsSamples { get; set; }
         public DbSet<ReestrProjectPosition> ReestrProjectPosition { get; set; }
         public DbSet<ReestrProjectExpertDecision> ReestrProjectExpertDecision { get; set; }
+        public DbSet<ReestrProjectCyberSecurityExpertDecision> ReestrProjectCyberSecurityExpertDecision  { get; set; }
         public DbSet<ReestrProjectIdentities> ReestrProjectIdentities { get; set; }
         public DbSet<ProjectIdentities> ProjectIdentities { get; set; }
         public DbSet<ReestrProjectConnection> ReestrProjectConnection { get; set; }

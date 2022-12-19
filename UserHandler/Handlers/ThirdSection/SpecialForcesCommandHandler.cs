@@ -93,32 +93,32 @@ namespace UserHandler.Handlers.ThirdSection
             };
             if(model.CharacterizingDocument!=null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.CharacterizingDocument);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.CharacterizingDocument);
                 addModel.CharacterizingDocument = filePath;
             }
             if (model.MinistryAgreedCharacterizingDocument != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.MinistryAgreedCharacterizingDocument);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.MinistryAgreedCharacterizingDocument);
                 addModel.MinistryAgreedCharacterizingDocument = filePath;
             }
             if (model.OrganizationalStructureFile != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.OrganizationalStructureFile);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.OrganizationalStructureFile);
                 addModel.OrganizationalStructureFile = filePath;
             }
             if (model.SpecialistsStuffingDocument != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.SpecialistsStuffingDocument);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.SpecialistsStuffingDocument);
                 addModel.SpecialistsStuffingDocument = filePath;
             }
             if (model.EmployeesSertificates != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.EmployeesSertificates);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.EmployeesSertificates);
                 addModel.EmployeesSertificates = filePath;
             }
             if (model.WorkPlanOfSpecialForces != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.WorkPlanOfSpecialForces);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.WorkPlanOfSpecialForces);
                 addModel.WorkPlanOfSpecialForces = filePath;
             }
             _specialForces.Add(addModel);
@@ -168,32 +168,32 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (model.CharacterizingDocument != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.CharacterizingDocument);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.CharacterizingDocument);
                 specialForces.CharacterizingDocument = filePath;
             }
             if (model.MinistryAgreedCharacterizingDocument != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.MinistryAgreedCharacterizingDocument);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.MinistryAgreedCharacterizingDocument);
                 specialForces.MinistryAgreedCharacterizingDocument = filePath;
             }
             if (model.OrganizationalStructureFile != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.OrganizationalStructureFile);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.OrganizationalStructureFile);
                 specialForces.OrganizationalStructureFile = filePath;
             }
             if (model.SpecialistsStuffingDocument != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.SpecialistsStuffingDocument);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.SpecialistsStuffingDocument);
                 specialForces.SpecialistsStuffingDocument = filePath;
             }
             if (model.EmployeesSertificates != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.EmployeesSertificates);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.EmployeesSertificates);
                 specialForces.EmployeesSertificates = filePath;
             }
             if (model.WorkPlanOfSpecialForces != null)
             {
-                var filePath = FileState.AddFile("commonDocs", model.WorkPlanOfSpecialForces);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.WorkPlanOfSpecialForces);
                 specialForces.WorkPlanOfSpecialForces = filePath;
             }
             _specialForces.Update(specialForces);

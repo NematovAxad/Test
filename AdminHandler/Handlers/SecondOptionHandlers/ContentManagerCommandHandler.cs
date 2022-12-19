@@ -57,7 +57,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             };
             if(model.File !=null)
             {
-                filePath = FileState.AddFile("headDocs", model.File);
+                filePath = FileState.AddFile("apiAdmin", "headDocs", model.File);
                 addModel.FilePath = filePath;
             }    
             
@@ -76,7 +76,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotAllowed("permission");
             if (model.File!=null)
             {
-                var filePath = FileState.AddFile("headDocs", model.File);
+                var filePath = FileState.AddFile("apiAdmin", "headDocs", model.File);
                 manager.FilePath = filePath;
             }
 

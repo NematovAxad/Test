@@ -27,7 +27,7 @@ namespace UserApi.Controllers
             try
             {
 
-                var filePath = FileState.AddFile("reestrDocs", model.File);
+                var filePath = FileState.AddFile("apiUser", "reestrDocs", model.File);
 
                 return filePath;
             }

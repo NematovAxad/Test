@@ -79,7 +79,7 @@ namespace UserHandler.Handlers.ThirdSection
             };
             if (model.ReglamentFile != null)
             {
-                var filePath = FileState.AddFile("reglaments", model.ReglamentFile);
+                var filePath = FileState.AddFile("apiUser", "reglaments", model.ReglamentFile);
                 addModel.ReglamentPath = filePath;
             }
             
@@ -138,7 +138,7 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (model.ReglamentFile != null)
             {
-                var filePath = FileState.AddFile("reglaments", model.ReglamentFile);
+                var filePath = FileState.AddFile("apiUser", "reglaments", model.ReglamentFile);
                 service.ReglamentPath = filePath;
             }
 

@@ -98,7 +98,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             }
             if (!String.IsNullOrEmpty(model.PoolScreenshot))
             {
-                var filePath = FileState.AddFile("screens", model.PoolScreenshot);
+                var filePath = FileState.AddFile("apiAdmin","screens", model.PoolScreenshot);
                 addModel.PoolScreenshotLink = filePath;
             }
             addModel.PoolLink = model.PoolLink;
@@ -122,27 +122,27 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             addModel.Post5 = model.Post5;
             if (!String.IsNullOrEmpty(model.Post1Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post1Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post1Screenshot);
                 addModel.Post1Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post2Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post2Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post2Screenshot);
                 addModel.Post2Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post3Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post3Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post3Screenshot);
                 addModel.Post3Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post4Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post4Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post4Screenshot);
                 addModel.Post4Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post5Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post5Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post5Screenshot);
                 addModel.Post5Link = filePath;
             }
             _orgSocials.Add(addModel);
@@ -202,7 +202,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             }
             if (!String.IsNullOrEmpty(model.PoolScreenshot))
             {
-                var filePath = FileState.AddFile("screens", model.PoolScreenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.PoolScreenshot);
                 socialSite.PoolScreenshotLink = filePath;
             }
             socialSite.PoolLink = model.PoolLink;
@@ -222,27 +222,27 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             socialSite.Post5 = model.Post5;
             if (!String.IsNullOrEmpty(model.Post1Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post1Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post1Screenshot);
                 socialSite.Post1Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post2Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post2Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post2Screenshot);
                 socialSite.Post2Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post3Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post3Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post3Screenshot);
                 socialSite.Post3Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post4Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post4Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post4Screenshot);
                 socialSite.Post4Link = filePath;
             }
             if (!String.IsNullOrEmpty(model.Post5Screenshot))
             {
-                var filePath = FileState.AddFile("screens", model.Post5Screenshot);
+                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post5Screenshot);
                 socialSite.Post5Link = filePath;
             }
             _orgSocials.Update(socialSite);
