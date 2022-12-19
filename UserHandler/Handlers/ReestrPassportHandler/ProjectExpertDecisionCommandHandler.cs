@@ -57,7 +57,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 
                 if (!String.IsNullOrEmpty(model.ExpertComment))
@@ -85,7 +85,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
 
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     projectExpertDecision.ExpertComment = model.ExpertComment;

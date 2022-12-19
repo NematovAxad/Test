@@ -74,7 +74,7 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 addModel.Exist = model.Exist;
             }
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
@@ -83,7 +83,7 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                     addModel.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    addModel.Exceptedtems = model.ExceptedItems;
+                    addModel.ExceptedItems = model.ExceptedItems;
             }
 
 
@@ -118,7 +118,7 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 }
             }
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectClassificator.ExpertComment = model.ExpertComment;
@@ -127,7 +127,7 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                     projectClassificator.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    projectClassificator.Exceptedtems = model.ExceptedItems;
+                    projectClassificator.ExceptedItems = model.ExceptedItems;
             }
 
             _projectClassifications.Update(projectClassificator);

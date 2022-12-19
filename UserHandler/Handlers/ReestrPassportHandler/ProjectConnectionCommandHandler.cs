@@ -79,7 +79,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                     addModel.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    addModel.Exceptedtems = model.ExceptedItems;
+                    addModel.ExceptedItems = model.ExceptedItems;
             }
 
             _projectConnection.Add(addModel);    
@@ -123,7 +123,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                     projectConnection.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    projectConnection.Exceptedtems = model.ExceptedItems;
+                    projectConnection.ExceptedItems = model.ExceptedItems;
             }
             _projectConnection.Update(projectConnection);
         }

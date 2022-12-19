@@ -31,7 +31,7 @@ namespace Domain.Models.SecondSection
         public int AllItems { get; set; }
 
         [Column("excepted_items")]
-        public int Exceptedtems { get; set; }
+        public int ExceptedItems { get; set; }
         [Column("expert_comment")]
         public string ExpertComment { get; set; }
 
