@@ -59,6 +59,10 @@
     <Compile Remove="Migrations\20221125064917_addtablenew.Designer.cs" />
     <Compile Remove="Migrations\20221125065538_itemsidentityadded.cs" />
     <Compile Remove="Migrations\20221125065538_itemsidentityadded.Designer.cs" />
+    <Compile Remove="Migrations\20221219071209_expertdecision.cs" />
+    <Compile Remove="Migrations\20221219071209_expertdecision.Designer.cs" />
+    <Compile Remove="Migrations\20221219071725_expertdecision.cs" />
+    <Compile Remove="Migrations\20221219071725_expertdecision.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

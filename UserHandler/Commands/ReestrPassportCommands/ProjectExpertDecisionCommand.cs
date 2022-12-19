@@ -29,6 +29,10 @@ namespace UserHandler.Commands.ReestrPassportCommands
 
         public int ReestrProjectId { get; set; }
 
+        public bool Exist { get; set; }
+
+        public string FilePath { get; set; }
+
         public string OrgComment { get; set; }
 
         public bool ExpertExcept { get; set; }

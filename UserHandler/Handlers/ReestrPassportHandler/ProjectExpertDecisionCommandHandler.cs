@@ -57,6 +57,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
 
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            {
+                addModel.Exist = model.Exist;
+                if (!String.IsNullOrEmpty(model.FilePath))
+                    addModel.FilePath = model.FilePath;
+            }
+
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 
@@ -84,6 +91,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (projectExpertDecision == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
 
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            {
+                projectExpertDecision.Exist = model.Exist;
+                if (!String.IsNullOrEmpty(model.FilePath))
+                    projectExpertDecision.FilePath = model.FilePath;
+                projectExpertDecision.OrgComment = model.OrgComment;
+            }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
