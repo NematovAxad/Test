@@ -16,7 +16,7 @@ namespace Domain.Models.SecondSection
         [Column("parent_id")]
         public int ParentId { get; set; }
         [ForeignKey(nameof(ParentId))]
-        public ReestrProjectClassifications ReestrProjectClassifications { get; set; }
+        public ReestrProjectAuthorizations ReestrProjectAuthorizations { get; set; }
 
         [Column("authorization_type")]
         public ReestrProjectAuthorizationType AuthorizationType { get; set; }
