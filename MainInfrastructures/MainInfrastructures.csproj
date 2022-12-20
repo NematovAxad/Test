@@ -63,6 +63,8 @@
     <Compile Remove="Migrations\20221219071209_expertdecision.Designer.cs" />
     <Compile Remove="Migrations\20221219071725_expertdecision.cs" />
     <Compile Remove="Migrations\20221219071725_expertdecision.Designer.cs" />
+    <Compile Remove="Migrations\20221220130123_tableaddednew.cs" />
+    <Compile Remove="Migrations\20221220130123_tableaddednew.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

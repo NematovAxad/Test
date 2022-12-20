@@ -143,13 +143,6 @@ namespace AdminHandler.Handlers.Organization
             org.OrgType = model.OrgType;
             org.Fax = model.Fax;
             org.OrgCategory = model.OrgCategory;
-            
-            if(model.IsActive != null)
-                org.IsActive = model.IsActive;
-            if (model.IsIct != null)
-                org.IsIct = model.IsIct;
-            if (model.IsMonitoring != null)
-                org.IsMonitoring = model.IsMonitoring;
 
             _organization.Update(org);
 

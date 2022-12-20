@@ -93,5 +93,7 @@ namespace MainInfrastructures.Db
         public DbSet<ReestrProjectClassifications> ReestrProjectClassifications { get; set; }
         public DbSet<ProjectClassifications> ProjectClassifications { get; set; }
         public DbSet<SiteFailComments> SiteFailComments { get; set; }
+        public DbSet<ReestrProjectAuthorizations> ReestrProjectAuthorizations { get; set; } 
+        public DbSet<ProjectAuthorizations> ProjectAuthorizations { get; set; }
     }
 }
