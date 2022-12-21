@@ -1,11 +1,14 @@
 ﻿using Domain.IntegrationLinks;
+using Domain.Models;
 using Domain.ReesterModels;
 using Domain.States;
+using JohaRepository;
 using MainInfrastructures.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -15,9 +18,19 @@ namespace MainInfrastructures.Services
 {
     public class ReesterService : IReesterService
     {
+        private readonly IRepository<Organizations, int> _org;
+
+        public ReesterService(IRepository<Organizations, int> org)
+        {
+            _org = org;
+        }
 
         public async Task<FirstRequestQueryResult> FirstRequest(FirstRequestQuery model)
         {
+            var organization = _org.Find(d => d.Id == model.OrgId).FirstOrDefault();
+            if (organization == null)
+                throw ErrorStates.NotFound("organization");
+
             var result = new FirstRequestQueryResult();
             var cts = new CancellationTokenSource();
             try
@@ -30,7 +43,7 @@ namespace MainInfrastructures.Services
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 var url = Links.ReesterFirstLink;
                 
-                url = url + "?OrgId=" + model.OrgId.ToString()+"&Page="+model.Page.ToString()+"&Limit="+model.Limit.ToString();
+                url = url + "?OrgId=" + organization.Id.ToString()+"&Page="+model.Page.ToString()+"&Limit="+model.Limit.ToString();
 
                 var response = await client.GetAsync(url).ConfigureAwait(false);
                 if (response != null || response.StatusCode == System.Net.HttpStatusCode.OK)
