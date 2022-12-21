@@ -43,7 +43,7 @@ namespace MainInfrastructures.Services
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
                 var url = Links.ReesterFirstLink;
                 
-                url = url + "?OrgId=" + organization.Id.ToString()+"&Page="+model.Page.ToString()+"&Limit="+model.Limit.ToString();
+                url = url + "?OrgId=" + organization.UserServiceId.ToString()+"&Page="+model.Page.ToString()+"&Limit="+model.Limit.ToString();
 
                 var response = await client.GetAsync(url).ConfigureAwait(false);
                 if (response != null || response.StatusCode == System.Net.HttpStatusCode.OK)
