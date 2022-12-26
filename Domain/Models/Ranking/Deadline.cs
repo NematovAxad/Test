@@ -24,5 +24,7 @@ namespace Domain.Models
         public bool IsActive { get; set; }
         [Column("ping_service")]
         public bool PingService { get; set; }
+        [Column("create_date")]
+        public DateTime CreateDate { get; set; }
     }
 }

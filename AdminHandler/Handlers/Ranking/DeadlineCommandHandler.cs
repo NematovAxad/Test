@@ -60,7 +60,8 @@ namespace AdminHandler.Handlers.Ranking
                 DeadlineDate = model.DeadlineDate,
                 OperatorDeadlineDate = model.OperatorDeadlineDate,
                 IsActive = model.IsActive,
-                PingService = false
+                PingService = true,
+                CreateDate = DateTime.Now
             };
             _deadline.Add(addModel);
         }
