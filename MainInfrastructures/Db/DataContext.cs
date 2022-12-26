@@ -2,6 +2,7 @@
 using Domain.Models.FifthSection;
 using Domain.Models.Organization;
 using Domain.Models.Ranking;
+using Domain.Models.Ranking.Administrations;
 using Domain.Models.SecondSection;
 using Domain.Models.SeventhSection;
 using Domain.Models.ThirdSection;
@@ -64,6 +65,10 @@ namespace MainInfrastructures.Db
         public DbSet<XField> XField { get; set; }
         public DbSet<XSubField> XSubField { get; set; }
         public DbSet<XRankTable> XRankTable { get; set; }
+        public DbSet<ASphere> ASphere { get; set; }
+        public DbSet<AField> AField { get; set; }
+        public DbSet<ASubField> ASubField { get; set; }
+        public DbSet<ARankTable> ARankTable { get; set; }
         public DbSet<GRankTable> GRankTable { get; set; }
         public DbSet<Application> Application { get; set; }
         public DbSet<Comment> Comment { get; set; }

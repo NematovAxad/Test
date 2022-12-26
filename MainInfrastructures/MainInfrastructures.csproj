@@ -65,6 +65,8 @@
     <Compile Remove="Migrations\20221219071725_expertdecision.Designer.cs" />
     <Compile Remove="Migrations\20221220130123_tableaddednew.cs" />
     <Compile Remove="Migrations\20221220130123_tableaddednew.Designer.cs" />
+    <Compile Remove="Migrations\20221226060426_hokimliklar.cs" />
+    <Compile Remove="Migrations\20221226060426_hokimliklar.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

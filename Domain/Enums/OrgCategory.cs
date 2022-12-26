@@ -3,6 +3,7 @@
     public enum OrgCategory
     {
         GovernmentOrganizations = 1,
-        FarmOrganizations
+        FarmOrganizations = 2, 
+        Adminstrations = 3,
     }
 }
