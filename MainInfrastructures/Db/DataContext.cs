@@ -40,9 +40,7 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationApps> OrganziationApps { get; set; }
         public DbSet<ContentManager> ContentManager { get; set; }
         public DbSet<Deadline> Deadline { get; set; }
-        public DbSet<RankTable> RankTable { get; set; }
-        public DbSet<Sphere> Sphere { get; set; }
-        public DbSet<Field> Field { get; set; }
+        
         public DbSet<OrganizationSocialParameters> OrganizationSocialParameters { get; set; }
         public DbSet<OrganizationSocials> OrganizationSocials { get; set; }
         public DbSet<HelplineInfo> HelplineInfo { get; set; }
@@ -57,7 +55,6 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationComputers> OrganizationComputers { get; set; }
         public DbSet<OrganizationServers> OrganizationServers { get; set; }
         public DbSet<IsFilledTable> IsFilledTable { get; set; }
-        public DbSet<SubField> SubField { get; set; }
         public DbSet<GSphere> GSphere { get; set; }
         public DbSet<GField> GField { get; set; }
         public DbSet<GSubField> GSubField { get; set; }

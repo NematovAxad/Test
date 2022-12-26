@@ -12,13 +12,20 @@ namespace Domain.Models.Ranking
     {
         [Column("id")]
         public int Id { get; set; }
+
         [Column("field_id")]
         [ForeignKey("XField")]
         public int FieldId { get; set; }
+
         public XField XField { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
+
         [Column("max_rate")]
         public double MaxRate { get; set; }
+
+        [Column("section")]
+        public string Section { get; set; }
     }
 }

@@ -11,9 +11,13 @@ namespace Domain.Models.Ranking.Administrations
     {
         [Column("id")]
         public int Id { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
-        [Column("category")]
+
+        [Column("section")]
+        public string Section { get; set; }
+
         public ICollection<AField> AFields { get; set; }
     }
 }

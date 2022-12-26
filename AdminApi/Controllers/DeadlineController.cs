@@ -4,6 +4,8 @@ using AdminHandler.Results.Ranking;
 using ApiConfigs;
 using CoreResult.ResponseCores;
 using Domain.Enums;
+using MainInfrastructures.Interfaces;
+using MainInfrastructures.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +20,11 @@ namespace AdminApi.Controllers
     public class Deadline : Controller
     {
         IMediator _mediator;
-        public Deadline(IMediator mediator)
+        private readonly IOrganizationService _orgService;
+        public Deadline(IMediator mediator, IOrganizationService orgService)
         {
             _mediator = mediator;
+            _orgService = orgService;
         }
         [HttpGet]
         public async Task<ResponseCore<DeadlineQueryResult>> Get([FromQuery] int year, Quarters quarter, bool isActive)
@@ -42,6 +46,22 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
+        [HttpGet]
+        public async Task<ResponseCore<RankingStruct>> GetStruct([FromQuery] int orgid)
+        {
+            try
+            {
+               
+
+                var result = await _orgService.GetStruct(orgid);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
         [HttpPost]
         public async Task<ResponseCore<DeadlineCommandResult>> Add([FromQuery] DeadlineCommand model)
         {

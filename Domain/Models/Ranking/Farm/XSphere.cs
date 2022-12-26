@@ -13,8 +13,13 @@ namespace Domain.Models
     {
         [Column("id")]
         public int Id { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
+
+        [Column("section")]
+        public string Section { get; set; }
+
         public ICollection<XField> XFields { get; set; }
     }
 }

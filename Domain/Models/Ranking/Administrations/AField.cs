@@ -11,16 +11,23 @@ namespace Domain.Models.Ranking.Administrations
     {
         [Column("id")]
         public int Id { get; set; }
+
         [Column("sphere_id")]
         [ForeignKey("ASphere")]
         public int SphereId { get; set; }
+
         public ASphere ASphere { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
+
         [Column("max_rate")]
         public double MaxRate { get; set; }
-        [Column("category")]
+
         public ICollection<ASubField> ASubFields { get; set; }
+
+        [Column("section")]
+        public string Section { get; set; }
 
     }
 }

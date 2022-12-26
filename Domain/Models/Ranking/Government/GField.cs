@@ -13,15 +13,22 @@ namespace Domain.Models.Ranking
     {
         [Column("id")]
         public int Id { get; set; }
+
         [Column("sphere_id")]
         [ForeignKey("GSphere")]
         public int SphereId { get; set; }
+
         public GSphere GSphere { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
+
         [Column("max_rate")]
         public double MaxRate { get; set; }
-        [Column("category")]
+
+        [Column("section")]
+        public string Section { get; set; }
+
         public ICollection<GSubField> GSubFields { get; set; }
 
     }
