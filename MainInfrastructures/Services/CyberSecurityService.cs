@@ -51,7 +51,15 @@ namespace MainInfrastructures.Services
             GetOrgRanksResult result = new GetOrgRanksResult();
 
             result = fullList.Where(l => l.Id == organization.CyberSecurityId).FirstOrDefault();
-
+            if(result == null)
+            {
+                result.Id = organization.Id;
+                result.FullName = organization.FullName;
+                result.Norm = 0;
+                result.Org = 0;
+                result.Tex = 0;
+                result.Total = 0;
+            }
             
     
             return result;
