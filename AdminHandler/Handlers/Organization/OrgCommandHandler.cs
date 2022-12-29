@@ -102,8 +102,6 @@ namespace AdminHandler.Handlers.Organization
             if (!String.IsNullOrEmpty(model.Fax))
                 addModel.Fax = model.Fax;
 
-            if (model.OrgCategory != 0)
-                addModel.OrgCategory = model.OrgCategory;
 
             addModel.IsActive = model.IsActive;
             addModel.IsIct = model.IsIct;
@@ -142,7 +140,6 @@ namespace AdminHandler.Handlers.Organization
             org.WebSite = model.WebSite;
             org.OrgType = model.OrgType;
             org.Fax = model.Fax;
-            org.OrgCategory = model.OrgCategory;
 
             _organization.Update(org);
 
