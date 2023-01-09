@@ -1,5 +1,6 @@
 ﻿using AdminHandler.Querys.Organization;
 using AdminHandler.Results.Organization;
+using Domain;
 using Domain.Models;
 using Domain.States;
 using JohaRepository;
@@ -28,7 +29,7 @@ namespace AdminHandler.Handlers.Organization
         {
             var org = _organizations.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(request.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
             var docs = _basedDocuments.GetAll();
             if (request.Id != 0)
             {

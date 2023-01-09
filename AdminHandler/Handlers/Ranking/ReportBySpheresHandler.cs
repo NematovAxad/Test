@@ -98,7 +98,7 @@ namespace AdminHandler.Handlers.Ranking
 
             foreach (var o in org)
             {
-                ReportBySpheresModel model = new ReportBySpheresModel() {OrganizationId = o.Id, OrgName = o.ShortName, Category = o.OrgCategory, Spheres = new List<SphereRateElement>() };
+                ReportBySpheresModel model = new ReportBySpheresModel() {OrganizationId = o.Id, OrgName = o.ShortName, UserServiceId = o.UserServiceId, Category = o.OrgCategory, Spheres = new List<SphereRateElement>() };
                 if (o.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
                     

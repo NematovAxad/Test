@@ -41,10 +41,13 @@ namespace AdminHandler.Handlers.Organization
         {
             var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            
             var filePath = FileState.AddFile("apiAdmin", "orgDocs", model.File);
+            
             OrganizationDocuments addModel = new OrganizationDocuments()
             {
                 OrganizationId = model.OrganizationId,
@@ -62,12 +65,14 @@ namespace AdminHandler.Handlers.Organization
         {
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
-                throw ErrorStates.NotFound(model.Id.ToString());
+                throw ErrorStates.Error(UIErrors.BasedDocNotFound);
+            
             var org = _organizations.Find(o => o.Id == orgDoc.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
             orgDoc.DocumentNo = model.DocumentNo;
             orgDoc.DocumentDate = DateTime.Now;
@@ -86,12 +91,14 @@ namespace AdminHandler.Handlers.Organization
         {
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
-                throw ErrorStates.NotFound(model.Id.ToString());
+                throw ErrorStates.Error(UIErrors.BasedDocNotFound);
+            
             var org = _organizations.Find(o => o.Id == orgDoc.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
             _orgDocuments.Remove(model.Id);
         }
     }
