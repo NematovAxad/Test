@@ -1,4 +1,5 @@
 ﻿using JohaRepository.Exception;
+using SB.Common.Logics.SynonymProviders;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,6 +39,12 @@ namespace Domain.States
         public static RepoException CyberSecurityServiceNotWorking()
         {
             return new RepoException(504, "CyberSecurity not Responding");
+        }
+
+        public static RepoException Error(Enum errorEnum)
+        {
+            string message = EnumSynonymProvider.Get(errorEnum);
+            return new RepoException(message);
         }
     }
 }

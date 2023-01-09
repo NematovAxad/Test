@@ -1,10 +1,12 @@
-﻿using Domain.Models;
+﻿using Domain;
+using Domain.Models;
 using Domain.Models.SecondSection;
 using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SB.Common.Logics.SynonymProviders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +46,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
         public void Add(ConnectionCommand model)
         {
+            throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");

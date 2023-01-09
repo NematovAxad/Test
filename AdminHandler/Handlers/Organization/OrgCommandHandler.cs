@@ -103,9 +103,9 @@ namespace AdminHandler.Handlers.Organization
                 addModel.Fax = model.Fax;
 
 
-            addModel.IsActive = model.IsActive;
-            addModel.IsIct = model.IsIct;
-            addModel.IsMonitoring = model.IsMonitoring;
+            addModel.IsActive = true;
+            addModel.IsIct = true;
+            addModel.IsMonitoring = true;
             
             _organization.Add(addModel);
         }
