@@ -4,5 +4,50 @@
         <name>ApiConfigs</name>
     </assembly>
     <members>
+        <member name="F:ApiConfigs.EnumSynonyms.Managers.NisEnumSynonymMigrateManager._propertyInfos">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ApiConfigs.EnumSynonyms.Managers.NisEnumSynonymMigrateManager.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ApiConfigs.EnumSynonyms.Managers.NisEnumSynonymMigrateManager.InitializeProperties``1">
+            <summary>
+            
+            </summary>
+            <typeparam name="TModel"></typeparam>
+        </member>
+        <member name="M:ApiConfigs.EnumSynonyms.Managers.NisEnumSynonymMigrateManager.InitializeProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            
+            </summary>
+            <param name="property"></param>
+        </member>
+        <member name="M:ApiConfigs.EnumSynonyms.Managers.NisEnumSynonymMigrateManager.GetEnumSynonymInfos``1">
+            <summary>
+            
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:ApiConfigs.EnumSynonyms.Managers.NisEnumSynonymMigrateManager.GetEnumTypeSynonymInfos``1(System.Type)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="enumType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiConfigs.EnumSynonyms.Managers.NisEnumSynonymMigrateManager.GetSynonymInfo``1(System.Reflection.FieldInfo)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

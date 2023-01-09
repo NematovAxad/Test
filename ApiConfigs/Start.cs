@@ -1,6 +1,8 @@
-﻿using Autofac;
+﻿using ApiConfigs.EnumSynonyms.Extensions;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.Variance;
+using CoreDomain.Middlewares;
 using CoreResult;
 using Domain;
 using EntityRepository;
@@ -146,6 +148,8 @@ namespace ApiConfigs
         public static void Configure(this IApplicationBuilder app, string serviceName)
         {
             app.ConfigureApp();
+            app.UseMiddleware<LanguageMiddleware>();
+
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
@@ -154,6 +158,8 @@ namespace ApiConfigs
             {
                 c.SwaggerEndpoint("v1/swagger.json", "My API V1");
             });
+
+            app.InitializeSynonymStorage();
         }
         #endregion
     }

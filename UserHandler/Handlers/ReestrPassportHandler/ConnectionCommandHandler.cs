@@ -6,11 +6,8 @@ using Domain.States;
 using JohaRepository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SB.Common.Logics.SynonymProviders;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UserHandler.Commands.ReestrPassportCommands;
@@ -46,14 +43,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
         public void Add(ConnectionCommand model)
         {
-            throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
-                throw ErrorStates.NotFound("available deadline");
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
             if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
 
 

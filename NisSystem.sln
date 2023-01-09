@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domains", "Domains", "{792B91B3-A7A6-4A5B-ACFA-42A95F3F9403}"
 EndProject
@@ -25,9 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainInfrastructures", "Main
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserHandler", "UserHandler\UserHandler.csproj", "{34C72EEE-D042-4169-8139-B1B69A355481}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringApi", "MonitoringApi\MonitoringApi.csproj", "{E92589F2-B895-4093-85C8-791B80925D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitoringApi", "MonitoringApi\MonitoringApi.csproj", "{E92589F2-B895-4093-85C8-791B80925D13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringHandler", "MonitoringHandler\MonitoringHandler.csproj", "{993F67A3-E940-427B-B26F-FE653A9B4339}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitoringHandler", "MonitoringHandler\MonitoringHandler.csproj", "{993F67A3-E940-427B-B26F-FE653A9B4339}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SB.Common", "..\..\..\OpenBudgetGit\open_budget\src\GlobalDomains\SB.Common\SB.Common.csproj", "{063BF021-D6E2-4573-9E13-17F291D7E0D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{993F67A3-E940-427B-B26F-FE653A9B4339}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{993F67A3-E940-427B-B26F-FE653A9B4339}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{993F67A3-E940-427B-B26F-FE653A9B4339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{063BF021-D6E2-4573-9E13-17F291D7E0D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{063BF021-D6E2-4573-9E13-17F291D7E0D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{063BF021-D6E2-4573-9E13-17F291D7E0D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{063BF021-D6E2-4573-9E13-17F291D7E0D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{34C72EEE-D042-4169-8139-B1B69A355481} = {42D343A4-04F1-4E6B-9F9E-90E259F1A0D5}
 		{E92589F2-B895-4093-85C8-791B80925D13} = {9B517430-62FC-44F3-A55B-C20140E0D9D4}
 		{993F67A3-E940-427B-B26F-FE653A9B4339} = {42D343A4-04F1-4E6B-9F9E-90E259F1A0D5}
+		{063BF021-D6E2-4573-9E13-17F291D7E0D2} = {0ABE8160-0B88-4FF6-8B5E-34D45B8CFC35}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4058047-36DA-46A8-8DA5-82CA32B447BE}

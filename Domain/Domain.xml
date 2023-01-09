@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Domain</name>
+    </assembly>
+    <members>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment4">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment5">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment6">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment7">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment8">
+            <summary>
+            
+            </summary>
+            
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment9">
+            <summary>
+            
+            </summary>
+            
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment10">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment11">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment12">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment13">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.HelplineInfo.Comment14">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.Link1">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.Link2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.Link3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.Link4">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.Link5">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.Pool">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.IsMain">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.MonitoringModels.Models.Performencer.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Domain.UIErrors.DeadlineNotFound">
+            <summary>
+            Невозможно редактировать доску. Доска в процессе
+            </summary>
+            <uz>sss</uz>
+            <ru>dfdsffsdfsdf</ru>
+            <en>Enlish error</en>
+            <kr>Kirilllll</kr>
+        </member>
+    </members>
+</doc>

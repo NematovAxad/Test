@@ -42,7 +42,7 @@ namespace AdminHandler.Handlers.Organization
 
             if (org == null)
             {
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
             }
 
             var doc = _basedDocs.Find(d => d.DocumentNo == model.DocumentNo).FirstOrDefault();
