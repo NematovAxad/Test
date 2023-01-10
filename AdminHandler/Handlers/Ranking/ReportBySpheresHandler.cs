@@ -106,13 +106,12 @@ namespace AdminHandler.Handlers.Ranking
                     double reached = 0;
                     foreach (var s in gSpheres)
                     {
-                        maxRate = maxRate + s.MaxRate;
-
+                       
                         double sphereRate = 0;
                         var fields = gFields.Where(f => f.SphereId == s.Id).ToList();
                         foreach(var f in fields)
                         {
-                            
+                            maxRate = maxRate + f.MaxRate;
                             double fieldRate = 0;
                             var subfields = gSubFields.Where(s => s.FieldId == f.Id).ToList();
                             if(subfields.Count()>0)
