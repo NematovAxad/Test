@@ -30,7 +30,6 @@ namespace ApiConfigs.EnumSynonyms.Extensions
                     En = synonymInfo.En,
                     Uz = synonymInfo.Uz,
                     Ru = synonymInfo.Ru,
-                    Kr = synonymInfo.Kr
                 });
             }
         }
