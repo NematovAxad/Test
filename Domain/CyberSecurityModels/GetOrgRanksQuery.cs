@@ -6,7 +6,6 @@ namespace Domain.CyberSecurityModels
 {
     public class GetOrgRanksQuery
     {
-        public int OrgId { get; set; }
         public int DeadlineId { get; set; }
     }
 }

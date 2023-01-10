@@ -8,6 +8,6 @@ namespace MainInfrastructures.Interfaces
 {
     public interface ICyberSecurityService
     {
-        Task<GetOrgRanksResult> GetOrgRank(GetOrgRanksQuery model);
+        Task<bool> GetOrgRank(GetOrgRanksQuery model);
     }
 }

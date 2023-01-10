@@ -1,12 +1,17 @@
 ﻿using Domain.CyberSecurityModels;
 using Domain.Models;
+using Domain.Models.Ranking.Administrations;
+using Domain.MonitoringModels.Models;
 using Domain.States;
+using EntityRepository;
 using JohaRepository;
 using MainInfrastructures.Interfaces;
+using MainInfrastructures.Migrations;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Policy;
@@ -18,15 +23,24 @@ namespace MainInfrastructures.Services
     public class CyberSecurityService : ICyberSecurityService
     {
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<Organizations, int> _org; 
+        private readonly IRepository<Organizations, int> _org;
+        private readonly IRepository<GRankTable, int> _gRank;
+        private readonly IRepository<XRankTable, int> _xRank;
+        private readonly IRepository<ARankTable, int> _aRank;
 
-        public CyberSecurityService(IRepository<Deadline, int> deadline, IRepository<Organizations, int> org)
+        private IDataContext _db;
+
+        public CyberSecurityService(IRepository<Deadline, int> deadline, IRepository<Organizations, int> org, IRepository<GRankTable, int> gRank, IRepository<XRankTable, int> xRank, IRepository<ARankTable, int> aRank, IDataContext db)
         {
             _deadline = deadline;
             _org = org;
+            _gRank = gRank;
+            _xRank = xRank;
+            _aRank = aRank;
+            _db = db;
         }
 
-        public async Task<GetOrgRanksResult> GetOrgRank(GetOrgRanksQuery model)
+        public async Task<bool> GetOrgRank(GetOrgRanksQuery model)
         {
             string token = await GetToken();
 
@@ -34,9 +48,9 @@ namespace MainInfrastructures.Services
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
             
-            var organization = _org.Find(o => o.Id == model.OrgId).FirstOrDefault();
-            if(organization == null)
-                throw ErrorStates.NotFound("organization");
+            //var organization = _org.Find(o => o.Id == model.OrgId).FirstOrDefault();
+            //if(organization == null)
+            //    throw ErrorStates.NotFound("organization");
 
             List<GetOrgRanksResult> fullList = new List<GetOrgRanksResult>();
 
@@ -48,16 +62,20 @@ namespace MainInfrastructures.Services
             }
 
 
-            GetOrgRanksResult result = new GetOrgRanksResult();
+            await SetRanks(fullList, deadline);
 
-            var orgRank = fullList.Where(l => l.Id == organization.CyberSecurityId).FirstOrDefault();
-            if(orgRank != null)
-            {
-                result = orgRank;
-            }
+            //GetOrgRanksResult result = new GetOrgRanksResult();
+
+            //var orgRank = fullList.Where(l => l.Id == organization.CyberSecurityId).FirstOrDefault();
+            //if(orgRank != null)
+            //{
+            //    result = orgRank;
+            //}
             
     
-            return result;
+            //return result;
+
+            return true;
         }
 
         public async Task<string> GetToken()
@@ -124,6 +142,275 @@ namespace MainInfrastructures.Services
                 Console.WriteLine(ex);
                 throw ex;
             }
+        }
+
+
+        public async Task<bool> SetRanks(List<GetOrgRanksResult> fullList, Deadline deadline)
+        {
+
+            foreach(var item in fullList)
+            {
+                var organization = _org.Find(o => o.CyberSecurityId == item.Id).FirstOrDefault();
+                if(organization != null)
+                {
+                    if(organization.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
+                    {
+                        var firstRank = _aRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 2 && r.FieldId == 8).FirstOrDefault();
+                        var secondRank = _aRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 2 && r.FieldId == 9).FirstOrDefault();
+                        var thirdRank = _aRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 2 && r.FieldId == 10).FirstOrDefault();
+
+
+                        if (firstRank != null)
+                        {
+                            firstRank.Rank = item.Norm;
+
+                            _aRank.Update(firstRank);
+                        }
+                        else
+                        {
+                            ARankTable addModelFirst = new ARankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Norm,
+                                IsException = false,
+                                SphereId = 2,
+                                FieldId = 8,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _aRank.Add(addModelFirst);
+                        }
+
+                        
+                        if (secondRank != null)
+                        {
+                            secondRank.Rank = item.Org;
+
+                            _aRank.Update(secondRank);
+                        }
+                        else
+                        {
+                            ARankTable addModelSecond = new ARankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Org,
+                                IsException = false,
+                                SphereId = 2,
+                                FieldId = 9,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _aRank.Add(addModelSecond);
+                        }
+
+                        
+                        if (thirdRank != null)
+                        {
+                            thirdRank.Rank = item.Tex;
+
+                            _aRank.Update(thirdRank);
+                        }
+                        else
+                        {
+                            ARankTable addModelThird = new ARankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Tex,
+                                IsException = false,
+                                SphereId = 2,
+                                FieldId = 10,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _aRank.Add(addModelThird);
+                        }
+                    }
+                    if (organization.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
+                    {
+                        var firstRank = _gRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 3 && r.FieldId == 24).FirstOrDefault();
+                        var secondRank = _gRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 3 && r.FieldId == 25).FirstOrDefault();
+                        var thirdRank = _gRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 3 && r.FieldId == 26).FirstOrDefault();
+
+
+                        if (firstRank != null)
+                        {
+                            firstRank.Rank = item.Norm;
+
+                            _gRank.Update(firstRank);
+                        }
+                        else
+                        {
+                            GRankTable addModelFirst = new GRankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Norm,
+                                IsException = false,
+                                SphereId = 3,
+                                FieldId = 24,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _gRank.Add(addModelFirst);
+                        }
+
+                        
+                        if (secondRank != null)
+                        {
+                            secondRank.Rank = item.Org;
+
+                            _gRank.Update(secondRank);
+                        }
+                        else
+                        {
+                            GRankTable addModelSecond = new GRankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Org,
+                                IsException = false,
+                                SphereId = 3,
+                                FieldId = 25,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _gRank.Add(addModelSecond);
+                        }
+
+                        
+                        if (thirdRank != null)
+                        {
+                            thirdRank.Rank = item.Tex;
+
+                            _gRank.Update(thirdRank);
+                        }
+                        else
+                        {
+                            GRankTable addModelThird = new GRankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Tex,
+                                IsException = false,
+                                SphereId = 3,
+                                FieldId = 26,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _gRank.Add(addModelThird);
+                        }
+                        
+                    }
+                    if (organization.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
+                    {
+                        
+                        var firstRank = _xRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 3 && r.FieldId == 24).FirstOrDefault();
+                        var secondRank = _xRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 3 && r.FieldId == 25).FirstOrDefault();
+                        var thirdRank = _xRank.Find(r => r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter && r.SphereId == 3 && r.FieldId == 26).FirstOrDefault();
+
+
+
+                        if (firstRank != null)
+                        {
+                            firstRank.Rank = item.Norm;
+
+                            _xRank.Update(firstRank);
+                        }
+                        else
+                        {
+                            XRankTable addModelFirst = new XRankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Norm,
+                                IsException = false,
+                                SphereId = 3,
+                                FieldId = 24,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _xRank.Add(addModelFirst);
+                        }
+
+                       
+                        if (secondRank != null)
+                        {
+                            secondRank.Rank = item.Org;
+
+                            _xRank.Update(secondRank);
+                        }
+                        else
+                        {
+                            XRankTable addModelSecond = new XRankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Org,
+                                IsException = false,
+                                SphereId = 3,
+                                FieldId = 25,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _xRank.Add(addModelSecond);
+                        }
+
+                        
+                        if (thirdRank != null)
+                        {
+                            thirdRank.Rank = item.Tex;
+
+                            _xRank.Update(thirdRank);
+                        }
+                        else
+                        {
+                            XRankTable addModelThird = new XRankTable()
+                            {
+                                OrganizationId = organization.Id,
+                                Year = deadline.Year,
+                                Quarter = deadline.Quarter,
+                                Rank = item.Tex,
+                                IsException = false,
+                                SphereId = 3,
+                                FieldId = 26,
+                                Comment = String.Empty,
+                                SubFieldId = 0,
+                                ElementId = 0
+                            };
+
+                            _xRank.Add(addModelThird);
+                        }
+                    }
+                }
+            }
+            return true;
         }
     }
 

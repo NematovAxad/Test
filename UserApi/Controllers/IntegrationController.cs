@@ -83,23 +83,15 @@ namespace UserApi.Controllers
             }
         }
         [HttpGet]
-        public async Task<ResponseCore<GetOrgRanksResult>> GetCyberSecurityRank([FromQuery] int orgId, int deadlineId)
+        public async Task<bool> GetCyberSecurityRank([FromQuery] int deadlineId)
         {
-            try
-            {
                 GetOrgRanksQuery model = new GetOrgRanksQuery()
                 {
-                    OrgId = orgId,
                     DeadlineId = deadlineId
                 };
 
                 var result = await _cyberSecurityService.GetOrgRank(model);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return ex;
-            }
+            return (bool)result;
         }
     }
 }
