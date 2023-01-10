@@ -15,6 +15,9 @@ namespace Domain.Models.Ranking.Administrations
         [Column("name")]
         public string Name { get; set; }
 
+        [Column("max_rate")]
+        public double MaxRate { get; set; }
+
         [Column("section")]
         public string Section { get; set; }
 
