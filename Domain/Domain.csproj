@@ -26,11 +26,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.11" />
     <PackageReference Include="Quartz" Version="3.4.0" />
+    <PackageReference Include="SB.Common" Version="1.0.31" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OpenBudgetGit\open_budget\src\GlobalDomains\SB.Common\SB.Common.csproj" />
   </ItemGroup>
 
 </Project>
