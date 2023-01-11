@@ -11,6 +11,16 @@ using System.Threading.Tasks;
 using Domain.States;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Domain.IntegrationLinks;
+using Domain.ReesterModels;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Net.Http;
+using Domain.AuthModels;
+using System.Threading;
+using Domain;
+using SB.Common.Extensions;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace MainInfrastructures.Services
 {
@@ -167,6 +177,66 @@ namespace MainInfrastructures.Services
 
             }
             return result;
+        }
+
+        public async Task<bool> UpdateOrgsName()
+        {
+            var orgs = _organization.GetAll().ToList();
+
+            foreach(Organizations org in orgs)
+            {
+                if(org.UserServiceId != 0)
+                {
+                    var result = new AuthOrggetQueryResult();
+                    var cts = new CancellationTokenSource();
+                    try
+                    {
+
+                        HttpClientHandler clientHandler = new HttpClientHandler();
+                        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                        HttpClient client = new HttpClient(clientHandler);
+
+                        var byteArray = Encoding.ASCII.GetBytes("single:123456");
+                        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                        var url = Links.AuthOrgGetUrl;
+
+                        url = url + "?organizationId=" + org.UserServiceId +"&limit=1";
+
+                        var response = await client.GetAsync(url).ConfigureAwait(false);
+                        if (response != null || response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            var jsonString = await response.Content.ReadAsStringAsync();
+                            var obj = JObject.Parse(jsonString);
+                            result = JsonConvert.DeserializeObject<AuthOrggetQueryResult>(jsonString);
+                        }
+                        else
+                        {
+                            throw ErrorStates.NotResponding();
+                        }
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        Console.WriteLine("Error: " + ex);
+                        throw ex;
+                    }
+                    catch (TaskCanceledException ex)
+                    {
+                        if (ex.CancellationToken == cts.Token)
+                        {
+                            throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+                        }
+                    }
+                    if(!String.IsNullOrEmpty(result.Result.Data.First().Name))
+                    {
+                        org.FullName = result.Result.Data.First().Name;
+                        org.ShortName = result.Result.Data.First().Name;
+                    }
+                    
+                    _organization.Update(org);
+                }
+            }
+
+            return true;
         }
     }
 }

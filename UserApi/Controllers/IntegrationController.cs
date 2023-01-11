@@ -18,11 +18,13 @@ namespace UserApi.Controllers
     {
         IMediator _mediator;
         ICyberSecurityService _cyberSecurityService;
+        IOrganizationService _organizationService;
 
-        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService)
+        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService)
         {
             _mediator = mediator;
             _cyberSecurityService = cyberSecurityService;
+            _organizationService = organizationService;
         }
 
         [HttpGet]
@@ -91,6 +93,13 @@ namespace UserApi.Controllers
                 };
 
                 var result = await _cyberSecurityService.GetOrgRank(model);
+            return (bool)result;
+        }
+
+        [HttpPost]
+        public async Task<bool> UpdateOrgsName()
+        {
+            var result = await _organizationService.UpdateOrgsName();
             return (bool)result;
         }
     }

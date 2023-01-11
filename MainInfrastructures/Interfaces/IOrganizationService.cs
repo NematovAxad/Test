@@ -10,5 +10,6 @@ namespace MainInfrastructures.Interfaces
     public interface IOrganizationService
     {
         Task<RankingStruct> GetStruct(int orgId);
+        Task<bool> UpdateOrgsName();
     }
 }

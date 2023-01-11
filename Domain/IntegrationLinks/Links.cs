@@ -10,5 +10,6 @@ namespace Domain.IntegrationLinks
         public static string ReesterFirstLink => "https://reestr.uz/api/apiProject/Integration/nisgetorgprojects";
         public static string ReesterSecondLink => "https://reestr.uz/api/apiProject/Integration/getproject";
         public static string CyberSecurityUrl = "https://sm.csec.uz/api/v1/nis/rating";
+        public static string AuthOrgGetUrl = "https://auth.egov.uz/api/Organization/GetOrg";
     }
 }
