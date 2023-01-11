@@ -1,4 +1,5 @@
 ﻿using Domain.CyberSecurityModels;
+using Domain.IntegrationLinks;
 using Domain.Models;
 using Domain.Models.Ranking.Administrations;
 using Domain.MonitoringModels.Models;
@@ -121,10 +122,9 @@ namespace MainInfrastructures.Services
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                var url = "https://sm.csec.uz/api/v1/nis/rating";
-                var parameters = new Dictionary<string, string> { { "quarter ", ((int)deadline.Quarter).ToString() }, { "year ", deadline.Year.ToString() }, {"page ", page.ToString()}, {"per_page ", "50" } };
-                var encodedContent = new FormUrlEncodedContent(parameters);
-                var response = await client.GetAsync(url+"?"+parameters).ConfigureAwait(true);
+                var url = Links.CyberSecurityUrl + "?year =" + deadline.Year.ToString() + "&page=" + page.ToString() + "&per_page =30" + "&quarter =" + ((int)deadline.Quarter).ToString();
+                
+                var response = await client.GetAsync(url).ConfigureAwait(true);
                 if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
