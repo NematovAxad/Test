@@ -54,32 +54,39 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 {
                     foreach (var r in model.Requirements)
                     {
-                        WebSiteRequirements requirement = new WebSiteRequirements
+                        WebSiteRequirements requirement = new WebSiteRequirements();
+                        requirement.OrganizationId = r.OrganizationId;
+                        requirement.Name = r.Name;
+                        requirement.Number = r.Number;
+
+                        if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
                         {
-                            OrganizationId = r.OrganizationId,
-                            Name = r.Name,
-                            Number = r.Number,
-                            SiteLink1 = r.SiteLink1,
-                            SiteLink2 = r.SiteLink2,
-                            SiteLink3 = r.SiteLink3,
-                            Comment = r.Comment,
-                            RequirementStatus = r.RequirementStatus,
+                            requirement.SiteLink1 = r.SiteLink1;
+                            requirement.SiteLink2 = r.SiteLink2;
+                            requirement.SiteLink3 = r.SiteLink3;
+
+                            if (!String.IsNullOrEmpty(r.Screenshot1))
+                            {
+                                var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot1);
+                                requirement.ScreenLink1 = filePath;
+                            }
+                            if (!String.IsNullOrEmpty(r.Screenshot2))
+                            {
+                                var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot2);
+                                requirement.ScreenLink2 = filePath;
+                            }
+                            if (!String.IsNullOrEmpty(r.Screenshot3))
+                            {
+                                var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot3);
+                                requirement.ScreenLink3 = filePath;
+                            }
+                        }
+                        if (model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                        {
+                            requirement.Comment = r.Comment;
+                            requirement.RequirementStatus = r.RequirementStatus;
                         };
-                        if(!String.IsNullOrEmpty(r.Screenshot1))
-                        {
-                            var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot1);
-                            requirement.ScreenLink1 = filePath;
-                        }
-                        if (!String.IsNullOrEmpty(r.Screenshot2))
-                        {
-                            var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot2);
-                            requirement.ScreenLink2 = filePath;
-                        }
-                        if (!String.IsNullOrEmpty(r.Screenshot3))
-                        {
-                            var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot3);
-                            requirement.ScreenLink3 = filePath;
-                        }
+                        
                         addList.Add(requirement);
                     }
                 }
@@ -89,8 +96,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 }
                 
                 
-                if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                    throw ErrorStates.NotAllowed("permission");
+                
 
                 _websiteRequirements.AddRange(addList);
             }
