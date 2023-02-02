@@ -97,5 +97,8 @@ namespace MainInfrastructures.Db
         public DbSet<SiteFailComments> SiteFailComments { get; set; }
         public DbSet<ReestrProjectAuthorizations> ReestrProjectAuthorizations { get; set; } 
         public DbSet<ProjectAuthorizations> ProjectAuthorizations { get; set; }
+        public DbSet<ReestrProjectAutomatedServices> ReestrProjectAutomatedServices { get; set; }
+        public DbSet<AutomatedFunctions> AutomatedFunctions { get; set; }
+        public DbSet<AutomatedServices> AutomatedServices { get; set; }
     }
 }

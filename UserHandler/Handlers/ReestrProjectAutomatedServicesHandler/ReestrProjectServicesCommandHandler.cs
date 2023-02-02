@@ -1,37 +1,40 @@
-﻿using Domain;
+﻿using Domain.Models.SecondSection;
 using Domain.Models;
-using Domain.Models.SecondSection;
-using Domain.Permission;
-using Domain.States;
 using JohaRepository;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using UserHandler.Commands.ReestrProjectIdentityCommand;
+using UserHandler.Commands.ReestrProjectAutomatedServicesCommand;
+using UserHandler.Results.ReestrProjectAutomatedServicesResult;
 using UserHandler.Results.ReestrProjectIdentityResult;
+using Domain.States;
+using System.Linq;
+using Domain.Permission;
+using Microsoft.EntityFrameworkCore;
 
-namespace UserHandler.Handlers.ReestrProjectIdentityHandler
+namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 {
-    public class ReestrProjectIdentityCommandHandler : IRequestHandler<ReestrProjectIdentityCommand, ReestrProjectIdentityCommandResult>
+    public class ReestrProjectServicesCommandHandler : IRequestHandler<ReestrProjectServicesCommand, ReestrProjectServicesCommandResult>
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<ReestrProjectIdentities, int> _projectIdentities;
-        private readonly IRepository<ProjectIdentities, int> _identities;
+        private readonly IRepository<ReestrProjectAutomatedServices, int> _projectServices;
+        private readonly IRepository<AutomatedFunctions, int> _functions;
+        private readonly IRepository<AutomatedServices, int> _services;
 
-        public ReestrProjectIdentityCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectIdentities, int> projectIdentities, IRepository<ProjectIdentities, int> identities)
+        public ReestrProjectServicesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectAutomatedServices, int> projectServices, IRepository<AutomatedFunctions, int> functions, IRepository<AutomatedServices, int> services)
         {
             _organization = organization;
             _deadline = deadline;
-            _projectIdentities = projectIdentities;
-            _identities = identities;
+            _projectServices = projectServices;
+            _functions = functions;
+            _services = services;
         }
-        public async Task<ReestrProjectIdentityCommandResult> Handle(ReestrProjectIdentityCommand request, CancellationToken cancellationToken)
+
+        public async Task<ReestrProjectServicesCommandResult> Handle(ReestrProjectServicesCommand request, CancellationToken cancellationToken)
         {
             switch (request.EventType)
             {
@@ -39,42 +42,42 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                 case Domain.Enums.EventType.Update: Update(request); break;
                 case Domain.Enums.EventType.Delete: Delete(request); break;
             }
-            return new ReestrProjectIdentityCommandResult() { IsSuccess = true };
+            return new ReestrProjectServicesCommandResult() { IsSuccess = true };
         }
-        public void Add(ReestrProjectIdentityCommand model)
+
+        public void Add(ReestrProjectServicesCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
-            
+
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-           
+
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
-            if (projectIdentities != null)
+            var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
+            if (projectServices != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectIdentities addModel = new ReestrProjectIdentities();
+            ReestrProjectAutomatedServices addModel = new ReestrProjectAutomatedServices();
 
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
 
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
-                if(!String.IsNullOrEmpty(model.OrgComment))
-                    addModel.OrgComment = model.OrgComment;
-                addModel.Exist = model.Exist;
+                
+                addModel.ProjectServiceExist = model.ProjectServiceExist;
             }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
-                
+
                 if (model.AllItems > 0)
                     addModel.AllItems = model.AllItems;
 
@@ -83,9 +86,10 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             }
 
 
-            _projectIdentities.Add(addModel);
+            _projectServices.Add(addModel);
         }
-        public void Update(ReestrProjectIdentityCommand model)
+
+        public void Update(ReestrProjectServicesCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -94,45 +98,45 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
+
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox=>mbox.Identities).FirstOrDefault();
-            if (projectIdentities == null)
+            var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox => mbox.AutomatedServices).Include(mbox=>mbox.AutomatedFunctions).FirstOrDefault();
+            if (projectServices == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
-                if (!String.IsNullOrEmpty(model.OrgComment))
-                    projectIdentities.OrgComment = model.OrgComment;
-                projectIdentities.Exist = model.Exist;
+                projectServices.ProjectServiceExist = model.ProjectServiceExist;
 
-                if (model.Exist == false)
+                if (model.ProjectServiceExist == false)
                 {
-                    _identities.RemoveRange(projectIdentities.Identities);
+                    _services.RemoveRange(projectServices.AutomatedServices);
                 }
             }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
-                    projectIdentities.ExpertComment = model.ExpertComment;
-                
+                    projectServices.ExpertComment = model.ExpertComment;
+
                 if (model.AllItems > 0)
-                    projectIdentities.AllItems = model.AllItems;
+                    projectServices.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    projectIdentities.ExceptedItems = model.ExceptedItems;
+                    projectServices.ExceptedItems = model.ExceptedItems;
             }
 
-            _projectIdentities.Update(projectIdentities);
+            _projectServices.Update(projectServices);
         }
-        public void Delete(ReestrProjectIdentityCommand model)
+
+        public void Delete(ReestrProjectServicesCommand model)
         {
-            var projectIdentities = _projectIdentities.Find(p => p.Id == model.Id).FirstOrDefault();
-            if (projectIdentities == null)
+            var projectServices = _projectServices.Find(p => p.Id == model.Id).FirstOrDefault();
+            if (projectServices == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            _projectIdentities.Remove(projectIdentities);
+            _projectServices.Remove(projectServices);
         }
     }
 }
