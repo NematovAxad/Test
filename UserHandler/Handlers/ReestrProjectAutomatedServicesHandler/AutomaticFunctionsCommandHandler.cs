@@ -68,11 +68,10 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             AutomatedFunctions addModel = new AutomatedFunctions();
 
 
-            if (((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 addModel.ParentId = model.ParentId;
                 addModel.FunctionName = model.FunctionName;
-                addModel.FilePath = model.FilePath;
             }
             else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 
@@ -100,12 +99,14 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 throw ErrorStates.NotAllowed(model.Id.ToString());
 
 
-            if (((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if (((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
             {
-                function.FunctionName = model.FunctionName;
-
                 if (!String.IsNullOrEmpty(model.FilePath))
                     function.FilePath = model.FilePath;
+            }
+            if(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            {
+                function.FunctionName = model.FunctionName;
             }
             else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 
