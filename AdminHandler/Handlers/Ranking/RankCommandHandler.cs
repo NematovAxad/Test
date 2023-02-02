@@ -133,7 +133,7 @@ namespace AdminHandler.Handlers.Ranking
                         {
                             var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
                             if (rankWithoutElement != null)
-                                throw ErrorStates.NotAllowed("ranking ");
+                                throw ErrorStates.NotAllowed("ranking should be with element id");
 
                             var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
                             if (rank != null)
@@ -162,7 +162,7 @@ namespace AdminHandler.Handlers.Ranking
                         {
                             var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
                             if (rankWithoutElement != null)
-                                throw ErrorStates.NotAllowed("ranking ");
+                                throw ErrorStates.NotAllowed("ranking should be with element id");
 
                             var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
                             if (rank != null)
@@ -214,7 +214,7 @@ namespace AdminHandler.Handlers.Ranking
                         {
                             var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
                             if (rankWithoutElement != null)
-                                throw ErrorStates.NotAllowed("ranking ");
+                                throw ErrorStates.NotAllowed("ranking should be with element id");
 
                             var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
                             if (rank != null)
@@ -243,7 +243,7 @@ namespace AdminHandler.Handlers.Ranking
                         {
                             var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
                             if (rankWithoutElement != null)
-                                throw ErrorStates.NotAllowed("ranking ");
+                                throw ErrorStates.NotAllowed("ranking should be with element id");
 
                             var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
                             if (rank != null)
@@ -296,7 +296,7 @@ namespace AdminHandler.Handlers.Ranking
                         {
                             var rankWithoutElement = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
                             if (rankWithoutElement != null)
-                                throw ErrorStates.NotAllowed("ranking ");
+                                throw ErrorStates.NotAllowed("ranking should be with element id");
 
                             var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
                             if (rank != null)
@@ -325,7 +325,7 @@ namespace AdminHandler.Handlers.Ranking
                         {
                             var rankWithoutElement = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
                             if (rankWithoutElement != null)
-                                throw ErrorStates.NotAllowed("ranking ");
+                                throw ErrorStates.NotAllowed("ranking should be with element id");
 
                             var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
                             if (rank != null)
