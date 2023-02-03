@@ -57,5 +57,43 @@ namespace Domain
         /// <en>Data to change not found</en>
         /// <kr>Данные для изменения не найдены</kr>
         BasedDocNotFound = -5,
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Malumotlarni kiritishga qo'yilgan muddat tugadi</uz>
+        /// <ru>Срок заполнения данных истек</ru>
+        /// <en>Deadline to fill data is expired</en>
+        /// <kr>Срок заполнения данных истек</kr>
+        DeadlineExpired = -6,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Bunday ma'lumot mavjud</uz>
+        /// <ru>Данные с этими параметрами существуют</ru>
+        /// <en>Data with this parameters is exist</en>
+        /// <kr>Данные с этими параметрами существуют</kr>
+        DataWithThisParametersIsExist = -7,
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>O'zgartirish uchun ma'lumot topilmadi</uz>
+        /// <ru>Данные для изменения не найдены</ru>
+        /// <en>Data to change not found</en>
+        /// <kr>Данные для изменения не найдены</kr>
+        DataToChangeNotFound = -8,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Yetarli ma;lumot berilmadi</uz>
+        /// <ru>Не предоставлено достаточно данных</ru>
+        /// <en>Enough data not provided</en>
+        /// <kr>Не предоставлено достаточно данных</kr>
+        EnoughDataNotProvided = -9,
     }
 }

@@ -97,7 +97,7 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox=>mbox.Identities).FirstOrDefault();
+            var projectIdentities = _projectIdentities.Find(p => p.Id == model.Id).Include(mbox=>mbox.Identities).FirstOrDefault();
             if (projectIdentities == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 

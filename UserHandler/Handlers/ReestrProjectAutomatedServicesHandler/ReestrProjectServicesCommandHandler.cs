@@ -14,6 +14,7 @@ using Domain.States;
 using System.Linq;
 using Domain.Permission;
 using Microsoft.EntityFrameworkCore;
+using Domain;
 
 namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 {
@@ -49,19 +50,19 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
 
             if (deadline == null)
-                throw ErrorStates.NotFound("available deadline");
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
             if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectServices != null)
-                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             ReestrProjectAutomatedServices addModel = new ReestrProjectAutomatedServices();
 
             addModel.OrganizationId = model.OrganizationId;
@@ -93,18 +94,18 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
-                throw ErrorStates.NotFound("available deadline");
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
 
             if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
-            var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox => mbox.AutomatedServices).Include(mbox=>mbox.AutomatedFunctions).FirstOrDefault();
+            var projectServices = _projectServices.Find(p => p.Id == model.Id).Include(mbox => mbox.AutomatedServices).Include(mbox=>mbox.AutomatedFunctions).FirstOrDefault();
             if (projectServices == null)
-                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
             {
@@ -135,7 +136,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         {
             var projectServices = _projectServices.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectServices == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
             _projectServices.Remove(projectServices);
         }
     }

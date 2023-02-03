@@ -16,6 +16,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Domain.Permission;
 using UserHandler.Commands.ReestrProjectIdentityCommand;
+using Domain;
 
 namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 {
@@ -49,20 +50,20 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
-                throw ErrorStates.NotFound("available deadline");
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
             if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
 
             var projectServices = _projectServices.Find(p => p.Id == model.ParentId && p.ProjectServiceExist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
             if (projectServices == null)
-                throw ErrorStates.NotFound(model.ParentId.ToString());
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
             var functions = _functions.Find(p => p.ParentId == model.ParentId && p.FunctionName == model.FunctionName).FirstOrDefault();
             if (functions != null)
-                throw ErrorStates.NotAllowed(model.FunctionName.ToString());
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
 
             AutomatedFunctions addModel = new AutomatedFunctions();
@@ -73,7 +74,10 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 addModel.ParentId = model.ParentId;
                 addModel.FunctionName = model.FunctionName;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+            else 
+            {
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed); 
+            }
 
 
 
@@ -84,19 +88,20 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
-                throw ErrorStates.NotFound("available deadline");
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
             if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
-
-
-            var projectServices = _projectServices.Find(p => p.Id == model.ParentId && p.ProjectServiceExist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
-            if (projectServices == null)
-                throw ErrorStates.NotFound(model.ParentId.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var function = _functions.Find(p => p.Id == model.Id).FirstOrDefault();
             if (function == null)
-                throw ErrorStates.NotAllowed(model.Id.ToString());
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+
+            var projectServices = _projectServices.Find(p => p.Id == function.ParentId && p.ProjectServiceExist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
+            if (projectServices == null)
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+
+            
 
 
             if (((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
@@ -108,7 +113,10 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             {
                 function.FunctionName = model.FunctionName;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+            else 
+            {
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            }
 
 
 
@@ -118,7 +126,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         {
             var function = _functions.Find(p => p.Id == model.Id).FirstOrDefault();
             if (function == null)
-                throw ErrorStates.NotFound(model.Id.ToString());
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
             _functions.Remove(function);
         }
     }
