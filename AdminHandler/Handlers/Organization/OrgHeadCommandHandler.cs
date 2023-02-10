@@ -47,7 +47,7 @@ namespace AdminHandler.Handlers.Organization
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            var filePath = FileState.AddFile("apiAdmin", "headDocs", model.File);
+            
             ReplacerOrgHead addModel = new ReplacerOrgHead()
             {
                 OrganizationId = model.OrganizationId,
@@ -57,7 +57,7 @@ namespace AdminHandler.Handlers.Organization
                 Position = model.Position,
                 Phone = model.Phone,
                 Fax = model.Fax,
-                FilePath = filePath
+                FilePath = model.FilePath
             };
             _replacerHead.Add(addModel);
         }
@@ -71,12 +71,8 @@ namespace AdminHandler.Handlers.Organization
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (model.File!=null)
-            {
-                var filePath = FileState.AddFile("apiAdmin", "headDocs", model.File);
-                head.FilePath = filePath;
-            }
-
+           
+            head.FilePath = model.FilePath;
             head.FirstName = model.FirstName;
             head.LastName = model.LastName;
             head.MidName = model.MidName;

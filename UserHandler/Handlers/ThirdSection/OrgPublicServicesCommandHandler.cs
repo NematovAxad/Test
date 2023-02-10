@@ -75,13 +75,10 @@ namespace UserHandler.Handlers.ThirdSection
                 ServiceOtherResult = model.ServiceOtherResult,
                 MechanizmForTrackingProgress = model.MechanizmForTrackingProgress,
                 TrackingProgressBy = model.TrackingProgressBy,
-                ReglamentUpdated = model.ReglamentUpdated
+                ReglamentUpdated = model.ReglamentUpdated,
+                ReglamentPath = model.ReglamentFilePath,
             };
-            if (model.ReglamentFile != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "reglaments", model.ReglamentFile);
-                addModel.ReglamentPath = filePath;
-            }
+            
             
             _orgPublicServices.Add(addModel);
         }
@@ -136,11 +133,8 @@ namespace UserHandler.Handlers.ThirdSection
             if (!String.IsNullOrEmpty(model.TrackingProgressBy))
                 service.TrackingProgressBy = model.TrackingProgressBy;
 
-            if (model.ReglamentFile != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "reglaments", model.ReglamentFile);
-                service.ReglamentPath = filePath;
-            }
+
+            service.ReglamentPath = model.ReglamentFilePath;
 
             service.ReglamentUpdated = model.ReglamentUpdated;
 

@@ -12,10 +12,10 @@ using Domain;
 namespace UserApi.Controllers
 {
     [Route("apiUser/[controller]/[action]")]
-    public class ReestrFilesController : Controller
+    public class FileController : Controller
     {
         IMediator _mediator;
-        public ReestrFilesController(IMediator mediator)
+        public FileController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -27,7 +27,7 @@ namespace UserApi.Controllers
             try
             {
 
-                var filePath = FileState.AddFile("apiUser", "reestrDocs", model.File);
+                var filePath = FileState.AddFile("apiUser", "commonDocs", model.File);
 
                 return filePath;
             }

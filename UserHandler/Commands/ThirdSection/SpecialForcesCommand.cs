@@ -35,21 +35,21 @@ namespace UserHandler.Commands.ThirdSection
         public string Email { get; set; }
         public bool MinistryAgreedHead { get; set; }
         public bool HasCharacterizingDocument { get; set; }
-        public IFormFile CharacterizingDocument { get; set; }
+        public string CharacterizingDocumentPath { get; set; }
         public bool HasMinistryAgreedCharacterizingDocument { get; set; }
-        public IFormFile MinistryAgreedCharacterizingDocument { get; set; }
+        public string MinistryAgreedCharacterizingDocumentPath { get; set; }
         public int EmployeesSum { get; set; }
         public int CentralofficeEmployees { get; set; }
         public int RegionalEmployees { get; set; }
         public int SubordinateEmployees { get; set; }
         public int InformationSecurityEmployees { get; set; }
         public int InformationSystemDatabaseEmployees { get; set; }
-        public IFormFile OrganizationalStructureFile { get; set; }
-        public IFormFile SpecialistsStuffingDocument { get; set; }
-        public IFormFile EmployeesSertificates { get; set; }
+        public string OrganizationalStructureFilePath { get; set; }
+        public string SpecialistsStuffingDocumentPath { get; set; }
+        public string EmployeesSertificatesPath { get; set; }
         public bool EmployeesResumesSentMinistry { get; set; }
         public bool HasWorkPlanOfSpecialForces { get; set; }
-        public IFormFile WorkPlanOfSpecialForces { get; set; }
+        public string WorkPlanOfSpecialForcesPath { get; set; }
         public bool FinanceProvisionMaterial { get; set; }
         public double AmountOfFunds { get; set; }
         public double LastYearAmountOfFunds { get; set; }

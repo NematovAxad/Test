@@ -92,76 +92,23 @@ namespace UserHandler.Handlers.SecondSectionHandler
             addModel.Comment12 = model.Comment12;
             addModel.Comment13 = model.Comment13;
 
-            if (!String.IsNullOrEmpty(model.Screenshot))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot);
-                addModel.ScreenshotLink = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot2))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot2);
-                addModel.Screenshot2Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot3))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot3);
-                addModel.Screenshot3Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot4))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot4);
-                addModel.Screenshot4Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot5))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot5);
-                addModel.Screenshot5Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot6))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot6);
-                addModel.Screenshot6Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot7))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot7);
-                addModel.Screenshot7Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot8))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot8);
-                addModel.Screenshot8Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot9))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot9);
-                addModel.Screenshot9Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot10))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot10);
-                addModel.Screenshot10Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot11))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot11);
-                addModel.Screenshot11Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot12))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot12);
-                addModel.Screenshot12Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot13))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot13);
-                addModel.Screenshot13Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot14))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot14);
-                addModel.Screenshot14Link = filePath;
-            }
+
+            addModel.ScreenshotLink = model.ScreenshotLink;
+            addModel.Screenshot2Link = model.Screenshot2Link;
+            addModel.Screenshot3Link = model.Screenshot3Link;
+            addModel.Screenshot4Link = model.Screenshot4Link;
+            addModel.Screenshot5Link = model.Screenshot5Link;
+            addModel.Screenshot6Link = model.Screenshot6Link;
+            addModel.Screenshot7Link = model.Screenshot7Link;
+            addModel.Screenshot8Link = model.Screenshot8Link;
+            addModel.Screenshot9Link = model.Screenshot9Link;
+            addModel.Screenshot10Link = model.Screenshot10Link;
+            addModel.Screenshot11Link = model.Screenshot11Link;
+            addModel.Screenshot12Link = model.Screenshot12Link;
+            addModel.Screenshot13Link = model.Screenshot13Link;
+            addModel.Screenshot14Link = model.Screenshot14Link;
+
+            
 
             _helplineInfo.Add(addModel);
         }
@@ -236,76 +183,22 @@ namespace UserHandler.Handlers.SecondSectionHandler
             {
                 helplineInfo.HelplineStatisticsIntime = model.HelplineStatisticsIntime;
             }
-            if (!String.IsNullOrEmpty(model.Screenshot))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot);
-                helplineInfo.ScreenshotLink = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot2))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot2);
-                helplineInfo.Screenshot2Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot3))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot3);
-                helplineInfo.Screenshot3Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot4))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot4);
-                helplineInfo.Screenshot4Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot5))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot5);
-                helplineInfo.Screenshot5Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot6))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot6);
-                helplineInfo.Screenshot6Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot7))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot7);
-                helplineInfo.Screenshot7Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot8))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot8);
-                helplineInfo.Screenshot8Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot9))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot9);
-                helplineInfo.Screenshot9Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot10))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot10);
-                helplineInfo.Screenshot10Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot11))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot11);
-                helplineInfo.Screenshot11Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot12))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot12);
-                helplineInfo.Screenshot12Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot13))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot13);
-                helplineInfo.Screenshot13Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Screenshot14))
-            {
-                var filePath = FileState.AddFile("apiUser", "screens", model.Screenshot14);
-                helplineInfo.Screenshot14Link = filePath;
-            }
+
+            helplineInfo.ScreenshotLink = model.ScreenshotLink;
+            helplineInfo.Screenshot2Link = model.Screenshot2Link;
+            helplineInfo.Screenshot3Link = model.Screenshot3Link;
+            helplineInfo.Screenshot4Link = model.Screenshot4Link;
+            helplineInfo.Screenshot5Link = model.Screenshot5Link;
+            helplineInfo.Screenshot6Link = model.Screenshot6Link;
+            helplineInfo.Screenshot7Link = model.Screenshot7Link;
+            helplineInfo.Screenshot8Link = model.Screenshot8Link;
+            helplineInfo.Screenshot9Link = model.Screenshot9Link;
+            helplineInfo.Screenshot10Link = model.Screenshot10Link;
+            helplineInfo.Screenshot11Link = model.Screenshot11Link;
+            helplineInfo.Screenshot12Link = model.Screenshot12Link;
+            helplineInfo.Screenshot13Link = model.Screenshot13Link;
+            helplineInfo.Screenshot14Link = model.Screenshot14Link;
+
             helplineInfo.Comment = model.Comment;
             helplineInfo.Comment14 = model.Comment14;
             helplineInfo.Comment2 = model.Comment2;

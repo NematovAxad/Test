@@ -29,6 +29,6 @@ namespace AdminHandler.Commands.Organization
         public DocumentType DocumentType { get; set; }
         public string DocumentName { get; set; }
         public string MainPurpose { get; set; }
-        public IFormFile File { get; set; }
+        public string FilePath { get; set; }
     }
 }

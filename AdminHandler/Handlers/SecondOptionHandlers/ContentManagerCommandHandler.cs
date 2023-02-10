@@ -46,20 +46,17 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            var filePath = "";
+            
 
             ContentManager addModel = new ContentManager()
             {
                 OrganizationId = model.OrganizationId,
                 FullName = model.FullName,
                 Position = model.Position,
-                Phone = model.Phone
+                Phone = model.Phone,
+                FilePath = model.FilePath
             };
-            if(model.File !=null)
-            {
-                filePath = FileState.AddFile("apiAdmin", "headDocs", model.File);
-                addModel.FilePath = filePath;
-            }    
+             
             
             _contentManager.Add(addModel);
         }
@@ -74,12 +71,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
                 throw ErrorStates.NotAllowed("permission");
-            if (model.File!=null)
-            {
-                var filePath = FileState.AddFile("apiAdmin", "headDocs", model.File);
-                manager.FilePath = filePath;
-            }
 
+            manager.FilePath = model.FilePath;
             manager.FullName = model.FullName;
             manager.Position = model.Position;
             manager.Phone = model.Phone;

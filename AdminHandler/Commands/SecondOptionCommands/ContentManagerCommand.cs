@@ -29,6 +29,6 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public string FullName { get; set; }
         public string Position { get; set; }
         public string Phone { get; set; }
-        public IFormFile File { get; set; }
+        public string FilePath { get; set; }
     }
 }

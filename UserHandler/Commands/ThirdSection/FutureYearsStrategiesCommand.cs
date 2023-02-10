@@ -28,6 +28,6 @@ namespace UserHandler.Commands.ThirdSection
         public string DocumentName { get; set; }
         public string DocumentNumber { get; set; }
         public DateTime ApprovalDate { get; set; }
-        public IFormFile Document { get; set; }
+        public string DocumentPath { get; set; }
     }
 }

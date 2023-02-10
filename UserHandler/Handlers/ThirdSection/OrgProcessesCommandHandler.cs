@@ -54,13 +54,10 @@ namespace UserHandler.Handlers.ThirdSection
             {
                 OrganizationId = model.OrganizationId,
                 ProcessNumber = model.ProcessNumber,
-                ItProcessNumber = model.ItProcessNumber
+                ItProcessNumber = model.ItProcessNumber,
+                FilePath = model.FilePath,
             };
-            if (model.File != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.File);
-                addModel.FilePath = filePath;
-            }
+            
             _orgProcesses.Add(addModel);
         }
         public void Update(OrgProcessessCommand model)
@@ -82,12 +79,8 @@ namespace UserHandler.Handlers.ThirdSection
             orgProcesses.OrganizationId = model.OrganizationId;
             orgProcesses.ProcessNumber = model.ProcessNumber;
             orgProcesses.ItProcessNumber = model.ItProcessNumber;
-           
-            if (model.File != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.File);
-                orgProcesses.FilePath = filePath;
-            }
+            orgProcesses.FilePath = model.FilePath;
+            
             _orgProcesses.Update(orgProcesses);
         }
         public void Delete(OrgProcessessCommand model)

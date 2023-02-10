@@ -30,6 +30,6 @@ namespace AdminHandler.Commands.Organization
         public DocumentType DocumentType { get; set; }
         public CommanderOrgs AcceptedOrg { get; set; }
         public string DocumentName { get; set; }
-        public IFormFile File { get; set; }
+        public string FilePath { get; set; }
     }
 }

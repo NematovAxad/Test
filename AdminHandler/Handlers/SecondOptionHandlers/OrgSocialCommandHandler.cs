@@ -96,11 +96,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             {
                 addModel.Pool = model.Pool;
             }
-            if (!String.IsNullOrEmpty(model.PoolScreenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin","screens", model.PoolScreenshot);
-                addModel.PoolScreenshotLink = filePath;
-            }
+   
+            
+            addModel.PoolScreenshotLink = model.PoolScreenshot;
+            
             addModel.PoolLink = model.PoolLink;
             addModel.PoolComment = model.PoolComment;
 
@@ -120,31 +119,14 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             addModel.Post3 = model.Post3;
             addModel.Post4 = model.Post4;
             addModel.Post5 = model.Post5;
-            if (!String.IsNullOrEmpty(model.Post1Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post1Screenshot);
-                addModel.Post1Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post2Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post2Screenshot);
-                addModel.Post2Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post3Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post3Screenshot);
-                addModel.Post3Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post4Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post4Screenshot);
-                addModel.Post4Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post5Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post5Screenshot);
-                addModel.Post5Link = filePath;
-            }
+
+            addModel.Post1Link = model.Post1Link;
+            addModel.Post2Link = model.Post2Link;
+            addModel.Post3Link = model.Post3Link;
+            addModel.Post4Link = model.Post4Link;
+            addModel.Post5Link = model.Post5Link;
+
+            
             _orgSocials.Add(addModel);
         }
         public void Update(OrgSocialCommand model)
@@ -200,11 +182,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             {
                 socialSite.Pool = model.Pool;
             }
-            if (!String.IsNullOrEmpty(model.PoolScreenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.PoolScreenshot);
-                socialSite.PoolScreenshotLink = filePath;
-            }
+
+            socialSite.PoolScreenshotLink = model.PoolScreenshot;
+            
             socialSite.PoolLink = model.PoolLink;
             socialSite.PoolComment = model.PoolComment;
 
@@ -220,31 +200,12 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             socialSite.Post3 = model.Post3;
             socialSite.Post4 = model.Post4;
             socialSite.Post5 = model.Post5;
-            if (!String.IsNullOrEmpty(model.Post1Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post1Screenshot);
-                socialSite.Post1Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post2Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post2Screenshot);
-                socialSite.Post2Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post3Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post3Screenshot);
-                socialSite.Post3Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post4Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post4Screenshot);
-                socialSite.Post4Link = filePath;
-            }
-            if (!String.IsNullOrEmpty(model.Post5Screenshot))
-            {
-                var filePath = FileState.AddFile("apiAdmin", "screens", model.Post5Screenshot);
-                socialSite.Post5Link = filePath;
-            }
+
+            socialSite.Post1Link = model.Post1Link;
+            socialSite.Post2Link = model.Post2Link;
+            socialSite.Post3Link = model.Post3Link;
+            socialSite.Post4Link = model.Post4Link;
+            socialSite.Post5Link = model.Post5Link;
             _orgSocials.Update(socialSite);
         }
         public void Delete(OrgSocialCommand model)

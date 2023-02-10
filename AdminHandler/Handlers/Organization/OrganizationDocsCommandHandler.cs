@@ -46,7 +46,7 @@ namespace AdminHandler.Handlers.Organization
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
             
-            var filePath = FileState.AddFile("apiAdmin", "orgDocs", model.File);
+            
             
             OrganizationDocuments addModel = new OrganizationDocuments()
             {
@@ -56,7 +56,7 @@ namespace AdminHandler.Handlers.Organization
                 DocumentType = model.DocumentType,
                 DocumentName = model.DocumentName,
                 MainPurpose = model.MainPurpose,
-                Path = filePath
+                Path = model.FilePath
             };
             _orgDocuments.Add(addModel);
         }
@@ -78,11 +78,9 @@ namespace AdminHandler.Handlers.Organization
             orgDoc.DocumentDate = DateTime.Now;
             orgDoc.DocumentType = model.DocumentType;
             orgDoc.DocumentName = model.DocumentName;
-            if(model.File!=null)
-            {
-                var filePath = FileState.AddFile("apiAdmin", "orgDocs", model.File);
-                orgDoc.Path = filePath;
-            }
+            
+            orgDoc.Path = model.FilePath;
+            
 
             _orgDocuments.Update(orgDoc);
         }

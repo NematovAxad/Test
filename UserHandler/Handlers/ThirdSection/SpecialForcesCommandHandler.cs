@@ -91,36 +91,15 @@ namespace UserHandler.Handlers.ThirdSection
                 OutsourcingHasWorkPlan = model.OutsourcingHasWorkPlan,
                 QuarterlyReportOutsourcing = model.QuarterlyReportOutsourcing
             };
-            if(model.CharacterizingDocument!=null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.CharacterizingDocument);
-                addModel.CharacterizingDocument = filePath;
-            }
-            if (model.MinistryAgreedCharacterizingDocument != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.MinistryAgreedCharacterizingDocument);
-                addModel.MinistryAgreedCharacterizingDocument = filePath;
-            }
-            if (model.OrganizationalStructureFile != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.OrganizationalStructureFile);
-                addModel.OrganizationalStructureFile = filePath;
-            }
-            if (model.SpecialistsStuffingDocument != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.SpecialistsStuffingDocument);
-                addModel.SpecialistsStuffingDocument = filePath;
-            }
-            if (model.EmployeesSertificates != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.EmployeesSertificates);
-                addModel.EmployeesSertificates = filePath;
-            }
-            if (model.WorkPlanOfSpecialForces != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.WorkPlanOfSpecialForces);
-                addModel.WorkPlanOfSpecialForces = filePath;
-            }
+
+
+            addModel.CharacterizingDocument = model.CharacterizingDocumentPath;
+            addModel.MinistryAgreedCharacterizingDocument = model.MinistryAgreedCharacterizingDocumentPath;
+            addModel.OrganizationalStructureFile = model.OrganizationalStructureFilePath;
+            addModel.SpecialistsStuffingDocument = model.SpecialistsStuffingDocumentPath;
+            addModel.EmployeesSertificates = model.EmployeesSertificatesPath;
+            addModel.WorkPlanOfSpecialForces = model.WorkPlanOfSpecialForcesPath;
+            
             _specialForces.Add(addModel);
         }
         public void Update(SpecialForcesCommand model)
@@ -166,36 +145,13 @@ namespace UserHandler.Handlers.ThirdSection
             specialForces.OutsourcingHasWorkPlan = model.OutsourcingHasWorkPlan;
             specialForces.QuarterlyReportOutsourcing = model.QuarterlyReportOutsourcing;
 
-            if (model.CharacterizingDocument != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.CharacterizingDocument);
-                specialForces.CharacterizingDocument = filePath;
-            }
-            if (model.MinistryAgreedCharacterizingDocument != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.MinistryAgreedCharacterizingDocument);
-                specialForces.MinistryAgreedCharacterizingDocument = filePath;
-            }
-            if (model.OrganizationalStructureFile != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.OrganizationalStructureFile);
-                specialForces.OrganizationalStructureFile = filePath;
-            }
-            if (model.SpecialistsStuffingDocument != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.SpecialistsStuffingDocument);
-                specialForces.SpecialistsStuffingDocument = filePath;
-            }
-            if (model.EmployeesSertificates != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.EmployeesSertificates);
-                specialForces.EmployeesSertificates = filePath;
-            }
-            if (model.WorkPlanOfSpecialForces != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.WorkPlanOfSpecialForces);
-                specialForces.WorkPlanOfSpecialForces = filePath;
-            }
+            specialForces.CharacterizingDocument = model.CharacterizingDocumentPath;
+            specialForces.MinistryAgreedCharacterizingDocument = model.MinistryAgreedCharacterizingDocumentPath;
+            specialForces.OrganizationalStructureFile = model.OrganizationalStructureFilePath;
+            specialForces.SpecialistsStuffingDocument = model.SpecialistsStuffingDocumentPath;
+            specialForces.EmployeesSertificates = model.EmployeesSertificatesPath;
+            specialForces.WorkPlanOfSpecialForces = model.WorkPlanOfSpecialForcesPath;
+
             _specialForces.Update(specialForces);
         }
         public void Delete(SpecialForcesCommand model)

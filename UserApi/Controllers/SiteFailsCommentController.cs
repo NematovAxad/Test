@@ -97,19 +97,5 @@ namespace UserApi.Controllers
             }
         }
 
-        [HttpPost]
-        public ResponseCore<string> AddImage([FromForm] FileModel model)
-        {
-            try
-            {
-                var path = FileState.AddFile("apiUser", "siteFails", model.File);
-
-                return path;
-            }
-            catch (Exception ex)
-            {
-                return ex;
-            }
-        }
     }
 }

@@ -38,6 +38,6 @@ namespace UserHandler.Commands.ThirdSection
         public bool MechanizmForTrackingProgress { get; set; }
         public string TrackingProgressBy { get; set; }
         public bool ReglamentUpdated { get; set; }
-        public IFormFile ReglamentFile { get; set; }
+        public string ReglamentFilePath { get; set; }
     }
 }

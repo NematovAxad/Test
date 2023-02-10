@@ -63,13 +63,10 @@ namespace UserHandler.Handlers.ThirdSection
                 OrganizationId = model.OrganizationId,
                 DocumentName = model.DocumentName,
                 DocumentNumber = model.DocumentNumber,
-                ApprovalDate = model.ApprovalDate
+                ApprovalDate = model.ApprovalDate,
+                DocumentPath = model.DocumentPath,
             };
-            if (model.Document != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.Document);
-                addModel.DocumentPath = filePath;
-            }
+            
             _futureStrategies.Add(addModel);
         }
         public void Update(FutureYearsStrategiesCommand model)
@@ -93,12 +90,8 @@ namespace UserHandler.Handlers.ThirdSection
             futureStrategies.DocumentName = model.DocumentName;
             futureStrategies.DocumentNumber = model.DocumentNumber;
             futureStrategies.ApprovalDate = model.ApprovalDate;
-  
-            if (model.Document != null)
-            {
-                var filePath = FileState.AddFile("apiUser", "commonDocs", model.Document);
-                futureStrategies.DocumentPath = filePath;
-            }
+            futureStrategies.DocumentPath = model.DocumentPath;
+            
             _futureStrategies.Update(futureStrategies);
         }
         public void Delete(FutureYearsStrategiesCommand model)

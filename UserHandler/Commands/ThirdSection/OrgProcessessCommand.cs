@@ -27,6 +27,6 @@ namespace UserHandler.Commands.ThirdSection
         public int OrganizationId { get; set; }
         public int ProcessNumber { get; set; }
         public int ItProcessNumber { get; set; }
-        public IFormFile File { get; set; }
+        public string FilePath { get; set; }
     }
 }

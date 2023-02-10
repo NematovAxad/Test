@@ -51,7 +51,7 @@ namespace AdminHandler.Handlers.Organization
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            var filePath = FileState.AddFile("apiAdmin","basedDocs", model.File);
+            
 
             BasedDocuments addModel = new BasedDocuments()
             {
@@ -61,7 +61,7 @@ namespace AdminHandler.Handlers.Organization
                 DocumentType = model.DocumentType,
                 AcceptedOrg = model.AcceptedOrg,
                 DocumentName = model.DocumentName,
-                Path = filePath
+                Path = model.FilePath
             };
             _basedDocs.Add(addModel);
         }
@@ -84,13 +84,9 @@ namespace AdminHandler.Handlers.Organization
             doc.DocumentType = model.DocumentType;
             doc.AcceptedOrg = model.AcceptedOrg;
             doc.DocumentName = model.DocumentName;
+            doc.Path = model.FilePath;
 
-
-            if(model.File!=null)
-            {
-                var filePath = FileState.AddFile("apiAdmin","basedDocs", model.File);
-                doc.Path = filePath;
-            }
+            
             _basedDocs.Update(doc);
         }
         public void Delete(BasedDocsCommand model)

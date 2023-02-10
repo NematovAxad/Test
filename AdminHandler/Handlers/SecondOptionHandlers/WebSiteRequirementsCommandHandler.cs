@@ -65,21 +65,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                             requirement.SiteLink2 = r.SiteLink2;
                             requirement.SiteLink3 = r.SiteLink3;
 
-                            if (!String.IsNullOrEmpty(r.Screenshot1))
-                            {
-                                var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot1);
-                                requirement.ScreenLink1 = filePath;
-                            }
-                            if (!String.IsNullOrEmpty(r.Screenshot2))
-                            {
-                                var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot2);
-                                requirement.ScreenLink2 = filePath;
-                            }
-                            if (!String.IsNullOrEmpty(r.Screenshot3))
-                            {
-                                var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot3);
-                                requirement.ScreenLink3 = filePath;
-                            }
+                            requirement.ScreenLink1 = r.ScreenLink1;
+                            requirement.ScreenLink2 = r.ScreenLink2;
+                            requirement.ScreenLink3 = r.ScreenLink3;
+
                         }
                         if (model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                         {
@@ -118,21 +107,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 
                 foreach (var r in model.Requirements)
                 {
-                    if (!String.IsNullOrEmpty(r.Screenshot1))
-                    {
-                        var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot1);
-                        r.ScreenLink1 = filePath;
-                    }
-                    if (!String.IsNullOrEmpty(r.Screenshot2))
-                    {
-                        var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot2);
-                        r.ScreenLink2 = filePath;
-                    }
-                    if (!String.IsNullOrEmpty(r.Screenshot3))
-                    {
-                        var filePath = FileState.AddFile("apiAdmin", "screens", r.Screenshot3);
-                        r.ScreenLink3 = filePath;
-                    }
+                    
                     WebSiteRequirements requirement = new WebSiteRequirements
                     {
                         Id = r.Id,
