@@ -60,13 +60,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             addModel.DeadlineId = deadline.Id;
             addModel.Website = model.Website;
             addModel.ExpertComment = model.ExpertComment;
+            addModel.ScreenPath = model.ImagePath;
             
-            if(!String.IsNullOrEmpty(model.ScreenBase64))
-            {
-                var path = FileState.AddFile("apiUser", "siteFails", model.ScreenBase64);
-
-                addModel.ScreenPath = path;
-            }
 
             _fails.Add(addModel);
         }
@@ -82,12 +77,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
 
-            
-            var path = FileState.AddFile("apiUser", "siteFails", model.ScreenBase64);
-
-            fail.ScreenPath = path;
-            fail.ExpertComment = model.ExpertComment;
-            
+            fail.ScreenPath = model.ImagePath;
+            fail.ExpertComment = model.ExpertComment;   
 
             _fails.Update(fail);
         }

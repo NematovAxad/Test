@@ -33,6 +33,6 @@ namespace UserHandler.Commands.SecondSectionCommand
         public int DeadlineId { get; set; }
         public string Website { get; set; }
         public string ExpertComment { get; set; }
-        public string ScreenBase64 { get; set; }
+        public string ImagePath { get; set; }
     }
 }

@@ -11,6 +11,8 @@ using UserHandler.Queries.SecondSectionQuery;
 using ApiConfigs;
 using UserHandler.Commands.ReestrProjectClassificationCommand;
 using UserHandler.Commands.SecondSectionCommand;
+using Domain;
+using UserHandler.Commands.ReestrPassportCommands;
 
 namespace UserApi.Controllers
 {
@@ -88,6 +90,21 @@ namespace UserApi.Controllers
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
+        [HttpPost]
+        public ResponseCore<string> AddImage([FromForm] FileModel model)
+        {
+            try
+            {
+                var path = FileState.AddFile("apiUser", "siteFails", model.File);
+
+                return path;
             }
             catch (Exception ex)
             {
