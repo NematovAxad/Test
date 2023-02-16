@@ -30,6 +30,7 @@ namespace AdminHandler.Commands.Organization
         public string MidName { get; set; }
         public string Position { get; set; }
         public string Phone { get; set; }
+        public string Email { get; set; }
         public string Fax { get; set; }
         public string FilePath { get; set; }
     }

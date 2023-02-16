@@ -25,6 +25,8 @@ namespace Domain.Models
         public string Position { get; set; }
         [Column("phone")]
         public string Phone { get; set; }
+        [Column("mail")]
+        public string Email { get; set; }
         [Column("fax")]
         public string Fax { get; set; }
         [Column("file_path")]

@@ -56,6 +56,7 @@ namespace AdminHandler.Handlers.Organization
                 MidName = model.MidName,
                 Position = model.Position,
                 Phone = model.Phone,
+                Email = model.Email,
                 Fax = model.Fax,
                 FilePath = model.FilePath
             };
@@ -78,6 +79,7 @@ namespace AdminHandler.Handlers.Organization
             head.MidName = model.MidName;
             head.Position = model.Position;
             head.Phone = model.Phone;
+            head.Email = model.Email;
             head.Fax = model.Fax;
             
 
