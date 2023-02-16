@@ -8,6 +8,7 @@ using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,10 +53,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (socialSite != null)
                 throw ErrorStates.NotAllowed(model.MessengerLink);
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
-                throw ErrorStates.NotFound("available deadline");
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
@@ -64,68 +65,6 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 OrganizationId = model.OrganizationId,
                 MessengerLink = model.MessengerLink
             };
-            if (model.OrgFullName != null)
-            {
-                addModel.OrgFullName = model.OrgFullName;
-            }
-            if (model.OrgLegalSite != null)
-            {
-                addModel.OrgLegalSite = model.OrgLegalSite;
-            }
-            if (model.OrgPhone != null)
-            {
-                addModel.OrgPhone = model.OrgPhone;
-            }
-            if (model.OrgLegalAddress != null)
-            {
-                addModel.OrgLegalAddress = model.OrgLegalAddress;
-            }
-            if (model.OrgEmail != null)
-            {
-                addModel.OrgEmail = model.OrgEmail;
-            }
-            if (model.LinksToOtherSocials != null)
-            {
-                addModel.LinksToOtherSocials = model.LinksToOtherSocials;
-            }
-            if (model.SyncronizedPosts != null)
-            {
-                addModel.SyncronizedPosts = model.SyncronizedPosts;
-            }
-            if (model.Pool != null)
-            {
-                addModel.Pool = model.Pool;
-            }
-   
-            
-            addModel.PoolScreenshotLink = model.PoolScreenshot;
-            
-            addModel.PoolLink = model.PoolLink;
-            addModel.PoolComment = model.PoolComment;
-
-            if (model.Verified != null)
-            {
-                addModel.Verified = model.Verified;
-            }
-            addModel.IsMain = model.IsMain;
-            addModel.Link1 = model.Link1;
-            addModel.Link2 = model.Link2;
-            addModel.Link3 = model.Link3;
-            addModel.Link4 = model.Link4;
-            addModel.Link5 = model.Link5;
-
-            addModel.Post1 = model.Post1;
-            addModel.Post2 = model.Post2;
-            addModel.Post3 = model.Post3;
-            addModel.Post4 = model.Post4;
-            addModel.Post5 = model.Post5;
-
-            addModel.Post1Link = model.Post1Link;
-            addModel.Post2Link = model.Post2Link;
-            addModel.Post3Link = model.Post3Link;
-            addModel.Post4Link = model.Post4Link;
-            addModel.Post5Link = model.Post5Link;
-
             
             _orgSocials.Add(addModel);
         }
@@ -134,78 +73,84 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            var socialSite = _orgSocials.Find(s => s.Id == model.Id).FirstOrDefault();
+            var socialSite = _orgSocials.Find(s => s.Id == model.Id).Include(mbox=>mbox.Organizations).FirstOrDefault();
             if (socialSite == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
+            
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            socialSite.MessengerLink = model.MessengerLink;
-            if (model.Verified != null)
+            if (((model.UserOrgId == socialSite.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
             {
-                socialSite.Verified = model.Verified;
+                socialSite.MessengerLink = model.MessengerLink;
             }
-            if (model.OrgFullName != null)
+            if(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
-                socialSite.OrgFullName = model.OrgFullName;
-            }
-            if (model.OrgLegalSite != null)
-            {
-                socialSite.OrgLegalSite = model.OrgLegalSite;
-            }
-            if (model.OrgPhone != null)
-            {
-                socialSite.OrgPhone = model.OrgPhone;
-            }
-            if (model.OrgLegalAddress != null)
-            {
-                socialSite.OrgLegalAddress = model.OrgLegalAddress;
-            }
-            if (model.OrgEmail != null)
-            {
-                socialSite.OrgEmail = model.OrgEmail;
-            }
-            if (model.LinksToOtherSocials != null)
-            {
-                socialSite.LinksToOtherSocials = model.LinksToOtherSocials;
-            }
-            if (model.SyncronizedPosts != null)
-            {
-                socialSite.SyncronizedPosts = model.SyncronizedPosts;
-            }
-            if (model.Pool != null)
-            {
-                socialSite.Pool = model.Pool;
-            }
+                if (model.Verified != null)
+                {
+                    socialSite.Verified = model.Verified;
+                }
+                if (model.OrgFullName != null)
+                {
+                    socialSite.OrgFullName = model.OrgFullName;
+                }
+                if (model.OrgLegalSite != null)
+                {
+                    socialSite.OrgLegalSite = model.OrgLegalSite;
+                }
+                if (model.OrgPhone != null)
+                {
+                    socialSite.OrgPhone = model.OrgPhone;
+                }
+                if (model.OrgLegalAddress != null)
+                {
+                    socialSite.OrgLegalAddress = model.OrgLegalAddress;
+                }
+                if (model.OrgEmail != null)
+                {
+                    socialSite.OrgEmail = model.OrgEmail;
+                }
+                if (model.LinksToOtherSocials != null)
+                {
+                    socialSite.LinksToOtherSocials = model.LinksToOtherSocials;
+                }
+                if (model.SyncronizedPosts != null)
+                {
+                    socialSite.SyncronizedPosts = model.SyncronizedPosts;
+                }
+                if (model.Pool != null)
+                {
+                    socialSite.Pool = model.Pool;
+                }
 
-            socialSite.PoolScreenshotLink = model.PoolScreenshot;
+                socialSite.PoolScreenshotLink = model.PoolScreenshot;
+
+                socialSite.PoolLink = model.PoolLink;
+                socialSite.PoolComment = model.PoolComment;
+
+                socialSite.IsMain = model.IsMain;
+                socialSite.Link1 = model.Link1;
+                socialSite.Link2 = model.Link2;
+                socialSite.Link3 = model.Link3;
+                socialSite.Link4 = model.Link4;
+                socialSite.Link5 = model.Link5;
+
+                socialSite.Post1 = model.Post1;
+                socialSite.Post2 = model.Post2;
+                socialSite.Post3 = model.Post3;
+                socialSite.Post4 = model.Post4;
+                socialSite.Post5 = model.Post5;
+
+                socialSite.Post1Link = model.Post1Link;
+                socialSite.Post2Link = model.Post2Link;
+                socialSite.Post3Link = model.Post3Link;
+                socialSite.Post4Link = model.Post4Link;
+                socialSite.Post5Link = model.Post5Link;
+            }
             
-            socialSite.PoolLink = model.PoolLink;
-            socialSite.PoolComment = model.PoolComment;
-
-            socialSite.IsMain = model.IsMain;
-            socialSite.Link1 = model.Link1;
-            socialSite.Link2 = model.Link2;
-            socialSite.Link3 = model.Link3;
-            socialSite.Link4 = model.Link4;
-            socialSite.Link5 = model.Link5;
-
-            socialSite.Post1 = model.Post1;
-            socialSite.Post2 = model.Post2;
-            socialSite.Post3 = model.Post3;
-            socialSite.Post4 = model.Post4;
-            socialSite.Post5 = model.Post5;
-
-            socialSite.Post1Link = model.Post1Link;
-            socialSite.Post2Link = model.Post2Link;
-            socialSite.Post3Link = model.Post3Link;
-            socialSite.Post4Link = model.Post4Link;
-            socialSite.Post5Link = model.Post5Link;
             _orgSocials.Update(socialSite);
         }
         public void Delete(OrgSocialCommand model)
