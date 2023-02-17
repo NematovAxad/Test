@@ -19,6 +19,7 @@ namespace Domain.Models.Models
     {
         public int SphereId { get; set; }
         public string SphereName { get; set; }
+        public string SphereSection { get; set; }
         public double SphereRate { get; set; }
     }
 }

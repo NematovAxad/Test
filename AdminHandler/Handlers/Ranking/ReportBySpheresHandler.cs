@@ -149,6 +149,7 @@ namespace AdminHandler.Handlers.Ranking
                         SphereRateElement addElement = new SphereRateElement();
                         addElement.SphereId = s.Id;
                         addElement.SphereName = s.Name;
+                        addElement.SphereSection = s.Section;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
                         reached += sphereRate;
@@ -204,6 +205,7 @@ namespace AdminHandler.Handlers.Ranking
                         SphereRateElement addElement = new SphereRateElement();
                         addElement.SphereId = s.Id;
                         addElement.SphereName = s.Name;
+                        addElement.SphereSection = s.Section;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
                         reached += sphereRate;
@@ -264,6 +266,7 @@ namespace AdminHandler.Handlers.Ranking
                         SphereRateElement addElement = new SphereRateElement();
                         addElement.SphereId = s.Id;
                         addElement.SphereName = s.Name;
+                        addElement.SphereSection = s.Section;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
                         reached += sphereRate;
