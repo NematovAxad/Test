@@ -95,5 +95,14 @@ namespace Domain
         /// <en>Enough data not provided</en>
         /// <kr>Не предоставлено достаточно данных</kr>
         EnoughDataNotProvided = -9,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Bu vaqt oralig'ida ma'lumotlar yo'q</uz>
+        /// <ru>Данные за этот период не найдены</ru>
+        /// <en>Data for this perio not found</en>
+        /// <kr>Данные за этот период не найдены</kr>
+        DataForThisPeriodNotFound = -10,
     }
 }

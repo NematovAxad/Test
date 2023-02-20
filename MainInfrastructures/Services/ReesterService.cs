@@ -46,7 +46,7 @@ namespace MainInfrastructures.Services
                 url = url + "?OrgId=" + organization.UserServiceId.ToString()+"&Page="+model.Page.ToString()+"&Limit="+model.Limit.ToString();
 
                 var response = await client.GetAsync(url).ConfigureAwait(false);
-                if (response != null || response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
                     var obj = JObject.Parse(jsonString);
@@ -94,7 +94,7 @@ namespace MainInfrastructures.Services
                 url = url + "?id=" + model.Id.ToString();
 
                 var response = await client.GetAsync(url).ConfigureAwait(false);
-                if (response != null || response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
                     var obj = JObject.Parse(jsonString);

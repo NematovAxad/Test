@@ -1,5 +1,6 @@
 ﻿using CoreResult.ResponseCores;
 using Domain.CyberSecurityModels;
+using Domain.MyGovModels;
 using Domain.OpenDataModels;
 using Domain.ReesterModels;
 using MainInfrastructures.Interfaces;
@@ -19,12 +20,14 @@ namespace UserApi.Controllers
         IMediator _mediator;
         ICyberSecurityService _cyberSecurityService;
         IOrganizationService _organizationService;
+        IMyGovService _myGovServices;
 
-        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService)
+        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService, IMyGovService myGovServices)
         {
             _mediator = mediator;
             _cyberSecurityService = cyberSecurityService;
             _organizationService = organizationService;
+            _myGovServices = myGovServices;
         }
 
         [HttpGet]
@@ -94,6 +97,22 @@ namespace UserApi.Controllers
 
                 var result = await _cyberSecurityService.GetOrgRank(model);
             return (bool)result;
+        }
+
+        [HttpGet]
+        public async Task<ResponseCore<List<OrgServiceRecordsResult>>> MyGovServices([FromQuery] int orgId, int deadlineId)
+        {
+            try
+            {
+                
+
+                var result = await _myGovServices.OrgServiceReport(orgId, deadlineId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
         [HttpPost]

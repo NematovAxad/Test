@@ -31,7 +31,7 @@ namespace MainInfrastructures.Services
                 }
 
                 var response = await client.GetAsync(url).ConfigureAwait(false);
-                if (response != null || response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
                     var obj = JObject.Parse(jsonString);

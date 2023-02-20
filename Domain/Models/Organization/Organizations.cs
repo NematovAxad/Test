@@ -18,6 +18,9 @@ namespace Domain.Models
         public int UserServiceId { get; set; }
         [Column("full_name")]
         public string FullName { get; set; }
+        [Column("full_name_ru")]
+        public string FullNameRu { get; set; }
+
         [Column("short_name")]
         public string ShortName { get; set; }
         [Column("director_first_name")]
@@ -52,6 +55,8 @@ namespace Domain.Models
         public OrgTypes OrgType { get; set; }
         [Column("cyber_security_id")]
         public int CyberSecurityId { get; set; }
+        [Column("my_gov_id")]
+        public int MyGovId { get; set; }
         [Column("fax")]
         public string Fax { get; set; }
         [Column("org_category")]
