@@ -23,6 +23,8 @@ namespace Domain.Models
 
         [Column("short_name")]
         public string ShortName { get; set; }
+        [Column("short_name_ru")]
+        public string ShortNameRu { get; set; }
         [Column("director_first_name")]
         public string DirectorFirstName { get; set; }
         [Column("director_last_name")]

@@ -50,9 +50,15 @@ namespace AdminHandler.Handlers.Organization
 
             if (!String.IsNullOrEmpty(model.FullName))
                 addModel.FullName = model.FullName;
-            
+
+            if (!String.IsNullOrEmpty(model.FullNameRu))
+                addModel.FullNameRu = model.FullNameRu;
+
             if (!String.IsNullOrEmpty(model.ShortName))
                 addModel.ShortName = model.ShortName;
+
+            if (!String.IsNullOrEmpty(model.ShortNameRu))
+                addModel.ShortNameRu = model.ShortNameRu;
 
             if (!String.IsNullOrEmpty(model.DirectorFirstName))
                 addModel.DirectorFirstName = model.DirectorFirstName;
@@ -123,7 +129,9 @@ namespace AdminHandler.Handlers.Organization
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             org.FullName = model.FullName;
+            org.FullNameRu = model.FullNameRu;
             org.ShortName = model.ShortName;
+            org.ShortNameRu = model.ShortNameRu;
             org.DirectorFirstName = model.DirectorFirstName;
             org.DirectorLastName = model.DirectorLastName;
             org.DirectorMidName = model.DirectorMidName;

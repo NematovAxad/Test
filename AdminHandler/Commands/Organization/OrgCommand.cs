@@ -26,7 +26,9 @@ namespace AdminHandler.Commands.Organization
         public int Id { get; set; }
         public int UserServiceId { get; set; }
         public string FullName { get; set; }
+        public string FullNameRu { get; set; }
         public string ShortName { get; set; }
+        public string ShortNameRu { get; set; }
         public string DirectorFirstName { get; set; }
         public string DirectorLastName { get; set; }
         public string DirectorMidName { get; set; }
