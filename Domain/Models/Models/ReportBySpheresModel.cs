@@ -9,6 +9,7 @@ namespace Domain.Models.Models
     {
         public int OrganizationId { get; set; }
         public string OrgName { get; set; }
+        public string OrgNameRu { get; set; }
         public int UserServiceId { get; set; }
         public OrgCategory Category { get; set; }
         public List<SphereRateElement> Spheres { get; set; }
