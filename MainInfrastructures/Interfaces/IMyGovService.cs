@@ -1,4 +1,5 @@
 ﻿using Domain.CyberSecurityModels;
+using Domain.Models.Organization;
 using Domain.MyGovModels;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace MainInfrastructures.Interfaces
 {
     public interface IMyGovService
     {
-        Task<List<OrgServiceRecordsResult>> OrgServiceReport(int orgId, int deadlineId);
+        Task<List<MygovReports>> OrgServiceReport(int orgId, int deadlineId);
+        Task<bool> UpdateMyGovReport(int deadlineId);
     }
 }

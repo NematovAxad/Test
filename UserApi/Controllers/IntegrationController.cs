@@ -1,5 +1,6 @@
 ﻿using CoreResult.ResponseCores;
 using Domain.CyberSecurityModels;
+using Domain.Models.Organization;
 using Domain.MyGovModels;
 using Domain.OpenDataModels;
 using Domain.ReesterModels;
@@ -100,7 +101,7 @@ namespace UserApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseCore<List<OrgServiceRecordsResult>>> MyGovServices([FromQuery] int orgId, int deadlineId)
+        public async Task<ResponseCore<List<MygovReports>>> MyGovServices([FromQuery] int orgId, int deadlineId)
         {
             try
             {
@@ -113,6 +114,15 @@ namespace UserApi.Controllers
             {
                 return ex;
             }
+        }
+
+        [HttpPost]
+        public async Task<bool> UpdateMyGovReport([FromQuery] int deadlineId)
+        {
+
+            var result = await _myGovServices.UpdateMyGovReport(deadlineId);
+            return result;
+           
         }
 
         [HttpPost]

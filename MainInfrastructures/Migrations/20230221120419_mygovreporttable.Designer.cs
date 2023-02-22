@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230221120419_mygovreporttable")]
+    partial class mygovreporttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -728,57 +730,6 @@ namespace MainInfrastructures.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("g_sphere","ranking");
-                });
-
-            modelBuilder.Entity("Domain.Models.Organization.MygovReports", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AllRequests")
-                        .HasColumnName("all_requests")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("LateRequests")
-                        .HasColumnName("late_requests")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MygovId")
-                        .HasColumnName("mygov_id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnName("organization_id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Part")
-                        .HasColumnName("part")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnName("service_id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ServiceName")
-                        .HasColumnName("service_name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Year")
-                        .HasColumnName("year")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("mygov_reports","organizations");
                 });
 
             modelBuilder.Entity("Domain.Models.Organization.SiteFailComments", b =>
@@ -3650,15 +3601,6 @@ namespace MainInfrastructures.Migrations
                     b.HasOne("Domain.Models.GSphere", "GSphere")
                         .WithMany()
                         .HasForeignKey("SphereId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.Organization.MygovReports", b =>
-                {
-                    b.HasOne("Domain.Models.Organizations", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

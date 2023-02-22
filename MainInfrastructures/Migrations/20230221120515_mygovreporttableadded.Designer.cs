@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230221120515_mygovreporttableadded")]
+    partial class mygovreporttableadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -746,20 +748,12 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("late_requests")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MygovId")
-                        .HasColumnName("mygov_id")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .HasColumnName("name")
                         .HasColumnType("text");
 
                     b.Property<int>("OrganizationId")
                         .HasColumnName("organization_id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Part")
-                        .HasColumnName("part")
                         .HasColumnType("integer");
 
                     b.Property<int>("ServiceId")
@@ -769,10 +763,6 @@ namespace MainInfrastructures.Migrations
                     b.Property<string>("ServiceName")
                         .HasColumnName("service_name")
                         .HasColumnType("text");
-
-                    b.Property<int>("Year")
-                        .HasColumnName("year")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

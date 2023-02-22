@@ -100,5 +100,6 @@ namespace MainInfrastructures.Db
         public DbSet<ReestrProjectAutomatedServices> ReestrProjectAutomatedServices { get; set; }
         public DbSet<AutomatedFunctions> AutomatedFunctions { get; set; }
         public DbSet<AutomatedServices> AutomatedServices { get; set; }
+        public DbSet<MygovReports> MygovReports { get; set; }
     }
 }
