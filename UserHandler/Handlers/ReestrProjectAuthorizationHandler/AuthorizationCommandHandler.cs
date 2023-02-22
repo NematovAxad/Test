@@ -45,7 +45,7 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             return new AuthorizationCommandResult() {Id = id, Success = true };
         }
 
-        public void Add(AuthorizationCommand model)
+        public int Add(AuthorizationCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -80,9 +80,11 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 
 
             _authorizations.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(AuthorizationCommand model)
+        public int Update(AuthorizationCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -113,13 +115,17 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 
 
             _authorizations.Update(identity);
+
+            return identity.Id;
         }
-        public void Delete(AuthorizationCommand model)
+        public int Delete(AuthorizationCommand model)
         {
             var identity = _authorizations.Find(p => p.Id == model.Id).FirstOrDefault();
             if (identity == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
             _authorizations.Remove(identity);
+
+            return identity.Id;
         }
     }
 }
