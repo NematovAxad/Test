@@ -36,16 +36,17 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 
         public async Task<IdentitiyCommandResult> Handle(IdentityCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new IdentitiyCommandResult() { Success = true };
+            return new IdentitiyCommandResult() { Id = id, Success = true };
         }
 
-        public void Add(IdentityCommand model)
+        public int Add(IdentityCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -80,9 +81,11 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 
 
             _identities.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(IdentityCommand model)
+        public int Update(IdentityCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -113,13 +116,17 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 
 
             _identities.Update(identity);
+
+            return identity.Id;
         }
-        public void Delete(IdentityCommand model)
+        public int Delete(IdentityCommand model)
         {
             var identity = _identities.Find(p => p.Id == model.Id).FirstOrDefault();
             if (identity == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
             _identities.Remove(identity);
+
+            return identity.Id;
         }
     }
 }

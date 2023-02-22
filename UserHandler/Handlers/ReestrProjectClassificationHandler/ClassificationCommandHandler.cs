@@ -35,15 +35,16 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 
         public async Task<ClassificationCommandResult> Handle(ClassificationCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ClassificationCommandResult() { Success = true };
+            return new ClassificationCommandResult() {Id = id, Success = true };
         }
-        public void Add(ClassificationCommand model)
+        public int Add(ClassificationCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -78,9 +79,11 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 
 
             _classifications.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(ClassificationCommand model)
+        public int Update(ClassificationCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -111,13 +114,17 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 
 
             _classifications.Update(identity);
+
+            return identity.Id;
         }
-        public void Delete(ClassificationCommand model)
+        public int Delete(ClassificationCommand model)
         {
             var identity = _classifications.Find(p => p.Id == model.Id).FirstOrDefault();
             if (identity == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
             _classifications.Remove(identity);
+
+            return identity.Id;
         }
     }
 }

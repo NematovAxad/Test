@@ -6,6 +6,7 @@ namespace UserHandler.Results.ReestrProjectIdentityResult
 {
     public class ReestrProjectIdentityCommandResult
     {
+        public int Id { get; set; }
         public bool IsSuccess { get; set; }
     }
 }

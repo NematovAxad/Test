@@ -32,15 +32,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
         public async Task<ProjectPositionCommandResult> Handle(ProjectPositionCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ProjectPositionCommandResult() { IsSuccess = true };
+            return new ProjectPositionCommandResult() { Id = id, IsSuccess = true };
         }
-        public void Add(ProjectPositionCommand model)
+        public int Add(ProjectPositionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -74,8 +75,10 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 
 
                 _projectPosition.Add(addModel);
+
+            return addModel.Id;
         }
-        public void Update(ProjectPositionCommand model)
+        public int Update(ProjectPositionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -106,13 +109,17 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
                
             _projectPosition.Update(projectPosition);
+
+            return projectPosition.Id;
         }
-        public void Delete(ProjectPositionCommand model)
+        public int Delete(ProjectPositionCommand model)
         {
             var projectPosition = _projectPosition.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectPosition == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             _projectPosition.Remove(projectPosition);
+
+            return projectPosition.Id;
         }
     }
 }

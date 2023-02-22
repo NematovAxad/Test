@@ -35,13 +35,14 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 
         public async Task<AuthorizationCommandResult> Handle(AuthorizationCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new AuthorizationCommandResult() { Success = true };
+            return new AuthorizationCommandResult() {Id = id, Success = true };
         }
 
         public void Add(AuthorizationCommand model)

@@ -32,16 +32,23 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
         public async Task<ConnectionCommandResult> Handle(ConnectionCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add:
+                    id = Add(request);
+                    break;
+                case Domain.Enums.EventType.Update: 
+                    id = Update(request);
+                    break;
+                case Domain.Enums.EventType.Delete: 
+                    id = Delete(request); 
+                    break;
             }
-            return new ConnectionCommandResult() { IsSuccess = true };
+            return new ConnectionCommandResult() {Id = id, IsSuccess = false };
         }
 
-        public void Add(ConnectionCommand model)
+        public int Add(ConnectionCommand model)
         {
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
@@ -77,9 +84,11 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
 
             _projectConnection.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(ConnectionCommand model)
+        public int Update(ConnectionCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -111,14 +120,17 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
 
             _projectConnection.Update(connection);
+
+            return connection.Id;
         }
 
-        public void Delete(ConnectionCommand model)
+        public int Delete(ConnectionCommand model)
         {
             var connection = _projectConnection.Find(p => p.PlatformReestrId == model.PlatformReestrId).FirstOrDefault();
             if (connection == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
             _projectConnection.Remove(connection);
+            return connection.Id;
         }
     }
 }

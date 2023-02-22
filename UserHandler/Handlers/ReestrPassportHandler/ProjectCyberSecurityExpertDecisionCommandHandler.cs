@@ -31,15 +31,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
         public async Task<ProjectCyberSecurityExpertDecisionCommandResult> Handle(ProjectCyberSecurityExpertDecisionCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ProjectCyberSecurityExpertDecisionCommandResult() { IsSuccess = true };
+            return new ProjectCyberSecurityExpertDecisionCommandResult() {Id = id, IsSuccess = true };
         }
-        public void Add(ProjectCyberSecurityExpertDecisionCommand model)
+        public int Add(ProjectCyberSecurityExpertDecisionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -75,8 +76,10 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
 
             _projectCyberSecurityExpertDecision.Add(addModel);
+
+            return addModel.Id;
         }
-        public void Update(ProjectCyberSecurityExpertDecisionCommand model)
+        public int Update(ProjectCyberSecurityExpertDecisionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -109,14 +112,18 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
 
             _projectCyberSecurityExpertDecision.Update(projectExpertDecision);
+
+            return projectExpertDecision.Id;
         }
 
-        public void Delete(ProjectCyberSecurityExpertDecisionCommand model)
+        public int Delete(ProjectCyberSecurityExpertDecisionCommand model)
         {
             var projectExpertDecision = _projectCyberSecurityExpertDecision.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectExpertDecision == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
             _projectCyberSecurityExpertDecision.Remove(projectExpertDecision);
+
+            return projectExpertDecision.Id;
         }
     }
 }

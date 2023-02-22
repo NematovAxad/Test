@@ -35,16 +35,17 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 
         public async Task<ReestrProjectAuthorizationCommandResult> Handle(ReestrProjectAuthorizationCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ReestrProjectAuthorizationCommandResult() { Success = true };
+            return new ReestrProjectAuthorizationCommandResult() {Id = id, Success = true };
         }
 
-        public void Add(ReestrProjectAuthorizationCommand model)
+        public int Add(ReestrProjectAuthorizationCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -87,8 +88,10 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 
 
             _projectAuthorization.Add(addModel);
+
+            return addModel.Id;
         }
-        public void Update(ReestrProjectAuthorizationCommand model)
+        public int Update(ReestrProjectAuthorizationCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -130,13 +133,17 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             }
 
             _projectAuthorization.Update(projectAuthorization);
+
+            return projectAuthorization.Id;
         }
-        public void Delete(ReestrProjectAuthorizationCommand model)
+        public int Delete(ReestrProjectAuthorizationCommand model)
         {
             var projectIdentities = _projectAuthorization.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectIdentities == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             _projectAuthorization.Remove(projectIdentities);
+
+            return projectIdentities.Id;
         }
     }
 }

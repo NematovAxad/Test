@@ -37,16 +37,17 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
         public async Task<AutomaticFunctionsCommandResult> Handle(AutomaticFunctionsCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new AutomaticFunctionsCommandResult() { IsSuccess = true };
+            return new AutomaticFunctionsCommandResult() { Id = id, IsSuccess = true };
         }
 
-        public void Add(AutomaticFunctionsCommand model)
+        public int Add(AutomaticFunctionsCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -82,9 +83,11 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
 
             _functions.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(AutomaticFunctionsCommand model)
+        public int Update(AutomaticFunctionsCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -121,13 +124,17 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
 
             _functions.Update(function);
+
+            return function.Id;
         }
-        public void Delete(AutomaticFunctionsCommand model)
+        public int Delete(AutomaticFunctionsCommand model)
         {
             var function = _functions.Find(p => p.Id == model.Id).FirstOrDefault();
             if (function == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
             _functions.Remove(function);
+
+            return function.Id;
         }
     }
 }

@@ -29,15 +29,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         }
         public async Task<ProjectExpertDecisionCommandResult> Handle(ProjectExpertDecisionCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ProjectExpertDecisionCommandResult() { IsSuccess = true };
+            return new ProjectExpertDecisionCommandResult() { Id = id, IsSuccess = true };
         }
-        public void Add(ProjectExpertDecisionCommand model)
+        public int Add(ProjectExpertDecisionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -73,8 +74,10 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
 
             _projectExpertDecision.Add(addModel);
+
+            return addModel.Id;
         }
-        public void Update(ProjectExpertDecisionCommand model)
+        public int Update(ProjectExpertDecisionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -107,14 +110,18 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
 
             _projectExpertDecision.Update(projectExpertDecision);
+
+            return projectExpertDecision.Id;
         }
 
-        public void Delete(ProjectExpertDecisionCommand model)
+        public int Delete(ProjectExpertDecisionCommand model)
         {
             var projectExpertDecision = _projectExpertDecision.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectExpertDecision == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
             _projectExpertDecision.Remove(projectExpertDecision);
+
+            return projectExpertDecision.Id;
         }
     }
 }

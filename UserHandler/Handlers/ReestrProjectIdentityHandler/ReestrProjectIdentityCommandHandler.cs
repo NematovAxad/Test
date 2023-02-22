@@ -33,15 +33,16 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
         }
         public async Task<ReestrProjectIdentityCommandResult> Handle(ReestrProjectIdentityCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ReestrProjectIdentityCommandResult() { IsSuccess = true };
+            return new ReestrProjectIdentityCommandResult() {Id = id, IsSuccess = true };
         }
-        public void Add(ReestrProjectIdentityCommand model)
+        public int Add(ReestrProjectIdentityCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -84,8 +85,10 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 
 
             _projectIdentities.Add(addModel);
+
+            return addModel.Id;
         }
-        public void Update(ReestrProjectIdentityCommand model)
+        public int Update(ReestrProjectIdentityCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -126,13 +129,17 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             }
 
             _projectIdentities.Update(projectIdentities);
+
+            return projectIdentities.Id;
         }
-        public void Delete(ReestrProjectIdentityCommand model)
+        public int Delete(ReestrProjectIdentityCommand model)
         {
             var projectIdentities = _projectIdentities.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectIdentities == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
             _projectIdentities.Remove(projectIdentities);
+
+            return projectIdentities.Id;
         }
     }
 }

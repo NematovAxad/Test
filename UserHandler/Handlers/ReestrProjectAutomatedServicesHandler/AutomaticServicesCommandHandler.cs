@@ -34,15 +34,16 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
         public async Task<AutomaticServicesCommandResult> Handle(AutomaticServicesCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new AutomaticServicesCommandResult() { IsSuccess = true };
+            return new AutomaticServicesCommandResult() {Id = id, IsSuccess = true };
         }
-        public void Add(AutomaticServicesCommand model)
+        public int Add(AutomaticServicesCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -79,9 +80,11 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
 
             _services.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(AutomaticServicesCommand model)
+        public int Update(AutomaticServicesCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -116,13 +119,17 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
 
             _services.Update(service);
+
+            return service.Id;
         }
-        public void Delete(AutomaticServicesCommand model)
+        public int Delete(AutomaticServicesCommand model)
         {
             var service = _services.Find(p => p.Id == model.Id).FirstOrDefault();
             if (service == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
             _services.Remove(service);
+
+            return service.Id;
         }
     }
 }

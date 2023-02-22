@@ -37,16 +37,17 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
         public async Task<ReestrProjectServicesCommandResult> Handle(ReestrProjectServicesCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ReestrProjectServicesCommandResult() { IsSuccess = true };
+            return new ReestrProjectServicesCommandResult() { Id = id, IsSuccess = true };
         }
 
-        public void Add(ReestrProjectServicesCommand model)
+        public int Add(ReestrProjectServicesCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -88,9 +89,11 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
 
             _projectServices.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(ReestrProjectServicesCommand model)
+        public int Update(ReestrProjectServicesCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -130,14 +133,18 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             }
 
             _projectServices.Update(projectServices);
+
+            return projectServices.Id;
         }
 
-        public void Delete(ReestrProjectServicesCommand model)
+        public int Delete(ReestrProjectServicesCommand model)
         {
             var projectServices = _projectServices.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectServices == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
             _projectServices.Remove(projectServices);
+
+            return projectServices.Id;
         }
     }
 }

@@ -32,15 +32,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         }
         public async Task<ProjectConnectionResult> Handle(ProjectConnectionCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ProjectConnectionResult() { IsSuccess = true };
+            return new ProjectConnectionResult() {Id = id,  IsSuccess = true };
         }
-        public void Add(ProjectConnectionCommand model)
+        public int Add(ProjectConnectionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -82,9 +83,11 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                     addModel.ExceptedItems = model.ExceptedItems;
             }
 
-            _projectConnection.Add(addModel);    
+            _projectConnection.Add(addModel);
+
+            return addModel.Id;
         }
-        public void Update(ProjectConnectionCommand model)
+        public int Update(ProjectConnectionCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -126,14 +129,18 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                     projectConnection.ExceptedItems = model.ExceptedItems;
             }
             _projectConnection.Update(projectConnection);
+
+            return projectConnection.Id;
         }
 
-        public void Delete(ProjectConnectionCommand model)
+        public int Delete(ProjectConnectionCommand model)
         {
             var projectConnection = _projectConnection.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectConnection == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
             _projectConnection.Remove(projectConnection);
+
+            return projectConnection.Id;
         }
     }
 }
