@@ -1,5 +1,6 @@
 ﻿using AdminHandler.Commands.Organization;
 using AdminHandler.Results.Organization;
+using Domain;
 using Domain.Models;
 using Domain.Permission;
 using Domain.States;
@@ -35,7 +36,11 @@ namespace AdminHandler.Handlers.Organization
         }
         public void AddOrg(OrgCommand model)
         {
-            var org = _organization.Find(o => o.ShortName == model.ShortName).FirstOrDefault();
+            if (model.UserServiceId != 0)
+            {
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            }
+            var org = _organization.Find(o => o.UserServiceId == model.UserServiceId).FirstOrDefault();
 
             if (org != null)
             {
@@ -45,8 +50,8 @@ namespace AdminHandler.Handlers.Organization
                 throw ErrorStates.NotAllowed("permission");
             Organizations addModel = new Organizations();
 
-            if (model.UserServiceId != 0)
-                addModel.UserServiceId = model.UserServiceId;
+          
+            addModel.UserServiceId = model.UserServiceId;
 
             if (!String.IsNullOrEmpty(model.FullName))
                 addModel.FullName = model.FullName;

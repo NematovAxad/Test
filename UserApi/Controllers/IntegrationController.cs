@@ -124,6 +124,14 @@ namespace UserApi.Controllers
             return result;
            
         }
+        [HttpPost]
+        public async Task<bool> UpdateMyGovReportDetail([FromQuery] int deadlineId)
+        {
+
+            var result = await _myGovServices.UpdateMyGovReportDetails(deadlineId);
+            return result;
+
+        }
 
         [HttpPost]
         public async Task<bool> UpdateOrgsName()

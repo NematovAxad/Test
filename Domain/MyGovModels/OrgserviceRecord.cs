@@ -21,6 +21,19 @@ namespace Domain.MyGovModels
         public Tasks Tasks { get; set; }
     }
 
+    public class OrgserviceDetail
+    {
+
+        [JsonProperty(PropertyName = "organisation")]
+        public MyGovOrganizationRecord OrganizationRecord { get; set; }
+
+        [JsonProperty(PropertyName = "service")]
+        public MyGovService MyGovService { get; set; }
+
+        [JsonProperty(PropertyName = "deadline_task")]
+        public DeadlineTask DeadlineTask { get; set; }
+    }
+
     public class MyGovMainOrganization
     {
         [JsonProperty(PropertyName = "id")]
@@ -34,7 +47,7 @@ namespace Domain.MyGovModels
     public class MyGovOrganizationRecord
     {
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
 
         [JsonProperty(PropertyName = "name")]
@@ -58,5 +71,17 @@ namespace Domain.MyGovModels
 
         [JsonProperty(PropertyName = "deadline")]
         public int Deadline { get; set; }
+    }
+
+    public class DeadlineTask
+    {
+        [JsonProperty(PropertyName = "id")]
+        public int Id { get; set; }
+
+        [JsonProperty(PropertyName = "deadline_from")]
+        public string DeadlineFrom { get; set; }
+
+        [JsonProperty(PropertyName = "deadline_to")]
+        public string DeadlineTo { get; set; }
     }
 }

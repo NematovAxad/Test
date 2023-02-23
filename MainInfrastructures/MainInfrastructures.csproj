@@ -69,6 +69,8 @@
     <Compile Remove="Migrations\20221226060426_hokimliklar.Designer.cs" />
     <Compile Remove="Migrations\20221226114805_trashdeleted.cs" />
     <Compile Remove="Migrations\20221226114805_trashdeleted.Designer.cs" />
+    <Compile Remove="Migrations\20230223130852_mygovreportdetail.cs" />
+    <Compile Remove="Migrations\20230223130852_mygovreportdetail.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
