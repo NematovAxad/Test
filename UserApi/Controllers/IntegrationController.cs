@@ -115,6 +115,21 @@ namespace UserApi.Controllers
                 return ex;
             }
         }
+        [HttpGet]
+        public async Task<ResponseCore<List<MygovReportsDetail>>> MyGovServiceDetails([FromQuery] int serviceId)
+        {
+            try
+            {
+
+
+                var result = await _myGovServices.MygovReportsDetails(serviceId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
 
         [HttpPost]
         public async Task<bool> UpdateMyGovReport([FromQuery] int deadlineId)

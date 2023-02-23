@@ -36,6 +36,15 @@ namespace MainInfrastructures.Services
             _db = db;
         }
 
+        public async Task<List<MygovReportsDetail>> MygovReportsDetails(int serviceId)
+        {
+            List<MygovReportsDetail> serviceList = new List<MygovReportsDetail>();
+
+            serviceList = _mygovReportsDetail.Find(r => r.ServiceId == serviceId).ToList();
+
+            return serviceList;
+        }
+
         public async Task<List<MygovReports>> OrgServiceReport(int orgId, int deadlineId)
         {
             List<MygovReports> serviceList = new List<MygovReports>();
