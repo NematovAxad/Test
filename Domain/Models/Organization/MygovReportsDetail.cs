@@ -12,6 +12,9 @@ namespace Domain.Models.Organization
         [Column("id")]
         public int Id { get; set; }
 
+        [Column("mygov_org_id")]
+        public int MygovOrgId { get; set; }
+
         [Column("task_id")]
         public int TaskId { get; set; }
 

@@ -36,36 +36,80 @@ namespace MainInfrastructures.Services
             _db = db;
         }
 
-        public async Task<List<MygovReportsDetail>> MygovReportsDetails(int serviceId)
+        public async Task<OrgServiceReportDetailResult> MygovReportsDetails(int serviceId, int orgId)
         {
-            List<MygovReportsDetail> serviceList = new List<MygovReportsDetail>();
+            List<MygovReportsDetail> serviceDetailList = new List<MygovReportsDetail>();
 
-            serviceList = _mygovReportsDetail.Find(r => r.ServiceId == serviceId).ToList();
+            var list = _mygovReports.Find(r => r.OrganizationId == orgId && r.ServiceId == serviceId);
 
-            return serviceList;
+
+            var detaillist = _mygovReportsDetail.Find(r => r.ServiceId == serviceId && list.Any(a => a.MygovMainOrgId == r.MygovOrgId));
+
+            OrgServiceReportDetailResult result = new OrgServiceReportDetailResult();
+            result.Count = detaillist.Count();
+            result.Items = detaillist.ToList<object>(); 
+
+            return result;
         }
 
-        public async Task<List<MygovReports>> OrgServiceReport(int orgId, int deadlineId)
+        public async Task<OrgServiceReportResult> MygovServiceReport(int orgId)
         {
-            List<MygovReports> serviceList = new List<MygovReports>();
+            List<OrgServiceReport> serviceList = new List<OrgServiceReport>();
 
             var organization = _organization.Find(o => o.Id == orgId).FirstOrDefault();
             if (organization == null)
                 throw ErrorStates.Error(UIErrors.OrganizationNotFound);
 
-            var deadline = _deadline.Find(o => o.Id == deadlineId).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            int part = 0;
-            if (deadline.Quarter == Domain.Enums.Quarters.First || deadline.Quarter == Domain.Enums.Quarters.Second)
-                part = 1;
-            if (deadline.Quarter == Domain.Enums.Quarters.Third || deadline.Quarter == Domain.Enums.Quarters.Fourth)
-                part = 2;
 
-            serviceList = _mygovReports.Find(r => r.OrganizationId == orgId && r.Year == deadline.Year && r.Part == part).ToList();
-            
-            return serviceList;
+            var list = _mygovReports.Find(r => r.OrganizationId == orgId).ToList();
+
+            foreach (var item in list)
+            {
+                var s = serviceList.Where(s => s.ServiceId == item.ServiceId && s.OrganizationId == item.OrganizationId).FirstOrDefault();
+                if (s != null)
+                {
+                    s.AllRequest += item.AllRequests;
+                    s.LatereRequest += item.LateRequests;
+                }
+                else
+                {
+                    serviceList.Add(new OrgServiceReport
+                    {
+                        OrganizationId = item.OrganizationId,
+                        ServiceId = item.ServiceId,
+                        ServiceName = item.ServiceName,
+                        AllRequest = item.AllRequests,
+                        LatereRequest = item.LateRequests
+                    });
+                }
+            }
+            OrgServiceReportResult result = new OrgServiceReportResult();
+
+            result.Count = serviceList.Count();
+            result.Items = serviceList.ToList<object>();
+            return result;
+        }
+
+        public class OrgServiceReportDetailResult
+        {
+            public int Count { get; set; }
+            public List<object> Items { get; set; }
+        }
+
+        public class OrgServiceReportResult
+        {
+            public int Count { get; set; }
+            public List<object> Items { get; set; }
+        }
+        public class OrgServiceReport
+        {
+            public int OrganizationId { get; set; }
+            public int ServiceId { get; set; }
+            public string ServiceName { get; set; }
+            public int AllRequest { get; set; }
+            public int LatereRequest { get; set; }
+
         }
 
         public async Task<bool> UpdateMyGovReport(int deadlineId)
@@ -106,29 +150,20 @@ namespace MainInfrastructures.Services
 
                     foreach (var i in responseResult)
                     {
-                        if (serviceList.Any(r => r.ServiceId == i.MyGovService.Id && r.Id == i.MainOrganization.Id))
+                        serviceList.Add(new MygovReports
                         {
-
-                            var item = serviceList.Where(r => r.ServiceId == i.MyGovService.Id && r.Id == i.MainOrganization.Id).FirstOrDefault();
-
-                            item.AllRequests = item.AllRequests + i.Tasks.All;
-                            item.LateRequests = item.LateRequests + i.Tasks.Deadline;
-                        }
-                        else
-                        {
-                            serviceList.Add(new MygovReports
-                            {
-                                MygovId = i.MainOrganization.Id,
-                                OrganizationId = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? 0 : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().Id,
-                                Name = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? String.Empty : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().ShortName,
-                                ServiceId = i.MyGovService.Id,
-                                ServiceName = i.MyGovService.Name,
-                                Year = deadline.Year,
-                                Part = part,
-                                AllRequests = i.Tasks.All,
-                                LateRequests = i.Tasks.Deadline
-                            });
-                        }
+                            MygovMainOrgId = i.MainOrganization.Id,
+                            MygovOrgId = i.OrganizationRecord.Id,
+                            OrganizationId = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? 0 : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().Id,
+                            Name = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? String.Empty : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().ShortName,
+                            ServiceId = i.MyGovService.Id,
+                            ServiceName = i.MyGovService.Name,
+                            Year = deadline.Year,
+                            Part = part,
+                            AllRequests = i.Tasks.All,
+                            LateRequests = i.Tasks.Deadline
+                        });
+                        
                     }
                 }
                 catch
@@ -138,21 +173,13 @@ namespace MainInfrastructures.Services
 
                 serviceList = serviceList.Where(s=>s.OrganizationId > 0).ToList();
 
-                foreach(var service in serviceList)
-                {
-                    var s = _mygovReports.Find(r => r.OrganizationId == service.OrganizationId && r.ServiceId == service.ServiceId && r.Year == service.Year && r.Part == service.Part).FirstOrDefault();
-                    if(s != null)
-                    {
-                        s.AllRequests = service.AllRequests;
-                        s.LateRequests = service.LateRequests;
+                var allRecords = _mygovReports.GetAll();
 
-                        _mygovReports.Update(s);
-                    }
-                    else
-                    {
-                        _mygovReports.Add(service);
-                    }
-                }
+                _db.Context.Set<MygovReports>().RemoveRange(allRecords);
+
+                _db.Context.Set<MygovReports>().AddRange(serviceList);
+
+                _db.Context.SaveChanges();
 
             }
             return true;
@@ -196,6 +223,7 @@ namespace MainInfrastructures.Services
                         addList.Add(new MygovReportsDetail
                         {
                             TaskId = item.DeadlineTask.Id,
+                            MygovOrgId = item.OrganizationRecord.Id,
                             ServiceId = item.MyGovService.Id,
                             ServiceName = item.MyGovService.Name,
                             DeadlineFrom = item.DeadlineTask.DeadlineFrom,

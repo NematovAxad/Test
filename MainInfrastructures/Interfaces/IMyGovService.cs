@@ -5,15 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using static MainInfrastructures.Services.MyGovService;
 
 namespace MainInfrastructures.Interfaces
 {
     public interface IMyGovService
     {
-        Task<List<MygovReports>> OrgServiceReport(int orgId, int deadlineId);
+        Task<OrgServiceReportResult> MygovServiceReport(int orgId);
         Task<bool> UpdateMyGovReport(int deadlineId);
 
-        Task<List<MygovReportsDetail>> MygovReportsDetails(int serviceId);
+        Task<OrgServiceReportDetailResult> MygovReportsDetails(int serviceId, int orgId);
         Task<bool> UpdateMyGovReportDetails(int deadlineId);
     }
 }

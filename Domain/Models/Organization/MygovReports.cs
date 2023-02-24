@@ -12,8 +12,11 @@ namespace Domain.Models.Organization
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("mygov_id")]
-        public int MygovId { get; set; }
+        [Column("mygov_main_org_id")]
+        public int MygovMainOrgId { get; set; }
+
+        [Column("mygov_org_id")]
+        public int MygovOrgId { get; set; }
 
         [Column("organization_id")]
         [ForeignKey("Organizations")]

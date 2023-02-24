@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static MainInfrastructures.Services.MyGovService;
 
 namespace UserApi.Controllers
 {
@@ -101,13 +102,13 @@ namespace UserApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseCore<List<MygovReports>>> MyGovServices([FromQuery] int orgId, int deadlineId)
+        public async Task<ResponseCore<List<OrgServiceReportResult>>> MyGovServices([FromQuery] int orgId)
         {
             try
             {
                 
 
-                var result = await _myGovServices.OrgServiceReport(orgId, deadlineId);
+                var result = await _myGovServices.OrgServiceReport(orgId);
                 return result;
             }
             catch (Exception ex)
@@ -116,13 +117,13 @@ namespace UserApi.Controllers
             }
         }
         [HttpGet]
-        public async Task<ResponseCore<List<MygovReportsDetail>>> MyGovServiceDetails([FromQuery] int serviceId)
+        public async Task<ResponseCore<OrgServiceReportDetailResult>> MyGovServiceDetails([FromQuery] int serviceId, int orgId)
         {
             try
             {
 
 
-                var result = await _myGovServices.MygovReportsDetails(serviceId);
+                var result = await _myGovServices.MygovReportsDetails(serviceId, orgId);
                 return result;
             }
             catch (Exception ex)
