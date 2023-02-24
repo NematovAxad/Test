@@ -102,13 +102,13 @@ namespace UserApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseCore<List<OrgServiceReportResult>>> MyGovServices([FromQuery] int orgId)
+        public async Task<ResponseCore<OrgServiceReportResult>> MyGovServices([FromQuery] int orgId)
         {
             try
             {
                 
 
-                var result = await _myGovServices.OrgServiceReport(orgId);
+                var result = await _myGovServices.MygovServiceReport(orgId);
                 return result;
             }
             catch (Exception ex)
