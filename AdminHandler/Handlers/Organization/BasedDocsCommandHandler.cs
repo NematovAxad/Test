@@ -45,7 +45,7 @@ namespace AdminHandler.Handlers.Organization
                 throw ErrorStates.Error(UIErrors.OrganizationNotFound);
             }
 
-            var doc = _basedDocs.Find(d => d.DocumentNo == model.DocumentNo).FirstOrDefault();
+            var doc = _basedDocs.Find(d =>d.OrganizationId == model.OrganizationId && d.DocumentNo == model.DocumentNo).FirstOrDefault();
             if (doc != null)
                 throw ErrorStates.Error(UIErrors.BasedDocExist);
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
