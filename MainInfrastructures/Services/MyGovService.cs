@@ -43,7 +43,7 @@ namespace MainInfrastructures.Services
             var list = _mygovReports.Find(r => r.OrganizationId == orgId && r.ServiceId == serviceId);
 
 
-            var detaillist = _mygovReportsDetail.Find(r => r.ServiceId == serviceId && list.Any(a => a.MygovMainOrgId == r.MygovOrgId));
+            var detaillist = _mygovReportsDetail.Find(r => r.ServiceId == serviceId && list.Any(a => a.MygovOrgId == r.MygovOrgId));
 
             OrgServiceReportDetailResult result = new OrgServiceReportDetailResult();
             result.Count = detaillist.Count();

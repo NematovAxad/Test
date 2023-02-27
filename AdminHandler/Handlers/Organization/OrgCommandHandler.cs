@@ -36,7 +36,7 @@ namespace AdminHandler.Handlers.Organization
         }
         public void AddOrg(OrgCommand model)
         {
-            if (model.UserServiceId != 0)
+            if (model.UserServiceId == 0)
             {
                 throw ErrorStates.Error(UIErrors.OrganizationNotFound);
             }
