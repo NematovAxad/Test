@@ -3,7 +3,8 @@
     public enum CommanderOrgs
     {
         President = 1,
-        UpperHouse,
-        CabinetMinisters
+        CabinetMinisters = 2,
+        UpperHouse = 3,
+        PresidentialAdministration = 4,
     }
 }

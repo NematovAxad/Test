@@ -2,8 +2,11 @@
 {
     public enum DocumentType
     {
-        Assignment = 1,
-        Low,
-        Resolution
+       
+        Low = 1,
+        Decision = 2,
+        Decree = 3,
+        Command = 4,
+        Statement = 5,
     }
 }
