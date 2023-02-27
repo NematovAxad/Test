@@ -57,7 +57,7 @@ namespace AdminHandler.Handlers.Organization
             {
                 OrganizationId = model.OrganizationId,
                 DocumentNo = model.DocumentNo,
-                DocumentDate = DateTime.Now,
+                DocumentDate = model.DocumentDate,
                 DocumentType = model.DocumentType,
                 AcceptedOrg = model.AcceptedOrg,
                 DocumentName = model.DocumentName,
@@ -80,7 +80,7 @@ namespace AdminHandler.Handlers.Organization
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
             doc.DocumentNo = model.DocumentNo;
-            doc.DocumentDate = DateTime.Now;
+            doc.DocumentDate = model.DocumentDate;
             doc.DocumentType = model.DocumentType;
             doc.AcceptedOrg = model.AcceptedOrg;
             doc.DocumentName = model.DocumentName;
