@@ -230,6 +230,8 @@ namespace MainInfrastructures.Services
                     {
                         org.FullName = result.Result.Data.First().Name;
                         org.ShortName = result.Result.Data.First().Name;
+                        org.FullNameRu = result.Result.Data.First().NameRu;
+                        org.ShortNameRu = result.Result.Data.First().NameRu;
                     }
                     
                     _organization.Update(org);

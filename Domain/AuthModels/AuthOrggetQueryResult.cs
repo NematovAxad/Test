@@ -28,5 +28,7 @@ namespace Domain.AuthModels
 
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+        [JsonProperty(PropertyName = "nameRu")]
+        public string NameRu { get; set; }
     }
 }

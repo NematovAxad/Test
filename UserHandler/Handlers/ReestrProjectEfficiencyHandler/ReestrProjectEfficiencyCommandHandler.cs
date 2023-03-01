@@ -1,5 +1,6 @@
 ﻿using Domain.Models.SecondSection;
 using Domain.Models;
+using Domain.States;
 using JohaRepository;
 using MediatR;
 using System;
@@ -8,33 +9,35 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UserHandler.Commands.ReestrProjectClassificationCommand;
+using UserHandler.Commands.ReestrProjectEfficiencyCommand;
 using UserHandler.Results.ReestrProjectClassificationResult;
-using UserHandler.Results.ReestrProjectIdentityResult;
-using Domain.States;
-using UserHandler.Commands.ReestrProjectIdentityCommand;
+using UserHandler.Results.ReestrProjectEfficiencyResult;
 using System.Linq;
 using Domain.Permission;
+using MainInfrastructures.Migrations;
 using Microsoft.EntityFrameworkCore;
 
-namespace UserHandler.Handlers.ReestrProjectClassificationHandler
+namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 {
-    public class ReestrProjectClassificationCommandHandler : IRequestHandler<ReestrProjectClassificationCommand, ReestrProjectClassificationCommandResult>
+    public class ReestrProjectEfficiencyCommandHandler : IRequestHandler<ReestrProjectEfficiencyCommand, ReestrProjectEfficiencyCommandResult>
     {
+
+
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<ReestrProjectClassifications, int> _projectClassifications;
-        private readonly IRepository<ProjectClassifications, int> _classifications;
+        private readonly IRepository<ReestrProjectEfficiency, int> _projectEfficiency;
+        private readonly IRepository<ProjectEfficiency, int> _efficiency;
 
-        public ReestrProjectClassificationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectClassifications, int> projectClassifications, IRepository<ProjectClassifications, int> classifications)
+        public ReestrProjectEfficiencyCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectEfficiency, int> projectEfficiency, IRepository<ProjectEfficiency, int> efficiency)
         {
             _organization = organization;
             _deadline = deadline;
-            _projectClassifications = projectClassifications;
-            _classifications = classifications;
+            _projectEfficiency = projectEfficiency;
+            _efficiency = efficiency;
         }
 
 
-        public async Task<ReestrProjectClassificationCommandResult> Handle(ReestrProjectClassificationCommand request, CancellationToken cancellationToken)
+        public async Task<ReestrProjectEfficiencyCommandResult> Handle(ReestrProjectEfficiencyCommand request, CancellationToken cancellationToken)
         {
             int id = 0;
             switch (request.EventType)
@@ -43,10 +46,10 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 case Domain.Enums.EventType.Update: id = Update(request); break;
                 case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new ReestrProjectClassificationCommandResult() {Id = id, Success = true };
+            return new ReestrProjectEfficiencyCommandResult() { Id = id, Success = true };
         }
 
-        public int Add(ReestrProjectClassificationCommand model)
+        public int Add(ReestrProjectEfficiencyCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -60,10 +63,10 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
-            var projectClassificator = _projectClassifications.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
-            if (projectClassificator != null)
+            var projectEfficiency = _projectEfficiency.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
+            if (projectEfficiency != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectClassifications addModel = new ReestrProjectClassifications();
+            ReestrProjectEfficiency addModel = new ReestrProjectEfficiency();
 
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
@@ -79,7 +82,7 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
-                
+
                 if (model.AllItems > 0)
                     addModel.AllItems = model.AllItems;
 
@@ -88,24 +91,27 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
             }
 
 
-            _projectClassifications.Add(addModel);
+            _projectEfficiency.Add(addModel);
 
             return addModel.Id;
         }
-        public int Update(ReestrProjectClassificationCommand model)
+        public int Update(ReestrProjectEfficiencyCommand model)
         {
-            var projectClassificator = _projectClassifications.Find(p => p.Id == model.Id).Include(mbox => mbox.Classifications).FirstOrDefault();
-            if (projectClassificator == null)
-                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+            var projectEfficiency = _projectEfficiency.Find(p => p.Id == model.Id).Include(mbox => mbox.Efficiencies).FirstOrDefault();
+            if (projectEfficiency == null)
+                throw ErrorStates.NotFound(model.Id.ToString());
 
-            var org = _organization.Find(o => o.Id == projectClassificator.OrganizationId).FirstOrDefault();
+            var org = _organization.Find(o => o.Id == projectEfficiency.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
+            
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
@@ -114,37 +120,37 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
                 if (!String.IsNullOrEmpty(model.OrgComment))
-                    projectClassificator.OrgComment = model.OrgComment;
-                projectClassificator.Exist = model.Exist;
+                    projectEfficiency.OrgComment = model.OrgComment;
+                projectEfficiency.Exist = model.Exist;
 
                 if (model.Exist == false)
                 {
-                    _classifications.RemoveRange(projectClassificator.Classifications);
+                    _efficiency.RemoveRange(projectEfficiency.Efficiencies);
                 }
             }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
-                    projectClassificator.ExpertComment = model.ExpertComment;
-                
+                    projectEfficiency.ExpertComment = model.ExpertComment;
+
                 if (model.AllItems > 0)
-                    projectClassificator.AllItems = model.AllItems;
+                    projectEfficiency.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    projectClassificator.ExceptedItems = model.ExceptedItems;
+                    projectEfficiency.ExceptedItems = model.ExceptedItems;
             }
 
-            _projectClassifications.Update(projectClassificator);
+            _projectEfficiency.Update(projectEfficiency);
 
-            return projectClassificator.Id;
+            return projectEfficiency.Id;
         }
-        public int Delete(ReestrProjectClassificationCommand model)
+        public int Delete(ReestrProjectEfficiencyCommand model)
         {
-            var projectIdentities = _projectClassifications.Find(p => p.Id == model.Id).FirstOrDefault();
+            var projectIdentities = _projectEfficiency.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectIdentities == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
-            _projectClassifications.Remove(projectIdentities);
+            _projectEfficiency.Remove(projectIdentities);
 
             return projectIdentities.Id;
         }

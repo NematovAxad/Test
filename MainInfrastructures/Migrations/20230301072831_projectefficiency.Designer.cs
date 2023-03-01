@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230301072831_projectefficiency")]
+    partial class projectefficiency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2221,37 +2223,6 @@ namespace MainInfrastructures.Migrations
                     b.ToTable("project_connections","reestrprojects");
                 });
 
-            modelBuilder.Entity("Domain.Models.SecondSection.ProjectEfficiency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("EfficiencyType")
-                        .HasColumnName("efficiency_type")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnName("file_path")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OrgComment")
-                        .HasColumnName("org_comment")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnName("parent_id")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("project_efficiency","reestrprojects");
-                });
-
             modelBuilder.Entity("Domain.Models.SecondSection.ProjectIdentities", b =>
                 {
                     b.Property<int>("Id")
@@ -2506,16 +2477,20 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("all_items")
                         .HasColumnType("integer");
 
+                    b.Property<int>("EfficiencyType")
+                        .HasColumnName("efficiency_type")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ExceptedItems")
                         .HasColumnName("excepted_items")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Exist")
-                        .HasColumnName("exist")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("ExpertComment")
                         .HasColumnName("expert_comment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnName("file_path")
                         .HasColumnType("text");
 
                     b.Property<string>("OrgComment")
@@ -2526,9 +2501,6 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("organization_id")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ReestrProjectEfficiencyId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ReestrProjectId")
                         .HasColumnName("reestr_project_id")
                         .HasColumnType("integer");
@@ -2536,8 +2508,6 @@ namespace MainInfrastructures.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
-
-                    b.HasIndex("ReestrProjectEfficiencyId");
 
                     b.ToTable("reestr_project_efficiency","reestrprojects");
                 });
@@ -4152,15 +4122,6 @@ namespace MainInfrastructures.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.SecondSection.ProjectEfficiency", b =>
-                {
-                    b.HasOne("Domain.Models.SecondSection.ReestrProjectEfficiency", "ReestrProjectEfficiency")
-                        .WithMany()
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Models.SecondSection.ProjectIdentities", b =>
                 {
                     b.HasOne("Domain.Models.SecondSection.ReestrProjectIdentities", "ReestrProjectIdentities")
@@ -4222,10 +4183,6 @@ namespace MainInfrastructures.Migrations
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Models.SecondSection.ReestrProjectEfficiency", null)
-                        .WithMany("Efficiencies")
-                        .HasForeignKey("ReestrProjectEfficiencyId");
                 });
 
             modelBuilder.Entity("Domain.Models.SecondSection.ReestrProjectExpertDecision", b =>

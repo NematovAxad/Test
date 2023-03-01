@@ -102,5 +102,7 @@ namespace MainInfrastructures.Db
         public DbSet<AutomatedServices> AutomatedServices { get; set; }
         public DbSet<MygovReports> MygovReports { get; set; }
         public DbSet<MygovReportsDetail> MygovReportsDetail { get; set; }
+        public DbSet<ReestrProjectEfficiency> ReestrProjectEfficiency { get; set; }
+        public DbSet<ProjectEfficiency> ProjectEfficiency { get; set; }
     }
 }
