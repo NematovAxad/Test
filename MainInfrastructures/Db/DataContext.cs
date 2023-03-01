@@ -104,5 +104,6 @@ namespace MainInfrastructures.Db
         public DbSet<MygovReportsDetail> MygovReportsDetail { get; set; }
         public DbSet<ReestrProjectEfficiency> ReestrProjectEfficiency { get; set; }
         public DbSet<ProjectEfficiency> ProjectEfficiency { get; set; }
+        public DbSet<OrganizationFinance> OrganizationFinance { get; set; }
     }
 }

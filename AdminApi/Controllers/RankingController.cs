@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace AdminApi.Controllers
 {
+    //we are not using
     [Route("apiAdmin/[controller]/[action]")]
     public class Ranking : Controller
     {
