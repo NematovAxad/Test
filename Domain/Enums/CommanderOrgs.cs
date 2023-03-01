@@ -6,5 +6,6 @@
         CabinetMinisters = 2,
         UpperHouse = 3,
         PresidentialAdministration = 4,
+        Other = 5,
     }
 }

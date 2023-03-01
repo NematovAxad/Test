@@ -8,5 +8,6 @@
         Decree = 3,
         Command = 4,
         Statement = 5,
+        Other = 6,
     }
 }
