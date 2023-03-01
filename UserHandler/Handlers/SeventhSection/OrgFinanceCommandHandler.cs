@@ -50,7 +50,7 @@ namespace UserHandler.Handlers.SeventhSection
                     id = Delete(request);
                     break;
             }
-            return new OrgFinanceCommandResult() { Id = id, IsSuccess = false };
+            return new OrgFinanceCommandResult() { Id = id, IsSuccess = true };
         }
 
         public int Add(OrgFinanceCommand model)
@@ -59,8 +59,10 @@ namespace UserHandler.Handlers.SeventhSection
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
-            
 
+            var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
 
             var orgFinance = _orgFinance.Find(p => p.OrganizationId == model.OrganizationId && p.Year == deadline.Year).Include(mbox => mbox.Organization).FirstOrDefault();
@@ -73,10 +75,10 @@ namespace UserHandler.Handlers.SeventhSection
             OrganizationFinance addModel = new OrganizationFinance();
 
 
-            if (((model.UserOrgId == orgFinance.Organization.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
                 addModel.OrganizationId = model.OrganizationId;
-                addModel.Year = model.Year;
+                addModel.Year = deadline.Year;
 
                 addModel.Plan11 = model.Plan11;
                 addModel.Fact11 = model.Fact11;
@@ -169,8 +171,9 @@ namespace UserHandler.Handlers.SeventhSection
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-
-
+            var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
             var orgFinance = _orgFinance.Find(p => p.Id == model.Id).Include(mbox => mbox.Organization).FirstOrDefault();
             if (orgFinance == null)
@@ -179,7 +182,7 @@ namespace UserHandler.Handlers.SeventhSection
 
 
 
-            if (((model.UserOrgId == orgFinance.Organization.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
                 
 
