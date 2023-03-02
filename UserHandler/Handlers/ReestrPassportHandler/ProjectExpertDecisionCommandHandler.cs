@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 using System.Threading;
 using UserHandler.Commands.ReestrPassportCommands;
 using UserHandler.Results.ReestrPassportResult;
-using Domain.Models.SecondSection;
 using System.Linq;
 using Domain.Permission;
+using Domain.Models.FirstSection;
+using Domain.Models.FifthSection.ReestrModels;
 
 namespace UserHandler.Handlers.ReestrPassportHandler
 {

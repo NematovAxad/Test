@@ -1,6 +1,6 @@
 ﻿using AdminHandler.Commands.Region;
 using AdminHandler.Results.Region;
-using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.States;
 using JohaRepository;
 using MediatR;

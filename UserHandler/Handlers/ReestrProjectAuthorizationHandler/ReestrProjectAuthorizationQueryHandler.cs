@@ -1,5 +1,4 @@
-﻿using Domain.Models.SecondSection;
-using Domain.Models;
+﻿using Domain.Models;
 using JohaRepository;
 using MediatR;
 using System;
@@ -13,6 +12,8 @@ using Domain.States;
 using UserHandler.Results.ReestrProjectClassificationResult;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Domain.Models.FirstSection;
+using Domain.Models.FifthSection.ReestrModels;
 
 namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 {

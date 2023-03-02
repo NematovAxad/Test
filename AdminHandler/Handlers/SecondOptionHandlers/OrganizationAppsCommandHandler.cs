@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.SecondOptionCommands;
 using AdminHandler.Results.SecondOptionResults;
 using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.Permission;
 using Domain.States;
 using JohaRepository;

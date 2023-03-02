@@ -1,7 +1,7 @@
 ﻿using AdminHandler.Commands.Region;
 using AdminHandler.Querys.Region;
 using AdminHandler.Results.Region;
-using Domain.Models;
+using Domain.Models.FirstSection;
 using JohaRepository;
 using MediatR;
 using System;

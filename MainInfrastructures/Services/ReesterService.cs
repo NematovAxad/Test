@@ -1,5 +1,5 @@
 ﻿using Domain.IntegrationLinks;
-using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.ReesterModels;
 using Domain.States;
 using JohaRepository;

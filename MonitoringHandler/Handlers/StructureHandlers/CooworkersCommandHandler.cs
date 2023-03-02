@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Domain.Models.FirstSection;
 using Domain.MonitoringModels.Models;
 using Domain.States;
 using JohaRepository;

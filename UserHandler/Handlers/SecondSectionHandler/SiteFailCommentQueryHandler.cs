@@ -1,5 +1,4 @@
-﻿using Domain.Models.Organization;
-using Domain.Models;
+﻿using Domain.Models;
 using JohaRepository;
 using MediatR;
 using System;
@@ -11,6 +10,7 @@ using UserHandler.Queries.SecondSectionQuery;
 using UserHandler.Results.SecondSectionQueryResult;
 using System.Linq.Dynamic.Core;
 using System.Linq;
+using Domain.Models.FirstSection;
 
 namespace UserHandler.Handlers.SecondSectionHandler
 {

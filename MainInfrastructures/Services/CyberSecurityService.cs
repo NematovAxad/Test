@@ -1,6 +1,7 @@
 ﻿using Domain.CyberSecurityModels;
 using Domain.IntegrationLinks;
 using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.Models.Ranking.Administrations;
 using Domain.MonitoringModels.Models;
 using Domain.States;

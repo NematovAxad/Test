@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Domain.IntegrationLinks;
 using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.Models.Organization;
 using Domain.MonitoringModels.Models;
 using Domain.MyGovModels;

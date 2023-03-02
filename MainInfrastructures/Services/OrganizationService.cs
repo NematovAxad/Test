@@ -21,6 +21,7 @@ using System.Threading;
 using Domain;
 using SB.Common.Extensions;
 using Microsoft.EntityFrameworkCore.Internal;
+using Domain.Models.FirstSection;
 
 namespace MainInfrastructures.Services
 {

@@ -1,4 +1,5 @@
-﻿using JohaRepository;
+﻿using Domain.Models.FirstSection;
+using JohaRepository;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

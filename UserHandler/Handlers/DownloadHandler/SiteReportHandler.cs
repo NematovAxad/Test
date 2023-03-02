@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Domain.Models.FirstSection;
 using Domain.Models.Models;
 using Domain.Models.SecondSection;
 using JohaRepository;

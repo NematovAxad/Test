@@ -1,7 +1,8 @@
 ﻿using AdminHandler.Querys.SecondOptionQueries;
 using AdminHandler.Results.SecondOptionResults;
 using Domain.Models;
-using Domain.Models.Organization;
+using Domain.Models.FirstSection;
+using Domain.Models.SecondSection;
 using Domain.States;
 using JohaRepository;
 using MediatR;

@@ -1,5 +1,4 @@
-﻿using Domain.Models.SecondSection;
-using Domain.Models;
+﻿using Domain.Models;
 using Domain.States;
 using JohaRepository;
 using MediatR;
@@ -16,6 +15,8 @@ using System.Linq;
 using Domain.Permission;
 using MainInfrastructures.Migrations;
 using Microsoft.EntityFrameworkCore;
+using Domain.Models.FirstSection;
+using Domain.Models.FifthSection.ReestrModels;
 
 namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 {

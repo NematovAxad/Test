@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.Ranking;
 using AdminHandler.Results.Ranking;
 using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.Models.Ranking;
 using Domain.Permission;
 using Domain.States;

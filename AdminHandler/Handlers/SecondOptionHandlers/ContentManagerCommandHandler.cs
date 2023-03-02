@@ -2,6 +2,7 @@
 using AdminHandler.Results.SecondOptionResults;
 using Domain;
 using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.Permission;
 using Domain.States;
 using JohaRepository;

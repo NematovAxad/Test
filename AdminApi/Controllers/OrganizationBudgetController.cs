@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
-using UserHandler.Results.SeventhSection;
-using UserHandler.Queries.SeventhSection;
-using UserHandler.Commands.SeventhSection;
+using UserHandler.Commands.EigthSectionCommand;
+using UserHandler.Queries.EigthSectionQuery;
+using UserHandler.Results.EigthSectionResult;
 
 namespace AdminApi.Controllers
 {

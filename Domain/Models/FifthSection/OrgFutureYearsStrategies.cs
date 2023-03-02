@@ -1,4 +1,5 @@
-﻿using JohaRepository;
+﻿using Domain.Models.FirstSection;
+using JohaRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

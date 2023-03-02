@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+﻿using Domain.Models.FirstSection;
 using Domain.Models.SeventhSection;
 using Domain.Permission;
 using Domain.States;

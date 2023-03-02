@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Querys.SecondOptionQueries;
 using AdminHandler.Results.SecondOptionResults;
 using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
 using Domain.States;

@@ -1,5 +1,4 @@
-﻿using Domain.Models.SecondSection;
-using Domain.Models;
+﻿using Domain.Models;
 using JohaRepository;
 using MediatR;
 using System;
@@ -17,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Permission;
 using UserHandler.Commands.ReestrProjectIdentityCommand;
 using Domain;
+using Domain.Models.FirstSection;
+using Domain.Models.FifthSection.ReestrModels;
 
 namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 {

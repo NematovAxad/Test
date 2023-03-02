@@ -1,7 +1,7 @@
 ﻿using AdminHandler.Commands.SecondOptionCommands;
 using AdminHandler.Results.SecondOptionResults;
 using Domain;
-using Domain.Models;
+using Domain.Models.FirstSection;
 using Domain.Models.SecondSection;
 using Domain.Permission;
 using Domain.States;
