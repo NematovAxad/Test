@@ -28,7 +28,6 @@ namespace UserHandler.Commands.SeventhSection
         public int Id { get; set; }
 
         public int OrganizationId { get; set; }
-        public int Year { get; set; }
 
 
         public double Plan11 { get; set; }

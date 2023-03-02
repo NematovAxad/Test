@@ -28,8 +28,6 @@ namespace UserHandler.Commands.SeventhSection
 
         public int OrganizationId { get; set; }
 
-        public int Year { get; set; }
-
         public double FullYearBudget { get; set; }
 
         public double FullYearSpentBudgetPercent { get; set; }
