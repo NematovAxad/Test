@@ -46,6 +46,7 @@ namespace UserHandler.Handlers.SeventhSection
             OrganizationServers addModel = new OrganizationServers()
             {
                 OrganizationId = model.OrganizationId,
+                ServerLocation = model.ServerLocation,
                 ServerType = model.ServerType,
                 ServerBrand = model.ServerBrand,
                 ServerConfig = model.ServerConfig,
@@ -66,6 +67,7 @@ namespace UserHandler.Handlers.SeventhSection
                 throw ErrorStates.NotAllowed("permission");
 
             orgServers.OrganizationId = model.OrganizationId;
+            orgServers.ServerLocation = model.ServerLocation;
             orgServers.ServerType = model.ServerType;
             orgServers.ServerBrand = model.ServerBrand;
             orgServers.ServerConfig = model.ServerConfig;

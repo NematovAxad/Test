@@ -18,6 +18,8 @@ namespace Domain.Models.SeventhSection
         public Organizations Organization { get; set; }
         [Column("server_type")]
         public string ServerType { get; set; }
+        [Column("server_location")]
+        public string ServerLocation { get; set; }
         [Column("server_brand")]
         public string ServerBrand { get; set; }
         [Column("server_config")]

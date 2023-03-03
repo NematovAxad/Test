@@ -25,6 +25,7 @@ namespace UserHandler.Commands.SeventhSection
         public int Id { get; set; }
         public int OrganizationId { get; set; }
         public string ServerType { get; set; }
+        public string ServerLocation { get; set; }
         public string ServerBrand { get; set; }
         public string ServerConfig { get; set; }
         public string ServerAutomaticTasks { get; set; }
