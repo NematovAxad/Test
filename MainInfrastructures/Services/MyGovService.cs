@@ -89,6 +89,8 @@ namespace MainInfrastructures.Services
 
             result.Count = serviceList.Count();
             result.Items = serviceList.ToList<object>();
+            result.Year = list.First().Year;
+            result.Part = list.First().Part;
             return result;
         }
 
@@ -101,6 +103,8 @@ namespace MainInfrastructures.Services
         public class OrgServiceReportResult
         {
             public int Count { get; set; }
+            public int Year { get; set; }
+            public int Part { get; set; }
             public List<object> Items { get; set; }
         }
         public class OrgServiceReport
