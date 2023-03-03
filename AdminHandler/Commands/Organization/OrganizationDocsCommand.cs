@@ -27,6 +27,7 @@ namespace AdminHandler.Commands.Organization
         public int OrganizationId { get; set; }
         public string DocumentNo { get; set; }
         public DocumentType DocumentType { get; set; }
+        public DateTime DocumentDate { get; set; }
         public string DocumentName { get; set; }
         public string MainPurpose { get; set; }
         public string FilePath { get; set; }

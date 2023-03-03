@@ -28,16 +28,17 @@ namespace AdminHandler.Handlers.Organization
 
         public async Task<OrganizationDocsCommandResult> Handle(OrganizationDocsCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add: id = Add(request); break;
+                case Domain.Enums.EventType.Update: id = Update(request); break;
+                case Domain.Enums.EventType.Delete: id = Delete(request); break;
             }
-            return new OrganizationDocsCommandResult() { IsSuccess = true };
+            return new OrganizationDocsCommandResult() {Id = id, IsSuccess = true };
         }
 
-        public void Add(OrganizationDocsCommand model)
+        public int Add(OrganizationDocsCommand model)
         {
             var org = _organizations.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -52,16 +53,18 @@ namespace AdminHandler.Handlers.Organization
             {
                 OrganizationId = model.OrganizationId,
                 DocumentNo = model.DocumentNo,
-                DocumentDate = DateTime.Now,
+                DocumentDate = model.DocumentDate,
                 DocumentType = model.DocumentType,
                 DocumentName = model.DocumentName,
                 MainPurpose = model.MainPurpose,
                 Path = model.FilePath
             };
             _orgDocuments.Add(addModel);
+
+            return addModel.Id;
         }
 
-        public void Update(OrganizationDocsCommand model)
+        public int Update(OrganizationDocsCommand model)
         {
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
@@ -75,17 +78,19 @@ namespace AdminHandler.Handlers.Organization
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
             orgDoc.DocumentNo = model.DocumentNo;
-            orgDoc.DocumentDate = DateTime.Now;
+            orgDoc.DocumentDate = model.DocumentDate;
             orgDoc.DocumentType = model.DocumentType;
             orgDoc.DocumentName = model.DocumentName;
-            
+            orgDoc.MainPurpose = model.MainPurpose;
             orgDoc.Path = model.FilePath;
             
 
             _orgDocuments.Update(orgDoc);
+
+            return orgDoc.Id;
         }
 
-        public void Delete(OrganizationDocsCommand model)
+        public int Delete(OrganizationDocsCommand model)
         {
             var orgDoc = _orgDocuments.Find(d => d.Id == model.Id).FirstOrDefault();
             if (orgDoc == null)
@@ -97,7 +102,10 @@ namespace AdminHandler.Handlers.Organization
             
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
-            _orgDocuments.Remove(model.Id);
+
+            _orgDocuments.Remove(orgDoc);
+
+            return orgDoc.Id;
         }
     }
 }
