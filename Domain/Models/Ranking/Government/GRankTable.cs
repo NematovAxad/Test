@@ -40,5 +40,9 @@ namespace Domain.Models
         public int SubFieldId { get; set; }
         [Column("comment")]
         public string Comment { get; set; }
+        [Column("expert_id")]
+        public int ExpertId { get; set; }
+        [Column("espert_pinfl")]
+        public string ExpertPinfl { get; set; }
     }
 }

@@ -114,6 +114,8 @@ namespace AdminHandler.Handlers.Ranking
                         SphereId = field.SphereId,
                         FieldId = field.Id,
                         Comment = model.Comment,
+                        ExpertId = model.UserId,
+                        ExpertPinfl = model.UserPinfl,
                         SubFieldId = 0,
                         ElementId = 0
                     };
@@ -196,6 +198,8 @@ namespace AdminHandler.Handlers.Ranking
                         SphereId = field.SphereId,
                         FieldId = field.Id,
                         Comment = model.Comment,
+                        ExpertId = model.UserId,
+                        ExpertPinfl = model.UserPinfl,
                         SubFieldId = 0,
                         ElementId = 0
                     };
@@ -277,6 +281,8 @@ namespace AdminHandler.Handlers.Ranking
                         SphereId = field.SphereId,
                         FieldId = field.Id,
                         Comment = model.Comment,
+                        ExpertId = model.UserId,
+                        ExpertPinfl = model.UserPinfl,
                         SubFieldId = 0,
                         ElementId = 0
                     };
@@ -400,6 +406,8 @@ namespace AdminHandler.Handlers.Ranking
                     }
                     rank.IsException = model.IsException;
                     rank.Comment = model.Comment;
+                    rank.ExpertId = model.UserId;
+                    rank.ExpertPinfl = model.UserPinfl;
                     _gRankTable.Update(rank);
                 }
                 if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
@@ -441,6 +449,8 @@ namespace AdminHandler.Handlers.Ranking
                     }
                     rank.IsException = model.IsException;
                     rank.Comment = model.Comment;
+                    rank.ExpertId = model.UserId;
+                    rank.ExpertPinfl = model.UserPinfl;
                     _xRankTable.Update(rank);
                 }
                 if (org.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
@@ -483,6 +493,8 @@ namespace AdminHandler.Handlers.Ranking
                     }
                     rank.IsException = model.IsException;
                     rank.Comment = model.Comment;
+                    rank.ExpertId = model.UserId;
+                    rank.ExpertPinfl = model.UserPinfl;
                     _aRankTable.Update(rank);
                 }
             }

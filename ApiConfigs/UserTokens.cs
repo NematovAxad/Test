@@ -17,6 +17,16 @@ namespace ApiConfigs
             }
             return int.Parse(value);
         }
+        public static string UserPinfl(this ControllerBase cBase)
+        {
+            var value = cBase.User.FindFirst(m => m.Type.ToLower() == "pin")?.Value;
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Empty;
+
+            }
+            return value;
+        }
         public static int UserOrgId(this ControllerBase cBase)
         {
             var value = cBase.User.FindFirst(m => m.Type.ToLower() == "orgid")?.Value;
