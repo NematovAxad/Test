@@ -116,6 +116,8 @@ namespace AdminHandler.Handlers.Ranking
                         Comment = model.Comment,
                         ExpertId = model.UserId,
                         ExpertPinfl = model.UserPinfl,
+                        CreatedDAte = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
                         SubFieldId = 0,
                         ElementId = 0
                     };
@@ -200,6 +202,8 @@ namespace AdminHandler.Handlers.Ranking
                         Comment = model.Comment,
                         ExpertId = model.UserId,
                         ExpertPinfl = model.UserPinfl,
+                        CreatedDAte = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
                         SubFieldId = 0,
                         ElementId = 0
                     };
@@ -283,6 +287,8 @@ namespace AdminHandler.Handlers.Ranking
                         Comment = model.Comment,
                         ExpertId = model.UserId,
                         ExpertPinfl = model.UserPinfl,
+                        CreatedDAte = DateTime.Now,
+                        ModifiedDate = DateTime.Now,    
                         SubFieldId = 0,
                         ElementId = 0
                     };
@@ -408,6 +414,7 @@ namespace AdminHandler.Handlers.Ranking
                     rank.Comment = model.Comment;
                     rank.ExpertId = model.UserId;
                     rank.ExpertPinfl = model.UserPinfl;
+                    rank.ModifiedDate = DateTime.Now;
                     _gRankTable.Update(rank);
                 }
                 if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
@@ -451,6 +458,7 @@ namespace AdminHandler.Handlers.Ranking
                     rank.Comment = model.Comment;
                     rank.ExpertId = model.UserId;
                     rank.ExpertPinfl = model.UserPinfl;
+                    rank.ModifiedDate = DateTime.Now;
                     _xRankTable.Update(rank);
                 }
                 if (org.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
@@ -495,6 +503,7 @@ namespace AdminHandler.Handlers.Ranking
                     rank.Comment = model.Comment;
                     rank.ExpertId = model.UserId;
                     rank.ExpertPinfl = model.UserPinfl;
+                    rank.ModifiedDate = DateTime.Now;
                     _aRankTable.Update(rank);
                 }
             }

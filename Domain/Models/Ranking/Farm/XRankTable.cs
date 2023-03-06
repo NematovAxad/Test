@@ -44,5 +44,9 @@ namespace Domain.Models
         public int ExpertId { get; set; }
         [Column("espert_pinfl")]
         public string ExpertPinfl { get; set; }
+        [Column("created_date")]
+        public DateTime CreatedDAte { get; set; }
+        [Column("modified_date")]
+        public DateTime ModifiedDate { get; set; }
     }
 }
