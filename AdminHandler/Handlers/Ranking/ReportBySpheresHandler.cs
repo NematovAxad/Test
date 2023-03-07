@@ -73,7 +73,7 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == request.DeadlineId).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline id " + request.DeadlineId.ToString());
-            var org = _organization.Find(o=>o.IsActive == true && o.IsIct == true).ToList();
+            var org = _organization.Find(o=>o.IsActive == true && o.IsIct == true).OrderBy(o=>o.Id).ToList();
             if (request.OrganizationId != 0)
             {
                 org = org.Where(o => o.Id == request.OrganizationId).ToList();
@@ -105,22 +105,22 @@ namespace AdminHandler.Handlers.Ranking
                     
                     double maxRate = 0;
                     double reached = 0;
-                    foreach (var s in gSpheres)
+                    foreach (var sphere in gSpheres)
                     {
-                        maxRate = maxRate + s.MaxRate;
+                        maxRate = maxRate + sphere.MaxRate;
 
                         double sphereRate = 0;
-                        var fields = gFields.Where(f => f.SphereId == s.Id).ToList();
-                        foreach(var f in fields)
+                        var fields = gFields.Where(f => f.SphereId == sphere.Id).ToList();
+                        foreach(var field in fields)
                         {
                             
                             double fieldRate = 0;
-                            var subfields = gSubFields.Where(s => s.FieldId == f.Id).ToList();
+                            var subfields = gSubFields.Where(s => s.FieldId == field.Id).ToList();
                             if(subfields.Count()>0)
                             {
                                 foreach(var sField in subfields)
                                 {
-                                    var ranks = gRankTable.Where(a => a.OrganizationId == o.Id && a.FieldId == f.Id && a.SubFieldId == sField.Id);
+                                    var ranks = gRankTable.Where(a => a.OrganizationId == o.Id && a.SphereId == sphere.Id && a.FieldId == field.Id && a.SubFieldId == sField.Id);
                                     if(ranks.Count()>1)
                                     {
                                         fieldRate += Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
@@ -134,7 +134,7 @@ namespace AdminHandler.Handlers.Ranking
                             }
                             if(subfields.Count()==0)
                             {
-                                var fieldR = gRankTable.Where(r => r.OrganizationId == o.Id && r.FieldId == f.Id);
+                                var fieldR = gRankTable.Where(r => r.OrganizationId == o.Id && r.SphereId == sphere.Id && r.FieldId == field.Id);
                                 if (fieldR.Count() > 1)
                                 {
                                     fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
@@ -148,9 +148,9 @@ namespace AdminHandler.Handlers.Ranking
                             sphereRate += fieldRate;
                         }
                         SphereRateElement addElement = new SphereRateElement();
-                        addElement.SphereId = s.Id;
-                        addElement.SphereName = s.Name;
-                        addElement.SphereSection = s.Section;
+                        addElement.SphereId = sphere.Id;
+                        addElement.SphereName = sphere.Name;
+                        addElement.SphereSection = sphere.Section;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
                         reached += sphereRate;
@@ -166,22 +166,22 @@ namespace AdminHandler.Handlers.Ranking
                 {
                     double maxRate = 0;
                     double reached = 0;
-                    foreach (var s in xSpheres)
+                    foreach (var sphere in xSpheres)
                     {
-                        maxRate = maxRate + s.MaxRate;
+                        maxRate = maxRate + sphere.MaxRate;
 
                         double sphereRate = 0;
-                        var fields = xFields.Where(f => f.SphereId == s.Id).ToList();
-                        foreach (var f in fields)
+                        var fields = xFields.Where(f => f.SphereId == sphere.Id).ToList();
+                        foreach (var field in fields)
                         {
                             
                             double fieldRate = 0;
-                            var subfields = xSubFields.Where(s => s.FieldId == f.Id);
+                            var subfields = xSubFields.Where(s => s.FieldId == field.Id);
                             if (subfields.Count() > 0)
                             {
-                                foreach (var sField in subfields)
+                                foreach (var sfield in subfields)
                                 {
-                                    var ranks = xRankTable.Where(a => a.OrganizationId == o.Id && a.FieldId == f.Id && a.SubFieldId == sField.Id);
+                                    var ranks = xRankTable.Where(a => a.OrganizationId == o.Id && a.SphereId == sphere.Id && a.FieldId == field.Id && a.SubFieldId == sfield.Id);
                                     if (ranks.Count() > 1)
                                     {
                                         fieldRate += Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
@@ -195,7 +195,7 @@ namespace AdminHandler.Handlers.Ranking
                             }
                             if (subfields.Count() == 0)
                             {
-                                var fieldR = xRankTable.Where(b => b.OrganizationId == o.Id && b.FieldId == f.Id);
+                                var fieldR = xRankTable.Where(b => b.OrganizationId == o.Id && b.SphereId == sphere.Id && b.FieldId == field.Id);
                                 if (fieldR.Count() > 0)
                                     fieldRate = fieldR.First().Rank;
 
@@ -204,9 +204,9 @@ namespace AdminHandler.Handlers.Ranking
                             sphereRate += fieldRate;
                         }
                         SphereRateElement addElement = new SphereRateElement();
-                        addElement.SphereId = s.Id;
-                        addElement.SphereName = s.Name;
-                        addElement.SphereSection = s.Section;
+                        addElement.SphereId = sphere.Id;
+                        addElement.SphereName = sphere.Name;
+                        addElement.SphereSection = sphere.Section;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
                         reached += sphereRate;
@@ -222,22 +222,22 @@ namespace AdminHandler.Handlers.Ranking
 
                     double maxRate = 0;
                     double reached = 0;
-                    foreach (var s in aSpheres)
+                    foreach (var sphere in aSpheres)
                     {
-                        maxRate = maxRate + s.MaxRate;
+                        maxRate = maxRate + sphere.MaxRate;
 
                         double sphereRate = 0;
-                        var fields = aFields.Where(f => f.SphereId == s.Id).ToList();
-                        foreach (var f in fields)
+                        var fields = aFields.Where(f => f.SphereId == sphere.Id).ToList();
+                        foreach (var field in fields)
                         {
                             
                             double fieldRate = 0;
-                            var subfields = aSubFields.Where(s => s.FieldId == f.Id).ToList();
+                            var subfields = aSubFields.Where(s => s.FieldId == field.Id).ToList();
                             if (subfields.Count() > 0)
                             {
-                                foreach (var sField in subfields)
+                                foreach (var sfield in subfields)
                                 {
-                                    var ranks = aRankTable.Where(a => a.OrganizationId == o.Id && a.FieldId == f.Id && a.SubFieldId == sField.Id);
+                                    var ranks = aRankTable.Where(a => a.OrganizationId == o.Id && a.SphereId == sphere.Id && a.FieldId == field.Id && a.SubFieldId == sfield.Id);
                                     if (ranks.Count() > 1)
                                     {
                                         fieldRate += Math.Round(ranks.Select(r => r.Rank).Sum() / ranks.Count(), 2);
@@ -251,7 +251,7 @@ namespace AdminHandler.Handlers.Ranking
                             }
                             if (subfields.Count() == 0)
                             {
-                                var fieldR = aRankTable.Where(r => r.OrganizationId == o.Id && r.FieldId == f.Id);
+                                var fieldR = aRankTable.Where(r => r.OrganizationId == o.Id && r.SphereId == sphere.Id && r.FieldId == field.Id);
                                 if (fieldR.Count() > 1)
                                 {
                                     fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
@@ -265,9 +265,9 @@ namespace AdminHandler.Handlers.Ranking
                             sphereRate += fieldRate;
                         }
                         SphereRateElement addElement = new SphereRateElement();
-                        addElement.SphereId = s.Id;
-                        addElement.SphereName = s.Name;
-                        addElement.SphereSection = s.Section;
+                        addElement.SphereId = sphere.Id;
+                        addElement.SphereName = sphere.Name;
+                        addElement.SphereSection = sphere.Section;
                         addElement.SphereRate = sphereRate;
                         model.Spheres.Add(addElement);
                         reached += sphereRate;
