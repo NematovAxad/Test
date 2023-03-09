@@ -8,6 +8,7 @@ using Domain.Models.Ranking;
 using Domain.Models.Ranking.Administrations;
 using Domain.Models.SecondSection;
 using Domain.Models.SeventhSection;
+using Domain.Models.SixthSection;
 using Domain.Models.ThirdSection;
 using Domain.MonitoringModels.Models;
 using EntityRepository;
@@ -110,5 +111,7 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationFinance> OrganizationFinance { get; set; }
         public DbSet<OrganizationFinanceReport> OrganizationFinanceReports { get; set; }
         public DbSet<OrganizationBudget> OrganizationBudget { get; set; }
+        public DbSet<OrganizationIndicators> OrganizationIndictors { get; set; }
+        public DbSet<IndicatorRating> IndicatorRatings { get; set; }
     }
 }
