@@ -25,15 +25,15 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<Field, int> _field;
         private readonly IRepository<OrganizationSocials, int> _orgSocials;
-        private readonly IRepository<OrganizationSocialParameters, int> _orgSocialParameters;
 
-        public OrgSocialCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationSocials, int> orgSocials, IRepository<OrganizationSocialParameters, int> orgSocialParameters)
+
+        public OrgSocialCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationSocials, int> orgSocials)
         {
             _organization = organization;
             _deadline = deadline;
             _field = field;
             _orgSocials = orgSocials;
-            _orgSocialParameters = orgSocialParameters;
+
         }
         public async Task<OrgSocialCommandResult> Handle(OrgSocialCommand request, CancellationToken cancellationToken)
         {
@@ -133,11 +133,18 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 socialSite.PoolComment = model.PoolComment;
 
                 socialSite.IsMain = model.IsMain;
+       
                 socialSite.Link1 = model.Link1;
                 socialSite.Link2 = model.Link2;
                 socialSite.Link3 = model.Link3;
                 socialSite.Link4 = model.Link4;
                 socialSite.Link5 = model.Link5;
+
+                socialSite.Post1Link = model.Post1Link;
+                socialSite.Post2Link = model.Post2Link;
+                socialSite.Post3Link = model.Post3Link;
+                socialSite.Post4Link = model.Post4Link;
+                socialSite.Post5Link = model.Post5Link;
 
                 socialSite.Post1 = model.Post1;
                 socialSite.Post2 = model.Post2;
@@ -145,11 +152,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 socialSite.Post4 = model.Post4;
                 socialSite.Post5 = model.Post5;
 
-                socialSite.Post1Link = model.Post1Link;
-                socialSite.Post2Link = model.Post2Link;
-                socialSite.Post3Link = model.Post3Link;
-                socialSite.Post4Link = model.Post4Link;
-                socialSite.Post5Link = model.Post5Link;
+
+                socialSite.CommentToSocialSite = model.Comment;
+                
             }
             
             _orgSocials.Update(socialSite);

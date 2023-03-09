@@ -55,10 +55,11 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public bool? Pool { get; set; }
         public string PoolLink { get; set; }
         public string PoolScreenshot { get; set; }
-
         public string PoolComment { get; set; }
+
         public bool IsMain { get; set; }
         public bool? Verified { get; set; }
         public bool? SyncronizedPosts { get; set; }
+        public string Comment { get; set; }
     }
 }

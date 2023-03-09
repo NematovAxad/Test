@@ -45,7 +45,6 @@ namespace MainInfrastructures.Db
         public DbSet<ContentManager> ContentManager { get; set; }
         public DbSet<Deadline> Deadline { get; set; }
         
-        public DbSet<OrganizationSocialParameters> OrganizationSocialParameters { get; set; }
         public DbSet<OrganizationSocials> OrganizationSocials { get; set; }
         public DbSet<HelplineInfo> HelplineInfo { get; set; }
         public DbSet<OrgDataFiller> OrgDataFiller { get; set; }

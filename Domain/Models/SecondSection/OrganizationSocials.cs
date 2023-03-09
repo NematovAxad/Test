@@ -96,5 +96,7 @@ namespace Domain.Models.SecondSection
         public bool? Verified {get;set;}
         [Column("syncronized_posts")]
         public bool? SyncronizedPosts { get; set; }
+        [Column("comment_to_social_site")]
+        public string CommentToSocialSite { get; set; }
     }
 }

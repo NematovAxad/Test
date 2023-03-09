@@ -22,15 +22,15 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<Field, int> _field;
         private readonly IRepository<OrganizationSocials, int> _orgSocials;
-        private readonly IRepository<OrganizationSocialParameters, int> _orgSocialParameters;
+      
 
-        public OrgSocialQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationSocials, int> orgSocials, IRepository<OrganizationSocialParameters, int> orgSocialParameters)
+        public OrgSocialQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationSocials, int> orgSocials)
         {
             _organization = organization;
             _deadline = deadline;
             _field = field;
             _orgSocials = orgSocials;
-            _orgSocialParameters = orgSocialParameters;
+           
         }
         public async Task<OrgSocialQueryResult> Handle(OrgSocialQuery request, CancellationToken cancellationToken)
         {
