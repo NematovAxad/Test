@@ -153,7 +153,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 socialSite.Post5 = model.Post5;
 
 
-                socialSite.CommentToSocialSite = model.Comment;
+                socialSite.CommentToSocialSite = model.CommentToSocialSite;
                 
             }
             
