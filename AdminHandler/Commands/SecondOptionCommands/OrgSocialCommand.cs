@@ -60,6 +60,6 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public bool IsMain { get; set; }
         public bool? Verified { get; set; }
         public bool? SyncronizedPosts { get; set; }
-        public string Comment { get; set; }
+        public string CommentToSocialSite { get; set; }
     }
 }
