@@ -40,7 +40,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<OrgPublicServicesCommandResult>> Add([FromQuery] OrgPublicServicesCommand model)
+        public async Task<ResponseCore<OrgPublicServicesCommandResult>> Add([FromBody] OrgPublicServicesCommand model)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<OrgPublicServicesCommandResult>> Put([FromQuery] OrgPublicServicesCommand model)
+        public async Task<ResponseCore<OrgPublicServicesCommandResult>> Put([FromBody] OrgPublicServicesCommand model)
         {
             try
             {
