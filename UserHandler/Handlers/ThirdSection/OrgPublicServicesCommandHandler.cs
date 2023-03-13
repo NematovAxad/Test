@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Enums;
 using Domain.Models;
 using Domain.Models.FirstSection;
 using Domain.Models.Ranking;
@@ -14,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UserHandler.Commands.ThirdSection;
+using UserHandler.Results.ReestrPassportResult;
 using UserHandler.Results.ThirdSection;
 
 namespace UserHandler.Handlers.ThirdSection
@@ -34,15 +36,22 @@ namespace UserHandler.Handlers.ThirdSection
         }
         public async Task<OrgPublicServicesCommandResult> Handle(OrgPublicServicesCommand request, CancellationToken cancellationToken)
         {
+            int id = 0;
             switch (request.EventType)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Update: Update(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case Domain.Enums.EventType.Add:
+                    id = Add(request);
+                    break;
+                case Domain.Enums.EventType.Update:
+                    id = Update(request);
+                    break;
+                case Domain.Enums.EventType.Delete:
+                    id = Delete(request);
+                    break;
             }
-            return new OrgPublicServicesCommandResult() { IsSuccess = true };
+            return new OrgPublicServicesCommandResult() { Id = id, IsSuccess = false };
         }
-        public void Add(OrgPublicServicesCommand model)
+        public int Add(OrgPublicServicesCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -51,7 +60,7 @@ namespace UserHandler.Handlers.ThirdSection
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
-            var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && h.ServiceName == model.ServiceName).FirstOrDefault();
+            var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && h.ServiceNameRu == model.ServiceNameRu).FirstOrDefault();
             if (orgPublicServices != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
@@ -64,100 +73,259 @@ namespace UserHandler.Handlers.ThirdSection
             OrganizationPublicServices addModel = new OrganizationPublicServices()
             {
                 OrganizationId = model.OrganizationId,
-                ServiceName = model.ServiceName,
-                UserTypes = model.UserTypes,
-                RenderingForm = model.RenderingForm,
-                PortalLink = model.PortalLink,
-                ServiceLink = model.ServiceLink,
-                MobileApp = model.MobileApp,
-                OtherResources = model.OtherResources,
-                IsPaid = model.IsPaid,
-                ServiceResult = model.ServiceResult,
-                ServiceOtherResult = model.ServiceOtherResult,
-                MechanizmForTrackingProgress = model.MechanizmForTrackingProgress,
-                TrackingProgressBy = model.TrackingProgressBy,
-                ReglamentUpdated = model.ReglamentUpdated,
-                ReglamentPath = model.ReglamentFilePath,
+                
             };
-            
-            
-            _orgPublicServices.Add(addModel);
+            addModel.ServiceNameUz = model.ServiceNameUz;
+
+            addModel.ServiceNameRu = model.ServiceNameRu;
+
+
+            addModel.ServiceBasedDocumentType = model.ServiceBasedDocumentType;
+
+            addModel.ServiceBasedDocumentName = model.ServiceBasedDocumentName;
+
+            addModel.ServiceBasedDocumentNumber = model.ServiceBasedDocumentNumber;
+
+            addModel.ServiceBasedDocumentDate = model.ServiceBasedDocumentDate;
+
+
+
+            addModel.PaidFor = model.PaidFor;
+
+            addModel.ServicePrice = model.ServicePrice;
+
+            addModel.ServicePriceComment = model.ServicePriceComment;
+
+
+
+            addModel.ServiceCompletePeriodType = model.ServiceCompletePeriodType;
+
+            addModel.ServiceCompletePeriod = model.ServiceCompletePeriod;
+
+
+            addModel.ServiceType = model.ServiceType;
+
+            addModel.ServiceLink = model.ServiceLink;
+
+            addModel.ServiceScreenshotLink = model.ServiceScreenshotLink;
+
+
+            addModel.ServiceSubjects = model.ServiceSubjects;
+
+
+            addModel.ServiceHasReglament = model.ServiceHasReglament;
+
+            addModel.ServiceReglamentPath = model.ServiceReglamentPath;
+
+            addModel.ServiceReglamentComment = model.ServiceReglamentComment;
+
+            addModel.ServiceHasUpdateReglament = model.ServiceHasUpdateReglament;
+
+            addModel.ServiceUpdateReglamentPath = model.ServiceUpdateReglamentPath;
+
+            addModel.ServiceUpdateReglamentComment = model.ServiceUpdateReglamentComment;
+
+
+
+            addModel.MyGovService = model.MyGovService;
+
+            addModel.MyGovLink = model.MyGovLink;
+
+            addModel.MyGovScreenshotLink = model.MyGovScreenshotLink;
+
+
+
+            addModel.OtherApps = model.OtherApps;
+
+            addModel.AppName = model.AppName;
+                
+            addModel.AppLink = model.AppLink;
+
+            addModel.AppScreenshot = model.AppScreenshot;
+
+
+            addModel.ServiceHasReglamentExpert = model.ServiceHasReglamentExpert;
+
+            addModel.ServiceHasReglamentExpertComment = model.ServiceHasReglamentExpertComment;
+
+            addModel.ServiceHasUpdateReglamentExpert = model.ServiceHasUpdateReglamentExpert;
+
+            addModel.ServiceHasUpdateReglamentExpertComment = model.ServiceHasUpdateReglamentExpertComment;
+
+            addModel.MyGovServiceExpert = model.MyGovServiceExpert;
+
+            addModel.MyGovServiceExpertComment = model.MyGovServiceExpertComment;
+
+            addModel.OtherAppsExpert = model.OtherAppsExpert;
+
+            addModel.OtherAppsExpertComment = model.OtherAppsExpertComment;
+
+            addModel.ServiceTypeExpert = model.ServiceTypeExpert;
+
+            addModel.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
+
+        _orgPublicServices.Add(addModel);
+
+            return addModel.Id;
         }
-        public void Update(OrgPublicServicesCommand model)
+        public int Update(OrgPublicServicesCommand model)
         {
             var service = _orgPublicServices.Find(h => h.Id == model.Id).FirstOrDefault();
             if (service == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+
+            if (deadline == null)
+                throw ErrorStates.NotFound("deadline");
+
             var org = _organization.Find(o => o.Id == service.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            {
+                if (deadline.DeadlineDate > DateTime.Now)
+                {
+                    service.ServiceNameUz = model.ServiceNameUz;
+
+                    service.ServiceNameRu = model.ServiceNameRu;
+
+
+                    service.ServiceBasedDocumentType = model.ServiceBasedDocumentType;
+
+                    service.ServiceBasedDocumentName = model.ServiceBasedDocumentName;
+
+                    service.ServiceBasedDocumentNumber = model.ServiceBasedDocumentNumber;
+
+                    service.ServiceBasedDocumentDate = model.ServiceBasedDocumentDate;
+
+
+
+                    service.PaidFor = model.PaidFor;
+
+                    service.ServicePrice = model.ServicePrice;
+
+                    service.ServicePriceComment = model.ServicePriceComment;
+
+
+
+                    service.ServiceCompletePeriodType = model.ServiceCompletePeriodType;
+
+                    service.ServiceCompletePeriod = model.ServiceCompletePeriod;
+
+
+                    service.ServiceType = model.ServiceType;
+
+                    service.ServiceLink = model.ServiceLink;
+
+                    service.ServiceScreenshotLink = model.ServiceScreenshotLink;
+
+
+                    service.ServiceSubjects = model.ServiceSubjects;
+
+
+                    service.ServiceHasReglament = model.ServiceHasReglament;
+
+                    service.ServiceReglamentPath = model.ServiceReglamentPath;
+
+                    service.ServiceReglamentComment = model.ServiceReglamentComment;
+
+                    service.ServiceHasUpdateReglament = model.ServiceHasUpdateReglament;
+
+                    service.ServiceUpdateReglamentPath = model.ServiceUpdateReglamentPath;
+
+                    service.ServiceUpdateReglamentComment = model.ServiceUpdateReglamentComment;
+
+
+
+                    service.MyGovService = model.MyGovService;
+
+                    service.MyGovLink = model.MyGovLink;
+
+                    service.MyGovScreenshotLink = model.MyGovScreenshotLink;
+
+
+
+                    service.OtherApps = model.OtherApps;
+
+                    service.AppName = model.AppName;
+
+                    service.AppLink = model.AppLink;
+
+                    service.AppScreenshot = model.AppScreenshot;
+
+                }
+                else
+                {
+                    throw ErrorStates.NotAllowed("deadline");
+                }
+                
+            }
+            else if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            {
+                if (deadline.OperatorDeadlineDate > DateTime.Now)
+                {
+                    service.ServiceHasReglamentExpert = model.ServiceHasReglamentExpert;
+
+                    service.ServiceHasReglamentExpertComment = model.ServiceHasReglamentExpertComment;
+
+                    service.ServiceHasUpdateReglamentExpert = model.ServiceHasUpdateReglamentExpert;
+
+                    service.ServiceHasUpdateReglamentExpertComment = model.ServiceHasUpdateReglamentExpertComment;
+
+                    service.MyGovServiceExpert = model.MyGovServiceExpert;
+
+                    service.MyGovServiceExpertComment = model.MyGovServiceExpertComment;
+
+                    service.OtherAppsExpert = model.OtherAppsExpert;
+
+                    service.OtherAppsExpertComment = model.OtherAppsExpertComment;
+
+                    service.ServiceTypeExpert = model.ServiceTypeExpert;
+
+                    service.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
+                }
+                else
+                {
+                    throw ErrorStates.NotAllowed("deadline");
+                }
+            }
+            else
+            {
                 throw ErrorStates.NotAllowed("permission");
-            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
-            if (deadline == null)
-                throw ErrorStates.NotFound("deadline");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            }
 
-            if(!String.IsNullOrEmpty(model.ServiceName))
-                service.ServiceName = model.ServiceName;
+                _orgPublicServices.Update(service);
 
-            if (!String.IsNullOrEmpty(model.UserTypes))
-                service.UserTypes = model.UserTypes;
-
-            if (!String.IsNullOrEmpty(model.RenderingForm))
-                service.RenderingForm = model.RenderingForm;
-
-            if (!String.IsNullOrEmpty(model.PortalLink))
-                service.PortalLink = model.PortalLink;
-
-            if (!String.IsNullOrEmpty(model.ServiceLink))
-                service.ServiceLink = model.ServiceLink;
-
-            if (!String.IsNullOrEmpty(model.MobileApp))
-                service.MobileApp = model.MobileApp;
-
-            if (!String.IsNullOrEmpty(model.OtherResources))
-                service.OtherResources = model.OtherResources;
-
-            service.IsPaid = model.IsPaid;
-
-            if (!String.IsNullOrEmpty(model.ServiceResult))
-                service.ServiceResult = model.ServiceResult;
-
-            if (!String.IsNullOrEmpty(model.ServiceOtherResult))
-                service.ServiceOtherResult = model.ServiceOtherResult;
-
-            service.MechanizmForTrackingProgress = model.MechanizmForTrackingProgress;
-
-            if (!String.IsNullOrEmpty(model.TrackingProgressBy))
-                service.TrackingProgressBy = model.TrackingProgressBy;
-
-
-            service.ReglamentPath = model.ReglamentFilePath;
-
-            service.ReglamentUpdated = model.ReglamentUpdated;
-
-            _orgPublicServices.Update(service);
+            return service.Id;
         }
-        public void Delete(OrgPublicServicesCommand model)
+        public int Delete(OrgPublicServicesCommand model)
         {
             var service = _orgPublicServices.Find(h => h.Id == model.Id).FirstOrDefault();
             if (service == null)
-                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+                throw ErrorStates.NotFound(model.Id.ToString());
+           
             var org = _organization.Find(o => o.Id == service.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.NotFound(service.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
+            
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
+            
             if (deadline.DeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+           
+            
             _orgPublicServices.Remove(service);
+
+            return service.Id;
         }
     }
 }

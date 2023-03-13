@@ -7,5 +7,6 @@ namespace UserHandler.Results.ThirdSection
     public class OrgPublicServicesCommandResult
     {
         public bool IsSuccess { get; set; }
+        public int Id { get; set; }
     }
 }
