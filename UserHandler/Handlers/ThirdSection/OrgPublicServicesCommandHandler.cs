@@ -263,7 +263,7 @@ namespace UserHandler.Handlers.ThirdSection
                 }
                 
             }
-            else if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (deadline.OperatorDeadlineDate > DateTime.Now)
                 {
