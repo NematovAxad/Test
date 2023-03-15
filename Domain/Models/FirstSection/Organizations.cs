@@ -66,9 +66,18 @@ namespace Domain.Models.FirstSection
         public ICollection<BasedDocuments> BasedDocuments { get; set; }
         public ICollection<SubOrganizations> SubOrganizations { get; set; }
         public ICollection<RankTable> OrgRanks { get; set; }
+
+        [Column("is_active")]
         public bool? IsActive { get; set; }
+
+        [Column("is_ict")]
         public bool? IsIct { get; set; }
+
+        [Column("is_monitoring")]
         public bool? IsMonitoring { get; set; }
+
+        [Column("has_org_documents")]
+        public bool HasOrgDocuments { get; set; }
 
     }
 }

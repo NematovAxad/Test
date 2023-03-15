@@ -117,6 +117,7 @@ namespace AdminHandler.Handlers.Organization
             addModel.IsActive = true;
             addModel.IsIct = true;
             addModel.IsMonitoring = true;
+            addModel.HasOrgDocuments = true;
             
             _organization.Add(addModel);
         }

@@ -46,7 +46,10 @@ namespace AdminHandler.Handlers.Organization
             
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
-            
+            if(org.HasOrgDocuments == false)
+            {
+                throw ErrorStates.NotAllowed(org.Id.ToString());
+            }
             
             
             OrganizationDocuments addModel = new OrganizationDocuments()

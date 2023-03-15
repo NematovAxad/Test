@@ -79,6 +79,23 @@ namespace AdminApi.Controllers
         }
 
         [HttpPost]
+        public async Task<ResponseCore<OrgDocsControlCommandResult>> OrgDocsControl([FromBody] OrgDocsControlCommand model)
+        {
+            try
+            {
+                model.UserId = this.UserId();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
+        [HttpPost]
         public async Task<ResponseCore<OrgCommandResult>> AddOrg([FromBody] OrgCommand model)
         {
             try
