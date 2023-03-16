@@ -84,7 +84,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 throw ErrorStates.NotFound("available deadline");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
 
             if (((model.UserOrgId == socialSite.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
             {

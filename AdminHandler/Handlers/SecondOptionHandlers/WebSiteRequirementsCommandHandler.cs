@@ -46,20 +46,28 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Add(WebSiteRequirementsCommand model)
         {
+            var org = _organizations.Find(o => o.Id == model.Requirements[0].OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.Requirements[0].Id.ToString());
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if(model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                if (deadline.DeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
 
             if (model.Requirements.Count()>0)
             {
                 List<WebSiteRequirements> addList = new List<WebSiteRequirements>();
 
-                var org = _organizations.Find(o => o.Id == model.Requirements[0].OrganizationId).FirstOrDefault();
-                if (org == null)
-                    throw ErrorStates.NotFound(model.Requirements[0].Id.ToString());
+                
                 try
                 {
                     foreach (var r in model.Requirements)
