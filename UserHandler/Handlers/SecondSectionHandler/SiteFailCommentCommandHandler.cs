@@ -51,8 +51,13 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
+
+            
 
             SiteFailComments addModel = new SiteFailComments();
 
@@ -77,6 +82,13 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
 
+            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
             fail.ScreenPath = model.ImagePath;
             fail.ExpertComment = model.ExpertComment;   
 
@@ -87,6 +99,13 @@ namespace UserHandler.Handlers.SecondSectionHandler
         {
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
+
+            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
             var fail = _fails.Find(f => f.Id == model.Id).FirstOrDefault();
 
