@@ -367,11 +367,13 @@ namespace AdminHandler.Handlers.Ranking
             else
             {
                 var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
-                if (deadline == null || deadline.DeadlineDate < DateTime.Now)
+                if (deadline == null || deadline.OperatorDeadlineDate < DateTime.Now)
                     throw ErrorStates.NotAllowed(model.Quarter.ToString());
+
                 var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
                 if (org == null)
                     throw ErrorStates.NotFound(model.OrganizationId.ToString());
+
                 if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
                     var rank = _gRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
