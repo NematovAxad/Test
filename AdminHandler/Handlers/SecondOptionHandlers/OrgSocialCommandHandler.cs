@@ -74,6 +74,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
+
             var socialSite = _orgSocials.Find(s => s.Id == model.Id).Include(mbox=>mbox.Organizations).FirstOrDefault();
             if (socialSite == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
@@ -81,7 +82,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            if (deadline.DeadlineDate < DateTime.Now)
+
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
 
             if (((model.UserOrgId == socialSite.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
