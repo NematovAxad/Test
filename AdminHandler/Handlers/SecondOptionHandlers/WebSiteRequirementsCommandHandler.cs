@@ -1,6 +1,7 @@
 ﻿using AdminHandler.Commands.SecondOptionCommands;
 using AdminHandler.Results.SecondOptionResults;
 using Domain;
+using Domain.Models;
 using Domain.Models.FirstSection;
 using Domain.Models.SecondSection;
 using Domain.Permission;
@@ -22,13 +23,15 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
     {
         private readonly IRepository<Organizations, int> _organizations;
         private readonly IRepository<WebSiteRequirements, int> _websiteRequirements;
+        private readonly IRepository<Deadline, int> _deadline;
         private IDataContext _db;
 
-        public WebSiteRequirementsCommandHandler(IRepository<Organizations, int> organizations, IRepository<WebSiteRequirements, int> websiteRequirements, IDataContext db)
+        public WebSiteRequirementsCommandHandler(IRepository<Organizations, int> organizations, IRepository<WebSiteRequirements, int> websiteRequirements, IDataContext db, IRepository<Deadline, int> deadline)
         {
             _organizations = organizations;
             _websiteRequirements = websiteRequirements;
             _db = db;
+            _deadline = deadline;
         }
 
         public async Task<WebSiteRequirementsCommandResult> Handle(WebSiteRequirementsCommand request, CancellationToken cancellationToken)
@@ -43,7 +46,14 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Add(WebSiteRequirementsCommand model)
         {
-            if(model.Requirements.Count()>0)
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
+            if (model.Requirements.Count()>0)
             {
                 List<WebSiteRequirements> addList = new List<WebSiteRequirements>();
 
@@ -97,6 +107,13 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Update(WebSiteRequirementsCommand model)
         {
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
             if (model.Requirements.Count() > 0)
             {
                 List<WebSiteRequirements> updateList = new List<WebSiteRequirements>();
@@ -127,7 +144,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                     updateList.Add(requirement);
                 }
 
-                if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                     throw ErrorStates.NotAllowed("permission");
 
                 _db.Context.Set<WebSiteRequirements>().UpdateRange(updateList);
