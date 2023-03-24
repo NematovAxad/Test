@@ -115,47 +115,52 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Update(WebSiteRequirementsCommand model)
         {
+            var org = _organizations.Find(o => o.Id == model.Requirements[0].OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.Requirements[0].Id.ToString());
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                if (deadline.DeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+
+            var orgRequirements = _websiteRequirements.Find(r => r.OrganizationId == model.Requirements[0].OrganizationId).ToList();
 
             if (model.Requirements.Count() > 0)
             {
-                List<WebSiteRequirements> updateList = new List<WebSiteRequirements>();
-
-                var org = _organizations.Find(o => o.Id == model.Requirements[0].OrganizationId).FirstOrDefault();
-                if (org == null)
-                    throw ErrorStates.NotFound(model.Requirements[0].Id.ToString());
                 
                 foreach (var r in model.Requirements)
                 {
-                    
-                    WebSiteRequirements requirement = new WebSiteRequirements
+
+
+                    var requirement = orgRequirements.Find(t => t.Id == r.Id);
+
+                    if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
                     {
-                        Id = r.Id,
-                        OrganizationId = r.OrganizationId,
-                        Name = r.Name,
-                        Number = r.Number,
-                        SiteLink1 = r.SiteLink1,
-                        ScreenLink1 = r.ScreenLink1,
-                        SiteLink2 = r.SiteLink2,
-                        ScreenLink2 = r.ScreenLink2,
-                        SiteLink3 = r.SiteLink3,
-                        ScreenLink3 = r.ScreenLink3,
-                        Comment = r.Comment,
-                        RequirementStatus = r.RequirementStatus
+                        requirement.SiteLink1 = r.SiteLink1;
+                        requirement.SiteLink2 = r.SiteLink2;
+                        requirement.SiteLink3 = r.SiteLink3;
+
+                        requirement.ScreenLink1 = r.ScreenLink1;
+                        requirement.ScreenLink2 = r.ScreenLink2;
+                        requirement.ScreenLink3 = r.ScreenLink3;
+
+                    }
+                    if (model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                    {
+                        requirement.Comment = r.Comment;
+                        requirement.RequirementStatus = r.RequirementStatus;
                     };
-                    
-                    updateList.Add(requirement);
-                }
+                }   
 
-                if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
-                    throw ErrorStates.NotAllowed("permission");
-
-                _db.Context.Set<WebSiteRequirements>().UpdateRange(updateList);
+                _db.Context.Set<WebSiteRequirements>().UpdateRange(orgRequirements);
                 _db.Context.SaveChanges();
             }
             else

@@ -47,7 +47,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
 
-            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
@@ -82,7 +82,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
 
-            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
@@ -100,7 +100,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
 
-            var deadline = _deadline.Find(d => d.Id == model.DeadlineId).FirstOrDefault();
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
