@@ -13,6 +13,7 @@ using System.Linq;
 using Domain.Permission;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using Domain;
 
 namespace UserHandler.Handlers.ReestrPassportHandler
 {
@@ -51,8 +52,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotFound("available deadline");
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectExpertDecision = _projectCyberSecurityExpertDecision.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectExpertDecision != null)
@@ -90,8 +91,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotFound("available deadline");
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectExpertDecision = _projectCyberSecurityExpertDecision.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectExpertDecision == null)

@@ -57,8 +57,8 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
             OrgFutureYearsStrategies addModel = new OrgFutureYearsStrategies()
             {
                 OrganizationId = model.OrganizationId,
@@ -85,8 +85,8 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             futureStrategies.DocumentName = model.DocumentName;
             futureStrategies.DocumentNumber = model.DocumentNumber;
@@ -109,8 +109,8 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
             _futureStrategies.Remove(futureStrategies);
         }
     }

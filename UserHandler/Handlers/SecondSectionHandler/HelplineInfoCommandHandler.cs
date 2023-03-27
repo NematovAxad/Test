@@ -61,7 +61,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotAllowed("permission");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             HelplineInfo addModel = new HelplineInfo()
             {
@@ -134,7 +134,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotAllowed("permission");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             if (model.RegulationShowsPhone != null)
             {
@@ -242,7 +242,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotFound("available deadline");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             _helplineInfo.Remove(helplineInfo);
         }

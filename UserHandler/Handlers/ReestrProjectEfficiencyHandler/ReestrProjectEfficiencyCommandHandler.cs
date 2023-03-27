@@ -17,6 +17,7 @@ using MainInfrastructures.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using Domain;
 
 namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 {
@@ -61,8 +62,8 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectEfficiency = _projectEfficiency.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectEfficiency != null)
@@ -113,10 +114,10 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
-            
+
 
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {

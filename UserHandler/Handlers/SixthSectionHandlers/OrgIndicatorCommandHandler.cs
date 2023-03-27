@@ -63,8 +63,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
             
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
 
@@ -93,8 +93,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var orgIndicator = _orgIndicators.Find(p => p.Id == model.Id).FirstOrDefault();
             if (orgIndicator == null)

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain;
+using Domain.Models;
 using Domain.Models.FirstSection;
 using Domain.Models.Ranking;
 using Domain.Models.SecondSection;
@@ -56,8 +57,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             OrgHelpline addModel = new OrgHelpline()
             {
@@ -79,8 +80,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             orgHelpline.HelplineNumber = model.HelplineNumber;
 
@@ -99,8 +100,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
             _orgHelpline.Remove(orgHelpline);
         }
     }

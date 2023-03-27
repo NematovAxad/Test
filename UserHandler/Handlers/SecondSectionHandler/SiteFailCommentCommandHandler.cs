@@ -52,7 +52,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotFound("available deadline");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
@@ -87,7 +87,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotFound("available deadline");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             fail.ScreenPath = model.ImagePath;
             fail.ExpertComment = model.ExpertComment;   
@@ -105,7 +105,7 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.NotFound("available deadline");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var fail = _fails.Find(f => f.Id == model.Id).FirstOrDefault();
 

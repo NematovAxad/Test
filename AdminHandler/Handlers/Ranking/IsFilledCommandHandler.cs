@@ -52,7 +52,7 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
             var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
-            if (deadline == null || deadline.DeadlineDate < DateTime.Now)
+            if (deadline == null || deadline.SecondSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(model.Quarter.ToString());
 
             var field = _field.Find(r => r.Id == model.FieldId).FirstOrDefault();
@@ -80,7 +80,7 @@ namespace AdminHandler.Handlers.Ranking
         public void Update(IsFilledCommand model)
         {
             var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
-            if (deadline == null || deadline.DeadlineDate < DateTime.Now)
+            if (deadline == null || deadline.SecondSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(model.Quarter.ToString());
 
             var field = _field.Find(r => r.Id == model.FieldId).FirstOrDefault();

@@ -59,7 +59,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.DeadlineDate < DateTime.Now)
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
@@ -104,7 +104,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
 
-            if (deadline.DeadlineDate < DateTime.Now)
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectServices = _projectServices.Find(p => p.Id == model.Id).Include(mbox => mbox.AutomatedServices).Include(mbox=>mbox.AutomatedFunctions).FirstOrDefault();

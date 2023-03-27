@@ -58,8 +58,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 
             OrganizationSocials addModel = new OrganizationSocials()
             {
@@ -175,8 +175,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
             _orgSocials.Remove(social);
         }
     }

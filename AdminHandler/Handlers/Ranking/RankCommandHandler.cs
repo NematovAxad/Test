@@ -544,7 +544,7 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
             var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
-            if (deadline == null || deadline.DeadlineDate < DateTime.Now)
+            if (deadline == null || deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(model.Quarter.ToString());
             if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");

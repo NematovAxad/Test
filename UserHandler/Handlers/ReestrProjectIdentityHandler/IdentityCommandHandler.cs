@@ -17,6 +17,7 @@ using Domain.Permission;
 using UserHandler.Commands.ReestrPassportCommands;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using Domain;
 
 namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 {
@@ -53,8 +54,8 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
 
@@ -92,8 +93,8 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
             var projectIdentity = _projectidentity.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();

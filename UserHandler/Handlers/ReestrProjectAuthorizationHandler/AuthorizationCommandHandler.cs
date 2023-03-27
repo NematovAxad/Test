@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Permission;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using Domain;
 
 namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 {
@@ -52,8 +53,8 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
 
@@ -91,8 +92,8 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
             var projectAuthorization = _projectAuthorization.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();

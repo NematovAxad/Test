@@ -57,7 +57,10 @@ namespace AdminHandler.Handlers.Ranking
             {
                 Year = model.Year,
                 Quarter = model.Quarter,
-                DeadlineDate = model.DeadlineDate,
+                SecondSectionDeadlineDate = model.SecondSectionDeadlineDate,
+                ThirdSectionDeadlineDate = model.ThirdSectionDeadlineDate,
+                FifthSectionDeadlineDate = model.FifthSectionDeadlineDate,
+                SixthSectionDeadlineDate= model.SixthSectionDeadlineDate,
                 OperatorDeadlineDate = model.OperatorDeadlineDate,
                 IsActive = model.IsActive,
                 PingService = true,
@@ -84,7 +87,10 @@ namespace AdminHandler.Handlers.Ranking
                 _db.Context.SaveChanges();
             }
             deadline.IsActive = model.IsActive;
-            deadline.DeadlineDate = model.DeadlineDate;
+            deadline.SecondSectionDeadlineDate = model.SecondSectionDeadlineDate;
+            deadline.ThirdSectionDeadlineDate = model.ThirdSectionDeadlineDate;
+            deadline.FifthSectionDeadlineDate = model.FifthSectionDeadlineDate;
+            deadline.SixthSectionDeadlineDate = model.SixthSectionDeadlineDate;
             deadline.OperatorDeadlineDate = model.OperatorDeadlineDate;
             _deadline.Update(deadline);
         }

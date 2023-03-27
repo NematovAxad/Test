@@ -54,8 +54,8 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
            
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectIdentities != null)
@@ -98,8 +98,8 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectIdentities = _projectIdentities.Find(p => p.Id == model.Id).Include(mbox=>mbox.Identities).FirstOrDefault();
             if (projectIdentities == null)

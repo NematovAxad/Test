@@ -56,8 +56,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
 
@@ -95,8 +95,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
             var projectConnection = _reestrProjectConnection.Find(p => p.Id == model.ParentId).Include(mbox => mbox.Organizations).FirstOrDefault();

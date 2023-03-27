@@ -319,9 +319,9 @@ namespace UserHandler.Handlers.ThirdSection
                 throw ErrorStates.NotFound("deadline");
             
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
-           
-            
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+
             _orgPublicServices.Remove(service);
 
             return service.Id;

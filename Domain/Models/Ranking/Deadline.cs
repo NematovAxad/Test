@@ -16,8 +16,14 @@ namespace Domain.Models
         public int Year { get; set; }
         [Column("quarter")]
         public Quarters Quarter { get; set; }
-        [Column("deadline_date")]
-        public DateTime DeadlineDate { get; set; }
+        [Column("second_section_deadline_date")]
+        public DateTime SecondSectionDeadlineDate { get; set; }
+        [Column("third_section_deadline_date")]
+        public DateTime ThirdSectionDeadlineDate { get; set; }
+        [Column("fifth_section_deadline_date")]
+        public DateTime FifthSectionDeadlineDate { get; set; }
+        [Column("sixth_section_deadline_date")]
+        public DateTime SixthSectionDeadlineDate { get; set; }
         [Column("operator_deadline_date")]
         public DateTime OperatorDeadlineDate { get; set; }
         [Column("is_active")]

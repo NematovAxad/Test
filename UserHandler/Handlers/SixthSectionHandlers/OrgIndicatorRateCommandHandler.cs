@@ -63,7 +63,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
 
@@ -91,7 +91,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 throw ErrorStates.NotFound("available deadline");
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var indicatorRate = _indicatorRating.Find(p => p.Id == model.Id).FirstOrDefault();
             if (indicatorRate == null)

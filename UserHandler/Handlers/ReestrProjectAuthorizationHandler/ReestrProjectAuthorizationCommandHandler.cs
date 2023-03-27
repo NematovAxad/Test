@@ -16,6 +16,7 @@ using Domain.Permission;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using Domain;
 
 namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 {
@@ -57,8 +58,8 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectAuthorization = _projectAuthorization.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectAuthorization != null)
@@ -102,8 +103,8 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 throw ErrorStates.NotFound("available deadline");
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.DeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var projectAuthorization = _projectAuthorization.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox => mbox.Authorizations).FirstOrDefault();
             if (projectAuthorization == null)

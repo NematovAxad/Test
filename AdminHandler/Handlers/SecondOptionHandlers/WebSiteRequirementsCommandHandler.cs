@@ -56,11 +56,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
             if(model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                if (deadline.DeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 
 
             if (model.Requirements.Count()>0)
@@ -125,11 +125,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
 
             if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                if (deadline.DeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.DeadlineDate.ToString());
+                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 
             var orgRequirements = _websiteRequirements.Find(r => r.OrganizationId == model.Requirements[0].OrganizationId).ToList();
 
