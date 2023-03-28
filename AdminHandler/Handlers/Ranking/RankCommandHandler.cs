@@ -50,7 +50,6 @@ namespace AdminHandler.Handlers.Ranking
                                     IRepository<ASphere, int> aSphere,
                                     IRepository<AField, int> aField,
                                     IRepository<ASubField, int> aSubField,
-                                    IRepository<Field, int> field, 
                                     IDataContext db)
         {
             _organization = organization;

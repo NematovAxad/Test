@@ -3,38 +3,38 @@ using CoreResult.ResponseCores;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using System;
 using UserHandler.Commands.SecondSectionCommand;
 using UserHandler.Queries.SecondSectionQuery;
 using UserHandler.Results.SecondSectionCommandResult;
 using UserHandler.Results.SecondSectionQueryResult;
+using UserHandler.Results.SixthSectionResults;
+using UserHandler.Queries.SixthSectionQueries;
+using UserHandler.Commands.SixthSectionCommands;
 
 namespace UserApi.Controllers
 {
     [Route("apiUser/[controller]/[action]")]
-    public class OrgHelpline : Controller
+    public class DigitalEconomyProjects : Controller
     {
         IMediator _mediator;
-        public OrgHelpline(IMediator mediator)
+        public DigitalEconomyProjects(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<ResponseCore<OrgHelplineQueryResult>> Get([FromQuery] int organizationId, int id)
+        public async Task<ResponseCore<OrganizationDigitalEconomyProjectsQueryResult>> Get([FromQuery] int organizationId)
         {
             try
             {
-                OrgHelplineQuery model = new OrgHelplineQuery()
+                OrganizationDigitalEconomyProjectsQuery model = new OrganizationDigitalEconomyProjectsQuery()
                 {
                     OrganizationId = organizationId,
-                    Id = id
                 };
 
-                var result = await _mediator.Send<OrgHelplineQueryResult>(model);
+                var result = await _mediator.Send<OrganizationDigitalEconomyProjectsQueryResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<OrgHelplineCommandResult>> Add([FromQuery] OrgHelplineCommand model)
+        public async Task<ResponseCore<OrganizationDigitalEconomyProjectsCommandResult>> Add([FromBody] OrganizationDigitalEconomyProjectsCommand model)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace UserApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                var result = await _mediator.Send<OrgHelplineCommandResult>(model);
+                var result = await _mediator.Send<OrganizationDigitalEconomyProjectsCommandResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<OrgHelplineCommandResult>> Put([FromQuery] OrgHelplineCommand model)
+        public async Task<ResponseCore<OrganizationDigitalEconomyProjectsCommandResult>> Put([FromBody] OrganizationDigitalEconomyProjectsCommand model)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace UserApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                var result = await _mediator.Send<OrgHelplineCommandResult>(model);
+                var result = await _mediator.Send<OrganizationDigitalEconomyProjectsCommandResult>(model);
                 return result;
             }
             catch (Exception ex)
@@ -78,11 +78,11 @@ namespace UserApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<ResponseCore<OrgHelplineCommandResult>> Delete([FromQuery] int id)
+        public async Task<ResponseCore<OrganizationDigitalEconomyProjectsCommandResult>> Delete([FromQuery] int id)
         {
             try
             {
-                OrgHelplineCommand model = new OrgHelplineCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
+                OrganizationDigitalEconomyProjectsCommand model = new OrganizationDigitalEconomyProjectsCommand() { EventType = Domain.Enums.EventType.Delete, Id = id };
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
@@ -93,6 +93,5 @@ namespace UserApi.Controllers
                 return ex;
             }
         }
-
     }
 }

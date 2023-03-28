@@ -37,7 +37,6 @@ namespace UserHandler.Handlers.DownloadHandler
 
         public ExportReportHandler(IRepository<Organizations, int> organizations,
                                         IRepository<Deadline, int> deadline,
-                                        IRepository<Field, int> field,
                                         IRepository<GRankTable, int> gRankTable,
                                         IRepository<XRankTable, int> xRankTable,
                                         IRepository<ARankTable, int> aRankTable,

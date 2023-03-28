@@ -20,15 +20,13 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<Field, int> _field;
         private readonly IRepository<OrganizationSocials, int> _orgSocials;
       
 
-        public OrgSocialQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationSocials, int> orgSocials)
+        public OrgSocialQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<OrganizationSocials, int> orgSocials)
         {
             _organization = organization;
             _deadline = deadline;
-            _field = field;
             _orgSocials = orgSocials;
            
         }

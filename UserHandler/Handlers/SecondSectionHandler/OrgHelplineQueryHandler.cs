@@ -20,14 +20,12 @@ namespace UserHandler.Handlers.SecondSectionHandler
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<Field, int> _field;
         private readonly IRepository<OrgHelpline, int> _orgHelpline;
 
-        public OrgHelplineQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrgHelpline, int> orgHelpline)
+        public OrgHelplineQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<OrgHelpline, int> orgHelpline)
         {
             _organization = organization;
             _deadline = deadline;
-            _field = field;
             _orgHelpline = orgHelpline;
         }
 

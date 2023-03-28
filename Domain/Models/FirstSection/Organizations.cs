@@ -65,7 +65,6 @@ namespace Domain.Models.FirstSection
         public OrgCategory OrgCategory { get; set; }
         public ICollection<BasedDocuments> BasedDocuments { get; set; }
         public ICollection<SubOrganizations> SubOrganizations { get; set; }
-        public ICollection<RankTable> OrgRanks { get; set; }
 
         [Column("is_active")]
         public bool? IsActive { get; set; }

@@ -1,14 +1,17 @@
-﻿using AdminHandler.Results.Ranking;
-using Domain.Enums;
+﻿using Domain.Enums;
+using Domain.Models.FirstSection;
+using Domain.Models.SixthSection;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Text.Json.Serialization;
+using UserHandler.Results.SixthSectionResults;
 
-namespace AdminHandler.Commands.Ranking
+namespace UserHandler.Commands.SixthSectionCommands
 {
-    public class IsFilledCommand:IRequest<IsFilledCommandResult>
+    public class OrganizationDigitalEconomyProjectsCommand:IRequest<OrganizationDigitalEconomyProjectsCommandResult>
     {
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
@@ -22,13 +25,17 @@ namespace AdminHandler.Commands.Ranking
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public EventType EventType { get; set; }
+
         public int Id { get; set; }
+
         public int OrganizationId { get; set; }
-        public int Year { get; set; }
-        public Quarters Quarter { get; set; }
-        public bool IsFilled { get; set; }
-        public int SphereId { get; set; }
-        public int FieldId { get; set; }
+
+        public string ProjectName { get; set; }
+
+        public string BasisFilePath { get; set; }
+
         public string Comment { get; set; }
+
+        public ProjectStatus ProjectStatus { get; set; }
     }
 }

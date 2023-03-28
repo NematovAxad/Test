@@ -21,14 +21,12 @@ namespace UserHandler.Handlers.ThirdSection
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<Field, int> _field;
         private readonly IRepository<OrgInformationSystems, int> _orgInfoSystem;
 
-        public OrgInformationSystemsQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrgInformationSystems, int> orgInfoSystem)
+        public OrgInformationSystemsQueryHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<OrgInformationSystems, int> orgInfoSystem)
         {
             _organization = organization;
             _deadline = deadline;
-            _field = field;
             _orgInfoSystem = orgInfoSystem;
         }
 

@@ -24,14 +24,12 @@ namespace UserHandler.Handlers.ThirdSection
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<Field, int> _field;
         private readonly IRepository<OrganizationPublicServices, int> _orgPublicServices;
 
-        public OrgPublicServicesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrganizationPublicServices, int> orgPublicServices)
+        public OrgPublicServicesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<OrganizationPublicServices, int> orgPublicServices)
         {
             _organization = organization;
             _deadline = deadline;
-            _field = field;
             _orgPublicServices = orgPublicServices;
         }
         public async Task<OrgPublicServicesCommandResult> Handle(OrgPublicServicesCommand request, CancellationToken cancellationToken)

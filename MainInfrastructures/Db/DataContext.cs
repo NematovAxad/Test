@@ -57,7 +57,6 @@ namespace MainInfrastructures.Db
         public DbSet<OrgFutureYearsStrategies> OrgFutureYearsStrategies { get; set; }
         public DbSet<OrganizationComputers> OrganizationComputers { get; set; }
         public DbSet<OrganizationServers> OrganizationServers { get; set; }
-        public DbSet<IsFilledTable> IsFilledTable { get; set; }
         public DbSet<GSphere> GSphere { get; set; }
         public DbSet<GField> GField { get; set; }
         public DbSet<GSubField> GSubField { get; set; }
@@ -112,5 +111,6 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationBudget> OrganizationBudget { get; set; }
         public DbSet<OrganizationIndicators> OrganizationIndictors { get; set; }
         public DbSet<IndicatorRating> IndicatorRatings { get; set; }
+        public DbSet<OrganizationDigitalEconomyProjects> OrganizationDigitalEconomyProjects { get; set; }
     }
 }

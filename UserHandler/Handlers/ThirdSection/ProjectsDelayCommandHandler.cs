@@ -22,14 +22,12 @@ namespace UserHandler.Handlers.ThirdSection
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<Field, int> _field;
         private readonly IRepository<DelaysOnProjects, int> _delaysOnProjects;
 
-        public ProjectsDelayCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<DelaysOnProjects, int> delaysOnProjects)
+        public ProjectsDelayCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<DelaysOnProjects, int> delaysOnProjects)
         {
             _organization = organization;
             _deadline = deadline;
-            _field = field;
             _delaysOnProjects = delaysOnProjects;
         }
         public async Task<ProjectsDelayCommandResult> Handle(ProjectsDelayCommand request, CancellationToken cancellationToken)

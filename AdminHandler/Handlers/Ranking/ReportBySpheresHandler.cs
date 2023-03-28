@@ -37,7 +37,6 @@ namespace AdminHandler.Handlers.Ranking
 
         public ReportBySpheresHandler(IRepository<Organizations, int> organizations, 
                                         IRepository<Deadline, int> deadline, 
-                                        IRepository<Field, int> field,
                                         IRepository<GRankTable, int> gRankTable,
                                         IRepository<XRankTable, int> xRankTable,
                                         IRepository<ARankTable, int> aRankTable,

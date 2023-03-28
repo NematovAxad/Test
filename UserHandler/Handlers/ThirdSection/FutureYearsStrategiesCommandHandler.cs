@@ -22,14 +22,13 @@ namespace UserHandler.Handlers.ThirdSection
     {
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<Field, int> _field;
+
         private readonly IRepository<OrgFutureYearsStrategies, int> _futureStrategies;
 
-        public FutureYearsStrategiesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<Field, int> field, IRepository<OrgFutureYearsStrategies, int> futureStrategies)
+        public FutureYearsStrategiesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<OrgFutureYearsStrategies, int> futureStrategies)
         {
             _organization = organization;
             _deadline = deadline;
-            _field = field;
             _futureStrategies = futureStrategies;
         }
         public async Task<FutureYearsStrategiesCommandResult> Handle(FutureYearsStrategiesCommand request, CancellationToken cancellationToken)
