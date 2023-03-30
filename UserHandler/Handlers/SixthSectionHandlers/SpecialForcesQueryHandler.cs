@@ -1,5 +1,5 @@
 ﻿using Domain.Models;
-using Domain.Models.FifthSection;
+using Domain.Models.SixthSection;
 using JohaRepository;
 using MediatR;
 using System;
@@ -8,10 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using UserHandler.Queries.ThirdSection;
-using UserHandler.Results.ThirdSection;
+using UserHandler.Queries.SixthSectionQueries;
+using UserHandler.Results.SixthSectionResults;
 
-namespace UserHandler.Handlers.ThirdSection
+namespace UserHandler.Handlers.SixthSectionHandlers
 {
     public class SpecialForcesQueryHandler : IRequestHandler<SpecialForcesQuery, SpecialForcesQueryResult>
     {

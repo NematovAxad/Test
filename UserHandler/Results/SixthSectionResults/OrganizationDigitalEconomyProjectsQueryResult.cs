@@ -13,5 +13,9 @@ namespace UserHandler.Results.SixthSectionResults
         public int CompletedProjects { get; set; }
         public int OngoingProjects { get; set; }
         public int NotFinishedProjects { get; set; }
+        public double Rate
+        {
+            get { return CompletedProjects / ProjectsCount; }
+        }
     }
 }

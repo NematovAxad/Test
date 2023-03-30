@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserHandler.Commands.ThirdSection;
-using UserHandler.Queries.ThirdSection;
-using UserHandler.Results.ThirdSection;
+using UserHandler.Commands.SixthSectionCommands;
+using UserHandler.Queries.SixthSectionQueries;
+using UserHandler.Results.SixthSectionResults;
 
 namespace UserApi.Controllers
 {
@@ -41,7 +41,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPost]
-        public async Task<ResponseCore<SpecialForcesCommandResult>> Add([FromQuery] SpecialForcesCommand model)
+        public async Task<ResponseCore<SpecialForcesCommandResult>> Add([FromBody] SpecialForcesCommand model)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace UserApi.Controllers
             }
         }
         [HttpPut]
-        public async Task<ResponseCore<SpecialForcesCommandResult>> Put([FromQuery] SpecialForcesCommand model)
+        public async Task<ResponseCore<SpecialForcesCommandResult>> Put([FromBody] SpecialForcesCommand model)
         {
             try
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UserHandler.Results.ThirdSection
+namespace UserHandler.Results.SixthSectionResults
 {
     public class SpecialForcesQueryResult
     {

@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using UserHandler.Results.ThirdSection;
+using UserHandler.Results.SixthSectionResults;
 
-namespace UserHandler.Queries.ThirdSection
+namespace UserHandler.Queries.SixthSectionQueries
 {
-    public class SpecialForcesQuery:IRequest<SpecialForcesQueryResult>
+    public class SpecialForcesQuery : IRequest<SpecialForcesQueryResult>
     {
         public int Id { get; set; }
         public int OrganizationId { get; set; }
