@@ -266,7 +266,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 else { throw ErrorStates.Error(UIErrors.DeadlineExpired); }
             }
 
-            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
             {
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
                 {
