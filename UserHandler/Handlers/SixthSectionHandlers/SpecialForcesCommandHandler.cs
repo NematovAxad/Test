@@ -181,7 +181,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             
 
 
-            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if ((model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 if (deadline.SixthSectionDeadlineDate < DateTime.Now)
                 {
@@ -268,7 +268,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             if ((model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
             {
-                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                if (deadline.SixthSectionDeadlineDate < DateTime.Now)
                 {
                     specialForces.ExpertComment = model.ExpertComment;
                     specialForces.ExpertExept = model.ExpertExept;
