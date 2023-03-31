@@ -183,7 +183,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             if ((model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
-                if (deadline.SixthSectionDeadlineDate < DateTime.Now)
+                if (deadline.SixthSectionDeadlineDate > DateTime.Now)
                 {
                     specialForces.HasSpecialForces = model.HasSpecialForces;
 
@@ -268,7 +268,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             if ((model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
             {
-                if (deadline.SixthSectionDeadlineDate < DateTime.Now)
+                if (deadline.SixthSectionDeadlineDate > DateTime.Now)
                 {
                     specialForces.ExpertComment = model.ExpertComment;
                     specialForces.ExpertExept = model.ExpertExept;
