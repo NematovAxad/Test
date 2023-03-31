@@ -24,6 +24,25 @@ namespace AdminApi.Controllers
         }
 
         [HttpGet]
+        public async Task<ResponseCore<OrgDataAvailabilityReportQueryResult>> OrgDataAvailabilityReport([FromQuery] int orgId)
+        {
+            try
+            {
+                OrgDataAvailabilityReportQuery model = new OrgDataAvailabilityReportQuery()
+                {
+                    OrgId = orgId,
+                };
+
+                var result = await _mediator.Send<OrgDataAvailabilityReportQueryResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
+        [HttpGet]
         public async Task<ResponseCore<OrgDataAvailabilityQueryResult>> Get([FromQuery] int orgId, string section)
         {
             try
