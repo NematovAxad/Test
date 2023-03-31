@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230331052714_orgdataavailabilitytable")]
+    partial class orgdataavailabilitytable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3385,14 +3387,6 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("data_relevance")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("DeadlineId")
-                        .HasColumnName("deadline_id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ExpertComment")
-                        .HasColumnName("expert_comment")
-                        .HasColumnType("text");
-
                     b.Property<string>("ExpertPinfl")
                         .HasColumnName("expert_pinfl")
                         .HasColumnType("text");
@@ -3414,8 +3408,6 @@ namespace MainInfrastructures.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DeadlineId");
 
                     b.HasIndex("OrganizationId");
 
@@ -4893,12 +4885,6 @@ namespace MainInfrastructures.Migrations
 
             modelBuilder.Entity("Domain.Models.SixthSection.OrganizationDataAvailability", b =>
                 {
-                    b.HasOne("Domain.Models.Deadline", "Deadline")
-                        .WithMany()
-                        .HasForeignKey("DeadlineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Models.FirstSection.Organizations", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")

@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230331054033_fkdeadline")]
+    partial class fkdeadline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3388,10 +3390,6 @@ namespace MainInfrastructures.Migrations
                     b.Property<int>("DeadlineId")
                         .HasColumnName("deadline_id")
                         .HasColumnType("integer");
-
-                    b.Property<string>("ExpertComment")
-                        .HasColumnName("expert_comment")
-                        .HasColumnType("text");
 
                     b.Property<string>("ExpertPinfl")
                         .HasColumnName("expert_pinfl")

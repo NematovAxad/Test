@@ -112,5 +112,6 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationIndicators> OrganizationIndictors { get; set; }
         public DbSet<IndicatorRating> IndicatorRatings { get; set; }
         public DbSet<OrganizationDigitalEconomyProjects> OrganizationDigitalEconomyProjects { get; set; }
+        public DbSet<OrganizationDataAvailability> OrganizationDataAvailability { get; set; }
     }
 }

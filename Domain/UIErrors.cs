@@ -104,5 +104,15 @@ namespace Domain
         /// <en>Data for this perio not found</en>
         /// <kr>Данные за этот период не найдены</kr>
         DataForThisPeriodNotFound = -10,
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Bunday Section yo'q</uz>
+        /// <ru>Этот раздел не существует</ru>
+        /// <en>This section don't exist</en>
+        /// <kr>Этот раздел не существует</kr>
+        IncorrectSection = -11,
     }
 }
