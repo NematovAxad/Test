@@ -164,7 +164,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
         }
         public int Update(SpecialForcesCommand model)
         {
-            var specialForces = _specialForces.Find(h => h.OrganizationId == model.OrganizationId).FirstOrDefault();
+            var specialForces = _specialForces.Find(h => h.Id == model.Id).FirstOrDefault();
             if (specialForces == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
@@ -181,7 +181,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             
 
 
-            if ((model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if ((model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)) || (model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 if (deadline.SixthSectionDeadlineDate > DateTime.Now)
                 {
@@ -266,7 +266,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 else { throw ErrorStates.Error(UIErrors.DeadlineExpired); }
             }
 
-            if ((model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)) || (model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
             {
                 if (deadline.SixthSectionDeadlineDate > DateTime.Now)
                 {
