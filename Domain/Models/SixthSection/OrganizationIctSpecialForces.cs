@@ -55,6 +55,9 @@ namespace Domain.Models.SixthSection
         [Column("ministry_agreed_head")]
         public bool MinistryAgreedHead { get; set; }
 
+        [Column("ministry_agreed_head_document")]
+        public string MinistryAgreedHeadDocument { get; set; } // added
+
 
         [Column("has_characterizing_document")]
         public bool HasCharacterizingDocument { get; set; }
@@ -122,6 +125,9 @@ namespace Domain.Models.SixthSection
 
         [Column("finance_provision_material")]
         public bool FinanceProvisionMaterial { get; set; }
+
+        [Column("finance_provision_material_document")]
+        public string FinanceProvisionMaterialDocument { get; set; }     // added
 
 
         [Column("amount_of_funds")]

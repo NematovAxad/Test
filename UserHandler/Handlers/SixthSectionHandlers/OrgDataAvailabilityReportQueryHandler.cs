@@ -42,7 +42,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             var orgData = _orgDataAvailability.Find(d => d.OrganizationId == request.OrgId && d.DeadlineId == deadline.Id).ToList();
 
             OrgDataAvailabilityReportQueryResult result = new OrgDataAvailabilityReportQueryResult();
-
+            
+            result.Data = orgData;
             result.OrganizationId = request.OrgId;
             result.AllCheckedSection = orgData.Count();
             result.FullyProvidedSections = orgData.Where(d => d.DataAvailability == Domain.Enums.DataAvailability.FullyProvided).Count();

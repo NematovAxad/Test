@@ -47,6 +47,8 @@ namespace UserHandler.Commands.SixthSectionCommands
 
         public bool MinistryAgreedHead { get; set; }
 
+        public string MinistryAgreedHeadDocument { get; set; }
+
         public bool HasCharacterizingDocument { get; set; }
 
         public string CharacterizingDocument { get; set; }
@@ -80,6 +82,8 @@ namespace UserHandler.Commands.SixthSectionCommands
         public string WorkPlanOfSpecialForces { get; set; }
 
         public bool FinanceProvisionMaterial { get; set; }
+
+        public string FinanceProvisionMaterialDocument { get; set; }
 
         public double AmountOfFunds { get; set; }
 

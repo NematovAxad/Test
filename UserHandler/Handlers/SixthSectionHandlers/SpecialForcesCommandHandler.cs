@@ -97,6 +97,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             addModel.MinistryAgreedHead = model.MinistryAgreedHead;
 
+            addModel.MinistryAgreedHeadDocument = model.MinistryAgreedHeadDocument;
+
             addModel.HasCharacterizingDocument = model.HasCharacterizingDocument;
 
             addModel.CharacterizingDocument = model.CharacterizingDocument;
@@ -130,6 +132,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.WorkPlanOfSpecialForces = model.WorkPlanOfSpecialForces;
 
             addModel.FinanceProvisionMaterial = model.FinanceProvisionMaterial;
+
+            addModel.FinanceProvisionMaterialDocument = model.FinanceProvisionMaterialDocument;
 
             addModel.AmountOfFunds = model.AmountOfFunds;
 
@@ -203,6 +207,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
                     specialForces.MinistryAgreedHead = model.MinistryAgreedHead;
 
+                    specialForces.MinistryAgreedHeadDocument = model.MinistryAgreedHeadDocument;
+
                     specialForces.HasCharacterizingDocument = model.HasCharacterizingDocument;
 
                     specialForces.CharacterizingDocument = model.CharacterizingDocument;
@@ -236,6 +242,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                     specialForces.WorkPlanOfSpecialForces = model.WorkPlanOfSpecialForces;
 
                     specialForces.FinanceProvisionMaterial = model.FinanceProvisionMaterial;
+
+                    specialForces.FinanceProvisionMaterialDocument = model.FinanceProvisionMaterialDocument;
 
                     specialForces.AmountOfFunds = model.AmountOfFunds;
 
