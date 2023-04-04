@@ -100,7 +100,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !(model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            if (deadline.OperatorDeadlineDate < DateTime.Now)
+            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
@@ -129,7 +129,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !(model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            if (deadline.OperatorDeadlineDate < DateTime.Now)
+            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
