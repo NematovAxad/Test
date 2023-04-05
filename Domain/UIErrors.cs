@@ -114,5 +114,26 @@ namespace Domain
         /// <en>This section don't exist</en>
         /// <kr>Этот раздел не существует</kr>
         IncorrectSection = -11,
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Yo'nalis id si kiritilmagan</uz>
+        /// <ru>Идентификатор поля не указан</ru>
+        /// <en>Field Id not provided</en>
+        /// <kr>Идентификатор поля не указан</kr>
+        FieldIdNotProvided = -12,
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Sub Yo'nalis id si kiritilmagan</uz>
+        /// <ru>Идентификатор подполя не указан</ru>
+        /// <en>SubField Id not provided</en>
+        /// <kr>Идентификатор подполя не указан</kr>
+        SubFieldIdNotProvided = -13,
     }
 }

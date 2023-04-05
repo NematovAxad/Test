@@ -1,5 +1,6 @@
 ﻿using AdminHandler.Commands.Ranking;
 using AdminHandler.Results.Ranking;
+using Domain;
 using Domain.Models;
 using Domain.Models.FirstSection;
 using Domain.Models.Ranking;
@@ -9,6 +10,7 @@ using Domain.States;
 using EntityRepository;
 using JohaRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,7 +88,10 @@ namespace AdminHandler.Handlers.Ranking
                 ExceptionCase(model);
             }
             else
-            { 
+            {
+                if (model.FieldId == 0)
+                    throw ErrorStates.Error(UIErrors.FieldIdNotProvided);
+
                 var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
                 if (org == null)
                     throw ErrorStates.NotFound(model.OrganizationId.ToString());
@@ -100,7 +105,7 @@ namespace AdminHandler.Handlers.Ranking
 
                 if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
-                    var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                    var field = _gField.Find(r => r.Id == model.FieldId).Include(mbox=>mbox.GSubFields).FirstOrDefault();
                     if (field == null)
                         throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
                     GRankTable addModel = new GRankTable()
@@ -121,8 +126,11 @@ namespace AdminHandler.Handlers.Ranking
                         ElementId = 0
                     };
 
-                    if (model.SubFieldId != 0)
+                    if (field.GSubFields.Count() > 0)
                     {
+                        if (model.SubFieldId == 0)
+                            throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
+
                         var subField = _gSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
@@ -186,7 +194,7 @@ namespace AdminHandler.Handlers.Ranking
                 }
                 if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
                 {
-                    var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                    var field = _xField.Find(r => r.Id == model.FieldId).Include(mbox=>mbox.XSubFields).FirstOrDefault();
                     if (field == null)
                         throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
                     XRankTable addModel = new XRankTable()
@@ -206,8 +214,11 @@ namespace AdminHandler.Handlers.Ranking
                         SubFieldId = 0,
                         ElementId = 0
                     };
-                    if (model.SubFieldId != 0)
+                    if (field.XSubFields.Count() > 0)
                     {
+                        if (model.SubFieldId == 0)
+                            throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
+
                         var subField = _xSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
@@ -271,7 +282,7 @@ namespace AdminHandler.Handlers.Ranking
                 }
                 if (org.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
                 {
-                    var field = _aField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                    var field = _aField.Find(r => r.Id == model.FieldId).Include(mbox=>mbox.ASubFields).FirstOrDefault();
                     if (field == null)
                         throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
                     ARankTable addModel = new ARankTable()
@@ -292,8 +303,11 @@ namespace AdminHandler.Handlers.Ranking
                         ElementId = 0
                     };
 
-                    if (model.SubFieldId != 0)
+                    if (field.ASubFields.Count() > 0)
                     {
+                        if (model.SubFieldId == 0)
+                            throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
+
                         var subField = _aSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
@@ -378,18 +392,26 @@ namespace AdminHandler.Handlers.Ranking
                     var rank = _gRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
                     if (rank == null)
                         throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
-                    var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+
+
+                    var field = _gField.Find(r => r.Id == rank.FieldId).Include(mbox=>mbox.GSubFields).FirstOrDefault();
                     if (field == null)
                         throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+
+
                     if (model.Rank > field.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.SubFieldId != 0)
+
+
+                    if (field.GSubFields.Count() > 0)
                     {
-                        var subField = _gSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
+                        var subField = _gSubField.Find(r => r.Id == rank.SubFieldId && r.FieldId == rank.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
+
                         if (model.Rank > subField.MaxRate)
                             throw ErrorStates.NotAllowed("incorrect mark");
+
                         if (model.IsException == true)
                         {
                             rank.Rank = subField.MaxRate;
@@ -411,7 +433,7 @@ namespace AdminHandler.Handlers.Ranking
                             rank.Rank = model.Rank;
                         }
                     }
-                    rank.IsException = model.IsException;
+                    rank.IsException = false;
                     rank.Comment = model.Comment;
                     rank.ExpertId = model.UserId;
                     rank.ExpertPinfl = model.UserPinfl;
@@ -423,18 +445,23 @@ namespace AdminHandler.Handlers.Ranking
                     var rank = _xRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
                     if (rank == null)
                         throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
-                    var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+
+                    var field = _xField.Find(r => r.Id == rank.FieldId).Include(mbox=>mbox.XSubFields).FirstOrDefault();
                     if (field == null)
                         throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+
                     if (model.Rank > field.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.SubFieldId != 0)
+
+                    if (field.XSubFields.Count() > 0)
                     {
-                        var subField = _xSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
+                        var subField = _xSubField.Find(r => r.Id == rank.SubFieldId && r.FieldId == rank.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
+
                         if (model.Rank > subField.MaxRate)
                             throw ErrorStates.NotAllowed("incorrect mark");
+
                         if (model.IsException == true)
                         {
                             rank.Rank = subField.MaxRate;
@@ -455,7 +482,7 @@ namespace AdminHandler.Handlers.Ranking
                             rank.Rank = model.Rank;
                         }
                     }
-                    rank.IsException = model.IsException;
+                    rank.IsException = false;
                     rank.Comment = model.Comment;
                     rank.ExpertId = model.UserId;
                     rank.ExpertPinfl = model.UserPinfl;
@@ -467,18 +494,23 @@ namespace AdminHandler.Handlers.Ranking
                     var rank = _aRankTable.Find(r => r.Id == model.Id).FirstOrDefault();
                     if (rank == null)
                         throw ErrorStates.NotFound("rank for " + model.OrganizationId.ToString());
-                    var field = _aField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+
+                    var field = _aField.Find(r => r.Id == rank.FieldId).Include(mbox=>mbox.ASubFields).FirstOrDefault();
                     if (field == null)
                         throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+
                     if (model.Rank > field.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.SubFieldId != 0)
+
+                    if (field.ASubFields.Count() > 0)
                     {
-                        var subField = _aSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
+                        var subField = _aSubField.Find(r => r.Id == rank.SubFieldId && r.FieldId == rank.FieldId).FirstOrDefault();
                         if (subField == null)
                             throw ErrorStates.NotFound("sub field ");
+
                         if (model.Rank > subField.MaxRate)
                             throw ErrorStates.NotAllowed("incorrect mark");
+
                         if (model.IsException == true)
                         {
                             rank.Rank = subField.MaxRate;
@@ -500,7 +532,7 @@ namespace AdminHandler.Handlers.Ranking
                             rank.Rank = model.Rank;
                         }
                     }
-                    rank.IsException = model.IsException;
+                    rank.IsException = false;
                     rank.Comment = model.Comment;
                     rank.ExpertId = model.UserId;
                     rank.ExpertPinfl = model.UserPinfl;
