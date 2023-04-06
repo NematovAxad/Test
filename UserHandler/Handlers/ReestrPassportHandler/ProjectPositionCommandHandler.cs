@@ -64,6 +64,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                addModel.ProjectStatus = model.ProjectStatus;
                 addModel.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
@@ -98,6 +99,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                projectPosition.ProjectStatus = model.ProjectStatus;
                 projectPosition.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     projectPosition.ExpertComment = model.ExpertComment;

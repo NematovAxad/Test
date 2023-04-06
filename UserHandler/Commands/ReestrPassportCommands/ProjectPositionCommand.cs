@@ -26,6 +26,7 @@ namespace UserHandler.Commands.ReestrPassportCommands
         public int Id { get; set; }
         public int OrganizationId { get; set; }
         public int ReestrProjectId { get; set; }
+        public ReestrProjectStatusInNis ProjectStatus { get; set; }
         public string FilePath { get; set; }
         public bool ExpertExcept { get; set; }
         public string ExpertComment { get; set; }
