@@ -118,6 +118,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 if (model.ProjectServiceExist == false)
                 {
                     _services.RemoveRange(projectServices.AutomatedServices);
+                    _functions.RemoveRange(projectServices.AutomatedFunctions);
                 }
             }
 
