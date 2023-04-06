@@ -47,7 +47,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                     id = Delete(request);
                     break;
             }
-            return new OrganizationDigitalEconomyProjectsReportCommandResult() { Id = id, IsSuccess = false };
+            return new OrganizationDigitalEconomyProjectsReportCommandResult() { Id = id, IsSuccess = true };
         }
 
         public int Add(OrganizationDigitalEconomyProjectsReportCommand model)
