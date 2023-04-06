@@ -219,5 +219,23 @@
             <en>This section don't exist</en>
             <kr>Этот раздел не существует</kr>
         </member>
+        <member name="F:Domain.UIErrors.FieldIdNotProvided">
+            <summary>
+            
+            </summary>
+            <uz>Yo'nalis id si kiritilmagan</uz>
+            <ru>Идентификатор поля не указан</ru>
+            <en>Field Id not provided</en>
+            <kr>Идентификатор поля не указан</kr>
+        </member>
+        <member name="F:Domain.UIErrors.SubFieldIdNotProvided">
+            <summary>
+            
+            </summary>
+            <uz>Sub Yo'nalis id si kiritilmagan</uz>
+            <ru>Идентификатор подполя не указан</ru>
+            <en>SubField Id not provided</en>
+            <kr>Идентификатор подполя не указан</kr>
+        </member>
     </members>
 </doc>

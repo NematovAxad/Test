@@ -18,21 +18,21 @@ using Domain.Permission;
 
 namespace UserHandler.Handlers.SixthSectionHandlers
 {
-    public class OrganizationDigitalEconomyProjectsCommandHandler : IRequestHandler<OrganizationDigitalEconomyProjectsCommand, OrganizationDigitalEconomyProjectsCommandResult>
+    public class OrganizationDigitalEconomyProjectsReportCommandHandler : IRequestHandler<OrganizationDigitalEconomyProjectsReportCommand, OrganizationDigitalEconomyProjectsReportCommandResult>
     {
 
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
-        private readonly IRepository<OrganizationDigitalEconomyProjects, int> _orgDigitalEconomyProjects;
+        private readonly IRepository<OrganizationDigitalEconomyProjectsReport, int> _orgDigitalEconomyProjectsReport;
 
-        public OrganizationDigitalEconomyProjectsCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<OrganizationDigitalEconomyProjects, int> orgDigitalEconomyProjects)
+        public OrganizationDigitalEconomyProjectsReportCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<OrganizationDigitalEconomyProjectsReport, int> orgDigitalEconomyProjectsReport)
         {
             _organization = organization;
             _deadline = deadline;
-            _orgDigitalEconomyProjects = orgDigitalEconomyProjects;
+            _orgDigitalEconomyProjectsReport = orgDigitalEconomyProjectsReport;
         }
 
-        public async Task<OrganizationDigitalEconomyProjectsCommandResult> Handle(OrganizationDigitalEconomyProjectsCommand request, CancellationToken cancellationToken)
+        public async Task<OrganizationDigitalEconomyProjectsReportCommandResult> Handle(OrganizationDigitalEconomyProjectsReportCommand request, CancellationToken cancellationToken)
         {
             int id = 0;
             switch (request.EventType)
@@ -47,10 +47,10 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                     id = Delete(request);
                     break;
             }
-            return new OrganizationDigitalEconomyProjectsCommandResult() { Id = id, IsSuccess = false };
+            return new OrganizationDigitalEconomyProjectsReportCommandResult() { Id = id, IsSuccess = false };
         }
 
-        public int Add(OrganizationDigitalEconomyProjectsCommand model)
+        public int Add(OrganizationDigitalEconomyProjectsReportCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
@@ -68,24 +68,24 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
 
 
-            var economyProject = _orgDigitalEconomyProjects.Find(p => p.OrganizationId == model.OrganizationId && p.ProjectName == model.ProjectName).FirstOrDefault();
-            if (economyProject != null)
+            var economyProjectReport = _orgDigitalEconomyProjectsReport.Find(p => p.OrganizationId == model.OrganizationId).FirstOrDefault();
+            if (economyProjectReport != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            OrganizationDigitalEconomyProjects addModel = new OrganizationDigitalEconomyProjects();
-            
-            addModel.OrganizationId = model.OrganizationId;
-            addModel.ProjectName = model.ProjectName;
-            addModel.BasisFilePath = model.BasisFilePath;
-            addModel.Comment = model.Comment;
-            addModel.Date = DateTime.Now;
+            OrganizationDigitalEconomyProjectsReport addModel = new OrganizationDigitalEconomyProjectsReport();
 
-            _orgDigitalEconomyProjects.Add(addModel);
+            addModel.OrganizationId = model.OrganizationId;
+            addModel.ProjectsCount = model.ProjectsCount;
+            addModel.CompletedProjects = model.CompletedProjects;
+            addModel.OngoingProjects = model.OngoingProjects;
+            addModel.NotFinishedProjects = model.NotFinishedProjects;
+
+            _orgDigitalEconomyProjectsReport.Add(addModel);
 
             return addModel.Id;
         }
 
-        public int Update(OrganizationDigitalEconomyProjectsCommand model)
+        public int Update(OrganizationDigitalEconomyProjectsReportCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -98,20 +98,21 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
-            var economyProject = _orgDigitalEconomyProjects.Find(p => p.Id == model.Id).FirstOrDefault();
-            if (economyProject == null)
+            var economyProjectReport = _orgDigitalEconomyProjectsReport.Find(p => p.Id == model.Id).FirstOrDefault();
+            if (economyProjectReport == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
 
-            economyProject.ProjectName = model.ProjectName;
-            economyProject.BasisFilePath = model.BasisFilePath;
-            economyProject.Comment = model.Comment;
+            economyProjectReport.ProjectsCount = model.ProjectsCount;
+            economyProjectReport.CompletedProjects = model.CompletedProjects;
+            economyProjectReport.OngoingProjects = model.OngoingProjects;
+            economyProjectReport.NotFinishedProjects = model.NotFinishedProjects; 
 
-            _orgDigitalEconomyProjects.Update(economyProject);
+            _orgDigitalEconomyProjectsReport.Update(economyProjectReport);
 
-            return economyProject.Id;
+            return economyProjectReport.Id;
         }
 
-        public int Delete(OrganizationDigitalEconomyProjectsCommand model)
+        public int Delete(OrganizationDigitalEconomyProjectsReportCommand model)
         {
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
@@ -124,11 +125,11 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
-            var economyProject = _orgDigitalEconomyProjects.Find(p => p.Id == model.Id).FirstOrDefault();
+            var economyProject = _orgDigitalEconomyProjectsReport.Find(p => p.Id == model.Id).FirstOrDefault();
             if (economyProject == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
 
-            _orgDigitalEconomyProjects.Remove(economyProject);
+            _orgDigitalEconomyProjectsReport.Remove(economyProject);
 
             return economyProject.Id;
         }

@@ -30,8 +30,5 @@ namespace Domain.Models.SixthSection
 
         [Column("date")]
         public DateTime Date { get;set; }
-
-        [Column("project_stage")]
-        public ProjectStatus ProjectStatus { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using UserHandler.Results.SixthSectionResults;
 
 namespace UserHandler.Commands.SixthSectionCommands
 {
-    public class OrganizationDigitalEconomyProjectsCommand:IRequest<OrganizationDigitalEconomyProjectsCommandResult>
+    public class OrganizationDigitalEconomyProjectsReportCommand:IRequest<OrganizationDigitalEconomyProjectsReportCommandResult>
     {
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
@@ -29,12 +29,13 @@ namespace UserHandler.Commands.SixthSectionCommands
         public int Id { get; set; }
 
         public int OrganizationId { get; set; }
+       
+        public int ProjectsCount { get; set; }
 
-        public string ProjectName { get; set; }
+        public int CompletedProjects { get; set; }
 
-        public string BasisFilePath { get; set; }
+        public int OngoingProjects { get; set; }
 
-        public string Comment { get; set; }
-
+        public int NotFinishedProjects { get; set; }
     }
 }

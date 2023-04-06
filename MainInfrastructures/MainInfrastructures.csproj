@@ -75,6 +75,8 @@
     <Compile Remove="Migrations\20230302055807_financereport.Designer.cs" />
     <Compile Remove="Migrations\20230309060640_orgindicators.cs" />
     <Compile Remove="Migrations\20230309060640_orgindicators.Designer.cs" />
+    <Compile Remove="Migrations\20230406052529_digitaleconomyprojects.cs" />
+    <Compile Remove="Migrations\20230406052529_digitaleconomyprojects.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

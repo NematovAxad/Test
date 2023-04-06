@@ -36,11 +36,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             OrganizationDigitalEconomyProjectsQueryResult result = new OrganizationDigitalEconomyProjectsQueryResult();
 
             result.Projects = digitalEconomyProjects;
-
             result.ProjectsCount = digitalEconomyProjects.Count();
-            result.CompletedProjects = digitalEconomyProjects.Where(p => p.ProjectStatus == Domain.Enums.ProjectStatus.Done).Count();
-            result.NotFinishedProjects = digitalEconomyProjects.Where(p => p.ProjectStatus == Domain.Enums.ProjectStatus.Failed).Count();
-            result.OngoingProjects = digitalEconomyProjects.Where(p => p.ProjectStatus == Domain.Enums.ProjectStatus.InProccess).Count();
 
             return result;
         }
