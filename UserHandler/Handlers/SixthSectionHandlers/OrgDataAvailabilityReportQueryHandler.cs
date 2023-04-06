@@ -43,13 +43,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             OrgDataAvailabilityReportQueryResult result = new OrgDataAvailabilityReportQueryResult();
             
-            result.Data = orgData;
-            result.OrganizationId = request.OrgId;
-            result.AllCheckedSection = orgData.Count();
-            result.FullyProvidedSections = orgData.Where(d => d.DataAvailability == Domain.Enums.DataAvailability.FullyProvided).Count();
-            result.PartiallyProvidedSections = orgData.Where(d => d.DataAvailability == Domain.Enums.DataAvailability.PartiallyProvided).Count();
-            result.NotProvidedSections = orgData.Where(d => d.DataAvailability == Domain.Enums.DataAvailability.NotProvided).Count();
-            result.RelevantDataSections = orgData.Where(d => d.DataRelevance == true).Count();
+            result.Data = orgData.OrderBy(o=>o.Sphere).ThenBy(o=>o.Section).ToList();
+            
 
             return result;
         }

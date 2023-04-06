@@ -79,6 +79,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.OrganizationId = model.OrganizationId;
             addModel.DeadlineId = deadline.Id;
             addModel.Section = model.Section;
+            addModel.Sphere = model.Sphere;
             addModel.DataAvailability = model.DataAvailability;
             addModel.DataRelevance = model.DataRelevance;
             addModel.SetDate = DateTime.Now;

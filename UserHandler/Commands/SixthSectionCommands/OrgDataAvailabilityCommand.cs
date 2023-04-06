@@ -35,7 +35,9 @@ namespace UserHandler.Commands.SixthSectionCommands
 
         public string Section { get; set; }
 
-        public DataAvailability DataAvailability { get; set; }
+        public SpheresOrder Sphere { get; set; }
+
+        public bool DataAvailability { get; set; }
 
         public bool DataRelevance { get; set; }
 

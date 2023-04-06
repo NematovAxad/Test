@@ -27,8 +27,11 @@ namespace Domain.Models.SixthSection
         [Column("section")]
         public string Section { get; set; }
 
+        [Column("sphere")]
+        public SpheresOrder Sphere { get; set; }
+
         [Column("data_availiability")]
-        public DataAvailability DataAvailability { get; set; }
+        public bool DataAvailability { get; set; }
 
         [Column("data_relevance")]
         public bool DataRelevance { get; set; }
