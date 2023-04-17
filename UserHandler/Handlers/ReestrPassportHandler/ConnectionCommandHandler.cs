@@ -127,7 +127,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
         public int Delete(ConnectionCommand model)
         {
-            var connection = _projectConnection.Find(p => p.PlatformReestrId == model.PlatformReestrId).FirstOrDefault();
+            var connection = _projectConnection.Find(p => p.Id == model.Id).FirstOrDefault();
             if (connection == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
             _projectConnection.Remove(connection);
