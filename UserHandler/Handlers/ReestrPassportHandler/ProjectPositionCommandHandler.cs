@@ -71,7 +71,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
-                if(!String.IsNullOrEmpty(model.FilePath))
+                addModel.ProjectStatus = model.ProjectStatus;
+                if (!String.IsNullOrEmpty(model.FilePath))
                     addModel.FilePath = model.FilePath;
             }
                 
@@ -107,7 +108,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
-                if(!String.IsNullOrEmpty(model.FilePath))
+                projectPosition.ProjectStatus = model.ProjectStatus;
+                if (!String.IsNullOrEmpty(model.FilePath))
                     projectPosition.FilePath = model.FilePath;
             }
                
