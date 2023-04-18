@@ -22,6 +22,12 @@ using Domain;
 using SB.Common.Extensions;
 using Microsoft.EntityFrameworkCore.Internal;
 using Domain.Models.FirstSection;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using System.IO;
+using OfficeOpenXml;
+using LicenseContext = OfficeOpenXml.LicenseContext;
+using Domain.Models.ThirdSection;
 
 namespace MainInfrastructures.Services
 {
@@ -238,6 +244,58 @@ namespace MainInfrastructures.Services
                     _organization.Update(org);
                 }
             }
+
+            return true;
+        }
+
+        public async Task<bool> UploadOrgServices(IFormFile file)
+        {
+            List<OrganizationPublicServices> addList = new List<OrganizationPublicServices>();
+
+            
+
+            using (MemoryStream memory = new MemoryStream())
+            {
+                file.CopyTo(memory);
+                using var package = new ExcelPackage(memory);
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var workSheet = package.Workbook.Worksheets.First();
+                long neighborhoodid = 0;
+                var rowCount = workSheet.Dimension.End.Row;
+                for (int row = 5; row <= rowCount; row++)
+                {
+                    try
+                    {
+
+                        if (workSheet.Cells[row, 2].Value?.ToString().Length > 1)
+                        {
+                            OrganizationPublicServices addModel = new OrganizationPublicServices();
+                            
+                            addModel.OrganizationId = Convert.ToInt32(workSheet.Cells[row, 3].Value?.ToString());
+                            addModel.ServiceNameUz = workSheet.Cells[row, 2].Value?.ToString();
+
+                            if (workSheet.Cells[row, 6].Value?.ToString() == "Jismoniy va yuridik shaxslar")
+                                addModel.PaidFor = Domain.Enums.OrganizationServiceConsumers.ForAll;
+
+                            if (workSheet.Cells[row, 6].Value?.ToString() == "Yuridik shaxs")
+                                addModel.PaidFor = Domain.Enums.OrganizationServiceConsumers.Legals;
+
+                            if (workSheet.Cells[row, 6].Value?.ToString() == "Jismoniy shaxs")
+                                addModel.PaidFor = Domain.Enums.OrganizationServiceConsumers.Phsicals;
+
+                           addList.Add(addModel);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+                    }
+                }
+            }
+
+            _db.Context.Set<OrganizationPublicServices>().AddRange(addList);
+
+            _db.Context.SaveChanges();
 
             return true;
         }

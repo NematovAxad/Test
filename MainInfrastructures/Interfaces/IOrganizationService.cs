@@ -1,5 +1,6 @@
 ﻿using Domain.CyberSecurityModels;
 using MainInfrastructures.Services;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,6 @@ namespace MainInfrastructures.Interfaces
     {
         Task<RankingStruct> GetStruct(int orgId);
         Task<bool> UpdateOrgsName();
+        Task<bool> UploadOrgServices(IFormFile file);
     }
 }

@@ -155,5 +155,12 @@ namespace UserApi.Controllers
             var result = await _organizationService.UpdateOrgsName();
             return (bool)result;
         }
+
+        [HttpPost]
+        public async Task<bool> UploadOrgServices(IFormFile file)
+        {
+            var result = await _organizationService.UploadOrgServices(file);
+            return (bool)result;
+        }
     }
 }

@@ -114,5 +114,6 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationDigitalEconomyProjects> OrganizationDigitalEconomyProjects { get; set; }
         public DbSet<OrganizationDataAvailability> OrganizationDataAvailability { get; set; }
         public DbSet<OrganizationDigitalEconomyProjectsReport> OrganizationDigitalEconomyProjectsReports { get; set; }
+        public DbSet<ReestrProjectException> ReestrProjectException { get; set; }
     }
 }
