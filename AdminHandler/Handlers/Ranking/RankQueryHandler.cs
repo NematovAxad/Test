@@ -225,7 +225,7 @@ namespace AdminHandler.Handlers.Ranking
                         }
                         if (rankWithElements.Count() > 0)
                         {
-                            data.Id = rankWithElements.First().Id;
+                            data.Id = 0;
                             data.OrganizationId = rankWithElements.First().OrganizationId;
                             data.Year = rankWithElements.First().Year;
                             data.Quarter = rankWithElements.First().Quarter;
@@ -320,7 +320,7 @@ namespace AdminHandler.Handlers.Ranking
                         }
                         if (rankWithElements.Count() > 0)
                         {
-                            data.Id = rankWithElements.First().Id;
+                            data.Id = 0;
                             data.OrganizationId = rankWithElements.First().OrganizationId;
                             data.Year = rankWithElements.First().Year;
                             data.Quarter = rankWithElements.First().Quarter;
