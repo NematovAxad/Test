@@ -129,7 +129,7 @@ namespace AdminHandler.Handlers.Ranking
                         }
                         if (rankWithElements.Count() > 0)
                         {
-                            data.Id = rankWithElements.First().Id;
+                            data.Id = 0;
                             data.OrganizationId = rankWithElements.First().OrganizationId;
                             data.Year = rankWithElements.First().Year;
                             data.Quarter = rankWithElements.First().Quarter;
@@ -143,7 +143,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { ElementId = element.Id, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
                             }
                         }
                         result.Count++;
@@ -239,7 +239,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { ElementId = element.Id, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
                             }
                         }
                         result.Count++;
@@ -334,7 +334,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { ElementId = element.Id, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
                             }
                         }
                         result.Count++;
