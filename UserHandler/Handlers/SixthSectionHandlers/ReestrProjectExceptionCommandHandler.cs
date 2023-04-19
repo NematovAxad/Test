@@ -5,6 +5,7 @@ using Domain.Models.FifthSection.ReestrModels;
 using Domain.Models.FirstSection;
 using Domain.Models.Ranking.Administrations;
 using Domain.States;
+using EntityRepository;
 using JohaRepository;
 using MediatR;
 using MediatR.Pipeline;
@@ -26,14 +27,16 @@ namespace UserHandler.Handlers.SixthSectionHandlers
         private readonly IRepository<ARankTable, int> _aRank;
         private readonly IRepository<GRankTable, int> _gRank;
         private readonly IRepository<XRankTable, int> _xRank;
+        private readonly IDataContext _db;
 
-        public ReestrProjectExceptionCommandHandler(IRepository<Organizations, int> organizations, IRepository<ReestrProjectException, int> projectExceptions, IRepository<ARankTable, int> aRank, IRepository<GRankTable, int> gRank, IRepository<XRankTable, int> xRank)
+        public ReestrProjectExceptionCommandHandler(IRepository<Organizations, int> organizations, IRepository<ReestrProjectException, int> projectExceptions, IRepository<ARankTable, int> aRank, IRepository<GRankTable, int> gRank, IRepository<XRankTable, int> xRank, IDataContext db)
         {
             _organizations = organizations;
             _projectExceptions = projectExceptions;
             _aRank = aRank;
             _gRank = gRank;
             _xRank = xRank;
+            _db = db;
         }
 
         public async Task<ReestrProjectExceptionCommandResult> Handle(ReestrProjectExceptionCommand request, CancellationToken cancellationToken)
@@ -56,32 +59,34 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 addModel.ReestrProjectId = request.ReestrProjectId;
                 addModel.Exception = true;
                 addModel.ExpertPinfl = request.UserPinfl;
-                
-                _projectExceptions.Add(addModel);
+
+                _db.Context.Set<ReestrProjectException>().Add(addModel);
                 
                 if(organization.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
                 {
                     var ranks = _aRank.Find(r => r.OrganizationId == request.OrganizationId && r.ElementId == request.ReestrProjectId).ToList();
 
-                    _aRank.RemoveRange(ranks);
+                    _db.Context.Set<ARankTable>().RemoveRange(ranks);
                 }
                 if(organization.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
                 {
                     var ranks = _xRank.Find(r => r.OrganizationId == request.OrganizationId && r.ElementId == request.ReestrProjectId).ToList();
 
-                    _xRank.RemoveRange(ranks);
+                    _db.Context.Set<XRankTable>().RemoveRange(ranks);
                 }
                 if (organization.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
                     var ranks = _gRank.Find(r => r.OrganizationId == request.OrganizationId && r.ElementId == request.ReestrProjectId).ToList();
 
-                    _gRank.RemoveRange(ranks);
+                    _db.Context.Set<GRankTable>().RemoveRange(ranks);
                 }
             }
             if(exeption != null && request.IsException == false)
             {
-                _projectExceptions.Remove(exeption);
+                _db.Context.Set<ReestrProjectException>().Remove(exeption);
             }
+
+            _db.Context.SaveChanges();
 
             return new ReestrProjectExceptionCommandResult() { IsSuccess = true };
         }
