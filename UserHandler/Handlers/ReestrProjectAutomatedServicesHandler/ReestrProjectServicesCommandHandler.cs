@@ -69,12 +69,11 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
+            addModel.ProjectServiceExist = model.ProjectServiceExist;
 
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
-            {
-                
-                addModel.ProjectServiceExist = model.ProjectServiceExist;
-            }
+
+
+
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
@@ -111,16 +110,15 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             if (projectServices == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
-            {
-                projectServices.ProjectServiceExist = model.ProjectServiceExist;
 
-                if (model.ProjectServiceExist == false)
-                {
-                    _services.RemoveRange(projectServices.AutomatedServices);
-                    _functions.RemoveRange(projectServices.AutomatedFunctions);
-                }
+            projectServices.ProjectServiceExist = model.ProjectServiceExist;
+
+            if (model.ProjectServiceExist == false)
+            {
+                _services.RemoveRange(projectServices.AutomatedServices);
+                _functions.RemoveRange(projectServices.AutomatedFunctions);
             }
+            
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
