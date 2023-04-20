@@ -24,6 +24,9 @@ namespace Domain.Models.FifthSection.ReestrModels
         [Column("project_service_exist")]
         public bool ProjectServiceExist { get; set; }
 
+        [Column("project_functions_exist")]
+        public bool ProjectFunctionsExist { get; set; }
+
         public ICollection<AutomatedFunctions> AutomatedFunctions { get; set; }
 
         public ICollection<AutomatedServices> AutomatedServices { get; set; }

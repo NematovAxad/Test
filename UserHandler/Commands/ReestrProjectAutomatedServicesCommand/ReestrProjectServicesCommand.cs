@@ -26,6 +26,7 @@ namespace UserHandler.Commands.ReestrProjectAutomatedServicesCommand
         public int OrganizationId { get; set; }
         public int ReestrProjectId { get; set; }
         public bool ProjectServiceExist { get; set; }
+        public bool ProjectFunctionsExist { get; set; }
         public int AllItems { get; set; }
         public int ExceptedItems { get; set; }
         public string ExpertComment { get; set; }

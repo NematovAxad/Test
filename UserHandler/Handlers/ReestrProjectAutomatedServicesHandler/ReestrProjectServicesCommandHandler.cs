@@ -70,8 +70,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             addModel.OrganizationId = model.OrganizationId;
             addModel.ReestrProjectId = model.ReestrProjectId;
             addModel.ProjectServiceExist = model.ProjectServiceExist;
-
-
+            addModel.ProjectFunctionsExist = model.ProjectFunctionsExist;
 
 
 
@@ -110,15 +109,26 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             if (projectServices == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-
+            projectServices.ProjectFunctionsExist = model.ProjectFunctionsExist;
             projectServices.ProjectServiceExist = model.ProjectServiceExist;
 
             if (model.ProjectServiceExist == false)
             {
                 _services.RemoveRange(projectServices.AutomatedServices);
-                _functions.RemoveRange(projectServices.AutomatedFunctions);
+
+                projectServices.ExpertComment = String.Empty;
+                projectServices.AllItems = 0;
+                projectServices.ExceptedItems = 0;
             }
-            
+            if (model.ProjectFunctionsExist == false)
+            {
+                _functions.RemoveRange(projectServices.AutomatedFunctions);
+
+                projectServices.ExpertComment = String.Empty;
+                projectServices.AllItems = 0;
+                projectServices.ExceptedItems = 0;
+            }
+
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
@@ -129,7 +139,11 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                     projectServices.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    projectServices.ExceptedItems = model.ExceptedItems;
+                    if(model.ExceptedItems<model.AllItems)
+                    {
+                        projectServices.ExceptedItems = model.ExceptedItems;
+                    }
+                    else { throw ErrorStates.Error(UIErrors.EnoughDataNotProvided); }  
             }
 
             _projectServices.Update(projectServices);
