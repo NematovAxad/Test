@@ -81,10 +81,10 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
 
-                if (model.AllItems > 0)
+                if (model.AllItems >= 0)
                     addModel.AllItems = model.AllItems;
 
-                if (model.ExceptedItems > 0)
+                if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
             }
 
@@ -127,10 +127,10 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectAuthorization.ExpertComment = model.ExpertComment;
 
-                if (model.AllItems > 0)
+                if (model.AllItems >= 0)
                     projectAuthorization.AllItems = model.AllItems;
 
-                if (model.ExceptedItems > 0)
+                if (model.ExceptedItems >= 0)
                     projectAuthorization.ExceptedItems = model.ExceptedItems;
             }
 

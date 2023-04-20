@@ -82,10 +82,10 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
                 
-                if (model.AllItems > 0)
+                if (model.AllItems >= 0)
                     addModel.AllItems = model.AllItems;
 
-                if (model.ExceptedItems > 0)
+                if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
             }
 
@@ -130,10 +130,10 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectClassificator.ExpertComment = model.ExpertComment;
                 
-                if (model.AllItems > 0)
+                if (model.AllItems >= 0)
                     projectClassificator.AllItems = model.AllItems;
 
-                if (model.ExceptedItems > 0)
+                if (model.ExceptedItems >= 0)
                     projectClassificator.ExceptedItems = model.ExceptedItems;
             }
 

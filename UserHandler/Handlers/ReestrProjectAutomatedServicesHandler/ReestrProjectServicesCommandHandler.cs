@@ -79,10 +79,10 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
 
-                if (model.AllItems > 0)
+                if (model.AllItems >= 0)
                     addModel.AllItems = model.AllItems;
 
-                if (model.ExceptedItems > 0)
+                if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
             }
 
@@ -135,10 +135,10 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectServices.ExpertComment = model.ExpertComment;
 
-                if (model.AllItems > 0)
+                if (model.AllItems >= 0)
                     projectServices.AllItems = model.AllItems;
 
-                if (model.ExceptedItems > 0)
+                if (model.ExceptedItems >= 0)
                     if(model.ExceptedItems <= model.AllItems)
                     {
                         projectServices.ExceptedItems = model.ExceptedItems;
