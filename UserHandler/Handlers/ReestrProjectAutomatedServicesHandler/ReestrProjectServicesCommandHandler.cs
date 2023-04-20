@@ -139,7 +139,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                     projectServices.AllItems = model.AllItems;
 
                 if (model.ExceptedItems > 0)
-                    if(model.ExceptedItems<model.AllItems)
+                    if(model.ExceptedItems <= model.AllItems)
                     {
                         projectServices.ExceptedItems = model.ExceptedItems;
                     }
