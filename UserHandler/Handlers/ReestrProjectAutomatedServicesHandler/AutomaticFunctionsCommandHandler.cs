@@ -59,8 +59,8 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
 
 
-            var projectServices = _projectServices.Find(p => p.Id == model.ParentId && p.ProjectServiceExist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
-            if (projectServices == null)
+            var projectFunctions = _projectServices.Find(p => p.Id == model.ParentId && p.ProjectFunctionsExist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
+            if (projectFunctions == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
             var functions = _functions.Find(p => p.ParentId == model.ParentId && p.FunctionName == model.FunctionName).FirstOrDefault();
@@ -101,14 +101,14 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             if (function == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            var projectServices = _projectServices.Find(p => p.Id == function.ParentId && p.ProjectServiceExist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
-            if (projectServices == null)
+            var projectFunctions = _projectServices.Find(p => p.Id == function.ParentId && p.ProjectFunctionsExist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
+            if (projectFunctions == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
             
 
 
-            if (((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
+            if (((model.UserOrgId == projectFunctions.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
             {
                 if (!String.IsNullOrEmpty(model.FilePath))
                     function.FilePath = model.FilePath;
