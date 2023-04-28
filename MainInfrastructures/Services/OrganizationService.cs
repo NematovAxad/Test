@@ -299,5 +299,61 @@ namespace MainInfrastructures.Services
 
             return true;
         }
+        public async Task<decimal> SubFieldMaxRate(int orgId, string fieldSection, string subFieldSection)
+        {
+            decimal rate = 0;
+
+            var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+
+            if (org.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
+            {
+                var fields = _aField.GetAll().Include(mbox => mbox.ASubFields);
+                var field = fields.Where(f => f.Section == fieldSection).FirstOrDefault();
+
+                if (field == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                var subField = field.ASubFields.Where(s => s.Section == subFieldSection).FirstOrDefault();
+
+                if (subField == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                rate = (decimal)subField.MaxRate;
+            }
+            if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
+            {
+                var fields = _gField.GetAll();
+                var field = fields.Where(f => f.Section == fieldSection).FirstOrDefault();
+
+                if (field == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                var subField = _gSubField.Find(s =>s.FieldId == field.Id && s.Section == subFieldSection).FirstOrDefault();
+
+                if (subField == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                rate = (decimal)subField.MaxRate;
+            }
+            if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
+            {
+                var fields = _xField.GetAll();
+                var field = fields.Where(f => f.Section == fieldSection).FirstOrDefault();
+
+                if (field == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                var subField = field.XSubFields.Where(s => s.Section == subFieldSection).FirstOrDefault();
+
+                if (subField == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                rate = (decimal)subField.MaxRate;
+            }
+
+            return rate;
+        }
     }
 }

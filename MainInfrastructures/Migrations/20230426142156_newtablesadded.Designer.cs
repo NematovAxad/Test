@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230426142156_newtablesadded")]
+    partial class newtablesadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3975,61 +3977,9 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("application_number")
                         .HasColumnType("text");
 
-                    b.Property<bool>("ApplicationProblemConfirmde")
-                        .HasColumnName("application_problem_confirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ApplicationProblemText")
-                        .HasColumnName("application_problem_text")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ExpertComment")
-                        .HasColumnName("expert_comment")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("HasApplicationProblem")
-                        .HasColumnName("has_application_problem")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("NotRecommendationComment")
-                        .HasColumnName("not_recommendation_comment")
-                        .HasColumnType("text");
-
                     b.Property<int>("OrganizationId")
                         .HasColumnName("organization_id")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("RecommendService")
-                        .HasColumnName("recommend_service")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ServiceComment")
-                        .HasColumnName("service_comment")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("ServiceCommentConfirmed")
-                        .HasColumnName("service_comment_confirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("ServiceCommentType")
-                        .HasColumnName("service_comment_type")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("ServiceDissatisfactionConfirmed")
-                        .HasColumnName("service_dissatisfaction_confirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("ServiceDissatisfactionReason")
-                        .HasColumnName("service_dissatisfaction_reason")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ServiceRate")
-                        .HasColumnName("service_rate")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("ServiceSatisfactive")
-                        .HasColumnName("service_satisfactive")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("Service_id")
                         .HasColumnName("service_id")

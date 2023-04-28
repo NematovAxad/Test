@@ -13,5 +13,7 @@ namespace MainInfrastructures.Interfaces
         Task<RankingStruct> GetStruct(int orgId);
         Task<bool> UpdateOrgsName();
         Task<bool> UploadOrgServices(IFormFile file);
+
+        Task<decimal> SubFieldMaxRate(int orgId, string fieldSection, string subFieldSection);
     }
 }
