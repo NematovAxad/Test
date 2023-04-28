@@ -67,7 +67,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (service == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            var rate = _orgServiceRate.Find(r => r.OrganizationId == model.OrganizationId && r.ApplicationNumber == model.ApplicationNumber).FirstOrDefault();
+            var rate = _orgServiceRate.Find(r => r.ServiceId == model.ServiceId && r.ApplicationNumber == model.ApplicationNumber).FirstOrDefault();
             if (rate != null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
@@ -103,7 +103,11 @@ namespace UserHandler.Handlers.ThirdSection
 
         public int Update(OrganizationServiceRateCommand model)
         {
-            var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
+            var rate = _orgServiceRate.Find(r => r.Id == model.Id).FirstOrDefault();
+            if (rate == null)
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+
+            var org = _organization.Find(o => o.Id == rate.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
@@ -114,9 +118,7 @@ namespace UserHandler.Handlers.ThirdSection
 
             
 
-            var rate = _orgServiceRate.Find(r => r.Id == model.Id).FirstOrDefault();
-            if (rate == null)
-                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+            
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");

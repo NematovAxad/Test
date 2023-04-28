@@ -54,7 +54,7 @@ namespace UserHandler.Handlers.ThirdSection
                     decimal recommendation = service.Rates.Where(r => r.RecommendService == true).Count();
                     decimal serviceSatisfaction = service.Rates.Where(r => r.ServiceSatisfactive == true || r.ServiceDissatisfactionConfirmed == false).Count();
                     decimal protest = service.Rates.Where(r => r.ServiceCommentType == Domain.Enums.CommentType.Objection && r.ServiceCommentConfirmed == true).Count();
-
+                    decimal serviceRate = service.Rates.Sum(r=>(int)r.ServiceRate);
 
                     newreport.Service = service;
                     newreport.RatesCount = service.Rates.Count;
@@ -64,7 +64,7 @@ namespace UserHandler.Handlers.ThirdSection
                         newreport.Recommendation = (recommendation / service.Rates.Count) * _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.2").Result;
                         newreport.ServiceSatisfaction = (serviceSatisfaction / service.Rates.Count) * _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.3").Result;
                         newreport.Protest = protest>0 ? 2 : 0;
-                        newreport.ServiceRate = (service.Rates.Sum(s=>(int)s.ServiceRate)/25)* _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.4").Result;
+                        newreport.ServiceRate = (serviceRate/(service.Rates.Count*5))* _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.4").Result;
                     }
 
                     result.Services.Add(newreport);
