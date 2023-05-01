@@ -44,7 +44,9 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             OrgDataAvailabilityReportQueryResult result = new OrgDataAvailabilityReportQueryResult();
             
             result.Data = orgData.OrderBy(o=>o.Sphere).ThenBy(o=>o.Section).ToList();
-            
+            result.DataAvailabilityRate = orgData.Sum(d => d.DataAvailabilityRate);
+            result.DataRelevanceRate = orgData.Sum(d => d.DataRelevanceRate);
+            result.RateSum = result.DataAvailabilityRate + result.DataRelevanceRate;
 
             return result;
         }

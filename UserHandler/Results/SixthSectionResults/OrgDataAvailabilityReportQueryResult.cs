@@ -9,5 +9,11 @@ namespace UserHandler.Results.SixthSectionResults
     {
         public List<OrganizationDataAvailability> Data { get; set; }
 
+        public double DataAvailabilityRate { get; set; }
+
+        public double DataRelevanceRate { get; set; }
+
+        public double RateSum { get; set; }
+
     }
 }
