@@ -33,8 +33,14 @@ namespace Domain.Models.SixthSection
         [Column("data_availiability")]
         public bool DataAvailability { get; set; }
 
+        [Column("data_availiability_rate")]
+        public double DataAvailabilityRate { get; set; }
+
         [Column("data_relevance")]
         public bool DataRelevance { get; set; }
+
+        [Column("data_relevance_rate")]
+        public double DataRelevanceRate { get; set; }
 
         [Column("set_date")]
         public DateTime SetDate { get; set; }

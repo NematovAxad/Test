@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230501112359_ratesadded")]
+    partial class ratesadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3420,17 +3422,17 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("data_availiability")
                         .HasColumnType("boolean");
 
-                    b.Property<double>("DataAvailabilityRate")
+                    b.Property<decimal>("DataAvailabilityRate")
                         .HasColumnName("data_availiability_rate")
-                        .HasColumnType("double precision");
+                        .HasColumnType("numeric");
 
                     b.Property<bool>("DataRelevance")
                         .HasColumnName("data_relevance")
                         .HasColumnType("boolean");
 
-                    b.Property<double>("DataRelevanceRate")
+                    b.Property<decimal>("DataRelevanceRate")
                         .HasColumnName("data_relevance_rate")
-                        .HasColumnType("double precision");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("DeadlineId")
                         .HasColumnName("deadline_id")

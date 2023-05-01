@@ -21,6 +21,54 @@ namespace Domain.IntegrationLinks
                                                                     "6.1", "6.2" , "6.3", "6.4",
                                                                     "7.1", "7.2" ,
                                                                     "8.1", "8.2" };
-        
-    }
+        public static List<Tuple<string, double, double>> listGos = new List<Tuple<string, double, double>> { 
+            new Tuple<string, double, double>("1.1", 0.1, 0.1),
+            new Tuple<string, double, double>("1.2", 0.1, 0.1),
+            new Tuple<string, double, double>("1.3", 0.1, 0.1),
+            new Tuple<string, double, double>("1.4", 0.1, 0.1),
+            new Tuple<string, double, double>("1.5", 0.03, 0.03),
+            new Tuple<string, double, double>("1.6", 0.1, 0.1),
+            new Tuple<string, double, double>("2.1", 0.1, 0.1),
+            new Tuple<string, double, double>("2.2", 0.01, 0.01),
+            new Tuple<string, double, double>("2.4", 0.1, 0.1),
+            new Tuple<string, double, double>("2.5", 0.1, 0.1),
+            new Tuple<string, double, double>("2.7", 0.01, 0.01),
+            new Tuple<string, double, double>("2.8", 0.1, 0.1),
+            new Tuple<string, double, double>("3.2", 0.05, 0.05),
+            new Tuple<string, double, double>("5.1", 0.1, 0.1),
+            new Tuple<string, double, double>("5.2", 0.1, 0.1),
+            new Tuple<string, double, double>("5.3", 0.1, 0.1),
+            new Tuple<string, double, double>("6.1", 0.1, 0.1),
+            new Tuple<string, double, double>("6.2", 0.1, 0.1),
+            new Tuple<string, double, double>("6.3", 0.1, 0.1),
+            new Tuple<string, double, double>("7.1", 0.1, 0.1),
+            new Tuple<string, double, double>("7.2", 0.1, 0.1),
+            new Tuple<string, double, double>("8.1", 0.1, 0.1),
+            new Tuple<string, double, double>("8.2", 0.1, 0.1)
+        };
+        public static List<Tuple<string, double, double>> listXoz = new List<Tuple<string, double, double>> {
+            new Tuple<string, double, double>("1.1", 0.1, 0.2),
+            new Tuple<string, double, double>("1.2", 0.1, 0.1),
+            new Tuple<string, double, double>("1.3", 0.1, 0.1),
+            new Tuple<string, double, double>("1.4", 0.1, 0.1),
+            new Tuple<string, double, double>("1.5", 0.03, 0.03),
+            new Tuple<string, double, double>("1.6", 0.2, 0.2),
+            new Tuple<string, double, double>("2.1", 0.1, 0.1),
+            new Tuple<string, double, double>("2.2", 0.01, 0.01),
+            new Tuple<string, double, double>("2.4", 0.1, 0.1),
+            new Tuple<string, double, double>("2.5", 0.1, 0.1),
+            new Tuple<string, double, double>("2.7", 0.01, 0.01),
+            new Tuple<string, double, double>("2.8", 0.1, 0.1),
+            new Tuple<string, double, double>("5.1", 0.2, 0.2),
+            new Tuple<string, double, double>("5.2", 0.2, 0.2),
+            new Tuple<string, double, double>("5.3", 0.2, 0.2),
+            new Tuple<string, double, double>("6.1", 0.1, 0.1),
+            new Tuple<string, double, double>("6.2", 0.2, 0.2),
+            new Tuple<string, double, double>("6.3", 0.1, 0.1),
+            new Tuple<string, double, double>("7.1", 0.1, 0.1),
+            new Tuple<string, double, double>("7.2", 0.1, 0.1),
+            new Tuple<string, double, double>("8.1", 0.1, 0.1),
+            new Tuple<string, double, double>("8.2", 0.1, 0.1)
+        };
+    };  
 }
