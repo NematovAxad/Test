@@ -117,12 +117,6 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             {
                 function.FunctionName = model.FunctionName;
             }
-            else 
-            {
-                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
-            }
-
-
 
             _functions.Update(function);
 
