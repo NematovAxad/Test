@@ -135,5 +135,14 @@ namespace Domain
         /// <en>SubField Id not provided</en>
         /// <kr>Идентификатор подполя не указан</kr>
         SubFieldIdNotProvided = -13,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Xizmat faqat davlat tashkilotlariga</uz>
+        /// <ru>Услуга только для государственных организаций</ru>
+        /// <en>Service for only government organizations</en>
+        /// <kr>Услуга только для государственных организаций</kr>
+        ApiNotForThisTypeOfOrganization = -14,
     }
 }

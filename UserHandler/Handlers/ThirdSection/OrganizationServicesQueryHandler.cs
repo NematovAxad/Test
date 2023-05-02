@@ -2,6 +2,7 @@
 using Domain;
 using Domain.Models.FirstSection;
 using Domain.Models.ThirdSection;
+using Domain.States;
 using JohaRepository;
 using MainInfrastructures.Interfaces;
 using MediatR;
@@ -34,6 +35,9 @@ namespace UserHandler.Handlers.ThirdSection
 
         public async Task<OrganizationServicesQueryResult> Handle(OrganizationServicesQuery request, CancellationToken cancellationToken)
         {
+            var org = _organizations.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
+            if (org.OrgCategory != Domain.Enums.OrgCategory.GovernmentOrganizations)
+                throw ErrorStates.Error(UIErrors.ApiNotForThisTypeOfOrganization);
 
             OrganizationServicesQueryResult result = new OrganizationServicesQueryResult() { Services = new List<ServiceReport>()};
 

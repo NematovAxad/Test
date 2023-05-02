@@ -34,6 +34,10 @@ namespace UserHandler.Handlers.ThirdSection
 
         public async Task<OrganizationServicesCommandResult> Handle(OrganizationServicesCommand request, CancellationToken cancellationToken)
         {
+            var org = _organization.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
+            if (org.OrgCategory != Domain.Enums.OrgCategory.GovernmentOrganizations)
+                throw ErrorStates.Error(UIErrors.ApiNotForThisTypeOfOrganization);
+
             int id = 0;
             switch (request.EventType)
             {
