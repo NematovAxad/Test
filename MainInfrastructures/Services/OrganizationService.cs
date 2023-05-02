@@ -315,7 +315,7 @@ namespace MainInfrastructures.Services
                 if (field == null)
                     throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 
-                var subField = field.ASubFields.Where(s => s.Section == subFieldSection).FirstOrDefault();
+                var subField = _aSubField.Find(s =>s.FieldId == field.Id && s.Section == subFieldSection).FirstOrDefault();
 
                 if (subField == null)
                     throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
@@ -345,7 +345,7 @@ namespace MainInfrastructures.Services
                 if (field == null)
                     throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 
-                var subField = field.XSubFields.Where(s => s.Section == subFieldSection).FirstOrDefault();
+                var subField = _xSubField.Find(s =>s.FieldId == field.Id && s.Section == subFieldSection).FirstOrDefault();
 
                 if (subField == null)
                     throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
