@@ -237,5 +237,23 @@
             <en>SubField Id not provided</en>
             <kr>Идентификатор подполя не указан</kr>
         </member>
+        <member name="F:Domain.UIErrors.ApiNotForThisTypeOfOrganization">
+            <summary>
+            
+            </summary>
+            <uz>Xizmat faqat davlat tashkilotlariga</uz>
+            <ru>Услуга только для государственных организаций</ru>
+            <en>Service for only government organizations</en>
+            <kr>Услуга только для государственных организаций</kr>
+        </member>
+        <member name="F:Domain.UIErrors.LimitToAddFull">
+            <summary>
+            
+            </summary>
+            <uz>Ma'lumotlar qo'shish cheklangan</uz>
+            <ru>Ограничение на добавление данных</ru>
+            <en>Limit to add data </en>
+            <kr>Ограничение на добавление данных</kr>
+        </member>
     </members>
 </doc>

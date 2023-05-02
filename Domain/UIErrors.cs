@@ -144,5 +144,14 @@ namespace Domain
         /// <en>Service for only government organizations</en>
         /// <kr>Услуга только для государственных организаций</kr>
         ApiNotForThisTypeOfOrganization = -14,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Ma'lumotlar qo'shish cheklangan</uz>
+        /// <ru>Ограничение на добавление данных</ru>
+        /// <en>Limit to add data </en>
+        /// <kr>Ограничение на добавление данных</kr>
+        LimitToAddFull = -15,
     }
 }

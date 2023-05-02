@@ -6,6 +6,7 @@ using Domain.Permission;
 using Domain.States;
 using JohaRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,13 +64,18 @@ namespace UserHandler.Handlers.ThirdSection
                 throw ErrorStates.NotFound("deadline");
 
 
-            var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && s.Id == model.ServiceId).FirstOrDefault();
+            var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && s.Id == model.ServiceId).Include(mbox=>mbox.Rates).FirstOrDefault();
+            
             if (service == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+            if (service.Rates.Count == 5)
+                throw ErrorStates.Error(UIErrors.LimitToAddFull);
 
-            var rate = _orgServiceRate.Find(r => r.ServiceId == model.ServiceId && r.ApplicationNumber == model.ApplicationNumber).FirstOrDefault();
+            var rate = _orgServiceRate.Find(r => r.ServiceId == service.Id && r.ApplicationNumber == model.ApplicationNumber).FirstOrDefault();
+            
             if (rate != null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
