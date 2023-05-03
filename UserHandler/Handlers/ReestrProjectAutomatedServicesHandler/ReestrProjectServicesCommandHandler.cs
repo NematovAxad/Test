@@ -112,6 +112,22 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             projectServices.ProjectFunctionsExist = model.ProjectFunctionsExist;
             projectServices.ProjectServiceExist = model.ProjectServiceExist;
 
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+            {
+                if (!String.IsNullOrEmpty(model.ExpertComment))
+                    projectServices.ExpertComment = model.ExpertComment;
+
+                if (model.AllItems >= 0)
+                    projectServices.AllItems = model.AllItems;
+
+                if (model.ExceptedItems >= 0)
+                    if(model.ExceptedItems <= model.AllItems)
+                    {
+                        projectServices.ExceptedItems = model.ExceptedItems;
+                    }
+                    else { throw ErrorStates.Error(UIErrors.EnoughDataNotProvided); }  
+            }
+
             if (model.ProjectServiceExist == false)
             {
                 _services.RemoveRange(projectServices.AutomatedServices);
@@ -127,23 +143,6 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 projectServices.ExpertComment = String.Empty;
                 projectServices.AllItems = 0;
                 projectServices.ExceptedItems = 0;
-            }
-
-
-            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
-            {
-                if (!String.IsNullOrEmpty(model.ExpertComment))
-                    projectServices.ExpertComment = model.ExpertComment;
-
-                if (model.AllItems >= 0)
-                    projectServices.AllItems = model.AllItems;
-
-                if (model.ExceptedItems >= 0)
-                    if(model.ExceptedItems <= model.AllItems)
-                    {
-                        projectServices.ExceptedItems = model.ExceptedItems;
-                    }
-                    else { throw ErrorStates.Error(UIErrors.EnoughDataNotProvided); }  
             }
 
             _projectServices.Update(projectServices);

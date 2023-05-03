@@ -143,6 +143,16 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                     projectEfficiency.ExceptedItems = model.ExceptedItems;
             }
 
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            {
+               if (model.Exist == false)
+                {
+                    projectEfficiency.ExpertComment = String.Empty;
+                    projectEfficiency.AllItems = 0;
+                    projectEfficiency.ExceptedItems = 0;
+                }
+            }
+
             _projectEfficiency.Update(projectEfficiency);
 
             return projectEfficiency.Id;
