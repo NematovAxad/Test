@@ -3,15 +3,17 @@ using System;
 using MainInfrastructures.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MainInfrastructures.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230504052108_datecolumnsadded")]
+    partial class datecolumnsadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3989,10 +3991,6 @@ namespace MainInfrastructures.Migrations
 
                     b.Property<string>("ApplicationProblemText")
                         .HasColumnName("application_problem_text")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AuthorPinfl")
-                        .HasColumnName("author_pinfl")
                         .HasColumnType("text");
 
                     b.Property<string>("ExpertComment")

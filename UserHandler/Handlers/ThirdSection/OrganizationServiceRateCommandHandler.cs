@@ -101,6 +101,9 @@ namespace UserHandler.Handlers.ThirdSection
             addModel.ServiceCommentConfirmed = model.ServiceCommentConfirmed;
             addModel.ServiceRate = model.ServiceRate;
             addModel.ExpertComment = model.ExpertComment;
+            addModel.AuthorPinfl = model.UserPinfl;
+            addModel.RateAddDate = DateTime.Now;
+            addModel.RateUpdateDate = DateTime.Now;
 
             _orgServiceRate.Add(addModel);
 
@@ -149,6 +152,7 @@ namespace UserHandler.Handlers.ThirdSection
             rate.ServiceCommentConfirmed = model.ServiceCommentConfirmed;
             rate.ServiceRate = model.ServiceRate;
             rate.ExpertComment = model.ExpertComment;
+            rate.RateUpdateDate = DateTime.Now;
 
             _orgServiceRate.Update(rate);
 
