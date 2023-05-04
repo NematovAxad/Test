@@ -7,5 +7,7 @@ namespace AdminHandler.Results.Ranking
     public class RankCommandResult
     {
         public bool IsSuccess { get; set; }
+
+        public int Id { get; set; }
     }
 }
