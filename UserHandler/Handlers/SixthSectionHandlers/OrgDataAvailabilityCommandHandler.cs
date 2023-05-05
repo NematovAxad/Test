@@ -123,7 +123,6 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 addModel.DataRelevanceRate = 0;
             }
                
-
             _orgDataAvailability.Add(addModel);
 
             return addModel.Id;
