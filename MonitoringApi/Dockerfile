@@ -5,10 +5,10 @@ EXPOSE 6053
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 RUN dotnet nuget add source http://172.16.60.9:2000/v3/index.json -n LocalBaget
 WORKDIR /src
-COPY ["MonitoringApi/MonitoringApi.csproj", "MonitoringApi/"]
-COPY ["ApiConfigs/ApiConfigs.csproj", "ApiConfigs/"]
-RUN dotnet restore "MonitoringApi/MonitoringApi.csproj"
 COPY . .
+COPY ["MonitoringApi/MonitoringApi.csproj", "MonitoringApi/"]
+RUN dotnet restore "MonitoringApi/MonitoringApi.csproj"
+#COPY . .
 WORKDIR "/src/MonitoringApi"
 RUN dotnet build "MonitoringApi.csproj" -c Release -o /app/build
 
