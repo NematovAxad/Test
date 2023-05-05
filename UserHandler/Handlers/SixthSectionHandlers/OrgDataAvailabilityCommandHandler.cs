@@ -105,7 +105,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.ExpertComment = model.ExpertComment;
 
 
-            if (model.DataAvailability == true)
+            if (model.DataAvailability == false)
             {
                 addModel.DataAvailabilityRate = rateAvailability;
             }
@@ -114,7 +114,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 addModel.DataAvailabilityRate = 0;
             }
 
-            if(model.DataRelevance == true)
+            if(model.DataRelevance == false)
             {
                 addModel.DataRelevanceRate = rateRelevance;
             }
@@ -176,7 +176,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             orgData.ExpertPinfl = model.UserPinfl;
             orgData.ExpertComment = model.ExpertComment;
 
-            if (model.DataAvailability == true)
+            if (model.DataAvailability == false)
             {
                 orgData.DataAvailabilityRate = rateAvailability;
             }
@@ -185,7 +185,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 orgData.DataAvailabilityRate = 0;
             }
 
-            if (model.DataRelevance == true)
+            if (model.DataRelevance == false)
             {
                 orgData.DataRelevanceRate = rateRelevance;
             }
