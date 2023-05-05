@@ -49,7 +49,6 @@ namespace UserApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                model.UserPinfl = this.UserPinfl();
                 var result = await _mediator.Send<OrganizationServiceRateCommandResult>(model);
                 return result;
             }
@@ -68,7 +67,6 @@ namespace UserApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                model.UserPinfl = this.UserPinfl();
                 var result = await _mediator.Send<OrganizationServiceRateCommandResult>(model);
                 return result;
             }
@@ -87,7 +85,6 @@ namespace UserApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
-                model.UserPinfl = this.UserPinfl();
                 return await _mediator.Send(model);
             }
             catch (Exception ex)

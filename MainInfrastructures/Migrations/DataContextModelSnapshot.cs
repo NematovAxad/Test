@@ -3991,10 +3991,6 @@ namespace MainInfrastructures.Migrations
                         .HasColumnName("application_problem_text")
                         .HasColumnType("text");
 
-                    b.Property<string>("AuthorPinfl")
-                        .HasColumnName("author_pinfl")
-                        .HasColumnType("text");
-
                     b.Property<string>("ExpertComment")
                         .HasColumnName("expert_comment")
                         .HasColumnType("text");
@@ -4010,14 +4006,6 @@ namespace MainInfrastructures.Migrations
                     b.Property<int>("OrganizationId")
                         .HasColumnName("organization_id")
                         .HasColumnType("integer");
-
-                    b.Property<DateTime>("RateAddDate")
-                        .HasColumnName("rate_add_date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("RateUpdateDate")
-                        .HasColumnName("rate_update_date")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("RecommendService")
                         .HasColumnName("recommend_service")

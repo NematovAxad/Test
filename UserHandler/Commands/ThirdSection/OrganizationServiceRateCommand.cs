@@ -21,9 +21,6 @@ namespace UserHandler.Commands.ThirdSection
         public int UserOrgId { get; set; }
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
-        public string UserPinfl { get; set; }
-        [JsonIgnore]
-        [Newtonsoft.Json.JsonIgnore]
         public List<string> UserPermissions { get; set; }
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]

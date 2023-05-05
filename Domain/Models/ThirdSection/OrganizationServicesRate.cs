@@ -65,14 +65,5 @@ namespace Domain.Models.ThirdSection
 
         [Column("expert_comment")]
         public string ExpertComment { get; set; }
-
-        [Column("rate_add_date")]
-        public DateTime RateAddDate { get; set; }
-
-        [Column("rate_update_date")]
-        public DateTime RateUpdateDate { get; set; }
-
-        [Column("author_pinfl")]
-        public string AuthorPinfl { get; set; }
     }
 }
