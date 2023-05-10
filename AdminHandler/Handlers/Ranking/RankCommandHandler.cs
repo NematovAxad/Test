@@ -9,6 +9,7 @@ using Domain.Permission;
 using Domain.States;
 using EntityRepository;
 using JohaRepository;
+using MainInfrastructures.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -85,10 +86,10 @@ namespace AdminHandler.Handlers.Ranking
         public int Add(RankCommand model)
         {
             int id = 0;
-            //if(model.Switch==true)
-            //{
-            //    ExceptionCase(model);
-            //}
+            if(model.IsException == true)
+            {
+                ExceptionCase(model);
+            }
             if (model.FieldId == 0)
                 throw ErrorStates.Error(UIErrors.FieldIdNotProvided);
 
@@ -134,13 +135,12 @@ namespace AdminHandler.Handlers.Ranking
                     var subField = _gSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
                     if (subField == null)
                         throw ErrorStates.NotFound("sub field ");
+                    
                     if (model.Rank > subField.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.IsException == true)
-                    {
-                        addModel.Rank = subField.MaxRate;
-                    }
+                    
                     addModel.SubFieldId = subField.Id;
+                   
                     if (model.ElementId != 0)
                     {
                         var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
@@ -150,6 +150,7 @@ namespace AdminHandler.Handlers.Ranking
                         var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+
                         addModel.ElementId = model.ElementId;
                         _gRankTable.Add(addModel);
                     }
@@ -166,27 +167,30 @@ namespace AdminHandler.Handlers.Ranking
                 {
                     if (model.Rank > field.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.IsException == true)
-                    {
-                        addModel.Rank = field.MaxRate;
-                    }
+
                     if (model.ElementId != 0)
                     {
                         var rankWithoutElement = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
+                        
                         if (rankWithoutElement != null)
                             throw ErrorStates.NotAllowed("ranking should be with element id");
 
                         var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                       
                         addModel.ElementId = model.ElementId;
+                        
                         _gRankTable.Add(addModel);
                     }
                     else
                     {
                         var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                        
                         _gRankTable.Add(addModel);
                     }
                 }
@@ -195,8 +199,10 @@ namespace AdminHandler.Handlers.Ranking
             if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
             {
                 var field = _xField.Find(r => r.Id == model.FieldId).Include(mbox=>mbox.XSubFields).FirstOrDefault();
+                
                 if (field == null)
                     throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+               
                 XRankTable addModel = new XRankTable()
                 {
                     OrganizationId = model.OrganizationId,
@@ -220,32 +226,38 @@ namespace AdminHandler.Handlers.Ranking
                         throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
 
                     var subField = _xSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
+                    
                     if (subField == null)
                         throw ErrorStates.NotFound("sub field ");
+                    
                     if (model.Rank > subField.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.IsException == true)
-                    {
-                        addModel.Rank = subField.MaxRate;
-                    }
+                    
                     addModel.SubFieldId = subField.Id;
+                    
                     if (model.ElementId != 0)
                     {
                         var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
+                        
                         if (rankWithoutElement != null)
                             throw ErrorStates.NotAllowed("ranking should be with element id");
 
                         var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                        
                         addModel.ElementId = model.ElementId;
+                       
                         _xRankTable.Add(addModel);
                     }
                     else
                     {
                         var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                        
                         _xRankTable.Add(addModel);
                     }
 
@@ -254,27 +266,30 @@ namespace AdminHandler.Handlers.Ranking
                 {
                     if (model.Rank > field.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.IsException == true)
-                    {
-                        addModel.Rank = field.MaxRate;
-                    }
+                    
                     if (model.ElementId != 0)
                     {
                         var rankWithoutElement = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
+                        
                         if (rankWithoutElement != null)
                             throw ErrorStates.NotAllowed("ranking should be with element id");
 
                         var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                       
                         addModel.ElementId = model.ElementId;
+                        
                         _xRankTable.Add(addModel);
                     }
                     else
                     {
                         var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                        
                         _xRankTable.Add(addModel);
                     }
                 }
@@ -283,8 +298,10 @@ namespace AdminHandler.Handlers.Ranking
             if (org.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
             {
                 var field = _aField.Find(r => r.Id == model.FieldId).Include(mbox=>mbox.ASubFields).FirstOrDefault();
+                
                 if (field == null)
                     throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
+                
                 ARankTable addModel = new ARankTable()
                 {
                     OrganizationId = model.OrganizationId,
@@ -309,32 +326,38 @@ namespace AdminHandler.Handlers.Ranking
                         throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
 
                     var subField = _aSubField.Find(r => r.Id == model.SubFieldId && r.FieldId == model.FieldId).FirstOrDefault();
+                    
                     if (subField == null)
                         throw ErrorStates.NotFound("sub field ");
+                    
                     if (model.Rank > subField.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.IsException == true)
-                    {
-                        addModel.Rank = subField.MaxRate;
-                    }
+                    
                     addModel.SubFieldId = subField.Id;
+                    
                     if (model.ElementId != 0)
                     {
                         var rankWithoutElement = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == 0).FirstOrDefault();
+                        
                         if (rankWithoutElement != null)
                             throw ErrorStates.NotAllowed("ranking should be with element id");
 
                         var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                        
                         addModel.ElementId = model.ElementId;
+                        
                         _aRankTable.Add(addModel);
                     }
                     else
                     {
                         var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                        
                         _aRankTable.Add(addModel);
                     }
 
@@ -343,20 +366,21 @@ namespace AdminHandler.Handlers.Ranking
                 {
                     if (model.Rank > field.MaxRate)
                         throw ErrorStates.NotAllowed("incorrect mark");
-                    if (model.IsException == true)
-                    {
-                        addModel.Rank = field.MaxRate;
-                    }
+                    
                     if (model.ElementId != 0)
                     {
                         var rankWithoutElement = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == 0).FirstOrDefault();
+                        
                         if (rankWithoutElement != null)
                             throw ErrorStates.NotAllowed("ranking should be with element id");
 
                         var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.ElementId == model.ElementId).FirstOrDefault();
+                        
                         if (rank != null)
                             throw ErrorStates.NotAllowed("ranking ");
+                       
                         addModel.ElementId = model.ElementId;
+                       
                         _aRankTable.Add(addModel);
                     }
                     else
@@ -377,7 +401,7 @@ namespace AdminHandler.Handlers.Ranking
         {
             int id = 0;
 
-            if(model.Switch == true)
+            if(model.IsException == true)
             {
                 ExceptionCase(model);
             }
@@ -416,26 +440,11 @@ namespace AdminHandler.Handlers.Ranking
                         if (model.Rank > subField.MaxRate)
                             throw ErrorStates.NotAllowed("incorrect mark");
 
-                        if (model.IsException == true)
-                        {
-                            rank.Rank = subField.MaxRate;
-                        }
-                        else
-                        {
-                            rank.Rank = model.Rank;
-                        }
-
+                        rank.Rank = model.Rank;
                     }
                     else
                     {
-                        if (model.IsException == true)
-                        {
-                            rank.Rank = field.MaxRate;
-                        }
-                        else
-                        {
-                            rank.Rank = model.Rank;
-                        }
+                        rank.Rank = model.Rank; 
                     }
                     rank.IsException = false;
                     rank.Comment = model.Comment;
@@ -468,25 +477,12 @@ namespace AdminHandler.Handlers.Ranking
                         if (model.Rank > subField.MaxRate)
                             throw ErrorStates.NotAllowed("incorrect mark");
 
-                        if (model.IsException == true)
-                        {
-                            rank.Rank = subField.MaxRate;
-                        }
-                        else
-                        {
-                            rank.Rank = model.Rank;
-                        }
+                        rank.Rank = model.Rank;
+                        
                     }
                     else
                     {
-                        if (model.IsException == true)
-                        {
-                            rank.Rank = field.MaxRate;
-                        }
-                        else
-                        {
-                            rank.Rank = model.Rank;
-                        }
+                        rank.Rank = model.Rank; 
                     }
                     rank.IsException = false;
                     rank.Comment = model.Comment;
@@ -519,26 +515,11 @@ namespace AdminHandler.Handlers.Ranking
                         if (model.Rank > subField.MaxRate)
                             throw ErrorStates.NotAllowed("incorrect mark");
 
-                        if (model.IsException == true)
-                        {
-                            rank.Rank = subField.MaxRate;
-                        }
-                        else
-                        {
-                            rank.Rank = model.Rank;
-                        }
-
+                        rank.Rank = model.Rank;
                     }
                     else
                     {
-                        if (model.IsException == true)
-                        {
-                            rank.Rank = field.MaxRate;
-                        }
-                        else
-                        {
-                            rank.Rank = model.Rank;
-                        }
+                        rank.Rank = model.Rank;
                     }
                     rank.IsException = false;
                     rank.Comment = model.Comment;
@@ -596,340 +577,365 @@ namespace AdminHandler.Handlers.Ranking
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
             var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
+            
             if (deadline == null || deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(model.Quarter.ToString());
+            
             if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
+            
             if(org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
             {
-                var field = _gField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                double rate = 0;
+                double maxRate = 0;
+                double gotRate = 0;
+
+                var allRanks = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter).ToList();
+                
+                foreach(var rank in allRanks)
+                {
+                    gotRate += rank.Rank;
+
+                    if(rank.SubFieldId != 0)
+                    {
+                        var subField = _gSubField.Find(s=>s.Id == rank.SubFieldId).FirstOrDefault();
+                        
+                        if (subField == null)
+                            throw ErrorStates.NotFound("sub field ");
+
+                        maxRate += subField.MaxRate;
+                    }
+                    else
+                    {
+                        var f = _gField.Find(f => f.Id == rank.FieldId).FirstOrDefault();
+
+                        maxRate += f.MaxRate;
+                    }
+                }
+
+                rate = gotRate / maxRate;
+
+
+
+                var field = _gField.Find(r => r.Id == model.FieldId).Include(mbox=>mbox.GSubFields).FirstOrDefault();
                 if (field == null)
                     throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
-                
-                if(model.SubFieldId!=0)
+
+                GRankTable addModel = new GRankTable()
                 {
+                    OrganizationId = model.OrganizationId,
+                    Year = model.Year,
+                    Quarter = model.Quarter,
+                    Rank = model.Rank,
+                    IsException = true,
+                    SphereId = field.SphereId,
+                    FieldId = field.Id,
+                    Comment = model.Comment,
+                    SubFieldId = 0,
+                    ElementId = model.ElementId,
+                };
+
+                if (field.GSubFields.Count() > 0)
+                {
+                    if (model.SubFieldId == 0)
+                        throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
+
                     var subField = _gSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
                     if (subField == null)
                         throw ErrorStates.NotFound("sub field ");
 
-                    var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).ToList();
-                        
-                    if (rank.Count()>0 && model.SwitchValue == 1)
+                    var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId);
+
+                    if (model.ElementId != 0)
+                    {
+                        rank = rank.Where(r => r.ElementId == model.ElementId);
+                    }
+                    else
+                    {
+                        if(rank.Any(r=>r.ElementId != 0))
+                            throw ErrorStates.Error(UIErrors.ElementIdNeed);
+                        rank = rank.Where(r=>r.ElementId == 0);
+                    }
+                    
+                    if (rank.ToList().Count()>0)
                     {
                         _db.Context.Set<GRankTable>().RemoveRange(rank);
                         _db.Context.SaveChanges();
                     }
-                    if (model.SwitchValue == 0)
-                    {
-                        if(rank.Count()>0)
-                        {
-                            _db.Context.Set<GRankTable>().RemoveRange(rank);
-                            _db.Context.SaveChanges();
-                        }
-                        GRankTable addModel = new GRankTable()
-                        {
-                            OrganizationId = model.OrganizationId,
-                            Year = model.Year,
-                            Quarter = model.Quarter,
-                            Rank = model.Rank,
-                            IsException = true,
-                            SphereId = field.SphereId,
-                            FieldId = field.Id,
-                            Comment = model.Comment,
-                            SubFieldId = 0,
-                            ElementId = 0
-                        };
-                        addModel.Rank = subField.MaxRate;
-                        addModel.IsException = true;
-                        addModel.SubFieldId = subField.Id;
-                        _gRankTable.Update(addModel);
 
-                        id = addModel.Id;
-                    }
+
+                    addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
+                    addModel.IsException = true;
+                    addModel.SubFieldId = subField.Id;
+                    _gRankTable.Add(addModel);
+
+                    id = addModel.Id;
+                    
                     
                 }
                 else
-                 {
-                    var ranks = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).ToList();
-                    if(ranks.Count()>0 && model.SwitchValue == 1)
+                {
+                    var rank = _gRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId);
+
+                    if (model.ElementId != 0)
                     {
-                        _db.Context.Set<GRankTable>().RemoveRange(ranks);
+                        rank = rank.Where(r => r.ElementId == model.ElementId);
+                    }
+                    else
+                    {
+                        if (rank.Any(r => r.ElementId != 0))
+                            throw ErrorStates.Error(UIErrors.ElementIdNeed);
+                        rank = rank.Where(r => r.ElementId == 0);
+                    }
+
+                    if (rank.ToList().Count() > 0)
+                    {
+                        _db.Context.Set<GRankTable>().RemoveRange(rank);
                         _db.Context.SaveChanges();
                     }
-                    if(model.SwitchValue == 0)
-                    {
-                        if(ranks.Count()>0)
-                        {
-                            _db.Context.Set<GRankTable>().RemoveRange(ranks);
-                            _db.Context.SaveChanges();
-                        }
-                        var sFields = _gSubField.Find(f => f.FieldId == field.Id).ToList();
-                        if(sFields.Count()>0)
-                        {
-                            List<GRankTable> addList = new List<GRankTable>();
-                            foreach(var s in sFields)
-                            {
-                                GRankTable addModel = new GRankTable()
-                                {
-                                    OrganizationId = model.OrganizationId,
-                                    Year = model.Year,
-                                    Quarter = model.Quarter,
-                                    Rank = model.Rank,
-                                    IsException = true,
-                                    SphereId = field.SphereId,
-                                    FieldId = field.Id,
-                                    Comment = model.Comment,
-                                    SubFieldId = 0,
-                                    ElementId = 0
-                                };
-                                addModel.Rank = s.MaxRate;
-                                addModel.IsException = true;
-                                addModel.SubFieldId = s.Id;
-                                addList.Add(addModel);
-                            }
-                            _gRankTable.AddRange(addList);
-                        }
-                        else
-                        {
-                            GRankTable addModel = new GRankTable()
-                            {
-                                OrganizationId = model.OrganizationId,
-                                Year = model.Year,
-                                Quarter = model.Quarter,
-                                Rank = model.Rank,
-                                IsException = model.IsException,
-                                SphereId = field.SphereId,
-                                FieldId = field.Id,
-                                Comment = model.Comment,
-                                SubFieldId = 0,
-                                ElementId = 0
-                            };
-                            addModel.Rank = field.MaxRate;
-                            addModel.IsException = true;
-                            _gRankTable.Add(addModel);
-                        }
-                        
-                    }
+
+
+                    addModel.Rank = Math.Round(field.MaxRate * rate, 2);
+                    addModel.IsException = true;
+                    _gRankTable.Add(addModel);
+
+                    id = addModel.Id;
                 }
             }
             if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
             {
-                var field = _xField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                double rate = 0;
+                double maxRate = 0;
+                double gotRate = 0;
+
+                var allRanks = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter).ToList();
+
+                foreach (var rank in allRanks)
+                {
+                    gotRate += rank.Rank;
+
+                    if (rank.SubFieldId != 0)
+                    {
+                        var subField = _xSubField.Find(s => s.Id == rank.SubFieldId).FirstOrDefault();
+
+                        if (subField == null)
+                            throw ErrorStates.NotFound("sub field ");
+
+                        maxRate += subField.MaxRate;
+                    }
+                    else
+                    {
+                        var f = _xField.Find(f => f.Id == rank.FieldId).FirstOrDefault();
+
+                        maxRate += f.MaxRate;
+                    }
+                }
+
+                rate = gotRate / maxRate;
+
+
+
+                var field = _xField.Find(r => r.Id == model.FieldId).Include(mbox => mbox.XSubFields).FirstOrDefault();
                 if (field == null)
                     throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
 
-                if (model.SubFieldId != 0)
+                GRankTable addModel = new GRankTable()
                 {
+                    OrganizationId = model.OrganizationId,
+                    Year = model.Year,
+                    Quarter = model.Quarter,
+                    Rank = model.Rank,
+                    IsException = true,
+                    SphereId = field.SphereId,
+                    FieldId = field.Id,
+                    Comment = model.Comment,
+                    SubFieldId = 0,
+                    ElementId = 0
+                };
+
+                if (field.XSubFields.Count() > 0)
+                {
+                    if (model.SubFieldId == 0)
+                        throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
+
                     var subField = _xSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
                     if (subField == null)
                         throw ErrorStates.NotFound("sub field ");
 
-                    var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).ToList();
+                    var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId);
 
-                    if (rank.Count() > 0 && model.SwitchValue == 1)
+                    if (model.ElementId != 0)
+                    {
+                        rank = rank.Where(r => r.ElementId == model.ElementId);
+                    }
+                    else
+                    {
+                        if (rank.Any(r => r.ElementId != 0))
+                            throw ErrorStates.Error(UIErrors.ElementIdNeed);
+                        rank = rank.Where(r => r.ElementId == 0);
+                    }
+
+                    if (rank.ToList().Count() > 0)
                     {
                         _db.Context.Set<XRankTable>().RemoveRange(rank);
                         _db.Context.SaveChanges();
                     }
-                    if (model.SwitchValue == 0)
-                    {
-                        if (rank.Count() > 0)
-                        {
-                            _db.Context.Set<XRankTable>().RemoveRange(rank);
-                            _db.Context.SaveChanges();
-                        }
-                        XRankTable addModel = new XRankTable()
-                        {
-                            OrganizationId = model.OrganizationId,
-                            Year = model.Year,
-                            Quarter = model.Quarter,
-                            Rank = model.Rank,
-                            IsException = model.IsException,
-                            SphereId = field.SphereId,
-                            FieldId = field.Id,
-                            Comment = model.Comment,
-                            SubFieldId = 0,
-                            ElementId = 0
-                        };
-                        addModel.Rank = subField.MaxRate;
-                        addModel.IsException = true;
-                        addModel.SubFieldId = subField.Id;
-                        _xRankTable.Update(addModel);
-                    }
+
+
+                    addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
+                    addModel.IsException = true;
+                    addModel.SubFieldId = subField.Id;
+                    _gRankTable.Update(addModel);
+
+                    id = addModel.Id;
+
 
                 }
                 else
                 {
-                    var ranks = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).ToList();
-                    if (ranks.Count() > 0 && model.SwitchValue == 1)
+                    var rank = _xRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId);
+
+                    if (model.ElementId != 0)
                     {
-                        _db.Context.Set<XRankTable>().RemoveRange(ranks);
+                        rank = rank.Where(r => r.ElementId == model.ElementId);
+                    }
+                    else
+                    {
+                        if (rank.Any(r => r.ElementId != 0))
+                            throw ErrorStates.Error(UIErrors.ElementIdNeed);
+                        rank = rank.Where(r => r.ElementId == 0);
+                    }
+
+                    if (rank.ToList().Count() > 0)
+                    {
+                        _db.Context.Set<XRankTable>().RemoveRange(rank);
                         _db.Context.SaveChanges();
                     }
-                    if (model.SwitchValue == 0)
-                    {
-                        if (ranks.Count() > 0)
-                        {
-                            _db.Context.Set<XRankTable>().RemoveRange(ranks);
-                            _db.Context.SaveChanges();
-                        }
-                        var sFields = _xSubField.Find(f => f.FieldId == field.Id).ToList();
-                        if (sFields.Count() > 0)
-                        {
-                            List<XRankTable> addList = new List<XRankTable>();
-                            foreach (var s in sFields)
-                            {
-                                XRankTable addModel = new XRankTable()
-                                {
-                                    OrganizationId = model.OrganizationId,
-                                    Year = model.Year,
-                                    Quarter = model.Quarter,
-                                    Rank = model.Rank,
-                                    IsException = model.IsException,
-                                    SphereId = field.SphereId,
-                                    FieldId = field.Id,
-                                    Comment = model.Comment,
-                                    SubFieldId = 0,
-                                    ElementId = 0
-                                };
-                                addModel.Rank = s.MaxRate;
-                                addModel.IsException = true;
-                                addModel.SubFieldId = s.Id;
-                                addList.Add(addModel);
-                            }
-                            _xRankTable.AddRange(addList);
-                        }
-                        else
-                        {
-                            XRankTable addModel = new XRankTable()
-                            {
-                                OrganizationId = model.OrganizationId,
-                                Year = model.Year,
-                                Quarter = model.Quarter,
-                                Rank = model.Rank,
-                                IsException = model.IsException,
-                                SphereId = field.SphereId,
-                                FieldId = field.Id,
-                                Comment = model.Comment,
-                                SubFieldId = 0,
-                                ElementId = 0
-                            };
-                            addModel.Rank = field.MaxRate;
-                            addModel.IsException = true;
-                            _xRankTable.Add(addModel);
-                        }
 
-                    }
+
+                    addModel.Rank = Math.Round(field.MaxRate * rate, 2); 
+                    addModel.IsException = true;
+                    _gRankTable.Update(addModel);
+
+                    id = addModel.Id;
                 }
             }
             if (org.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
             {
-                var field = _aField.Find(r => r.Id == model.FieldId).FirstOrDefault();
+                double rate = 0;
+                double maxRate = 0;
+                double gotRate = 0;
+
+                var allRanks = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter).ToList();
+
+                foreach (var rank in allRanks)
+                {
+                    gotRate += rank.Rank;
+
+                    if (rank.SubFieldId != 0)
+                    {
+                        var subField = _aSubField.Find(s => s.Id == rank.SubFieldId).FirstOrDefault();
+
+                        if (subField == null)
+                            throw ErrorStates.NotFound("sub field ");
+
+                        maxRate += subField.MaxRate;
+                    }
+                    else
+                    {
+                        var f = _aField.Find(f => f.Id == rank.FieldId).FirstOrDefault();
+
+                        maxRate += f.MaxRate;
+                    }
+                }
+
+                rate = gotRate / maxRate;
+
+
+
+                var field = _aField.Find(r => r.Id == model.FieldId).Include(mbox => mbox.ASubFields).FirstOrDefault();
                 if (field == null)
                     throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
 
-                if (model.SubFieldId != 0)
+                GRankTable addModel = new GRankTable()
                 {
+                    OrganizationId = model.OrganizationId,
+                    Year = model.Year,
+                    Quarter = model.Quarter,
+                    Rank = model.Rank,
+                    IsException = true,
+                    SphereId = field.SphereId,
+                    FieldId = field.Id,
+                    Comment = model.Comment,
+                    SubFieldId = 0,
+                    ElementId = 0
+                };
+
+                if (field.ASubFields.Count() > 0)
+                {
+                    if (model.SubFieldId == 0)
+                        throw ErrorStates.Error(UIErrors.SubFieldIdNotProvided);
+
                     var subField = _aSubField.Find(r => r.Id == model.SubFieldId).FirstOrDefault();
                     if (subField == null)
                         throw ErrorStates.NotFound("sub field ");
 
-                    var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId).ToList();
+                    var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId && r.SubFieldId == model.SubFieldId);
 
-                    if (rank.Count() > 0 && model.SwitchValue == 1)
+                    if (model.ElementId != 0)
+                    {
+                        rank = rank.Where(r => r.ElementId == model.ElementId);
+                    }
+                    else
+                    {
+                        if (rank.Any(r => r.ElementId != 0))
+                            throw ErrorStates.Error(UIErrors.ElementIdNeed);
+                        rank = rank.Where(r => r.ElementId == 0);
+                    }
+
+                    if (rank.ToList().Count() > 0)
                     {
                         _db.Context.Set<ARankTable>().RemoveRange(rank);
                         _db.Context.SaveChanges();
                     }
-                    if (model.SwitchValue == 0)
-                    {
-                        if (rank.Count() > 0)
-                        {
-                            _db.Context.Set<ARankTable>().RemoveRange(rank);
-                            _db.Context.SaveChanges();
-                        }
-                        ARankTable addModel = new ARankTable()
-                        {
-                            OrganizationId = model.OrganizationId,
-                            Year = model.Year,
-                            Quarter = model.Quarter,
-                            Rank = model.Rank,
-                            IsException = true,
-                            SphereId = field.SphereId,
-                            FieldId = field.Id,
-                            Comment = model.Comment,
-                            SubFieldId = 0,
-                            ElementId = 0
-                        };
-                        addModel.Rank = subField.MaxRate;
-                        addModel.IsException = true;
-                        addModel.SubFieldId = subField.Id;
-                        _aRankTable.Update(addModel);
-                    }
+
+
+                    addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
+                    addModel.IsException = true;
+                    addModel.SubFieldId = subField.Id;
+                    _gRankTable.Update(addModel);
+
+                    id = addModel.Id;
+
 
                 }
                 else
                 {
-                    var ranks = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId).ToList();
-                    if (ranks.Count() > 0 && model.SwitchValue == 1)
+                    var rank = _aRankTable.Find(r => r.OrganizationId == model.OrganizationId && r.Year == model.Year && r.Quarter == model.Quarter && r.FieldId == model.FieldId);
+
+                    if (model.ElementId != 0)
                     {
-                        _db.Context.Set<ARankTable>().RemoveRange(ranks);
+                        rank = rank.Where(r => r.ElementId == model.ElementId);
+                    }
+                    else
+                    {
+                        if (rank.Any(r => r.ElementId != 0))
+                            throw ErrorStates.Error(UIErrors.ElementIdNeed);
+                        rank = rank.Where(r => r.ElementId == 0);
+                    }
+
+                    if (rank.ToList().Count() > 0)
+                    {
+                        _db.Context.Set<ARankTable>().RemoveRange(rank);
                         _db.Context.SaveChanges();
                     }
-                    if (model.SwitchValue == 0)
-                    {
-                        if (ranks.Count() > 0)
-                        {
-                            _db.Context.Set<ARankTable>().RemoveRange(ranks);
-                            _db.Context.SaveChanges();
-                        }
-                        var sFields = _aSubField.Find(f => f.FieldId == field.Id).ToList();
-                        if (sFields.Count() > 0)
-                        {
-                            List<ARankTable> addList = new List<ARankTable>();
-                            foreach (var s in sFields)
-                            {
-                                ARankTable addModel = new ARankTable()
-                                {
-                                    OrganizationId = model.OrganizationId,
-                                    Year = model.Year,
-                                    Quarter = model.Quarter,
-                                    Rank = model.Rank,
-                                    IsException = true,
-                                    SphereId = field.SphereId,
-                                    FieldId = field.Id,
-                                    Comment = model.Comment,
-                                    SubFieldId = 0,
-                                    ElementId = 0
-                                };
-                                addModel.Rank = s.MaxRate;
-                                addModel.IsException = true;
-                                addModel.SubFieldId = s.Id;
-                                addList.Add(addModel);
-                            }
-                            _aRankTable.AddRange(addList);
-                        }
-                        else
-                        {
-                            ARankTable addModel = new ARankTable()
-                            {
-                                OrganizationId = model.OrganizationId,
-                                Year = model.Year,
-                                Quarter = model.Quarter,
-                                Rank = model.Rank,
-                                IsException = model.IsException,
-                                SphereId = field.SphereId,
-                                FieldId = field.Id,
-                                Comment = model.Comment,
-                                SubFieldId = 0,
-                                ElementId = 0
-                            };
-                            addModel.Rank = field.MaxRate;
-                            addModel.IsException = true;
-                            _aRankTable.Add(addModel);
-                        }
 
-                    }
+
+                    addModel.Rank = Math.Round(field.MaxRate * rate, 2);
+                    addModel.IsException = true;
+                    _gRankTable.Update(addModel);
+
+                    id = addModel.Id;
                 }
             }
             return id;

@@ -255,5 +255,14 @@
             <en>Limit to add data </en>
             <kr>Ограничение на добавление данных</kr>
         </member>
+        <member name="F:Domain.UIErrors.ElementIdNeed">
+            <summary>
+            
+            </summary>
+            <uz>ElementId ko'rsatilmagan</uz>
+            <ru>Требуется идентификатор элемента</ru>
+            <en>Element Id Need </en>
+            <kr>Требуется идентификатор элемента</kr>
+        </member>
     </members>
 </doc>

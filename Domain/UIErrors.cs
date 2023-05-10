@@ -153,5 +153,14 @@ namespace Domain
         /// <en>Limit to add data </en>
         /// <kr>Ограничение на добавление данных</kr>
         LimitToAddFull = -15,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>ElementId ko'rsatilmagan</uz>
+        /// <ru>Требуется идентификатор элемента</ru>
+        /// <en>Element Id Need </en>
+        /// <kr>Требуется идентификатор элемента</kr>
+        ElementIdNeed = -16,
     }
 }

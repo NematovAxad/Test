@@ -35,7 +35,5 @@ namespace AdminHandler.Commands.Ranking
         public double Rank { get; set; }
         public bool IsException { get; set; }
         public string Comment { get; set; }
-        public bool Switch { get; set; }
-        public int SwitchValue { get; set; }
     }
 }
