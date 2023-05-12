@@ -615,7 +615,8 @@ namespace AdminHandler.Handlers.Ranking
 
                 rate = gotRate / maxRate;
 
-
+                if (rate == 0)
+                    rate = 1;
 
                 var field = _gField.Find(r => r.Id == model.FieldId).Include(mbox=>mbox.GSubFields).FirstOrDefault();
                 if (field == null)
