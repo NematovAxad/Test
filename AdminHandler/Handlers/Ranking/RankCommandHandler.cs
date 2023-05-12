@@ -631,6 +631,8 @@ namespace AdminHandler.Handlers.Ranking
                     SphereId = field.SphereId,
                     FieldId = field.Id,
                     Comment = model.Comment,
+                    ExpertId = model.UserId,
+                    ExpertPinfl = model.UserPinfl,
                     SubFieldId = 0,
                     ElementId = model.ElementId,
                 };
@@ -749,6 +751,8 @@ namespace AdminHandler.Handlers.Ranking
                     SphereId = field.SphereId,
                     FieldId = field.Id,
                     Comment = model.Comment,
+                    ExpertId = model.UserId,
+                    ExpertPinfl = model.UserPinfl,
                     SubFieldId = 0,
                     ElementId = 0
                 };
@@ -867,6 +871,8 @@ namespace AdminHandler.Handlers.Ranking
                     SphereId = field.SphereId,
                     FieldId = field.Id,
                     Comment = model.Comment,
+                    ExpertId = model.UserId,
+                    ExpertPinfl = model.UserPinfl,
                     SubFieldId = 0,
                     ElementId = 0
                 };
