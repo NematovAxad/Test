@@ -668,7 +668,6 @@ namespace AdminHandler.Handlers.Ranking
 
 
                     addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
-                    addModel.IsException = true;
                     addModel.SubFieldId = subField.Id;
                     _gRankTable.Add(addModel);
 
@@ -788,7 +787,6 @@ namespace AdminHandler.Handlers.Ranking
 
 
                     addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
-                    addModel.IsException = true;
                     addModel.SubFieldId = subField.Id;
                     _gRankTable.Update(addModel);
 
@@ -908,7 +906,6 @@ namespace AdminHandler.Handlers.Ranking
 
 
                     addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
-                    addModel.IsException = true;
                     addModel.SubFieldId = subField.Id;
                     _gRankTable.Update(addModel);
 

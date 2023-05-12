@@ -98,7 +98,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
                                 foreach (var element in subFieldRankWithElements)
                                 {
-                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -143,7 +143,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
                             }
                         }
                         result.Count++;
@@ -194,7 +194,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
                                 foreach (var element in subFieldRankWithElements)
                                 {
-                                    subFieldToAdd.Elements.Add(new Elements() {RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                    subFieldToAdd.Elements.Add(new Elements() {RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -239,7 +239,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
                             }
                         }
                         result.Count++;
@@ -289,7 +289,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
                                 foreach (var element in subFieldRankWithElements)
                                 {
-                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -334,7 +334,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
                             }
                         }
                         result.Count++;

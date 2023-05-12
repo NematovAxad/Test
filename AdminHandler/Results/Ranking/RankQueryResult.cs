@@ -38,6 +38,7 @@ namespace AdminHandler.Results.Ranking
         public int RankdId { get; set; }
         public int ElementId { get; set; }
         public double ElementRank { get; set; }
+        public bool IsException { get; set; }
         public string Comment { get; set; }
     }
 }
