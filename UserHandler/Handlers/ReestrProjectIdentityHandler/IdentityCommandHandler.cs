@@ -63,7 +63,7 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (projectIdentity == null)
                 throw ErrorStates.NotFound(model.ParentId.ToString());
 
-            var identity = _identities.Find(p => p.ParentId == model.ParentId && p.IdentityUrl == model.IdentityUrl).FirstOrDefault();
+            var identity = _identities.Find(p => p.ParentId == model.ParentId && p.IdentitiyType == model.IdentitiyType).FirstOrDefault();
             if (identity != null)
                 throw ErrorStates.NotAllowed(model.IdentityUrl.ToString());
 

@@ -5,6 +5,7 @@ using Domain.Models.FirstSection;
 using Domain.Permission;
 using Domain.States;
 using JohaRepository;
+using MainInfrastructures.Migrations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -76,12 +77,14 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             {
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
-                
-                if (model.AllItems >= 0)
-                    addModel.AllItems = model.AllItems;
+                if(model.Exist == true)
+                {
+                    if (model.AllItems >= 0)
+                        addModel.AllItems = model.AllItems;
 
-                if (model.ExceptedItems >= 0)
-                    addModel.ExceptedItems = model.ExceptedItems;
+                    if (model.ExceptedItems >= 0)
+                        addModel.ExceptedItems = model.ExceptedItems;
+                }
             }
 
 
@@ -127,6 +130,15 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 
                 if (model.ExceptedItems >= 0)
                     projectIdentities.ExceptedItems = model.ExceptedItems;
+            }
+            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            {
+                if (model.Exist == false)
+                {
+                    projectIdentities.ExpertComment = String.Empty;
+                    projectIdentities.AllItems = 0;
+                    projectIdentities.ExceptedItems = 0;
+                }
             }
 
             _projectIdentities.Update(projectIdentities);
