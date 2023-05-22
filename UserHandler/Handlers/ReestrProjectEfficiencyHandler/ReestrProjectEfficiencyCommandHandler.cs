@@ -53,6 +53,8 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 
         public int Add(ReestrProjectEfficiencyCommand model)
         {
+            int id = 0;
+
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
@@ -62,40 +64,59 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var projectEfficiency = _projectEfficiency.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectEfficiency != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectEfficiency addModel = new ReestrProjectEfficiency();
+           
 
-            addModel.OrganizationId = model.OrganizationId;
-            addModel.ReestrProjectId = model.ReestrProjectId;
-
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+                
+                
+                ReestrProjectEfficiency addModel = new ReestrProjectEfficiency();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+
+                _projectEfficiency.Add(addModel);
+                id = addModel.Id;
             }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+
+                ReestrProjectEfficiency addModel = new ReestrProjectEfficiency();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
+                addModel.Exist = model.Exist;
 
                 if (model.AllItems >= 0)
                     addModel.AllItems = model.AllItems;
 
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
+
+                _projectEfficiency.Add(addModel);
+                id = addModel.Id;
             }
 
 
-            _projectEfficiency.Add(addModel);
+            
 
-            return addModel.Id;
+            return id;
         }
         public int Update(ReestrProjectEfficiencyCommand model)
         {
@@ -111,16 +132,14 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
             
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
             
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
-
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     projectEfficiency.OrgComment = model.OrgComment;
                 projectEfficiency.Exist = model.Exist;
@@ -133,6 +152,9 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectEfficiency.ExpertComment = model.ExpertComment;
 
@@ -143,15 +165,14 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                     projectEfficiency.ExceptedItems = model.ExceptedItems;
             }
 
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+
+            if (projectEfficiency.Exist == false)
             {
-               if (model.Exist == false)
-                {
-                    projectEfficiency.ExpertComment = String.Empty;
-                    projectEfficiency.AllItems = 0;
-                    projectEfficiency.ExceptedItems = 0;
-                }
+                projectEfficiency.ExpertComment = String.Empty;
+                projectEfficiency.AllItems = 0;
+                projectEfficiency.ExceptedItems = 0;
             }
+            
 
             _projectEfficiency.Update(projectEfficiency);
 

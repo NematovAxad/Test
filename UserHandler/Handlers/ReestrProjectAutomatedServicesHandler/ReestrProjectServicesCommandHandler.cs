@@ -50,6 +50,8 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
         public int Add(ReestrProjectServicesCommand model)
         {
+            int id = 0;
+
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.Error(UIErrors.OrganizationNotFound);
@@ -59,23 +61,41 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectServices != null)
                 throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
-            ReestrProjectAutomatedServices addModel = new ReestrProjectAutomatedServices();
-
-            addModel.OrganizationId = model.OrganizationId;
-            addModel.ReestrProjectId = model.ReestrProjectId;
-            addModel.ProjectServiceExist = model.ProjectServiceExist;
-            addModel.ProjectFunctionsExist = model.ProjectFunctionsExist;
 
 
+            if ((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            {
+                ReestrProjectAutomatedServices addModel = new ReestrProjectAutomatedServices();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
+                addModel.ProjectServiceExist = model.ProjectServiceExist;
+               
+
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                _projectServices.Add(addModel);
+                id = addModel.Id;
+            }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                ReestrProjectAutomatedServices addModel = new ReestrProjectAutomatedServices();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
+                
+                addModel.ProjectFunctionsExist = model.ProjectFunctionsExist;
+
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
 
@@ -84,12 +104,15 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
+
+                _projectServices.Add(addModel);
+                id = addModel.Id;
             }
 
 
-            _projectServices.Add(addModel);
+            
 
-            return addModel.Id;
+            return id;
         }
 
         public int Update(ReestrProjectServicesCommand model)
@@ -102,18 +125,29 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var projectServices = _projectServices.Find(p => p.Id == model.Id).Include(mbox => mbox.AutomatedServices).Include(mbox=>mbox.AutomatedFunctions).FirstOrDefault();
             if (projectServices == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            projectServices.ProjectFunctionsExist = model.ProjectFunctionsExist;
-            projectServices.ProjectServiceExist = model.ProjectServiceExist;
+            
+
+            if ((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                projectServices.ProjectServiceExist = model.ProjectServiceExist;
+            }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                projectServices.ProjectFunctionsExist = model.ProjectFunctionsExist;
+       
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectServices.ExpertComment = model.ExpertComment;
 
@@ -128,7 +162,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                     else { throw ErrorStates.Error(UIErrors.EnoughDataNotProvided); }  
             }
 
-            if (model.ProjectServiceExist == false)
+            if (projectServices.ProjectServiceExist == false)
             {
                 _services.RemoveRange(projectServices.AutomatedServices);
 
@@ -136,7 +170,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 projectServices.AllItems = 0;
                 projectServices.ExceptedItems = 0;
             }
-            if (model.ProjectFunctionsExist == false)
+            if (projectServices.ProjectFunctionsExist == false)
             {
                 _functions.RemoveRange(projectServices.AutomatedFunctions);
 

@@ -50,6 +50,8 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 
         public int Add(ReestrProjectClassificationCommand model)
         {
+            int id = 0;
+
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
@@ -59,26 +61,42 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+           
 
             var projectClassificator = _projectClassifications.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectClassificator != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectClassifications addModel = new ReestrProjectClassifications();
+            
 
-            addModel.OrganizationId = model.OrganizationId;
-            addModel.ReestrProjectId = model.ReestrProjectId;
-
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+                
+                
+                ReestrProjectClassifications addModel = new ReestrProjectClassifications();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+
+                _projectClassifications.Add(addModel);
+                id = addModel.Id;
             }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                ReestrProjectClassifications addModel = new ReestrProjectClassifications();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
+                addModel.Exist = model.Exist;
+
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
                 
@@ -87,12 +105,15 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
+
+                _projectClassifications.Add(addModel);
+                id = addModel.Id;
             }
 
 
-            _projectClassifications.Add(addModel);
+           
 
-            return addModel.Id;
+            return id;
         }
         public int Update(ReestrProjectClassificationCommand model)
         {
@@ -106,15 +127,15 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+           
 
 
 
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     projectClassificator.OrgComment = model.OrgComment;
                 projectClassificator.Exist = model.Exist;
@@ -127,6 +148,14 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+
+                if (model.Exist == false)
+                {
+                    _classifications.RemoveRange(projectClassificator.Classifications);
+                }
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectClassificator.ExpertComment = model.ExpertComment;
                 

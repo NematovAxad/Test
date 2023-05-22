@@ -46,6 +46,7 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
         }
         public int Add(ReestrProjectIdentityCommand model)
         {
+            int id = 0;
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
@@ -55,26 +56,40 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
            
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+           
 
             var projectIdentities = _projectIdentities.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectIdentities != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectIdentities addModel = new ReestrProjectIdentities();
+            
 
-            addModel.OrganizationId = model.OrganizationId;
-            addModel.ReestrProjectId = model.ReestrProjectId;
-
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
-                if(!String.IsNullOrEmpty(model.OrgComment))
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+                
+                ReestrProjectIdentities addModel = new ReestrProjectIdentities();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
+                if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+
+                _projectIdentities.Add(addModel);
+                id = addModel.Id;
             }
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+
+                ReestrProjectIdentities addModel = new ReestrProjectIdentities();
+
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
                 if(model.Exist == true)
@@ -85,31 +100,37 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                     if (model.ExceptedItems >= 0)
                         addModel.ExceptedItems = model.ExceptedItems;
                 }
+
+                _projectIdentities.Add(addModel);
+                id = addModel.Id;
             }
 
 
-            _projectIdentities.Add(addModel);
+           
 
-            return addModel.Id;
+            return id;
         }
         public int Update(ReestrProjectIdentityCommand model)
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+           
 
             var projectIdentities = _projectIdentities.Find(p => p.Id == model.Id).Include(mbox=>mbox.Identities).FirstOrDefault();
             if (projectIdentities == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     projectIdentities.OrgComment = model.OrgComment;
                 projectIdentities.Exist = model.Exist;
@@ -122,6 +143,9 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectIdentities.ExpertComment = model.ExpertComment;
                 
@@ -131,15 +155,14 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                 if (model.ExceptedItems >= 0)
                     projectIdentities.ExceptedItems = model.ExceptedItems;
             }
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+
+            if (projectIdentities.Exist == false)
             {
-                if (model.Exist == false)
-                {
-                    projectIdentities.ExpertComment = String.Empty;
-                    projectIdentities.AllItems = 0;
-                    projectIdentities.ExceptedItems = 0;
-                }
+                projectIdentities.ExpertComment = String.Empty;
+                projectIdentities.AllItems = 0;
+                projectIdentities.ExceptedItems = 0;
             }
+            
 
             _projectIdentities.Update(projectIdentities);
 

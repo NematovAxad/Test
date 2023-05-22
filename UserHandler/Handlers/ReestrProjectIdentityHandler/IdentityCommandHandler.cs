@@ -50,12 +50,13 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 
         public int Add(IdentityCommand model)
         {
+            int id = 0;
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
 
@@ -68,23 +69,30 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                 throw ErrorStates.NotAllowed(model.IdentityUrl.ToString());
 
 
-            ProjectIdentities addModel = new ProjectIdentities();
+           
 
 
-            if (((model.UserOrgId == projectIdentity.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectIdentity.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                ProjectIdentities addModel = new ProjectIdentities();
                 addModel.ParentId = model.ParentId;
                 addModel.IdentitiyType = model.IdentitiyType;
                 addModel.IdentityUrl = model.IdentityUrl;
                 addModel.FilePath = model.FilePath;
+
+                _identities.Add(addModel);
+                id = addModel.Id;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+           
 
 
 
-            _identities.Add(addModel);
+            
 
-            return addModel.Id;
+            return id;
         }
 
         public int Update(IdentityCommand model)
@@ -93,8 +101,7 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
             var projectIdentity = _projectidentity.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
@@ -106,17 +113,17 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                 throw ErrorStates.NotAllowed(model.IdentityUrl.ToString());
 
 
-            if (((model.UserOrgId == projectIdentity.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectIdentity.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 identity.IdentitiyType = model.IdentitiyType;
                 identity.IdentityUrl = model.IdentityUrl;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     identity.FilePath = model.FilePath;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
-
-
-
+           
             _identities.Update(identity);
 
             return identity.Id;

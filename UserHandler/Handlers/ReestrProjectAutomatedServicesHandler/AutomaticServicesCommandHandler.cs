@@ -46,12 +46,13 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         }
         public int Add(AutomaticServicesCommand model)
         {
+            int id = 0;
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+           
 
 
 
@@ -64,25 +65,28 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
 
-            AutomatedServices addModel = new AutomatedServices();
+           
 
 
-            if (((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
+            if ((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+                AutomatedServices addModel = new AutomatedServices();
                 addModel.ParentId = model.ParentId;
                 addModel.ServiceName = model.ServiceName;
                 addModel.FilePath = model.FilePath;
+
+                _services.Add(addModel);
+                id = addModel.Id;
             }
-            else 
-            {
-                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
-            }
+            
 
 
 
-            _services.Add(addModel);
+            
 
-            return addModel.Id;
+            return id;
         }
 
         public int Update(AutomaticServicesCommand model)
@@ -91,8 +95,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var service = _services.Find(p => p.Id == model.Id).FirstOrDefault();
             if (service == null)
@@ -105,17 +108,16 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             
 
 
-            if (((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
+            if ((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
                 service.ServiceName = model.ServiceName;
 
                 if (!String.IsNullOrEmpty(model.FilePath))
                     service.FilePath = model.FilePath;
             }
-            else 
-            {
-                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
-            }
+            
 
 
 

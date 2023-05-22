@@ -48,12 +48,13 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
         }
         public int Add(ProjectEfficiencyCommand model)
         {
+            int id = 0;
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
 
@@ -66,23 +67,30 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                 throw ErrorStates.NotAllowed(model.EfficiencyType.ToString());
 
 
-            ProjectEfficiency addModel = new ProjectEfficiency();
+            
 
 
-            if (((model.UserOrgId == projectEfficiency.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectEfficiency.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                ProjectEfficiency addModel = new ProjectEfficiency();
                 addModel.ParentId = model.ParentId;
                 addModel.EfficiencyType = model.EfficiencyType;
                 addModel.OrgComment = model.OrgComment;
                 addModel.FilePath = model.FilePath;
+
+                _efficiency.Add(addModel);
+                id = addModel.Id;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+            
 
 
 
-            _efficiency.Add(addModel);
+            
 
-            return addModel.Id;
+            return id;
         }
 
         public int Update(ProjectEfficiencyCommand model)
@@ -91,8 +99,7 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
             var projectEfficiency = _projectEfficiency.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
@@ -104,15 +111,17 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                 throw ErrorStates.NotAllowed(model.Id.ToString());
 
 
-            if (((model.UserOrgId == projectEfficiency.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectEfficiency.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 efficiency.EfficiencyType = model.EfficiencyType;
                 efficiency.OrgComment = model.OrgComment;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     efficiency.FilePath = model.FilePath;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
-
+           
 
 
             _efficiency.Update(efficiency);

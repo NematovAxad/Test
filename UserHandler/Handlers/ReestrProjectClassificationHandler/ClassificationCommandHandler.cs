@@ -48,12 +48,13 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
         }
         public int Add(ClassificationCommand model)
         {
+            int id = 0;
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
 
@@ -66,23 +67,31 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 throw ErrorStates.NotAllowed(model.ClassificationUri.ToString());
 
 
-            ProjectClassifications addModel = new ProjectClassifications();
+            
 
 
-            if (((model.UserOrgId == projectClassification.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectClassification.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+
+                ProjectClassifications addModel = new ProjectClassifications();
                 addModel.ParentId = model.ParentId;
                 addModel.ClassificationType = model.ClassificationType;
                 addModel.ClassificationUri = model.ClassificationUri;
                 addModel.FilePath = model.FilePath;
+
+                _classifications.Add(addModel);
+                id = addModel.Id;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+            
 
 
 
-            _classifications.Add(addModel);
+            
 
-            return addModel.Id;
+            return id;
         }
 
         public int Update(ClassificationCommand model)
@@ -91,8 +100,7 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+          
 
 
             var projectClassification = _projectClassification.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
@@ -104,14 +112,17 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 throw ErrorStates.NotAllowed(model.Id.ToString());
 
 
-            if (((model.UserOrgId == projectClassification.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectClassification.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 identity.ClassificationType = model.ClassificationType;
                 identity.ClassificationUri = model.ClassificationUri;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     identity.FilePath = model.FilePath;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+            
 
 
 

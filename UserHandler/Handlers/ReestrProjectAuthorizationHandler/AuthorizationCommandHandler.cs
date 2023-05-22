@@ -49,14 +49,11 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 
         public int Add(AuthorizationCommand model)
         {
+            int id = 0;
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
-
-
 
             var projectAuthorization = _projectAuthorization.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
             if (projectAuthorization == null)
@@ -67,23 +64,22 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 throw ErrorStates.NotAllowed(model.AuthorizationUri.ToString());
 
 
-            ProjectAuthorizations addModel = new ProjectAuthorizations();
-
-
-            if (((model.UserOrgId == projectAuthorization.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectAuthorization.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                ProjectAuthorizations addModel = new ProjectAuthorizations();
                 addModel.ParentId = model.ParentId;
                 addModel.AuthorizationType = model.AuthorizationType;
                 addModel.AuthorizationUri = model.AuthorizationUri;
                 addModel.FilePath = model.FilePath;
+
+                _authorizations.Add(addModel);
+                id = addModel.Id;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 
-
-
-            _authorizations.Add(addModel);
-
-            return addModel.Id;
+            return id;
         }
 
         public int Update(AuthorizationCommand model)
@@ -92,8 +88,7 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
             var projectAuthorization = _projectAuthorization.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
@@ -105,14 +100,17 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 throw ErrorStates.NotAllowed(model.Id.ToString());
 
 
-            if (((model.UserOrgId == projectAuthorization.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectAuthorization.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 identity.AuthorizationType = model.AuthorizationType;
                 identity.AuthorizationUri = model.AuthorizationUri;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     identity.FilePath = model.FilePath;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+           
 
 
 

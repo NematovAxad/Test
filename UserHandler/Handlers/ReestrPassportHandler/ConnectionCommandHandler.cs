@@ -51,15 +51,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
         public int Add(ConnectionCommand model)
         {
+            int id = 0;
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
-
-
+            
 
             var projectConnection = _reestrProjectConnection.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
             if (projectConnection == null)
@@ -70,23 +68,26 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotAllowed(model.PlatformReestrId.ToString());
 
 
-            ProjectConnections addModel = new ProjectConnections();
 
 
-            if (((model.UserOrgId == projectConnection.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectConnection.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                ProjectConnections addModel = new ProjectConnections();
                 addModel.ParentId = model.ParentId;
                 addModel.ConnectionType = model.ConnectionType;
                 addModel.PlatformReestrId = model.PlatformReestrId;
                 addModel.FilePath = model.FilePath;
+
+                _projectConnection.Add(addModel);
+
+                id = addModel.Id;
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
+           
 
-
-
-            _projectConnection.Add(addModel);
-
-            return addModel.Id;
+            return id;
         }
 
         public int Update(ConnectionCommand model)
@@ -95,8 +96,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
             var projectConnection = _reestrProjectConnection.Find(p => p.Id == model.ParentId).Include(mbox => mbox.Organizations).FirstOrDefault();
@@ -108,15 +108,17 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotAllowed(model.ParentId.ToString());
 
 
-            if (((model.UserOrgId == projectConnection.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == projectConnection.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 connection.ConnectionType = model.ConnectionType;
                 connection.PlatformReestrId = model.PlatformReestrId;
                 if(!String.IsNullOrEmpty(model.FilePath))
                     connection.FilePath = model.FilePath;
 
             }
-            else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 
 
 

@@ -44,12 +44,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         }
         public int Add(ProjectPositionCommand model)
         {
+            int id = 0; 
+
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
+            
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
+            
             if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS) && !model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             
@@ -57,34 +61,47 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             var projectPosition = _projectPosition.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectPosition != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
-            ReestrProjectPosition addModel = new ReestrProjectPosition();
-            addModel.OrganizationId = model.OrganizationId;
-            addModel.ReestrProjectId = model.ReestrProjectId;
+            
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
                     throw ErrorStates.Error(UIErrors.DeadlineExpired);
-
+               
+                ReestrProjectPosition addModel = new ReestrProjectPosition();
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
                 addModel.ProjectStatus = model.ProjectStatus;
                 addModel.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
+                
+                _projectPosition.Add(addModel);
+                id= addModel.Id;    
             }
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            
+
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 if (deadline.FifthSectionDeadlineDate < DateTime.Now)
                     throw ErrorStates.Error(UIErrors.DeadlineExpired);
-
+                
+                ReestrProjectPosition addModel = new ReestrProjectPosition();
+                addModel.OrganizationId = model.OrganizationId;
+                addModel.ReestrProjectId = model.ReestrProjectId;
+                addModel.ExpertExcept = model.ExpertExcept;
                 addModel.ProjectStatus = model.ProjectStatus;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     addModel.FilePath = model.FilePath;
-            }
-                
 
                 _projectPosition.Add(addModel);
+                id = addModel.Id;
+            }
 
-            return addModel.Id;
+
+            
+
+            return id;
         }
         public int Update(ProjectPositionCommand model)
         {
@@ -94,8 +111,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
+            
             
 
             var projectPosition = _projectPosition.Find(p => p.Id == model.Id).FirstOrDefault();
@@ -113,7 +129,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                     projectPosition.ExpertComment = model.ExpertComment;
 
             }
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 if (deadline.FifthSectionDeadlineDate < DateTime.Now)
                     throw ErrorStates.Error(UIErrors.DeadlineExpired);
@@ -122,7 +139,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 if (!String.IsNullOrEmpty(model.FilePath))
                     projectPosition.FilePath = model.FilePath;
             }
-               
+
             _projectPosition.Update(projectPosition);
 
             return projectPosition.Id;

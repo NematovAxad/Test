@@ -50,12 +50,13 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
         public int Add(AutomaticFunctionsCommand model)
         {
+            int id = 0;
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
 
 
@@ -68,24 +69,28 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
 
-            AutomatedFunctions addModel = new AutomatedFunctions();
+            
 
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                AutomatedFunctions addModel = new AutomatedFunctions();
                 addModel.ParentId = model.ParentId;
                 addModel.FunctionName = model.FunctionName;
+
+                _functions.Add(addModel);
+                id = addModel.Id;
             }
-            else 
-            {
-                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed); 
-            }
+            
 
 
 
-            _functions.Add(addModel);
+            
 
-            return addModel.Id;
+            return id;
         }
 
         public int Update(AutomaticFunctionsCommand model)
@@ -94,8 +99,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var function = _functions.Find(p => p.Id == model.Id).FirstOrDefault();
             if (function == null)
@@ -108,13 +112,19 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
             
 
 
-            if (((model.UserOrgId == projectFunctions.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)))
+            if ((model.UserOrgId == projectFunctions.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.FilePath))
                     function.FilePath = model.FilePath;
             }
             if(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 function.FunctionName = model.FunctionName;
             }
 
