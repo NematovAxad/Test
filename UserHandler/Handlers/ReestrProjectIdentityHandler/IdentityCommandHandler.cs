@@ -72,7 +72,7 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
            
 
 
-            if ((model.UserOrgId == projectIdentity.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if ((model.UserOrgId == projectIdentity.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 if (deadline.FifthSectionDeadlineDate < DateTime.Now)
                     throw ErrorStates.Error(UIErrors.DeadlineExpired);
