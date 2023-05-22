@@ -63,12 +63,12 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
             
 
-            var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
+            var projectServices = _projectServices.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox=>mbox.Organizations).FirstOrDefault();
             if (projectServices != null)
                 throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
 
-            if ((model.UserOrgId == projectServices.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 ReestrProjectAutomatedServices addModel = new ReestrProjectAutomatedServices();
 
