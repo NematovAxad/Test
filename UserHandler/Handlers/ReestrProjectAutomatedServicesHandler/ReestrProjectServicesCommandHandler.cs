@@ -127,7 +127,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
             
 
-            var projectServices = _projectServices.Find(p => p.Id == model.Id).Include(mbox => mbox.AutomatedServices).Include(mbox=>mbox.AutomatedFunctions).FirstOrDefault();
+            var projectServices = _projectServices.Find(p => p.Id == model.Id).Include(mbox => mbox.Organizations).Include(mbox => mbox.AutomatedServices).Include(mbox=>mbox.AutomatedFunctions).FirstOrDefault();
             if (projectServices == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
