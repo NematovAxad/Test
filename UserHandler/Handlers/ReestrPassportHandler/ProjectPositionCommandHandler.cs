@@ -52,8 +52,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotFound("available deadline");
             if (!model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS) && !model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var projectPosition = _projectPosition.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).FirstOrDefault();
             if (projectPosition != null)
@@ -64,6 +63,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 addModel.ProjectStatus = model.ProjectStatus;
                 addModel.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
@@ -71,6 +73,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 addModel.ProjectStatus = model.ProjectStatus;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     addModel.FilePath = model.FilePath;
@@ -91,8 +96,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 throw ErrorStates.NotFound("available deadline");
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var projectPosition = _projectPosition.Find(p => p.Id == model.Id).FirstOrDefault();
             if (projectPosition == null)
@@ -100,6 +104,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 projectPosition.ProjectStatus = model.ProjectStatus;
                 projectPosition.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
@@ -108,6 +115,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             }
             if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
             {
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 projectPosition.ProjectStatus = model.ProjectStatus;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     projectPosition.FilePath = model.FilePath;

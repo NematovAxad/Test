@@ -98,17 +98,19 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
             
-            if (deadline.FifthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
 
             var projectConnection = _projectConnection.Find(p => p.OrganizationId == model.OrganizationId && p.ReestrProjectId == model.ReestrProjectId).Include(mbox => mbox.Connections).FirstOrDefault();
             if (projectConnection == null)
                 throw ErrorStates.NotFound(model.ReestrProjectId.ToString());
             
 
-            if (((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))) || (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
-                if(!String.IsNullOrEmpty(model.OrgComment))
+                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+                if (!String.IsNullOrEmpty(model.OrgComment))
                     projectConnection.OrgComment = model.OrgComment;
                 projectConnection.Exist = model.Exist;
 
@@ -120,6 +122,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     projectConnection.ExpertComment = model.ExpertComment;
 
