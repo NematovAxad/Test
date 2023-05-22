@@ -59,7 +59,7 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             if (projectAuthorization == null)
                 throw ErrorStates.NotFound(model.ParentId.ToString());
 
-            var identity = _authorizations.Find(p => p.ParentId == model.ParentId && p.AuthorizationUri == model.AuthorizationUri).FirstOrDefault();
+            var identity = _authorizations.Find(p => p.ParentId == model.ParentId && p.AuthorizationType == model.AuthorizationType).FirstOrDefault();
             if (identity != null)
                 throw ErrorStates.NotAllowed(model.AuthorizationUri.ToString());
 
