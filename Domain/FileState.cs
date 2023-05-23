@@ -76,8 +76,8 @@ namespace Domain
                 return CheckingState.RandomString(6);
             }
             var fileTip = fileName.Split('.').Last();
-            var guid = CheckingState.RandomString(6);
-            return fileName.Substring(0, fileName.Length - fileTip.Length - 1) + guid + "." + fileTip;
+            var guid = CheckingState.RandomString(8);
+            return guid + "." + fileTip;
         }
     }
 }
