@@ -117,5 +117,7 @@ namespace MainInfrastructures.Db
         public DbSet<ReestrProjectException> ReestrProjectException { get; set; }
         public DbSet<OrganizationServices> OrganizationServices { get; set; }
         public DbSet<OrganizationServicesRate> OrganizationServicesRate { get; set; }
+
+        public DbSet<ExceptionFields> ExceptionFields { get; set; }
     }
 }

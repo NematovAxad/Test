@@ -64,6 +64,8 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
+
+        
         [HttpPut]
         public async Task<ResponseCore<RankCommandResult>> Put([FromQuery] RankCommand model)
         {
@@ -93,6 +95,43 @@ namespace AdminApi.Controllers
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 return await _mediator.Send(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<ResponseCore<FieldExceptionCommandResult>> SetFielsException([FromQuery] FieldExceptionCommand model)
+        {
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Add;
+                model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send<FieldExceptionCommandResult>(model);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
+        [HttpDelete]
+        public async Task<ResponseCore<FieldExceptionCommandResult>> RemoveFielsException([FromQuery] FieldExceptionCommand model)
+        {
+            try
+            {
+                model.EventType = Domain.Enums.EventType.Delete;
+                model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                var result = await _mediator.Send<FieldExceptionCommandResult>(model);
+                return result;
             }
             catch (Exception ex)
             {
