@@ -164,14 +164,6 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                 if (model.ExceptedItems >= 0)
                     projectEfficiency.ExceptedItems = model.ExceptedItems;
             }
-
-
-            if (projectEfficiency.Exist == false)
-            {
-                projectEfficiency.ExpertComment = String.Empty;
-                projectEfficiency.AllItems = 0;
-                projectEfficiency.ExceptedItems = 0;
-            }
             
 
             _projectEfficiency.Update(projectEfficiency);

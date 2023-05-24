@@ -162,22 +162,7 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                     else { throw ErrorStates.Error(UIErrors.EnoughDataNotProvided); }  
             }
 
-            if (projectServices.ProjectServiceExist == false)
-            {
-                _services.RemoveRange(projectServices.AutomatedServices);
-
-                projectServices.ExpertComment = String.Empty;
-                projectServices.AllItems = 0;
-                projectServices.ExceptedItems = 0;
-            }
-            if (projectServices.ProjectFunctionsExist == false)
-            {
-                _functions.RemoveRange(projectServices.AutomatedFunctions);
-
-                projectServices.ExpertComment = String.Empty;
-                projectServices.AllItems = 0;
-                projectServices.ExceptedItems = 0;
-            }
+            
 
             _projectServices.Update(projectServices);
 

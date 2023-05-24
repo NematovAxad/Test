@@ -156,12 +156,7 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                     projectIdentities.ExceptedItems = model.ExceptedItems;
             }
 
-            if (projectIdentities.Exist == false)
-            {
-                projectIdentities.ExpertComment = String.Empty;
-                projectIdentities.AllItems = 0;
-                projectIdentities.ExceptedItems = 0;
-            }
+           
             
 
             _projectIdentities.Update(projectIdentities);
