@@ -80,7 +80,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                
             if(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p==Permissions.OPERATOR_RIGHTS))
             {
-                if (deadline.FifthSectionDeadlineDate < DateTime.Now)
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
                     throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
                 ReestrProjectConnection addModel = new ReestrProjectConnection();
