@@ -741,7 +741,7 @@ namespace AdminHandler.Handlers.Ranking
                 if (field == null)
                     throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
 
-                GRankTable addModel = new GRankTable()
+                XRankTable addModel = new XRankTable()
                 {
                     OrganizationId = model.OrganizationId,
                     Year = model.Year,
@@ -788,7 +788,7 @@ namespace AdminHandler.Handlers.Ranking
 
                     addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
                     addModel.SubFieldId = subField.Id;
-                    _gRankTable.Update(addModel);
+                    _xRankTable.Add(addModel);
 
                     id = addModel.Id;
 
@@ -818,7 +818,7 @@ namespace AdminHandler.Handlers.Ranking
 
                     addModel.Rank = Math.Round(field.MaxRate * rate, 2); 
                     addModel.IsException = true;
-                    _gRankTable.Update(addModel);
+                    _xRankTable.Add(addModel);
 
                     id = addModel.Id;
                 }
@@ -860,7 +860,7 @@ namespace AdminHandler.Handlers.Ranking
                 if (field == null)
                     throw ErrorStates.NotFound("rank field " + model.FieldId.ToString());
 
-                GRankTable addModel = new GRankTable()
+                ARankTable addModel = new ARankTable()
                 {
                     OrganizationId = model.OrganizationId,
                     Year = model.Year,
@@ -907,7 +907,7 @@ namespace AdminHandler.Handlers.Ranking
 
                     addModel.Rank = Math.Round(subField.MaxRate * rate, 2);
                     addModel.SubFieldId = subField.Id;
-                    _gRankTable.Update(addModel);
+                    _aRankTable.Add(addModel);
 
                     id = addModel.Id;
 
@@ -937,7 +937,7 @@ namespace AdminHandler.Handlers.Ranking
 
                     addModel.Rank = Math.Round(field.MaxRate * rate, 2);
                     addModel.IsException = true;
-                    _gRankTable.Update(addModel);
+                    _aRankTable.Add(addModel);
 
                     id = addModel.Id;
                 }
