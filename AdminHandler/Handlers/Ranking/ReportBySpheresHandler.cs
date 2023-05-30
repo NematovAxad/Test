@@ -190,14 +190,18 @@ namespace AdminHandler.Handlers.Ranking
                                         fieldRate += ranks.First().Rank;
                                     }
                                 }
-
                             }
                             if (subfields.Count() == 0)
                             {
-                                var fieldR = xRankTable.Where(b => b.OrganizationId == o.Id && b.SphereId == sphere.Id && b.FieldId == field.Id);
-                                if (fieldR.Count() > 0)
+                                var fieldR = xRankTable.Where(r => r.OrganizationId == o.Id && r.SphereId == sphere.Id && r.FieldId == field.Id);
+                                if (fieldR.Count() > 1)
+                                {
+                                    fieldRate = Math.Round(fieldR.Select(f => f.Rank).Sum() / fieldR.Count(), 2);
+                                }
+                                if (fieldR.Count() == 1)
+                                {
                                     fieldRate = fieldR.First().Rank;
-
+                                }
                             }
 
                             sphereRate += fieldRate;

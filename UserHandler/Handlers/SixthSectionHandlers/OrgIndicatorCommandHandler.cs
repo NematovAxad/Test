@@ -123,7 +123,13 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
         public int Delete(OrgIndicatorsCommand model)
         {
-            
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
+
+            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
+                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
             var orgIndicator = _orgIndicators.Find(p => p.Id == model.Id).FirstOrDefault();
             if (orgIndicator == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
