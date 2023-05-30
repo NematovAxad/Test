@@ -54,11 +54,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if(model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+            if(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) ||model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
                     throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
 
-            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
                 if (deadline.SecondSectionDeadlineDate < DateTime.Now)
                     throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 

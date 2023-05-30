@@ -62,9 +62,14 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
-            
-            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 
 
 
@@ -93,9 +98,6 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
-
             var orgIndicator = _orgIndicators.Find(p => p.Id == model.Id).FirstOrDefault();
             if (orgIndicator == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
@@ -107,6 +109,13 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 
 
             orgIndicator.StartDate = model.StartDate;
@@ -123,16 +132,30 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
         public int Delete(OrgIndicatorsCommand model)
         {
+            var orgIndicator = _orgIndicators.Find(p => p.Id == model.Id).FirstOrDefault();
+            if (orgIndicator == null)
+                throw ErrorStates.NotFound(model.Id.ToString());
+
+            var org = _organization.Find(o => o.Id == orgIndicator.OrganizationId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            var orgIndicator = _orgIndicators.Find(p => p.Id == model.Id).FirstOrDefault();
-            if (orgIndicator == null)
-                throw ErrorStates.NotFound(model.Id.ToString());
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
+
+            
             _orgIndicators.Remove(orgIndicator);
 
             return orgIndicator.Id;
