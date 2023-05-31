@@ -148,6 +148,7 @@ namespace AdminHandler.Handlers.Organization
             org.AddressProvince = model.AddressProvince;
             org.AddressDistrict = model.AddressDistrict;
             org.PostIndex = model.PostIndex;
+            org.OrgInn = model.OrgInn;
             org.Department = model.Department;
             org.DirectorMail = model.DirectorMail;
             org.OrgMail = model.OrgMail;

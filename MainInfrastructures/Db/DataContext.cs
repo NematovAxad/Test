@@ -3,6 +3,7 @@ using Domain.Models.EighthSection;
 using Domain.Models.FifthSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain.Models.FirstSection;
+using Domain.Models.MibModels;
 using Domain.Models.Organization;
 using Domain.Models.Ranking;
 using Domain.Models.Ranking.Administrations;
@@ -119,5 +120,7 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationServicesRate> OrganizationServicesRate { get; set; }
 
         public DbSet<ExceptionFields> ExceptionFields { get; set; }
+
+        public DbSet<MibReport> MibReports { get; set; }
     }
 }

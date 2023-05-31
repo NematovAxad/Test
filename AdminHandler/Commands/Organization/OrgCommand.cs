@@ -39,6 +39,7 @@ namespace AdminHandler.Commands.Organization
         public string AddressProvince { get; set; }
         public string AddressDistrict { get; set; }
         public string PostIndex { get; set; }
+        public string OrgInn { get; set; }
         public string Department { get; set; }
         public string DirectorMail { get; set; }
         public string OrgMail { get; set; }

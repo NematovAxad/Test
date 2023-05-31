@@ -45,6 +45,8 @@ namespace Domain.Models.FirstSection
         public string AddressDistrict { get; set; }
         [Column("post_index")]
         public string PostIndex { get; set; }
+        [Column("org_inn")]
+        public string OrgInn { get; set; }
         [Column("department")]
         public string Department { get; set; }
         [Column("director_mail")]
