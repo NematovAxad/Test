@@ -46,10 +46,10 @@ namespace UserHandler.Handlers.ThirdSection
             if (orgProcesses != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
+            if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            
+
             OrgProcesses addModel = new OrgProcesses()
             {
                 OrganizationId = model.OrganizationId,
