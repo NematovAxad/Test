@@ -23,13 +23,15 @@ namespace UserApi.Controllers
         ICyberSecurityService _cyberSecurityService;
         IOrganizationService _organizationService;
         IMyGovService _myGovServices;
+        IMibService _mibService;
 
-        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService, IMyGovService myGovServices)
+        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService, IMyGovService myGovServices, IMibService mibService)
         {
             _mediator = mediator;
             _cyberSecurityService = cyberSecurityService;
             _organizationService = organizationService;
             _myGovServices = myGovServices;
+            _mibService = mibService;
         }
 
         [HttpGet]
@@ -161,6 +163,14 @@ namespace UserApi.Controllers
         {
             var result = await _organizationService.UploadOrgServices(file);
             return (bool)result;
+        }
+        [HttpPost]
+        public async Task<bool> MibReportUpdate([FromQuery] DateTime startTime, DateTime endTime)
+        {
+
+            var result = await _mibService.MibReport(startTime, endTime);
+            return result;
+
         }
     }
 }

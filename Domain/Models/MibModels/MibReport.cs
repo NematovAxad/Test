@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Models.MibModels
 {
-    [Table("mygov_report", Schema = "organizations")]
+    [Table("mib_report", Schema = "organizations")]
     public class MibReport:IDomain<int>
     {
         [Column("id")]
