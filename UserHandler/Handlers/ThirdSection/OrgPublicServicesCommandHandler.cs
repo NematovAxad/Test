@@ -64,105 +64,118 @@ namespace UserHandler.Handlers.ThirdSection
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
-                throw ErrorStates.NotAllowed("permission");
-            
-            if (deadline.OperatorDeadlineDate < DateTime.Now)
-                throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
+
+
             OrganizationPublicServices addModel = new OrganizationPublicServices()
             {
                 OrganizationId = model.OrganizationId,
                 
             };
-            addModel.ServiceNameUz = model.ServiceNameUz;
 
-            addModel.ServiceNameRu = model.ServiceNameRu;
+            if ((model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+            {
+                addModel.ServiceNameUz = model.ServiceNameUz;
 
-
-            addModel.ServiceBasedDocumentType = model.ServiceBasedDocumentType;
-
-            addModel.ServiceBasedDocumentName = model.ServiceBasedDocumentName;
-
-            addModel.ServiceBasedDocumentNumber = model.ServiceBasedDocumentNumber;
-
-            addModel.ServiceBasedDocumentDate = model.ServiceBasedDocumentDate;
+                addModel.ServiceNameRu = model.ServiceNameRu;
 
 
+                addModel.ServiceBasedDocumentType = model.ServiceBasedDocumentType;
 
-            addModel.PaidFor = model.PaidFor;
+                addModel.ServiceBasedDocumentName = model.ServiceBasedDocumentName;
 
-            addModel.ServicePrice = model.ServicePrice;
+                addModel.ServiceBasedDocumentNumber = model.ServiceBasedDocumentNumber;
 
-            addModel.ServicePriceComment = model.ServicePriceComment;
+                addModel.ServiceBasedDocumentDate = model.ServiceBasedDocumentDate;
 
 
 
-            addModel.ServiceCompletePeriodType = model.ServiceCompletePeriodType;
+                addModel.PaidFor = model.PaidFor;
 
-            addModel.ServiceCompletePeriod = model.ServiceCompletePeriod;
+                addModel.ServicePrice = model.ServicePrice;
 
-
-            addModel.ServiceType = model.ServiceType;
-
-            addModel.ServiceLink = model.ServiceLink;
-
-            addModel.ServiceScreenshotLink = model.ServiceScreenshotLink;
-
-
-            addModel.ServiceSubjects = model.ServiceSubjects;
-
-
-            addModel.ServiceHasReglament = model.ServiceHasReglament;
-
-            addModel.ServiceReglamentPath = model.ServiceReglamentPath;
-
-            addModel.ServiceReglamentComment = model.ServiceReglamentComment;
-
-            addModel.ServiceHasUpdateReglament = model.ServiceHasUpdateReglament;
-
-            addModel.ServiceUpdateReglamentPath = model.ServiceUpdateReglamentPath;
-
-            addModel.ServiceUpdateReglamentComment = model.ServiceUpdateReglamentComment;
+                addModel.ServicePriceComment = model.ServicePriceComment;
 
 
 
-            addModel.MyGovService = model.MyGovService;
+                addModel.ServiceCompletePeriodType = model.ServiceCompletePeriodType;
 
-            addModel.MyGovLink = model.MyGovLink;
-
-            addModel.MyGovScreenshotLink = model.MyGovScreenshotLink;
+                addModel.ServiceCompletePeriod = model.ServiceCompletePeriod;
 
 
+                addModel.ServiceType = model.ServiceType;
 
-            addModel.OtherApps = model.OtherApps;
+                addModel.ServiceLink = model.ServiceLink;
 
-            addModel.AppName = model.AppName;
+                addModel.ServiceScreenshotLink = model.ServiceScreenshotLink;
+
+
+                addModel.ServiceSubjects = model.ServiceSubjects;
+
+
+                addModel.ServiceHasReglament = model.ServiceHasReglament;
+
+                addModel.ServiceReglamentPath = model.ServiceReglamentPath;
+
+                addModel.ServiceReglamentComment = model.ServiceReglamentComment;
+
+                addModel.ServiceHasUpdateReglament = model.ServiceHasUpdateReglament;
+
+                addModel.ServiceUpdateReglamentPath = model.ServiceUpdateReglamentPath;
+
+                addModel.ServiceUpdateReglamentComment = model.ServiceUpdateReglamentComment;
+
+
+
+                addModel.MyGovService = model.MyGovService;
+
+                addModel.MyGovLink = model.MyGovLink;
+
+                addModel.MyGovScreenshotLink = model.MyGovScreenshotLink;
+
+
+
+                addModel.OtherApps = model.OtherApps;
+
+                addModel.AppName = model.AppName;
+
+                addModel.AppLink = model.AppLink;
+
+                addModel.AppScreenshot = model.AppScreenshot;
+            }
+
+
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+            {
+                addModel.ServiceHasReglamentExpert = model.ServiceHasReglamentExpert;
+
+                addModel.ServiceHasReglamentExpertComment = model.ServiceHasReglamentExpertComment;
+
+                addModel.ServiceHasUpdateReglamentExpert = model.ServiceHasUpdateReglamentExpert;
+
+                addModel.ServiceHasUpdateReglamentExpertComment = model.ServiceHasUpdateReglamentExpertComment;
+
+                addModel.MyGovServiceExpert = model.MyGovServiceExpert;
+
+                addModel.MyGovServiceExpertComment = model.MyGovServiceExpertComment;
+
+                addModel.OtherAppsExpert = model.OtherAppsExpert;
+
+                addModel.OtherAppsExpertComment = model.OtherAppsExpertComment;
+
+                addModel.ServiceTypeExpert = model.ServiceTypeExpert;
+
+                addModel.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
+            }
                 
-            addModel.AppLink = model.AppLink;
-
-            addModel.AppScreenshot = model.AppScreenshot;
-
-
-            addModel.ServiceHasReglamentExpert = model.ServiceHasReglamentExpert;
-
-            addModel.ServiceHasReglamentExpertComment = model.ServiceHasReglamentExpertComment;
-
-            addModel.ServiceHasUpdateReglamentExpert = model.ServiceHasUpdateReglamentExpert;
-
-            addModel.ServiceHasUpdateReglamentExpertComment = model.ServiceHasUpdateReglamentExpertComment;
-
-            addModel.MyGovServiceExpert = model.MyGovServiceExpert;
-
-            addModel.MyGovServiceExpertComment = model.MyGovServiceExpertComment;
-
-            addModel.OtherAppsExpert = model.OtherAppsExpert;
-
-            addModel.OtherAppsExpertComment = model.OtherAppsExpertComment;
-
-            addModel.ServiceTypeExpert = model.ServiceTypeExpert;
-
-            addModel.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
 
         _orgPublicServices.Add(addModel);
 
@@ -183,116 +196,112 @@ namespace UserHandler.Handlers.ThirdSection
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+
+            if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
+
+            if ((model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
-                if (deadline.OperatorDeadlineDate > DateTime.Now)
-                {
-                    service.ServiceNameUz = model.ServiceNameUz;
+                service.ServiceNameUz = model.ServiceNameUz;
 
-                    service.ServiceNameRu = model.ServiceNameRu;
+                service.ServiceNameRu = model.ServiceNameRu;
 
 
-                    service.ServiceBasedDocumentType = model.ServiceBasedDocumentType;
+                service.ServiceBasedDocumentType = model.ServiceBasedDocumentType;
 
-                    service.ServiceBasedDocumentName = model.ServiceBasedDocumentName;
+                service.ServiceBasedDocumentName = model.ServiceBasedDocumentName;
 
-                    service.ServiceBasedDocumentNumber = model.ServiceBasedDocumentNumber;
+                service.ServiceBasedDocumentNumber = model.ServiceBasedDocumentNumber;
 
-                    service.ServiceBasedDocumentDate = model.ServiceBasedDocumentDate;
+                service.ServiceBasedDocumentDate = model.ServiceBasedDocumentDate;
 
 
 
-                    service.PaidFor = model.PaidFor;
+                service.PaidFor = model.PaidFor;
 
-                    service.ServicePrice = model.ServicePrice;
+                service.ServicePrice = model.ServicePrice;
 
-                    service.ServicePriceComment = model.ServicePriceComment;
-
-
-
-                    service.ServiceCompletePeriodType = model.ServiceCompletePeriodType;
-
-                    service.ServiceCompletePeriod = model.ServiceCompletePeriod;
-
-
-                    service.ServiceType = model.ServiceType;
-
-                    service.ServiceLink = model.ServiceLink;
-
-                    service.ServiceScreenshotLink = model.ServiceScreenshotLink;
-
-
-                    service.ServiceSubjects = model.ServiceSubjects;
-
-
-                    service.ServiceHasReglament = model.ServiceHasReglament;
-
-                    service.ServiceReglamentPath = model.ServiceReglamentPath;
-
-                    service.ServiceReglamentComment = model.ServiceReglamentComment;
-
-                    service.ServiceHasUpdateReglament = model.ServiceHasUpdateReglament;
-
-                    service.ServiceUpdateReglamentPath = model.ServiceUpdateReglamentPath;
-
-                    service.ServiceUpdateReglamentComment = model.ServiceUpdateReglamentComment;
+                service.ServicePriceComment = model.ServicePriceComment;
 
 
 
-                    service.MyGovService = model.MyGovService;
+                service.ServiceCompletePeriodType = model.ServiceCompletePeriodType;
 
-                    service.MyGovLink = model.MyGovLink;
-
-                    service.MyGovScreenshotLink = model.MyGovScreenshotLink;
+                service.ServiceCompletePeriod = model.ServiceCompletePeriod;
 
 
+                service.ServiceType = model.ServiceType;
 
-                    service.OtherApps = model.OtherApps;
+                service.ServiceLink = model.ServiceLink;
 
-                    service.AppName = model.AppName;
+                service.ServiceScreenshotLink = model.ServiceScreenshotLink;
 
-                    service.AppLink = model.AppLink;
 
-                    service.AppScreenshot = model.AppScreenshot;
+                service.ServiceSubjects = model.ServiceSubjects;
 
-                }
-                else
-                {
-                    throw ErrorStates.NotAllowed("deadline");
-                }
+
+                service.ServiceHasReglament = model.ServiceHasReglament;
+
+                service.ServiceReglamentPath = model.ServiceReglamentPath;
+
+                service.ServiceReglamentComment = model.ServiceReglamentComment;
+
+                service.ServiceHasUpdateReglament = model.ServiceHasUpdateReglament;
+
+                service.ServiceUpdateReglamentPath = model.ServiceUpdateReglamentPath;
+
+                service.ServiceUpdateReglamentComment = model.ServiceUpdateReglamentComment;
+
+
+
+                service.MyGovService = model.MyGovService;
+
+                service.MyGovLink = model.MyGovLink;
+
+                service.MyGovScreenshotLink = model.MyGovScreenshotLink;
+
+
+
+                service.OtherApps = model.OtherApps;
+
+                service.AppName = model.AppName;
+
+                service.AppLink = model.AppLink;
+
+                service.AppScreenshot = model.AppScreenshot;
+            }
+
                 
-            }
-            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
+
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
             {
-                if (deadline.OperatorDeadlineDate > DateTime.Now)
-                {
-                    service.ServiceHasReglamentExpert = model.ServiceHasReglamentExpert;
+                service.ServiceHasReglamentExpert = model.ServiceHasReglamentExpert;
 
-                    service.ServiceHasReglamentExpertComment = model.ServiceHasReglamentExpertComment;
+                service.ServiceHasReglamentExpertComment = model.ServiceHasReglamentExpertComment;
 
-                    service.ServiceHasUpdateReglamentExpert = model.ServiceHasUpdateReglamentExpert;
+                service.ServiceHasUpdateReglamentExpert = model.ServiceHasUpdateReglamentExpert;
 
-                    service.ServiceHasUpdateReglamentExpertComment = model.ServiceHasUpdateReglamentExpertComment;
+                service.ServiceHasUpdateReglamentExpertComment = model.ServiceHasUpdateReglamentExpertComment;
 
-                    service.MyGovServiceExpert = model.MyGovServiceExpert;
+                service.MyGovServiceExpert = model.MyGovServiceExpert;
 
-                    service.MyGovServiceExpertComment = model.MyGovServiceExpertComment;
+                service.MyGovServiceExpertComment = model.MyGovServiceExpertComment;
 
-                    service.OtherAppsExpert = model.OtherAppsExpert;
+                service.OtherAppsExpert = model.OtherAppsExpert;
 
-                    service.OtherAppsExpertComment = model.OtherAppsExpertComment;
+                service.OtherAppsExpertComment = model.OtherAppsExpertComment;
 
-                    service.ServiceTypeExpert = model.ServiceTypeExpert;
+                service.ServiceTypeExpert = model.ServiceTypeExpert;
 
-                    service.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
-                }
-                else
-                {
-                    throw ErrorStates.NotAllowed("deadline");
-                }
+                service.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
             }
-            
 
                 _orgPublicServices.Update(service);
 
