@@ -58,20 +58,23 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
 
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
-                throw ErrorStates.NotFound("available deadline");
+                throw ErrorStates.NotFound("available deadline");            
 
-            if (deadline.SixthSectionDeadlineDate < DateTime.Now)
-                throw ErrorStates.Error(UIErrors.DeadlineExpired);
-            
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !(model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                throw ErrorStates.NotAllowed("permission");
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
+            if(model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))
+                if (deadline.SixthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
             OrganizationIctSpecialForces addModel = new OrganizationIctSpecialForces();
@@ -162,6 +165,12 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.QuarterlyReportOutsourcingFile = model.QuarterlyReportOutsourcingFile;
 
 
+            if ((model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
+            {
+                addModel.ExpertComment = model.ExpertComment;
+                addModel.ExpertExept = model.ExpertExept;
+            }
+
             _specialForces.Add(addModel);
 
             return addModel.Id;
@@ -182,106 +191,104 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            
+            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             if (model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))
-            {
-                if (deadline.SixthSectionDeadlineDate > DateTime.Now)
-                {
-                    specialForces.HasSpecialForces = model.HasSpecialForces;
+                if (deadline.SixthSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
+ 
+            specialForces.HasSpecialForces = model.HasSpecialForces;
 
-                    specialForces.SpecialForcesName = model.SpecialForcesName;
+            specialForces.SpecialForcesName = model.SpecialForcesName;
 
-                    specialForces.FormOfSpecialForces = model.FormOfSpecialForces;
+            specialForces.FormOfSpecialForces = model.FormOfSpecialForces;
 
-                    specialForces.FullNameDirector = model.FullNameDirector;
+            specialForces.FullNameDirector = model.FullNameDirector;
 
-                    specialForces.HeadPosition = model.HeadPosition;
+            specialForces.HeadPosition = model.HeadPosition;
 
-                    specialForces.WorkPhone = model.WorkPhone;
+            specialForces.WorkPhone = model.WorkPhone;
 
-                    specialForces.MobilePhone = model.MobilePhone;
+            specialForces.MobilePhone = model.MobilePhone;
 
-                    specialForces.Email = model.Email;
+            specialForces.Email = model.Email;
 
-                    specialForces.MinistryAgreedHead = model.MinistryAgreedHead;
+            specialForces.MinistryAgreedHead = model.MinistryAgreedHead;
 
-                    specialForces.MinistryAgreedHeadDocument = model.MinistryAgreedHeadDocument;
+            specialForces.MinistryAgreedHeadDocument = model.MinistryAgreedHeadDocument;
 
-                    specialForces.HasCharacterizingDocument = model.HasCharacterizingDocument;
+            specialForces.HasCharacterizingDocument = model.HasCharacterizingDocument;
 
-                    specialForces.CharacterizingDocument = model.CharacterizingDocument;
+            specialForces.CharacterizingDocument = model.CharacterizingDocument;
 
-                    specialForces.HasMinistryAgreedCharacterizingDocument = model.HasMinistryAgreedCharacterizingDocument;
+            specialForces.HasMinistryAgreedCharacterizingDocument = model.HasMinistryAgreedCharacterizingDocument;
 
-                    specialForces.MinistryAgreedCharacterizingDocument = model.MinistryAgreedCharacterizingDocument;
+            specialForces.MinistryAgreedCharacterizingDocument = model.MinistryAgreedCharacterizingDocument;
 
-                    specialForces.EmployeesSum = model.EmployeesSum;
+            specialForces.EmployeesSum = model.EmployeesSum;
 
-                    specialForces.CentralofficeEmployees = model.CentralofficeEmployees;
+            specialForces.CentralofficeEmployees = model.CentralofficeEmployees;
 
-                    specialForces.RegionalEmployees = model.RegionalEmployees;
+            specialForces.RegionalEmployees = model.RegionalEmployees;
 
-                    specialForces.SubordinateEmployees = model.SubordinateEmployees;
+            specialForces.SubordinateEmployees = model.SubordinateEmployees;
 
-                    specialForces.InformationSecurityEmployees = model.InformationSecurityEmployees;
+            specialForces.InformationSecurityEmployees = model.InformationSecurityEmployees;
 
-                    specialForces.InformationSystemDatabaseEmployees = model.InformationSystemDatabaseEmployees;
+            specialForces.InformationSystemDatabaseEmployees = model.InformationSystemDatabaseEmployees;
 
-                    specialForces.OrganizationalStructureFile = model.OrganizationalStructureFile;
+            specialForces.OrganizationalStructureFile = model.OrganizationalStructureFile;
 
-                    specialForces.SpecialistsStuffingDocument = model.SpecialistsStuffingDocument;
+            specialForces.SpecialistsStuffingDocument = model.SpecialistsStuffingDocument;
 
-                    specialForces.EmployeesSertificates = model.EmployeesSertificates;
+            specialForces.EmployeesSertificates = model.EmployeesSertificates;
 
-                    specialForces.EmployeesResumesSentMinistry = model.EmployeesResumesSentMinistry;
+            specialForces.EmployeesResumesSentMinistry = model.EmployeesResumesSentMinistry;
 
-                    specialForces.HasWorkPlanOfSpecialForces = model.HasWorkPlanOfSpecialForces;
+            specialForces.HasWorkPlanOfSpecialForces = model.HasWorkPlanOfSpecialForces;
 
-                    specialForces.WorkPlanOfSpecialForces = model.WorkPlanOfSpecialForces;
+            specialForces.WorkPlanOfSpecialForces = model.WorkPlanOfSpecialForces;
 
-                    specialForces.FinanceProvisionMaterial = model.FinanceProvisionMaterial;
+            specialForces.FinanceProvisionMaterial = model.FinanceProvisionMaterial;
 
-                    specialForces.FinanceProvisionMaterialDocument = model.FinanceProvisionMaterialDocument;
+            specialForces.FinanceProvisionMaterialDocument = model.FinanceProvisionMaterialDocument;
 
-                    specialForces.AmountOfFunds = model.AmountOfFunds;
+            specialForces.AmountOfFunds = model.AmountOfFunds;
 
-                    specialForces.LastYearAmountOfFunds = model.LastYearAmountOfFunds;
+            specialForces.LastYearAmountOfFunds = model.LastYearAmountOfFunds;
 
-                    specialForces.FundForKeepingForces = model.FundForKeepingForces;
+            specialForces.FundForKeepingForces = model.FundForKeepingForces;
 
-                    specialForces.AmountOfSpentFund = model.AmountOfSpentFund;
+            specialForces.AmountOfSpentFund = model.AmountOfSpentFund;
 
-                    specialForces.NextYearFundForKeepingForces = model.NextYearFundForKeepingForces;
+            specialForces.NextYearFundForKeepingForces = model.NextYearFundForKeepingForces;
 
-                    specialForces.OutsourcingSpentFund = model.OutsourcingSpentFund;
+            specialForces.OutsourcingSpentFund = model.OutsourcingSpentFund;
 
-                    specialForces.OutsourcingHasCertificates = model.OutsourcingHasCertificates;
+            specialForces.OutsourcingHasCertificates = model.OutsourcingHasCertificates;
 
-                    specialForces.OutsourcingCompanySertificate = model.OutsourcingCompanySertificate;
+            specialForces.OutsourcingCompanySertificate = model.OutsourcingCompanySertificate;
 
-                    specialForces.OutsourcingEmployees = model.OutsourcingEmployees;
+            specialForces.OutsourcingEmployees = model.OutsourcingEmployees;
 
-                    specialForces.OutsourcingHasWorkPlan = model.OutsourcingHasWorkPlan;
+            specialForces.OutsourcingHasWorkPlan = model.OutsourcingHasWorkPlan;
 
-                    specialForces.OutsourcingWorkPlanFile = model.OutsourcingWorkPlanFile;
+            specialForces.OutsourcingWorkPlanFile = model.OutsourcingWorkPlanFile;
 
-                    specialForces.QuarterlyReportOutsourcing = model.QuarterlyReportOutsourcing;
+            specialForces.QuarterlyReportOutsourcing = model.QuarterlyReportOutsourcing;
 
-                    specialForces.QuarterlyReportOutsourcingFile = model.QuarterlyReportOutsourcingFile;
-                }
-                else { throw ErrorStates.Error(UIErrors.DeadlineExpired); }
-            }
+            specialForces.QuarterlyReportOutsourcingFile = model.QuarterlyReportOutsourcingFile;
+              
 
             if ((model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
             {
-                if (deadline.OperatorDeadlineDate > DateTime.Now)
-                {
-                    specialForces.ExpertComment = model.ExpertComment;
-                    specialForces.ExpertExept = model.ExpertExept;
-                }
-                else { throw ErrorStates.Error(UIErrors.DeadlineExpired); }
+                specialForces.ExpertComment = model.ExpertComment;
+                specialForces.ExpertExept = model.ExpertExept;  
             }
 
 
@@ -307,7 +314,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !(model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                throw ErrorStates.NotAllowed("permission");
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
             _specialForces.Remove(specialForces);
 
