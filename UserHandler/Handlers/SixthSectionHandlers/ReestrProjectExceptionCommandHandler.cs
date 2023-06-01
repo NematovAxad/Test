@@ -4,9 +4,11 @@ using Domain.Models;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain.Models.FirstSection;
 using Domain.Models.Ranking.Administrations;
+using Domain.Permission;
 using Domain.States;
 using EntityRepository;
 using JohaRepository;
+using MainInfrastructures.Migrations;
 using MediatR;
 using MediatR.Pipeline;
 using System;
@@ -27,9 +29,10 @@ namespace UserHandler.Handlers.SixthSectionHandlers
         private readonly IRepository<ARankTable, int> _aRank;
         private readonly IRepository<GRankTable, int> _gRank;
         private readonly IRepository<XRankTable, int> _xRank;
+        private readonly IRepository<Deadline, int> _deadline;
         private readonly IDataContext _db;
 
-        public ReestrProjectExceptionCommandHandler(IRepository<Organizations, int> organizations, IRepository<ReestrProjectException, int> projectExceptions, IRepository<ARankTable, int> aRank, IRepository<GRankTable, int> gRank, IRepository<XRankTable, int> xRank, IDataContext db)
+        public ReestrProjectExceptionCommandHandler(IRepository<Organizations, int> organizations, IRepository<ReestrProjectException, int> projectExceptions, IRepository<ARankTable, int> aRank, IRepository<GRankTable, int> gRank, IRepository<XRankTable, int> xRank, IDataContext db, IRepository<Deadline, int> deadline)
         {
             _organizations = organizations;
             _projectExceptions = projectExceptions;
@@ -37,11 +40,21 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             _gRank = gRank;
             _xRank = xRank;
             _db = db;
+            _deadline = deadline;
         }
 
         public async Task<ReestrProjectExceptionCommandResult> Handle(ReestrProjectExceptionCommand request, CancellationToken cancellationToken)
         {
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.NotFound("available deadline");
 
+            if (!(request.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || request.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+
+            if (request.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || request.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                if (deadline.OperatorDeadlineDate < DateTime.Now)
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             var organization = _organizations.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
 
