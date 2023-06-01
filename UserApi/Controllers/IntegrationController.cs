@@ -1,4 +1,5 @@
-﻿using CoreResult.ResponseCores;
+﻿using Autofac.Core;
+using CoreResult.ResponseCores;
 using Domain.CyberSecurityModels;
 using Domain.MibModels;
 using Domain.Models.Organization;
@@ -176,10 +177,15 @@ namespace UserApi.Controllers
         [HttpGet]
         public async Task<ResponseCore<MibReportResult>> OrgMibReport([FromQuery] int orgId)
         {
-
-            var result = await _mibService.OrgMibReport(orgId);
-            return result;
-
+            try
+            {
+                var result = await _mibService.OrgMibReport(orgId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
     }
 }
