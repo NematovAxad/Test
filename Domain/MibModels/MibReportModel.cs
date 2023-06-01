@@ -28,7 +28,7 @@ namespace Domain.MibModels
         public int FailCount { get; set; }
 
         [JsonProperty(PropertyName = "overall")]
-        public string Overall { get; set; }
+        public int Overall { get; set; }
 
         [JsonProperty(PropertyName = "success_share")]
         public double SuccessShare { get; set; }

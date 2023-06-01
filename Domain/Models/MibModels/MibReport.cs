@@ -31,7 +31,7 @@ namespace Domain.Models.MibModels
         public int FailCount { get; set; }
 
         [Column("overall")]
-        public string Overall { get; set; }
+        public int Overall { get; set; }
 
         [Column("success_share")]
         public double SuccessShare { get; set; }

@@ -1,5 +1,6 @@
 ﻿using CoreResult.ResponseCores;
 using Domain.CyberSecurityModels;
+using Domain.MibModels;
 using Domain.Models.Organization;
 using Domain.MyGovModels;
 using Domain.OpenDataModels;
@@ -169,6 +170,14 @@ namespace UserApi.Controllers
         {
 
             var result = await _mibService.MibReport(startTime, endTime);
+            return result;
+
+        }
+        [HttpGet]
+        public async Task<ResponseCore<MibReportResult>> OrgMibReport([FromQuery] int orgId)
+        {
+
+            var result = await _mibService.OrgMibReport(orgId);
             return result;
 
         }

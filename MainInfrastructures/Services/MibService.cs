@@ -97,5 +97,30 @@ namespace MainInfrastructures.Services
 
             return true;
         }
+
+        public async Task<MibReportResult> OrgMibReport(int orgId)
+        {
+            if (orgId == null)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+            var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+
+            if(String.IsNullOrEmpty(org.OrgInn))
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+            var mibReport = _mibReport.Find(m => m.OwnerInn == org.OrgInn).ToList();
+
+            MibReportResult result = new MibReportResult();
+
+            result.Data = mibReport.OrderBy(u => u.Id).ToList();
+            if(mibReport.Count > 0)
+            {
+                result.SuccessRate = Math.Round((mibReport.Sum(u => u.SuccessCount)*1.0)/mibReport.Sum(u=>u.Overall), 2);
+            }
+
+            return result;
+        }
     }
 }

@@ -70,7 +70,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             var economyProjectReport = _orgDigitalEconomyProjectsReport.Find(p => p.OrganizationId == model.OrganizationId).FirstOrDefault();
             if (economyProjectReport != null)
-                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
             OrganizationDigitalEconomyProjectsReport addModel = new OrganizationDigitalEconomyProjectsReport();
 
@@ -100,7 +100,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             var economyProjectReport = _orgDigitalEconomyProjectsReport.Find(p => p.Id == model.Id).FirstOrDefault();
             if (economyProjectReport == null)
-                throw ErrorStates.NotFound(model.Id.ToString());
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
             economyProjectReport.ProjectsCount = model.ProjectsCount;
             economyProjectReport.CompletedProjects = model.CompletedProjects;
