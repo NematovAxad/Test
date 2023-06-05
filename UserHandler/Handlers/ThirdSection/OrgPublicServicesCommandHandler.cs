@@ -71,8 +71,8 @@ namespace UserHandler.Handlers.ThirdSection
                     throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
 
             if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
+                if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+                    throw ErrorStates.NotAllowed(deadline.ThirdSectionDeadlineDate.ToString());
 
 
             OrganizationPublicServices addModel = new OrganizationPublicServices()
