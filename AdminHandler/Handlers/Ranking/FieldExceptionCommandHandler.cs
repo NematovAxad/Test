@@ -74,10 +74,10 @@ namespace AdminHandler.Handlers.Ranking
         }
         public async Task<FieldExceptionCommandResult> Handle(FieldExceptionCommand request, CancellationToken cancellationToken)
         {
-            switch (request.EventType)
+            switch (request.IsException)
             {
-                case Domain.Enums.EventType.Add: Add(request); break;
-                case Domain.Enums.EventType.Delete: Delete(request); break;
+                case true: Add(request); break;
+                case false: Delete(request); break;
             }
             return new FieldExceptionCommandResult() { IsSuccess = true};
         }
