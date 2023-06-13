@@ -153,6 +153,12 @@ namespace AdminHandler.Handlers.Ranking
                                 sphereRate += fieldRate;
                             }  
                         }
+
+                        if (sphereRate < 0)
+                        {
+                            sphereRate = 0;
+                        }
+
                         SphereRateElement addElement = new SphereRateElement();
                         addElement.SphereId = sphere.Id;
                         addElement.SphereName = sphere.Name;
