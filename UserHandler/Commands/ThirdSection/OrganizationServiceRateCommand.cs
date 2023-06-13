@@ -59,5 +59,11 @@ namespace UserHandler.Commands.ThirdSection
         public Rate ServiceRate { get; set; }
 
         public string ExpertComment { get; set; }
+
+        public string ApplicationProblemTextExspert { get; set; }
+
+        public string ServiceDissatisfactionConfirmedExspert { get; set; }
+
+        public string ServiceCommentConfirmedExspert { get; set; }
     }
 }

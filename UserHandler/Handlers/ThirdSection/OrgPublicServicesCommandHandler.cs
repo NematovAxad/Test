@@ -59,7 +59,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
             
-            var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && h.ServiceNameRu == model.ServiceNameRu).FirstOrDefault();
+            var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && (h.ServiceNameRu == model.ServiceNameRu || h.ServiceLink == model.ServiceLink)).FirstOrDefault();
             if (orgPublicServices != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
@@ -186,6 +186,10 @@ namespace UserHandler.Handlers.ThirdSection
             var service = _orgPublicServices.Find(h => h.Id == model.Id).FirstOrDefault();
             if (service == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+
+            var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.ServiceLink == model.ServiceLink).FirstOrDefault();
+            if (serviceWithSameUri != null)
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
 

@@ -32,5 +32,7 @@ namespace UserHandler.Commands.ThirdSection
         public string ServiceNameUz { get; set; }
 
         public string ServiceNameRu { get; set; }
+
+        public string ServiceUrl { get; set; }
     }
 }

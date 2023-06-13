@@ -101,6 +101,10 @@ namespace UserHandler.Handlers.ThirdSection
             addModel.ServiceCommentConfirmed = model.ServiceCommentConfirmed;
             addModel.ServiceRate = model.ServiceRate;
             addModel.ExpertComment = model.ExpertComment;
+            addModel.ApplicationProblemTextExspert = model.ApplicationProblemTextExspert;
+            addModel.ServiceDissatisfactionConfirmedExspert = model.ServiceDissatisfactionConfirmedExspert;
+            addModel.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
+
 
             _orgServiceRate.Add(addModel);
 
@@ -132,8 +136,6 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
-
-            rate.OrganizationId = model.OrganizationId;
             rate.ServiceId = model.ServiceId;
             rate.ApplicationNumber = model.ApplicationNumber;
             rate.HasApplicationProblem = model.HasApplicationProblem;
@@ -149,6 +151,9 @@ namespace UserHandler.Handlers.ThirdSection
             rate.ServiceCommentConfirmed = model.ServiceCommentConfirmed;
             rate.ServiceRate = model.ServiceRate;
             rate.ExpertComment = model.ExpertComment;
+            rate.ApplicationProblemTextExspert = model.ApplicationProblemTextExspert;
+            rate.ServiceDissatisfactionConfirmedExspert = model.ServiceDissatisfactionConfirmedExspert;
+            rate.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
 
             _orgServiceRate.Update(rate);
 

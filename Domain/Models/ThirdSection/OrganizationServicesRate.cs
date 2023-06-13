@@ -65,5 +65,14 @@ namespace Domain.Models.ThirdSection
 
         [Column("expert_comment")]
         public string ExpertComment { get; set; }
+
+        [Column("application_problem_text_exspert")]
+        public string ApplicationProblemTextExspert { get; set; }
+
+        [Column("service_dissatisfaction_confirmed_exspert")]
+        public string ServiceDissatisfactionConfirmedExspert { get; set; }
+
+        [Column("service_comment_confirmed_exspert")]
+        public string ServiceCommentConfirmedExspert { get; set; }
     }
 }

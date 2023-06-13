@@ -62,7 +62,7 @@ namespace UserHandler.Handlers.ThirdSection
                 throw ErrorStates.NotFound("deadline");
 
 
-            var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && s.ServiceNameRu == model.ServiceNameRu).FirstOrDefault();
+            var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && (s.ServiceNameRu == model.ServiceNameRu || s.ServiceUrl == model.ServiceUrl)).FirstOrDefault();
             if (service != null)
                 throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
@@ -77,6 +77,7 @@ namespace UserHandler.Handlers.ThirdSection
             addModel.OrganizationId = model.OrganizationId;
             addModel.ServiceNameRu = model.ServiceNameRu;
             addModel.ServiceNameUz = model.ServiceNameUz;
+            addModel.ServiceUrl = model.ServiceUrl;
 
             _orgServices.Add(addModel);
 

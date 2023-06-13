@@ -23,6 +23,9 @@ namespace Domain.Models.ThirdSection
         [Column("service_name_ru")]
         public string ServiceNameRu { get; set; }
 
+        [Column("service_url")]
+        public string ServiceUrl { get; set; }
+
         public ICollection<OrganizationServicesRate> Rates { get; set; }
     }
 }
