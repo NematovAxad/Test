@@ -187,7 +187,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (service == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.ServiceLink == model.ServiceLink).FirstOrDefault();
+            var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.ServiceLink == model.ServiceLink && s.Id != service.Id).FirstOrDefault();
             if (serviceWithSameUri != null)
                 throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
