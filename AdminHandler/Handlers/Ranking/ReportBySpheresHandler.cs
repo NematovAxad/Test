@@ -144,7 +144,14 @@ namespace AdminHandler.Handlers.Ranking
                                 }
                             }
 
-                            sphereRate += fieldRate;
+                            if(field.Section == "3.4")
+                            {
+                                sphereRate -= fieldRate;
+                            }
+                            else
+                            {
+                                sphereRate += fieldRate;
+                            }  
                         }
                         SphereRateElement addElement = new SphereRateElement();
                         addElement.SphereId = sphere.Id;

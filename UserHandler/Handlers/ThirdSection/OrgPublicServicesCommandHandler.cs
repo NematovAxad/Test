@@ -61,7 +61,7 @@ namespace UserHandler.Handlers.ThirdSection
             
             var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && (h.ServiceNameRu == model.ServiceNameRu || h.ServiceLink == model.ServiceLink)).FirstOrDefault();
             if (orgPublicServices != null)
-                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
             if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
@@ -185,7 +185,7 @@ namespace UserHandler.Handlers.ThirdSection
         {
             var service = _orgPublicServices.Find(h => h.Id == model.Id).FirstOrDefault();
             if (service == null)
-                throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
             var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.ServiceLink == model.ServiceLink).FirstOrDefault();
             if (serviceWithSameUri != null)
