@@ -58,10 +58,19 @@ namespace UserHandler.Handlers.ThirdSection
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
+
+            if (!String.IsNullOrEmpty(model.ServiceLink))
+            {
+                var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && (h.ServiceNameRu == model.ServiceNameRu || h.ServiceLink == model.ServiceLink)).FirstOrDefault();
+                if (orgPublicServices != null)
+                    throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            }
+            else {
+                var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && h.ServiceNameUz == model.ServiceNameUz).FirstOrDefault();
+                if (orgPublicServices != null)
+                    throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            }
             
-            var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && (h.ServiceNameRu == model.ServiceNameRu || h.ServiceLink == model.ServiceLink)).FirstOrDefault();
-            if (orgPublicServices != null)
-                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
 
             if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
@@ -187,10 +196,13 @@ namespace UserHandler.Handlers.ThirdSection
             if (service == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.ServiceLink == model.ServiceLink && s.Id != service.Id).FirstOrDefault();
-            if (serviceWithSameUri != null)
-                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
-
+            if(!String.IsNullOrEmpty(model.ServiceLink))
+            {
+                var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.ServiceLink == model.ServiceLink && s.Id != service.Id).FirstOrDefault();
+                if (serviceWithSameUri != null)
+                    throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            }
+            
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
 
             if (deadline == null)

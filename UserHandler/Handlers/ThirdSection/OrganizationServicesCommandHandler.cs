@@ -61,10 +61,18 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
 
-
-            var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && (s.ServiceNameRu == model.ServiceNameRu || s.ServiceUrl == model.ServiceUrl)).FirstOrDefault();
-            if (service != null)
-                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            if(!String.IsNullOrEmpty(model.ServiceUrl))
+            {
+                var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && (s.ServiceNameRu == model.ServiceNameRu || s.ServiceUrl == model.ServiceUrl)).FirstOrDefault();
+                if (service != null)
+                    throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            }
+            else
+            {
+                var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && s.ServiceNameUz == model.ServiceNameUz).FirstOrDefault();
+                if (service != null)
+                    throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            }
 
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
@@ -93,11 +101,11 @@ namespace UserHandler.Handlers.ThirdSection
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 throw ErrorStates.NotAllowed("permission");
 
-            var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && s.ServiceNameRu == model.ServiceNameRu).FirstOrDefault();
+            var service = _orgServices.Find(s => s.Id == model.Id).FirstOrDefault();
             if (service != null)
-                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             _orgServices.Remove(service);
