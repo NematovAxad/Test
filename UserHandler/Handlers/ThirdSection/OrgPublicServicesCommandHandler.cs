@@ -61,12 +61,12 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (!String.IsNullOrEmpty(model.ServiceLink))
             {
-                var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && (h.ServiceNameRu == model.ServiceNameRu || h.ServiceNameUz == model.ServiceNameUz || h.ServiceLink == model.ServiceLink)).FirstOrDefault();
+                var orgPublicServices = _orgPublicServices.Find(h => h.ServiceNameRu == model.ServiceNameRu || h.ServiceNameUz == model.ServiceNameUz || h.ServiceLink == model.ServiceLink).FirstOrDefault();
                 if (orgPublicServices != null)
                     throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             }
             else {
-                var orgPublicServices = _orgPublicServices.Find(h => h.OrganizationId == model.OrganizationId && h.ServiceNameUz == model.ServiceNameUz || h.ServiceNameRu == model.ServiceNameRu).FirstOrDefault();
+                var orgPublicServices = _orgPublicServices.Find(h => h.ServiceNameUz == model.ServiceNameUz || h.ServiceNameRu == model.ServiceNameRu).FirstOrDefault();
                 if (orgPublicServices != null)
                     throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             }
@@ -198,13 +198,13 @@ namespace UserHandler.Handlers.ThirdSection
 
             if(!String.IsNullOrEmpty(model.ServiceLink))
             {
-                var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.Id != service.Id && (s.ServiceLink == model.ServiceLink || s.ServiceNameUz == model.ServiceNameUz || s.ServiceNameRu == model.ServiceNameRu )).FirstOrDefault();
+                var serviceWithSameUri = _orgPublicServices.Find(s => s.Id != service.Id && (s.ServiceLink == model.ServiceLink || s.ServiceNameUz == model.ServiceNameUz || s.ServiceNameRu == model.ServiceNameRu )).FirstOrDefault();
                 if (serviceWithSameUri != null)
                     throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             }
             else
             {
-                var serviceWithSameUri = _orgPublicServices.Find(s => s.OrganizationId == service.OrganizationId && s.Id != service.Id && (s.ServiceNameUz == model.ServiceNameUz || s.ServiceNameRu == model.ServiceNameRu)).FirstOrDefault();
+                var serviceWithSameUri = _orgPublicServices.Find(s => s.Id != service.Id && (s.ServiceNameUz == model.ServiceNameUz || s.ServiceNameRu == model.ServiceNameRu)).FirstOrDefault();
                 if (serviceWithSameUri != null)
                     throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             }

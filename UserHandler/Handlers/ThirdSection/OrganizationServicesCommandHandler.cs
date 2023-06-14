@@ -34,10 +34,6 @@ namespace UserHandler.Handlers.ThirdSection
 
         public async Task<OrganizationServicesCommandResult> Handle(OrganizationServicesCommand request, CancellationToken cancellationToken)
         {
-            var org = _organization.Find(o => o.Id == request.OrganizationId).FirstOrDefault();
-            if (org.OrgCategory != Domain.Enums.OrgCategory.GovernmentOrganizations)
-                throw ErrorStates.Error(UIErrors.ApiNotForThisTypeOfOrganization);
-
             int id = 0;
             switch (request.EventType)
             {
@@ -55,7 +51,10 @@ namespace UserHandler.Handlers.ThirdSection
         {
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
-                throw ErrorStates.NotFound(model.OrganizationId.ToString());
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            if (org.OrgCategory != Domain.Enums.OrgCategory.GovernmentOrganizations)
+                throw ErrorStates.Error(UIErrors.ApiNotForThisTypeOfOrganization);
+
 
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
