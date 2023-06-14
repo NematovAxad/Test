@@ -1,4 +1,5 @@
 ﻿using Domain.CyberSecurityModels;
+using Domain.Models.Ranking;
 using MainInfrastructures.Services;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -15,5 +16,7 @@ namespace MainInfrastructures.Interfaces
         Task<bool> UploadOrgServices(IFormFile file);
 
         Task<decimal> SubFieldMaxRate(int orgId, string fieldSection, string subFieldSection);
+
+        Task<OrgExceptionPercentResultModel> GetOrganizationExceptionPercent(int orgId);
     }
 }

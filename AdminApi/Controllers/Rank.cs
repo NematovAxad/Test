@@ -4,6 +4,8 @@ using AdminHandler.Results.Ranking;
 using ApiConfigs;
 using CoreResult.ResponseCores;
 using Domain.Enums;
+using Domain.Models.Ranking;
+using MainInfrastructures.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +19,12 @@ namespace AdminApi.Controllers
     [Route("apiAdmin/[controller]/[action]")]
     public class Rank : Controller
     {
+        IOrganizationService _organizationService;
         IMediator _mediator;
-        public Rank(IMediator mediator)
+        public Rank(IMediator mediator, IOrganizationService organizationService)
         {
             _mediator = mediator;
+            _organizationService = organizationService;
         }
         [HttpGet]
         public async Task<ResponseCore<RankQueryResult>> Get([FromQuery] int orgId, int year, Quarters quarter, int sphereId, int fieldId, int subFieldId, int elementId)
@@ -46,6 +50,22 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
+
+        [HttpGet]
+        public async Task<ResponseCore<OrgExceptionPercentResultModel>> GetOrganizationExceptionPercent([FromQuery] int organizationId)
+        {
+            try
+            {
+                var result = await _organizationService.GetOrganizationExceptionPercent(organizationId);
+
+                return result;
+            }
+            catch(Exception ex)
+            {
+                return ex;
+            }
+        }
+
         [HttpPost]
         public async Task<ResponseCore<RankCommandResult>> Add([FromQuery] RankCommand model)
         {
