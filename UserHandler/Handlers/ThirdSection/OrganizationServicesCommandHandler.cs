@@ -101,7 +101,7 @@ namespace UserHandler.Handlers.ThirdSection
                 throw ErrorStates.NotAllowed("permission");
 
             var service = _orgServices.Find(s => s.Id == model.Id).FirstOrDefault();
-            if (service != null)
+            if (service == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
