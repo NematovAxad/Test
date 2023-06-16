@@ -76,7 +76,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.NotAllowed("permission");
             
-            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             OrganizationServices addModel = new OrganizationServices();
