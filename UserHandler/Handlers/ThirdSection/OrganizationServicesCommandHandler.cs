@@ -73,7 +73,7 @@ namespace UserHandler.Handlers.ThirdSection
                     throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             }
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+            if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.NotAllowed("permission");
             
             if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
@@ -97,7 +97,7 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+            if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.NotAllowed("permission");
 
             var service = _orgServices.Find(s => s.Id == model.Id).FirstOrDefault();
