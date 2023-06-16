@@ -65,5 +65,7 @@ namespace UserHandler.Commands.ThirdSection
         public string ServiceDissatisfactionConfirmedExspert { get; set; }
 
         public string ServiceCommentConfirmedExspert { get; set; }
+
+        public string ConversationAudioLink { get; set; }
     }
 }

@@ -104,7 +104,7 @@ namespace UserHandler.Handlers.ThirdSection
             addModel.ApplicationProblemTextExspert = model.ApplicationProblemTextExspert;
             addModel.ServiceDissatisfactionConfirmedExspert = model.ServiceDissatisfactionConfirmedExspert;
             addModel.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
-
+            addModel.ConversationAudioLink = model.ConversationAudioLink;
 
             _orgServiceRate.Add(addModel);
 
@@ -154,6 +154,7 @@ namespace UserHandler.Handlers.ThirdSection
             rate.ApplicationProblemTextExspert = model.ApplicationProblemTextExspert;
             rate.ServiceDissatisfactionConfirmedExspert = model.ServiceDissatisfactionConfirmedExspert;
             rate.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
+            rate.ConversationAudioLink = model.ConversationAudioLink;
 
             _orgServiceRate.Update(rate);
 

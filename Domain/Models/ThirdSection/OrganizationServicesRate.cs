@@ -74,5 +74,8 @@ namespace Domain.Models.ThirdSection
 
         [Column("service_comment_confirmed_exspert")]
         public string ServiceCommentConfirmedExspert { get; set; }
+
+        [Column("conversation_audio_link")]
+        public string ConversationAudioLink { get; set; }
     }
 }
