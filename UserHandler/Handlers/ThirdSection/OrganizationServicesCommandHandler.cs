@@ -62,13 +62,13 @@ namespace UserHandler.Handlers.ThirdSection
 
             if(!String.IsNullOrEmpty(model.ServiceUrl))
             {
-                var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && (s.ServiceNameRu == model.ServiceNameRu || s.ServiceUrl == model.ServiceUrl)).FirstOrDefault();
+                var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && (s.ServiceNameRu == model.ServiceNameRu || s.ServiceNameUz == model.ServiceNameUz || s.ServiceUrl == model.ServiceUrl)).FirstOrDefault();
                 if (service != null)
                     throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             }
             else
             {
-                var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && s.ServiceNameUz == model.ServiceNameUz).FirstOrDefault();
+                var service = _orgServices.Find(s => s.OrganizationId == model.OrganizationId && (s.ServiceNameUz == model.ServiceNameUz || s.ServiceNameUz == model.ServiceNameUz)).FirstOrDefault();
                 if (service != null)
                     throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
             }

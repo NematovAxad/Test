@@ -77,10 +77,10 @@ namespace UserHandler.Handlers.ThirdSection
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+            if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.NotAllowed("permission");
 
-            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             OrganizationServicesRate addModel = new OrganizationServicesRate();
@@ -130,10 +130,10 @@ namespace UserHandler.Handlers.ThirdSection
 
             
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+            if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.NotAllowed("permission");
 
-            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             rate.ServiceId = model.ServiceId;
@@ -166,14 +166,14 @@ namespace UserHandler.Handlers.ThirdSection
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+            if (!(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.NotAllowed("permission");
 
             var rate = _orgServiceRate.Find(r => r.Id == model.Id).FirstOrDefault();
             if (rate == null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
-            if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
+            if (deadline.OperatorDeadlineDate < DateTime.Now)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             _orgServiceRate.Remove(rate);
