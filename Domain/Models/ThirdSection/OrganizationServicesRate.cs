@@ -77,5 +77,8 @@ namespace Domain.Models.ThirdSection
 
         [Column("conversation_audio_link")]
         public string ConversationAudioLink { get; set; }
+
+        [Column("rate_set_date")]
+        public DateTime RateSetDate { get; set; }
     }
 }

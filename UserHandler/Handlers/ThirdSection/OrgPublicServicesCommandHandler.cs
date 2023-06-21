@@ -77,11 +77,11 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
                 if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.ThirdSectionDeadlineDate.ToString());
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
 
             OrganizationPublicServices addModel = new OrganizationPublicServices()
@@ -223,11 +223,11 @@ namespace UserHandler.Handlers.ThirdSection
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) || model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
                 if (deadline.ThirdSectionDeadlineDate < DateTime.Now)
-                    throw ErrorStates.NotAllowed(deadline.ThirdSectionDeadlineDate.ToString());
+                    throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             if ((model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER)) || (model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {

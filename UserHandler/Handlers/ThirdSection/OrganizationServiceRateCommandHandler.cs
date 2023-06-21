@@ -105,6 +105,7 @@ namespace UserHandler.Handlers.ThirdSection
             addModel.ServiceDissatisfactionConfirmedExspert = model.ServiceDissatisfactionConfirmedExspert;
             addModel.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
             addModel.ConversationAudioLink = model.ConversationAudioLink;
+            addModel.RateSetDate = DateTime.Now;
 
             _orgServiceRate.Add(addModel);
 
@@ -155,6 +156,7 @@ namespace UserHandler.Handlers.ThirdSection
             rate.ServiceDissatisfactionConfirmedExspert = model.ServiceDissatisfactionConfirmedExspert;
             rate.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
             rate.ConversationAudioLink = model.ConversationAudioLink;
+            rate.RateSetDate = DateTime.Now;
 
             _orgServiceRate.Update(rate);
 
