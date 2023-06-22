@@ -31,5 +31,6 @@ namespace AdminHandler.Commands.Organization
         public string OwnerType { get; set; }
         public string OfficialSite { get; set; }
         public string Contacts { get; set; }
+        public string Inn { get; set; }
     }
 }

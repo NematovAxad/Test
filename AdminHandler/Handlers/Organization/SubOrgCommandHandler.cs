@@ -56,6 +56,11 @@ namespace AdminHandler.Handlers.Organization
                 OfficialSite = model.OfficialSite,
                 Contacts = model.Contacts
             };
+
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) )
+                if(!String.IsNullOrEmpty(model.Inn))
+                    addModel.Inn = model.Inn;
+                
             _subOrganizations.Add(addModel);
         }
         public void Update(SubOrgCommand model)
@@ -76,6 +81,9 @@ namespace AdminHandler.Handlers.Organization
             subOrg.OfficialSite = model.OfficialSite;
             subOrg.Contacts = model.Contacts;
 
+            if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER))
+                if (!String.IsNullOrEmpty(model.Inn))
+                    subOrg.Inn = model.Inn;
 
             _subOrganizations.Update(subOrg);
         }

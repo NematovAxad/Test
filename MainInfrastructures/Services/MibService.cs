@@ -17,6 +17,7 @@ using EntityRepository;
 using JohaRepository;
 using System.Globalization;
 using Domain.MibModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MainInfrastructures.Services
 {
@@ -100,17 +101,27 @@ namespace MainInfrastructures.Services
 
         public async Task<MibReportResult> OrgMibReport(int orgId)
         {
-            if (orgId == null)
+            if (orgId == 0)
                 throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 
-            var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
+            var org = _organization.Find(o => o.Id == orgId).Include(mbox => mbox.SubOrganizations).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.Error(UIErrors.OrganizationNotFound);
 
             if(String.IsNullOrEmpty(org.OrgInn))
                 throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 
-            var mibReport = _mibReport.Find(m => m.OwnerInn == org.OrgInn).ToList();
+            List<string> orgInnCollection = new List<string>();
+
+            orgInnCollection.Add(org.OrgInn);
+
+            foreach(var subOrg in org.SubOrganizations)
+            {
+                if(!String.IsNullOrEmpty(subOrg.Inn))
+                    orgInnCollection.Add(subOrg.Inn);   
+            }
+
+            var mibReport = _mibReport.Find(m => orgInnCollection.Any(s => s == m.OwnerInn)).ToList();
 
             MibReportResult result = new MibReportResult();
 

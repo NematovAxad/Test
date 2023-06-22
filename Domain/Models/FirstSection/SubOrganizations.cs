@@ -31,5 +31,7 @@ namespace Domain.Models.FirstSection
         public string OfficialSite { get; set; }
         [Column("contacts")]
         public string Contacts { get; set; }
+        [Column("inn")]
+        public string Inn { get; set; }
     }
 }
