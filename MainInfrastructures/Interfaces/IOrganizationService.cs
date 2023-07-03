@@ -16,6 +16,7 @@ namespace MainInfrastructures.Interfaces
         Task<bool> UploadOrgServices(IFormFile file);
 
         Task<decimal> SubFieldMaxRate(int orgId, string fieldSection, string subFieldSection);
+        Task<decimal> FieldMaxRate(int orgId, string fieldSection);
 
         Task<OrgExceptionPercentResultModel> GetOrganizationExceptionPercent(int orgId);
     }

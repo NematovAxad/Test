@@ -64,15 +64,17 @@ namespace UserHandler.Handlers.ThirdSection
                     newreport.RatesCount = service.Rates.Count;
                     if(service.Rates.Count > 0)
                     {
-                        newreport.ApplicationProblems = (applicationWithoutProblems / service.Rates.Count) * _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.1").Result;
-                        newreport.Recommendation = (recommendation / service.Rates.Count) * _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.2").Result;
-                        newreport.ServiceSatisfaction = (serviceSatisfaction / service.Rates.Count) * _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.3").Result;
+                        newreport.ApplicationProblems = (applicationWithoutProblems / service.Rates.Count) * (_services.FieldMaxRate(service.OrganizationId, "3.1").Result / 4);
+                        newreport.Recommendation = (recommendation / service.Rates.Count) * (_services.FieldMaxRate(service.OrganizationId, "3.1").Result / 4);
+                        newreport.ServiceSatisfaction = (serviceSatisfaction / service.Rates.Count) * (_services.FieldMaxRate(service.OrganizationId, "3.1").Result / 4);
                         newreport.Protest = protest>0 ? 2 : 0;
-                        newreport.ServiceRate = (serviceRate/(service.Rates.Count*5))* _services.SubFieldMaxRate(service.OrganizationId, "3.1", "3.1.4").Result;
+                        newreport.ServiceRate = (serviceRate/(service.Rates.Count*5))* (_services.FieldMaxRate(service.OrganizationId, "3.1").Result / 4);
                     }
 
                     result.Services.Add(newreport);
                 }
+
+                result.FinalRank = Math.Round(result.Services.Sum(s => s.ApplicationProblems + s.Recommendation + s.ServiceSatisfaction + s.ServiceRate - s.Protest) / result.Services.Count(), 2);
             }
 
             return result;

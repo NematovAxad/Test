@@ -8,6 +8,7 @@ namespace UserHandler.Results.ThirdSection
     public class OrganizationServicesQueryResult
     {
         public List<ServiceReport> Services { get; set; }
+        public decimal FinalRank { get; set; }
     }
 
     public class ServiceReport

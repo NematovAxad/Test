@@ -372,6 +372,48 @@ namespace MainInfrastructures.Services
 
             return rate;
         }
+        public async Task<decimal> FieldMaxRate(int orgId, string fieldSection)
+        {
+            decimal rate = 0;
+
+            var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
+            if (org == null)
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+
+            if (org.OrgCategory == Domain.Enums.OrgCategory.Adminstrations)
+            {
+                var fields = _aField.GetAll().Include(mbox => mbox.ASubFields);
+                var field = fields.Where(f => f.Section == fieldSection).FirstOrDefault();
+
+                if (field == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                rate = (decimal)field.MaxRate;
+            }
+            if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
+            {
+                var fields = _gField.GetAll();
+                var field = fields.Where(f => f.Section == fieldSection).FirstOrDefault();
+
+                if (field == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+
+                rate = (decimal)field.MaxRate;
+            }
+            if (org.OrgCategory == Domain.Enums.OrgCategory.FarmOrganizations)
+            {
+                var fields = _xField.GetAll();
+                var field = fields.Where(f => f.Section == fieldSection).FirstOrDefault();
+
+                if (field == null)
+                    throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                rate = (decimal)field.MaxRate;
+            }
+
+            return rate;
+        }
 
         public async Task<OrgExceptionPercentResultModel> GetOrganizationExceptionPercent(int orgId)
         {
