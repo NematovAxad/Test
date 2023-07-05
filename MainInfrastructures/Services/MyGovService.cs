@@ -71,7 +71,6 @@ namespace MainInfrastructures.Services
                 if (s != null)
                 {
                     s.AllRequest += item.AllRequests;
-                    s.LatereRequest += item.LateRequests;
                 }
                 else
                 {
@@ -81,7 +80,7 @@ namespace MainInfrastructures.Services
                         ServiceId = item.ServiceId,
                         ServiceName = item.ServiceName,
                         AllRequest = item.AllRequests,
-                        LatereRequest = item.LateRequests
+                        LatereRequest = MygovReportsDetails(item.ServiceId, item.OrganizationId).Result.Count
                     });
                 }
             }
