@@ -4,10 +4,12 @@ using AdminHandler.Results.Organization;
 using ApiConfigs;
 using CoreResult.ResponseCores;
 using Domain.Models;
+using MainInfrastructures.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,10 +19,28 @@ namespace AdminApi.Controllers
     public class Organization : Controller
     {
         IMediator _mediator;
-        public Organization(IMediator mediator)
+        IOrganizationService _organizationService;
+        public Organization(IMediator mediator, IOrganizationService organizationService)
         {
             _mediator = mediator;
+            _organizationService = organizationService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadOrgData([FromQuery] int orgId)
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgData(orgId);
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+
 
         [HttpGet]
         public async Task<ResponseCore<OrgQueryResult>> Get([FromQuery] int id)

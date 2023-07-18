@@ -1,9 +1,11 @@
-﻿using Domain.CyberSecurityModels;
+﻿using AutoMapper;
+using Domain.CyberSecurityModels;
 using Domain.Models.Ranking;
 using MainInfrastructures.Services;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,5 +21,7 @@ namespace MainInfrastructures.Interfaces
         Task<decimal> FieldMaxRate(int orgId, string fieldSection);
 
         Task<OrgExceptionPercentResultModel> GetOrganizationExceptionPercent(int orgId);
+
+        Task<MemoryStream> DownloadOrgData(int orgId);
     }
 }

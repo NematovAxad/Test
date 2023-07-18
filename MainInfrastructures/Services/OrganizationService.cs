@@ -33,6 +33,8 @@ using Domain.MyGovModels;
 using MainInfrastructures.Migrations;
 using Domain.Models.MibModels;
 using Domain.Permission;
+using System.Xml.Linq;
+using Domain.Models.SixthSection;
 
 namespace MainInfrastructures.Services
 {
@@ -53,7 +55,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ASubField, int> _aSubField;
         private readonly IRepository<ARankTable, int> _aRankTable;
         private readonly IDataContext _db;
-
+        private readonly IReesterService _reesterService;
         public OrganizationService(IRepository<Deadline, int> deadline,
                                     IRepository<Organizations, int> organization, 
                                     IRepository<GSphere, int> gSphere, 
@@ -68,7 +70,8 @@ namespace MainInfrastructures.Services
                                     IRepository<AField, int> aField, 
                                     IRepository<ASubField, int> aSubField,
                                     IRepository<ARankTable, int> aRankTable,
-                                    IDataContext db)
+                                    IDataContext db,
+                                    IReesterService reesterService)
         {
             _deadline = deadline;
             _organization = organization;
@@ -85,6 +88,7 @@ namespace MainInfrastructures.Services
             _aSubField = aSubField;
             _aRankTable = aRankTable;
             _db = db;
+            _reesterService = reesterService;
         }
 
         public async Task<RankingStruct> GetStruct(int orgId)
@@ -547,6 +551,235 @@ namespace MainInfrastructures.Services
             result.OrganizationId = org.Id;
 
             return result;
+
+        }
+
+        public ReplacerOrgHead GetReplacerOrgHead(int orgId)
+        {
+            ReplacerOrgHead result = new ReplacerOrgHead();
+
+            var replaceOrgHead = _db.Context.Set<ReplacerOrgHead>().Where(r => r.OrganizationId == orgId).FirstOrDefault();
+
+            if (replaceOrgHead != null)
+                result = replaceOrgHead;
+
+            return result;
+        }
+
+        public async Task<MemoryStream> DownloadOrgData(int orgId)
+        {
+            var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
+
+            if(org == null)
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+
+            if (deadline == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+             
+
+            var replaceOrgHead = GetReplacerOrgHead(org.Id);
+
+            string fileName = org.ShortName + " _details";
+            var memoryStream = new MemoryStream();
+
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet;
+                worksheet = package.Workbook.Worksheets.Add(fileName);
+
+                worksheet.Name = fileName;
+                worksheet.Columns[1].Width = 30;
+                worksheet.Columns[2].Width = 50;
+                worksheet.DefaultRowHeight = 20;
+                worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+
+                #region First basic data about organization
+
+                using (var range = worksheet.Cells[1, 1, 1, 2])
+                {
+                    range.Value = org.FullName;
+                    range.Style.Font.Bold = true;
+                    range.Style.Font.Size = 12;
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                   
+                }
+                using (var range = worksheet.Cells[2, 1, 2, 2])
+                {
+                    range.Value = deadline.Year + "- yil " + (int)deadline.Quarter + " - yarim yilligi";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                }
+
+                worksheet.Cells[3, 1].Value = "Tashkilot to'liq nomi";
+                worksheet.Cells[3, 1].Style.Font.Bold = true;
+                worksheet.Cells[3, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells[3, 2].Value = org.FullName;
+
+                worksheet.Cells[4, 1].Value = "INN";
+                worksheet.Cells[4, 2].Value = org.OrgInn;
+
+                worksheet.Cells[5, 1].Value = "Yuridik manzil";
+                worksheet.Cells[5, 2].Value = org.AddressProvince + ", " + org.AddressDistrict + ", " + org.AddressStreet + ", " + org.AddressHomeNo;
+
+                worksheet.Cells[6, 1].Value = "Websayt";
+                worksheet.Cells[6, 2].Value = org.WebSite;
+                
+                using(var range = worksheet.Cells[4, 1, 6, 1])
+                {
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                }
+                using (var range = worksheet.Cells[3, 2, 6, 2])
+                {
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                }
+
+
+                worksheet.Cells[8, 1].Value = "Tashkilot rahbari";
+                worksheet.Cells[8, 1].Style.Font.Bold = true;
+                worksheet.Cells[8, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells[8, 2].Value = org.DirectorLastName + " " + org.DirectorMidName + " " + org.DirectorFirstName;
+
+                worksheet.Cells[9, 1].Value = "Lavozimi";
+                worksheet.Cells[9, 2].Value = org.DirectorPosition;
+
+                worksheet.Cells[10, 1].Value = "Telefon";
+                worksheet.Cells[10, 2].Value = org.PhoneNumber;
+
+                worksheet.Cells[11, 1].Value = "Elektron pochta manzili";
+                worksheet.Cells[11, 2].Value = org.DirectorMail;
+
+                using (var range = worksheet.Cells[9, 1, 11, 1])
+                {
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                }
+                using (var range = worksheet.Cells[8, 2, 11, 2])
+                {
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                }
+
+
+                worksheet.Cells[13, 1].Value = "Chief Digital Officer";
+                worksheet.Cells[13, 1].Style.Font.Bold = true;
+                worksheet.Cells[13, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+                worksheet.Cells[13, 2].Value = replaceOrgHead.LastName + " " + replaceOrgHead.MidName + " " + replaceOrgHead.FirstName;
+
+                worksheet.Cells[14, 1].Value = "Lavozimi";
+                worksheet.Cells[14, 2].Value = replaceOrgHead.Position;
+
+                worksheet.Cells[15, 1].Value = "Telefon";
+                worksheet.Cells[15, 2].Value = replaceOrgHead.Phone;
+
+                worksheet.Cells[16, 1].Value = "Elektron pochta manzili";
+                worksheet.Cells[16, 2].Value = replaceOrgHead.Email;
+
+                using (var range = worksheet.Cells[14, 1, 16, 1])
+                {
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                }
+                using (var range = worksheet.Cells[13, 2, 16, 2])
+                {
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                }
+
+                #endregion
+
+                var task1 = SetICTDepartmentDetaills(worksheet, org.Id);
+                var task2 = SetReestrData(worksheet, orgId);
+
+                await Task.WhenAll(task1, task2);
+
+                package.Save();
+            }
+
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+
+            return memoryStream;
+        }
+
+        private async Task SetICTDepartmentDetaills(ExcelWorksheet worksheet, int orgId)
+        {
+            OrganizationIctSpecialForces orgSpecialForces = new OrganizationIctSpecialForces();
+
+            var result = _db.Context.Set<OrganizationIctSpecialForces>().Where(r => r.OrganizationId == orgId).FirstOrDefault();
+
+            if (result != null)
+                orgSpecialForces = result;
+
+            worksheet.Cells[18, 1].Value = "AKT Bo'linma";
+            worksheet.Cells[18, 1].Style.Font.Bold = true;
+            worksheet.Cells[18, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[18, 2].Value = orgSpecialForces.MinistryAgreedHead == true ? "ha" : "yo'q";
+
+            worksheet.Cells[19, 1].Value = "AKT bo'linma rahbari";
+            worksheet.Cells[19, 2].Value = orgSpecialForces.FullNameDirector;
+
+            worksheet.Cells[20, 1].Value = "Lavozim";
+            worksheet.Cells[20, 2].Value = orgSpecialForces.HeadPosition;
+
+            worksheet.Cells[21, 1].Value = "Telefon";
+            worksheet.Cells[21, 2].Value = orgSpecialForces.MobilePhone;
+
+            worksheet.Cells[22, 1].Value = "Elektron pochta manzili";
+            worksheet.Cells[22, 2].Value = orgSpecialForces.Email;
+
+            worksheet.Cells[23, 1].Value = "Maxsus tarkibiy bo‘linma xodimlarining umumiy soni (jami tizim bo‘yicha)";
+            worksheet.Cells[23, 2].Value = orgSpecialForces.EmployeesSum;
+
+            worksheet.Cells[24, 1].Value = "Markaziy boshqaruv apparatida";
+            worksheet.Cells[24, 2].Value = orgSpecialForces.CentralofficeEmployees;
+
+            worksheet.Cells[25, 1].Value = "Hududiy boshqarmalarda";
+            worksheet.Cells[25, 2].Value = orgSpecialForces.RegionalEmployees;
+
+            using (var range = worksheet.Cells[19, 1, 25, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+            }
+            using (var range = worksheet.Cells[18, 2, 25, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
+
+        }
+
+        private async Task SetReestrData(ExcelWorksheet worksheet, int orgId)
+        {
+            FirstRequestQuery model = new FirstRequestQuery
+            {
+                OrgId = orgId,
+                Page = 1,
+                Limit = 1000000
+            };
+
+            FirstRequestQueryResult reestrResult = new FirstRequestQueryResult();
+
+            reestrResult = await _reesterService.FirstRequest(model);
+
+            worksheet.Cells[27, 1].Value = "Axborot tizimlari soni";
+            worksheet.Cells[27, 1].Style.Font.Bold = true;
+            worksheet.Cells[27, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[27, 2].Value = reestrResult.Items.Count;
+
+            worksheet.Cells[28, 1].Value = "Ekspert xulosalari olinganligi";
+            worksheet.Cells[28, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+            
+            worksheet.Cells[28, 2].Value = reestrResult.Items.Where(i=>i.HasExpertise == true).ToList().Count;
+
+            using (var range = worksheet.Cells[27, 2, 28, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
 
         }
     }
