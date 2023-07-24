@@ -35,6 +35,7 @@ using MainInfrastructures.Migrations;
 using Domain.Models.MibModels;
 using Domain.Permission;
 using System.Xml.Linq;
+using Domain.Enums;
 using Domain.Models.SixthSection;
 
 namespace MainInfrastructures.Services
@@ -694,8 +695,9 @@ namespace MainInfrastructures.Services
                 var task1 = SetICTDepartmentDetaills(worksheet, org.Id);
                 var task2 = SetReestrData(worksheet, orgId);
                 var task3 = SetOrgProjectsReport(worksheet, orgId);
+                var task4 = SetOrgServicesReport(worksheet, orgId);
                 
-                await Task.WhenAll(task1, task2, task3);
+                await Task.WhenAll(task1, task2, task3, task4);
 
                 package.Save();
             }
@@ -814,6 +816,43 @@ namespace MainInfrastructures.Services
                 range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
             }
             using (var range = worksheet.Cells[29, 2, 32, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
+        }
+
+        private async Task SetOrgServicesReport(ExcelWorksheet worksheet, int orgId)
+        {
+            var result = _db.Context
+                .Set<OrganizationPublicServices>().Where(r => r.OrganizationId == orgId);
+            
+            worksheet.Cells[33, 1].Value = "Davlat xizmatlari soni";
+            worksheet.Cells[33, 1].Style.Font.Bold = true;
+            worksheet.Cells[33, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[33, 2].Value = result.Count().ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[34, 1].Value = "An'anaviy xizmatlar";
+            worksheet.Cells[34, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.National)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[35, 1].Value = "Elektron xizmatlar";
+            worksheet.Cells[35, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.Electronic)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[36, 1].Value = "Elektron xizmatlar (YIDXP orqali)";
+            worksheet.Cells[36, 2].Value = result.Count(s => s.MyGovService == true)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[37, 1].Value = "Elektron xizmatlar (Muqobil xizmatlar orqali)";
+            worksheet.Cells[37, 2].Value = result.Count(s => s.OtherApps == true)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            using (var range = worksheet.Cells[34, 1, 37, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+            }
+            using (var range = worksheet.Cells[33, 2, 37, 2])
             {
                 range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
             }
