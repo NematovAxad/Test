@@ -24,6 +24,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Domain.Models.FirstSection;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using OfficeOpenXml;
 using LicenseContext = OfficeOpenXml.LicenseContext;
@@ -692,8 +693,9 @@ namespace MainInfrastructures.Services
 
                 var task1 = SetICTDepartmentDetaills(worksheet, org.Id);
                 var task2 = SetReestrData(worksheet, orgId);
-
-                await Task.WhenAll(task1, task2);
+                var task3 = SetOrgProjectsReport(worksheet, orgId);
+                
+                await Task.WhenAll(task1, task2, task3);
 
                 package.Save();
             }
@@ -733,13 +735,13 @@ namespace MainInfrastructures.Services
             worksheet.Cells[22, 2].Value = orgSpecialForces.Email;
 
             worksheet.Cells[23, 1].Value = "Maxsus tarkibiy bo‘linma xodimlarining umumiy soni (jami tizim bo‘yicha)";
-            worksheet.Cells[23, 2].Value = orgSpecialForces.EmployeesSum;
+            worksheet.Cells[23, 2].Value = orgSpecialForces.EmployeesSum.ToString(CultureInfo.InvariantCulture);
 
             worksheet.Cells[24, 1].Value = "Markaziy boshqaruv apparatida";
-            worksheet.Cells[24, 2].Value = orgSpecialForces.CentralofficeEmployees;
+            worksheet.Cells[24, 2].Value = orgSpecialForces.CentralofficeEmployees.ToString(CultureInfo.InvariantCulture);
 
             worksheet.Cells[25, 1].Value = "Hududiy boshqarmalarda";
-            worksheet.Cells[25, 2].Value = orgSpecialForces.RegionalEmployees;
+            worksheet.Cells[25, 2].Value = orgSpecialForces.RegionalEmployees.ToString(CultureInfo.InvariantCulture);
 
             using (var range = worksheet.Cells[19, 1, 25, 1])
             {
@@ -781,6 +783,40 @@ namespace MainInfrastructures.Services
                 range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
             }
 
+        }
+
+        private async Task SetOrgProjectsReport(ExcelWorksheet worksheet, int orgId)
+        {
+            OrganizationDigitalEconomyProjectsReport orgProjects = new OrganizationDigitalEconomyProjectsReport();
+
+            var result = _db.Context
+                .Set<OrganizationDigitalEconomyProjectsReport>().FirstOrDefault(r => r.OrganizationId == orgId);
+            if (result != null)
+                orgProjects = result;
+            
+            worksheet.Cells[29, 1].Value = "Jami AKT loyihalarining soni";
+            worksheet.Cells[29, 1].Style.Font.Bold = true;
+            worksheet.Cells[29, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[29, 2].Value = orgProjects.ProjectsCount.ToString(CultureInfo.InvariantCulture);
+
+            worksheet.Cells[30, 1].Value = "Bajarilgan";
+            worksheet.Cells[30, 2].Value = orgProjects.CompletedProjects.ToString(CultureInfo.InvariantCulture);
+
+            worksheet.Cells[31, 1].Value = "Bajarilmoqda";
+            worksheet.Cells[31, 2].Value = orgProjects.OngoingProjects.ToString(CultureInfo.InvariantCulture);
+            
+            worksheet.Cells[32, 1].Value = "Bajarilmagan";
+            worksheet.Cells[32, 2].Value = orgProjects.NotFinishedProjects.ToString(CultureInfo.InvariantCulture);
+            
+            using (var range = worksheet.Cells[30, 1, 32, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+            }
+            using (var range = worksheet.Cells[29, 2, 32, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
         }
     }
 }
