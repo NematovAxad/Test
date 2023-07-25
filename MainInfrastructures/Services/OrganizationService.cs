@@ -37,6 +37,7 @@ using Domain.Permission;
 using System.Xml.Linq;
 using Domain.Enums;
 using Domain.Models.SixthSection;
+using Domain.OpenDataModels;
 
 namespace MainInfrastructures.Services
 {
@@ -696,8 +697,9 @@ namespace MainInfrastructures.Services
                 var task2 = SetReestrData(worksheet, orgId);
                 var task3 = SetOrgProjectsReport(worksheet, orgId);
                 var task4 = SetOrgServicesReport(worksheet, orgId);
+                var task5 = SetRanks(worksheet, deadline, org);
                 
-                await Task.WhenAll(task1, task2, task3, task4);
+                await Task.WhenAll(task1, task2, task3, task4, task5);
 
                 package.Save();
             }
@@ -800,16 +802,16 @@ namespace MainInfrastructures.Services
             worksheet.Cells[29, 1].Style.Font.Bold = true;
             worksheet.Cells[29, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
 
-            worksheet.Cells[29, 2].Value = orgProjects.ProjectsCount.ToString(CultureInfo.InvariantCulture);
+            worksheet.Cells[29, 2].Value = orgProjects.ProjectsCount.ToString(CultureInfo.InvariantCulture) + " ta";
 
             worksheet.Cells[30, 1].Value = "Bajarilgan";
-            worksheet.Cells[30, 2].Value = orgProjects.CompletedProjects.ToString(CultureInfo.InvariantCulture);
+            worksheet.Cells[30, 2].Value = orgProjects.CompletedProjects.ToString(CultureInfo.InvariantCulture) + " ta";
 
             worksheet.Cells[31, 1].Value = "Bajarilmoqda";
-            worksheet.Cells[31, 2].Value = orgProjects.OngoingProjects.ToString(CultureInfo.InvariantCulture);
+            worksheet.Cells[31, 2].Value = orgProjects.OngoingProjects.ToString(CultureInfo.InvariantCulture) + " ta";
             
             worksheet.Cells[32, 1].Value = "Bajarilmagan";
-            worksheet.Cells[32, 2].Value = orgProjects.NotFinishedProjects.ToString(CultureInfo.InvariantCulture);
+            worksheet.Cells[32, 2].Value = orgProjects.NotFinishedProjects.ToString(CultureInfo.InvariantCulture) + " ta";
             
             using (var range = worksheet.Cells[30, 1, 32, 1])
             {
@@ -855,6 +857,284 @@ namespace MainInfrastructures.Services
             using (var range = worksheet.Cells[33, 2, 37, 2])
             {
                 range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
+        }
+
+        private async Task SetRanks(ExcelWorksheet worksheet, Deadline deadline, Organizations organization)
+        {
+            using (var range = worksheet.Cells[39, 1, 39, 2])
+            {
+                range.Value = "REYTING NATIJALARI";
+                range.Style.Font.Bold = true;
+                range.Style.Font.Size = 12;
+                range.Merge = true;
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                   
+            }
+
+            var excelIndex = 39;
+            
+            switch (organization.OrgCategory)
+            {
+                case Domain.Enums.OrgCategory.GovernmentOrganizations:
+                {
+                    var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields).OrderBy(s => s.Section);
+                    foreach(var sphere in spheres)
+                    {
+                        excelIndex += 2;
+                        double sphereRate = 0;
+                        foreach (var field in sphere.GFields)
+                        {
+                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
+                            sphereRate += fieldRank;
+
+                            worksheet.Cells[excelIndex++, 1].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
+                            worksheet.Cells[excelIndex++, 2].Value = $"{field.Section} {field.Name}";
+                        }
+
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Value = sphereRate;
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 2].Value =
+                            $"{sphere.Section} {sphere.Name}";
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 2].Style.Font.Bold = true;
+
+                        excelIndex += sphere.GFields.Count();
+                    }
+                    
+                    break;
+                }
+                    
+                case Domain.Enums.OrgCategory.FarmOrganizations:
+                {
+                    var spheres = _xSphere.GetAll().Include(mbox => mbox.XFields).OrderBy(s => s.Section);
+                    foreach(var sphere in spheres)
+                    {
+                        excelIndex += 2;
+                        double sphereRate = 0;
+                        foreach (var field in sphere.XFields)
+                        {
+                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
+                            sphereRate += fieldRank;
+
+                            worksheet.Cells[excelIndex++, 1].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
+                            worksheet.Cells[excelIndex++, 2].Value = $"{field.Section} {field.Name}";
+                        }
+
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Value = sphereRate;
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 2].Value =
+                            $"{sphere.Section} {sphere.Name}";
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 2].Style.Font.Bold = true;
+
+                        excelIndex += sphere.XFields.Count();
+                    }
+                    
+                    break;
+                }
+                    
+                case Domain.Enums.OrgCategory.Adminstrations:
+                {
+                    var spheres = _aSphere.GetAll().Include(mbox => mbox.AFields).OrderBy(s => s.Section);
+                    foreach(var sphere in spheres)
+                    {
+                        excelIndex += 2;
+                        double sphereRate = 0;
+                        foreach (var field in sphere.AFields)
+                        {
+                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
+                            sphereRate += fieldRank;
+
+                            worksheet.Cells[excelIndex++, 1].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
+                            worksheet.Cells[excelIndex++, 2].Value = $"{field.Section} {field.Name}";
+                        }
+
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Value = sphereRate;
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 2].Value =
+                            $"{sphere.Section} {sphere.Name}";
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 2].Style.Font.Bold = true;
+
+                        excelIndex += sphere.AFields.Count();
+                    }
+                    
+                    break;
+                }
+                default:
+                    throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            }
+            using (var range = worksheet.Cells[40, 1, excelIndex, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+            }
+            using (var range = worksheet.Cells[40, 2, excelIndex, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+            }
+        }
+
+        private async Task<double> GetFieldRank(Deadline deadline, Organizations organization, int fieldId)
+        {
+            double fieldRank = 0;
+
+            switch (organization.OrgCategory)
+            {
+                case Domain.Enums.OrgCategory.GovernmentOrganizations:
+                {
+                    var field = _gField.Find(f => f.Id == fieldId).FirstOrDefault();
+                    if (field == null)
+                        throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                    var rank = _gRankTable.Find(r =>
+                        r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter &&
+                        r.SphereId == field.SphereId && r.FieldId == field.Id).ToList();
+                    if (rank.Count > 0)
+                    {
+                        var subField = _gSubField.Find(s => s.FieldId == field.Id).ToList();
+                        if (subField.Any())
+                        {
+                            foreach (var sField in subField)
+                            {
+                                var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
+                                if (subFieldRankWithElements.Any())
+                                {
+                                    var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
+                                    fieldRank += subfieldRankMedium;
+                                }
+                            
+                                var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
+                                if (subFieldRankWithoutElements != null)
+                                {
+                                    fieldRank += subFieldRankWithoutElements.Rank;
+                                }
+                            }
+                            return await Task.FromResult<double>(fieldRank);
+                        }
+                        else
+                        {
+                            var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
+                            if (rankWithElements.Count > 0)
+                            {
+                                fieldRank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                            }
+                        
+                            var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
+                            if (rankWithouthElements != null)
+                            {
+                                fieldRank = rankWithouthElements.Rank;
+                            }
+                            return await Task.FromResult<double>(fieldRank);
+                        }
+                    }
+                    else
+                    {
+                        return await Task.FromResult<double>(0);
+                    }
+                }
+                case Domain.Enums.OrgCategory.FarmOrganizations:
+                {
+                    var field = _xField.Find(f => f.Id == fieldId).FirstOrDefault();
+                    if (field == null)
+                        throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                    var rank = _xRankTable.Find(r =>
+                        r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter &&
+                        r.SphereId == field.SphereId && r.FieldId == field.Id).ToList();
+                    if (rank.Count > 0)
+                    {
+                        var subField = _xSubField.Find(s => s.FieldId == field.Id).ToList();
+                        if (subField.Any())
+                        {
+                            foreach (var sField in subField)
+                            {
+                                var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
+                                if (subFieldRankWithElements.Any())
+                                {
+                                    var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
+                                    fieldRank += subfieldRankMedium;
+                                }
+                            
+                                var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
+                                if (subFieldRankWithoutElements != null)
+                                {
+                                    fieldRank += subFieldRankWithoutElements.Rank;
+                                }
+                            }
+                            return await Task.FromResult<double>(fieldRank);
+                        }
+                        else
+                        {
+                            var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
+                            if (rankWithElements.Count > 0)
+                            {
+                                fieldRank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                            }
+                        
+                            var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
+                            if (rankWithouthElements != null)
+                            {
+                                fieldRank = rankWithouthElements.Rank;
+                            }
+                            return await Task.FromResult<double>(fieldRank);
+                        }
+                    }
+                    else
+                    {
+                        return await Task.FromResult<double>(0);
+                    }
+                }
+                case Domain.Enums.OrgCategory.Adminstrations:
+                {
+                    var field = _aField.Find(f => f.Id == fieldId).FirstOrDefault();
+                    if (field == null)
+                        throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+
+                    var rank = _aRankTable.Find(r =>
+                        r.OrganizationId == organization.Id && r.Year == deadline.Year && r.Quarter == deadline.Quarter &&
+                        r.SphereId == field.SphereId && r.FieldId == field.Id).ToList();
+                    if (rank.Count > 0)
+                    {
+                        var subField = _aSubField.Find(s => s.FieldId == field.Id).ToList();
+                        if (subField.Any())
+                        {
+                            foreach (var sField in subField)
+                            {
+                                var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
+                                if (subFieldRankWithElements.Any())
+                                {
+                                    var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
+                                    fieldRank += subfieldRankMedium;
+                                }
+                                
+                                var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
+                                if (subFieldRankWithoutElements != null)
+                                {
+                                    fieldRank += subFieldRankWithoutElements.Rank;
+                                }
+                            }
+                            return await Task.FromResult<double>(fieldRank);
+                        }
+                        else
+                        {
+                            var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
+                            if (rankWithElements.Count > 0)
+                            {
+                                fieldRank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                            }
+                            
+                            var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
+                            if (rankWithouthElements != null)
+                            {
+                                fieldRank = rankWithouthElements.Rank;
+                            }
+                            return await Task.FromResult<double>(fieldRank);
+                        }
+                    }
+                    else
+                    {
+                        return await Task.FromResult<double>(0);
+                    }
+                }
+                default:
+                    return await Task.FromResult<double>(0);
             }
         }
     }
