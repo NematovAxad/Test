@@ -593,9 +593,9 @@ namespace MainInfrastructures.Services
                 worksheet = package.Workbook.Worksheets.Add(fileName);
 
                 worksheet.Name = fileName;
-                worksheet.Columns[1].Width = 30;
-                worksheet.Columns[2].Width = 50;
-                worksheet.DefaultRowHeight = 20;
+                worksheet.Columns[1].Width = 50;
+                worksheet.Columns[2].Width = 40;
+                worksheet.DefaultRowHeight = 25;
                 worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
 
 
@@ -739,13 +739,13 @@ namespace MainInfrastructures.Services
             worksheet.Cells[22, 2].Value = orgSpecialForces.Email;
 
             worksheet.Cells[23, 1].Value = "Maxsus tarkibiy bo‘linma xodimlarining umumiy soni (jami tizim bo‘yicha)";
-            worksheet.Cells[23, 2].Value = orgSpecialForces.EmployeesSum.ToString(CultureInfo.InvariantCulture);
+            worksheet.Cells[23, 2].Value = orgSpecialForces.EmployeesSum;
 
             worksheet.Cells[24, 1].Value = "Markaziy boshqaruv apparatida";
-            worksheet.Cells[24, 2].Value = orgSpecialForces.CentralofficeEmployees.ToString(CultureInfo.InvariantCulture);
+            worksheet.Cells[24, 2].Value = orgSpecialForces;
 
             worksheet.Cells[25, 1].Value = "Hududiy boshqarmalarda";
-            worksheet.Cells[25, 2].Value = orgSpecialForces.RegionalEmployees.ToString(CultureInfo.InvariantCulture);
+            worksheet.Cells[25, 2].Value = orgSpecialForces;
 
             using (var range = worksheet.Cells[19, 1, 25, 1])
             {
@@ -835,19 +835,19 @@ namespace MainInfrastructures.Services
             worksheet.Cells[33, 2].Value = result.Count().ToString(CultureInfo.InvariantCulture) + " ta";
             
             worksheet.Cells[34, 1].Value = "An'anaviy xizmatlar";
-            worksheet.Cells[34, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.National)
+            worksheet.Cells[34, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.National && s.ServiceTypeExpert == true)
                 .ToString(CultureInfo.InvariantCulture) + " ta";
             
             worksheet.Cells[35, 1].Value = "Elektron xizmatlar";
-            worksheet.Cells[35, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.Electronic)
+            worksheet.Cells[35, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.Electronic && s.ServiceTypeExpert == true)
                 .ToString(CultureInfo.InvariantCulture) + " ta";
             
             worksheet.Cells[36, 1].Value = "Elektron xizmatlar (YIDXP orqali)";
-            worksheet.Cells[36, 2].Value = result.Count(s => s.MyGovService == true)
+            worksheet.Cells[36, 2].Value = result.Count(s => s.MyGovService == true && s.MyGovServiceExpert == true)
                 .ToString(CultureInfo.InvariantCulture) + " ta";
             
             worksheet.Cells[37, 1].Value = "Elektron xizmatlar (Muqobil xizmatlar orqali)";
-            worksheet.Cells[37, 2].Value = result.Count(s => s.OtherApps == true)
+            worksheet.Cells[37, 2].Value = result.Count(s => s.OtherApps == true && s.OtherAppsExpert == true)
                 .ToString(CultureInfo.InvariantCulture) + " ta";
             
             using (var range = worksheet.Cells[34, 1, 37, 1])
@@ -878,7 +878,7 @@ namespace MainInfrastructures.Services
             {
                 case Domain.Enums.OrgCategory.GovernmentOrganizations:
                 {
-                    var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields).OrderBy(s => s.Section);
+                    var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields).OrderBy(s => s.Section).ToList();
                     foreach(var sphere in spheres)
                     {
                         excelIndex += 2;
@@ -888,16 +888,16 @@ namespace MainInfrastructures.Services
                             var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
                             sphereRate += fieldRank;
 
-                            worksheet.Cells[excelIndex++, 1].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
-                            worksheet.Cells[excelIndex++, 2].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
+
+                            excelIndex++;
                         }
 
-                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Value = sphereRate;
-                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 2].Value =
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Value =
                             $"{sphere.Section} {sphere.Name}";
-                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 2].Style.Font.Bold = true;
-
-                        excelIndex += sphere.GFields.Count();
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Style.Font.Bold = true;
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 2].Value = sphereRate;
                     }
                     
                     break;
@@ -915,16 +915,16 @@ namespace MainInfrastructures.Services
                             var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
                             sphereRate += fieldRank;
 
-                            worksheet.Cells[excelIndex++, 1].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
-                            worksheet.Cells[excelIndex++, 2].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 2].Value =  fieldRank;
+
+                            excelIndex++;
                         }
 
-                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Value = sphereRate;
-                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 2].Value =
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Value =
                             $"{sphere.Section} {sphere.Name}";
-                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 2].Style.Font.Bold = true;
-
-                        excelIndex += sphere.XFields.Count();
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Style.Font.Bold = true;
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 2].Value = sphereRate;
                     }
                     
                     break;
@@ -942,16 +942,16 @@ namespace MainInfrastructures.Services
                             var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
                             sphereRate += fieldRank;
 
-                            worksheet.Cells[excelIndex++, 1].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
-                            worksheet.Cells[excelIndex++, 2].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
+
+                            excelIndex++;
                         }
 
-                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Value = sphereRate;
-                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 2].Value =
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Value =
                             $"{sphere.Section} {sphere.Name}";
-                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 2].Style.Font.Bold = true;
-
-                        excelIndex += sphere.AFields.Count();
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Style.Font.Bold = true;
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 2].Value = sphereRate;
                     }
                     
                     break;
@@ -1003,7 +1003,7 @@ namespace MainInfrastructures.Services
                                 var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
                                 if (subFieldRankWithoutElements != null)
                                 {
-                                    fieldRank += subFieldRankWithoutElements.Rank;
+                                    fieldRank += Math.Round(subFieldRankWithoutElements.Rank, 2);
                                 }
                             }
                             return await Task.FromResult<double>(fieldRank);
@@ -1019,7 +1019,7 @@ namespace MainInfrastructures.Services
                             var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
                             if (rankWithouthElements != null)
                             {
-                                fieldRank = rankWithouthElements.Rank;
+                                fieldRank = Math.Round(rankWithouthElements.Rank, 2);
                             }
                             return await Task.FromResult<double>(fieldRank);
                         }
@@ -1055,7 +1055,7 @@ namespace MainInfrastructures.Services
                                 var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
                                 if (subFieldRankWithoutElements != null)
                                 {
-                                    fieldRank += subFieldRankWithoutElements.Rank;
+                                    fieldRank += Math.Round(subFieldRankWithoutElements.Rank, 2);
                                 }
                             }
                             return await Task.FromResult<double>(fieldRank);
@@ -1071,7 +1071,7 @@ namespace MainInfrastructures.Services
                             var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
                             if (rankWithouthElements != null)
                             {
-                                fieldRank = rankWithouthElements.Rank;
+                                fieldRank = Math.Round(rankWithouthElements.Rank, 2);
                             }
                             return await Task.FromResult<double>(fieldRank);
                         }
@@ -1107,7 +1107,7 @@ namespace MainInfrastructures.Services
                                 var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
                                 if (subFieldRankWithoutElements != null)
                                 {
-                                    fieldRank += subFieldRankWithoutElements.Rank;
+                                    fieldRank += Math.Round(subFieldRankWithoutElements.Rank, 2);
                                 }
                             }
                             return await Task.FromResult<double>(fieldRank);
@@ -1123,7 +1123,7 @@ namespace MainInfrastructures.Services
                             var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
                             if (rankWithouthElements != null)
                             {
-                                fieldRank = rankWithouthElements.Rank;
+                                fieldRank = Math.Round(rankWithouthElements.Rank, 2);
                             }
                             return await Task.FromResult<double>(fieldRank);
                         }
