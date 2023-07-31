@@ -33,7 +33,7 @@ namespace Domain.Models
         [Column("create_date")]
         public DateTime CreateDate { get; set; }
         
-        [Column("create_date")]
+        [Column("dashboard")]
         public bool Dashboard { get; set; }
     }
 }
