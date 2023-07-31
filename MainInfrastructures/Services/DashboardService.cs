@@ -68,12 +68,12 @@ namespace MainInfrastructures.Services
         
         public async Task<DashboardResultModel> GetDashboardData()
         {
+            DashboardResultModel result = new DashboardResultModel();
+            
             var deadline = _deadline.Find(d => d.Dashboard == true).OrderBy(i => i.Id).LastOrDefault();
 
             if (deadline == null)
-                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
-
-            DashboardResultModel result = new DashboardResultModel();
+                return await Task.FromResult(result);
 
             result.GovernmentOrganizations = await Task.FromResult(GetGovernmentOrganizationsReport(deadline).Result);
             result.FarmOrganizations = await Task.FromResult(GetFarmOrganizationsReport(deadline).Result);
