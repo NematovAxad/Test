@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Models.DashboardModels;
+using MainInfrastructures.Services;
 
 namespace AdminApi.Controllers
 {
@@ -20,10 +22,13 @@ namespace AdminApi.Controllers
     {
         IMediator _mediator;
         IOrganizationService _organizationService;
-        public Organization(IMediator mediator, IOrganizationService organizationService)
+        private IDashboardService _dashboardService;
+        
+        public Organization(IMediator mediator, IOrganizationService organizationService, IDashboardService dashboardService)
         {
             _mediator = mediator;
             _organizationService = organizationService;
+            _dashboardService = dashboardService;
         }
 
         [HttpGet]
@@ -38,6 +43,19 @@ namespace AdminApi.Controllers
             catch(Exception ex)
             {
                 return NoContent();
+            }
+        }
+        
+        [HttpGet]
+        public async Task<ResponseCore<DashboardResultModel>> DashboardReport()
+        {
+            try
+            {
+                return await _dashboardService.GetDashboardData();
+            }
+            catch(Exception ex)
+            {
+                return ex;
             }
         }
 
