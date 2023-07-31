@@ -715,7 +715,8 @@ namespace MainInfrastructures.Services
         {
             OrganizationIctSpecialForces orgSpecialForces = new OrganizationIctSpecialForces();
 
-            var result = _db.Context.Set<OrganizationIctSpecialForces>().Where(r => r.OrganizationId == orgId).FirstOrDefault();
+            var result = _db.Context.Set<OrganizationIctSpecialForces>()
+                .FirstOrDefault(r => r.OrganizationId == orgId);
 
             if (result != null)
                 orgSpecialForces = result;
@@ -775,12 +776,12 @@ namespace MainInfrastructures.Services
             worksheet.Cells[27, 1].Style.Font.Bold = true;
             worksheet.Cells[27, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
 
-            worksheet.Cells[27, 2].Value = reestrResult.Items.Count + " ta";
+            worksheet.Cells[27, 2].Value = reestrResult.Items.Count.ToString(CultureInfo.InvariantCulture) + " ta";
 
             worksheet.Cells[28, 1].Value = "Ekspert xulosalari olinganligi";
             worksheet.Cells[28, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
 
-            worksheet.Cells[28, 2].Value = reestrResult.Items.Where(i => i.HasExpertise == true).ToList().Count + " ta";
+            worksheet.Cells[28, 2].Value = reestrResult.Items.Where(i => i.HasExpertise == true).ToList().Count.ToString(CultureInfo.InvariantCulture) + " ta";
 
             using (var range = worksheet.Cells[27, 2, 28, 2])
             {

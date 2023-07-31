@@ -32,5 +32,8 @@ namespace Domain.Models
         public bool PingService { get; set; }
         [Column("create_date")]
         public DateTime CreateDate { get; set; }
+        
+        [Column("create_date")]
+        public bool Dashboard { get; set; }
     }
 }
