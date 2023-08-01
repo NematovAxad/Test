@@ -101,6 +101,10 @@ namespace AdminHandler.Handlers.Ranking
                 ReportBySpheresModel model = new ReportBySpheresModel() {OrganizationId = o.Id, OrgName = o.ShortName, OrgNameRu = o.ShortNameRu, UserServiceId = o.UserServiceId, Category = o.OrgCategory, Spheres = new List<SphereRateElement>() };
                 if (o.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
                 {
+                    if(o.Id==106)
+                    {
+
+                    }
                     
                     double maxRate = 0;
                     double reached = 0;

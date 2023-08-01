@@ -87,7 +87,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 rateRelevance = Links.listGos.Where(t => t.Item1 == model.Section).FirstOrDefault().Item3;
             }
 
-            var orgData = _orgDataAvailability.Find(p => p.OrganizationId == model.OrganizationId && p.Section == model.Section).FirstOrDefault();
+            var orgData = _orgDataAvailability.Find(p => p.OrganizationId == model.OrganizationId && p.Section == model.Section && p.DeadlineId == deadline.Id).FirstOrDefault();
             if (orgData != null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
 
