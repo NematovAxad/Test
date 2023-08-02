@@ -441,7 +441,6 @@ namespace MainInfrastructures.Services
             result.WorkingStage = reestrProjectPositions.Count(p => p.ProjectStatus == ReestrProjectStatusInNis.WorkingStage && p.ExpertExcept == true);
             result.ExpertDecision = reestrProjectExpertDecisions.Count(p => p.Exist == true && p.ExpertExcept==true);
 
-            
             return await Task.FromResult(result);
         }
     }
