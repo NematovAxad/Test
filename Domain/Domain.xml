@@ -4,6 +4,11 @@
         <name>Domain</name>
     </assembly>
     <members>
+        <member name="T:Domain.Models.DashboardModels.RatedOrganizationServices">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Domain.Models.DashboardModels.OrgReportModel">
             <summary>
             
