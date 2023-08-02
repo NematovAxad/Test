@@ -392,7 +392,7 @@ namespace MainInfrastructures.Services
 
             var nationalElectronServices = publicServices.Where(s => (s.ServiceType == OrganizationServiceType.Electronic || s.ServiceType == OrganizationServiceType.NationalElectronic) && s.ServiceTypeExpert == true);
 
-            result.NationalElectronicServices = nationalElectronServices.Count();
+            result.ElectronicServices = nationalElectronServices.Count();
 
             var mygovServices = publicServices.Where(s => s.MyGovService == true && s.MyGovServiceExpert == true);
 
