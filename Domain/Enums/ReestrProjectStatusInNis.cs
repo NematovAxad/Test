@@ -6,6 +6,7 @@ namespace Domain.Enums
 {
     public enum ReestrProjectStatusInNis
     {
+        Undefined = 0,
         WorkingStage = 1,
         DevelopmentStage = 2,
         TestStage = 3,

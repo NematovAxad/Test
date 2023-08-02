@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Domain;
 using Domain.Enums;
+using Domain.IntegrationLinks;
 using Domain.Models;
 using Domain.Models.DashboardModels;
 using Domain.Models.FifthSection.ReestrModels;
@@ -18,6 +21,9 @@ using Domain.States;
 using JohaRepository;
 using MainInfrastructures.Interfaces;
 using MainInfrastructures.Migrations;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Domain.Models.SixthSection;
 
 namespace MainInfrastructures.Services
 {
@@ -28,6 +34,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ReestrProjectException, int> _reestrProjectException;
         private readonly IRepository<ReestrProjectPosition, int> _reestrProjectPosition;
         private readonly IRepository<ReestrProjectExpertDecision, int> _reestrProjectExpertDecision;
+        private readonly IRepository<OrganizationDigitalEconomyProjectsReport, int> _digitalEconomyProjectsReport;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<GRankTable, int> _gRankTable;
         private readonly IRepository<XRankTable, int> _xRankTable;
@@ -41,7 +48,6 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ASphere, int> _aSphere;
         private readonly IRepository<AField, int> _aField;
         private readonly IRepository<ASubField, int> _aSubField;
-        private readonly IReesterService _reesterService;
 
         public DashboardService(IRepository<Organizations, int> organizations, 
                                         IRepository<Deadline, int> deadline, 
@@ -60,8 +66,8 @@ namespace MainInfrastructures.Services
                                         IRepository<OrganizationPublicServices, int> organizationPublicServices,
                                         IRepository<ReestrProjectException, int> reestrProjectException,
                                         IRepository<ReestrProjectPosition, int> reestrProjectPosition,
-                                        IReesterService reesterService,
-                                        IRepository<ReestrProjectExpertDecision, int> reestrProjectExpertDecision
+                                        IRepository<ReestrProjectExpertDecision, int> reestrProjectExpertDecision,
+                                        IRepository<OrganizationDigitalEconomyProjectsReport, int> digitalEconomyProjectsReport
                                         )
         {
             _organization = organizations;
@@ -69,7 +75,7 @@ namespace MainInfrastructures.Services
             _reestrProjectException = reestrProjectException;
             _reestrProjectPosition = reestrProjectPosition;
             _reestrProjectExpertDecision = reestrProjectExpertDecision;
-            _reesterService = reesterService;
+            _digitalEconomyProjectsReport = digitalEconomyProjectsReport;
             _deadline = deadline;
             _gRankTable = gRankTable;
             _xRankTable = xRankTable;
@@ -95,6 +101,7 @@ namespace MainInfrastructures.Services
                 return await Task.FromResult(result);
 
             result.RatedServicesReport = await GetRatedServicesReport(deadline);
+            result.DigitalEconomyProjectsReport = await GetDigitalEconomyProjectsReport(deadline);
             result.ReestrProjectsReport = await GetReestrProjectsReport(deadline);
             result.GovernmentOrganizations = await Task.FromResult(GetGovernmentOrganizationsReport(deadline).Result);
             result.FarmOrganizations = await Task.FromResult(GetFarmOrganizationsReport(deadline).Result);
@@ -383,6 +390,10 @@ namespace MainInfrastructures.Services
 
             result.Count = publicServices.Count();
 
+            var nationalElectronServices = publicServices.Where(s => (s.ServiceType == OrganizationServiceType.Electronic || s.ServiceType == OrganizationServiceType.NationalElectronic) && s.ServiceTypeExpert == true);
+
+            result.NationalElectronicServices = nationalElectronServices.Count();
+
             var mygovServices = publicServices.Where(s => s.MyGovService == true && s.MyGovServiceExpert == true);
 
             result.MyGovServices = mygovServices.Count();
@@ -394,38 +405,42 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
+        public async Task<DigitalEconomyProjectsReport> GetDigitalEconomyProjectsReport(Deadline deadline)
+        {
+            DigitalEconomyProjectsReport result = new DigitalEconomyProjectsReport();
+            
+            var organizations = _organization.Find(o => o.IsActive == true && o.IsIct == true).ToList();
+
+            List<int> orgIds = organizations.Select(o => o.Id).ToList();
+
+            var report = _digitalEconomyProjectsReport.Find(r => orgIds.Any(i => i == r.OrganizationId));
+
+            result.Count = report.Sum(r=>r.ProjectsCount);
+            result.Completed = report.Sum(r => r.CompletedProjects);
+            result.Ongoing = report.Sum(r => r.OngoingProjects);
+            result.NotFinished = report.Sum(r => r.NotFinishedProjects);
+
+            return await Task.FromResult(result);
+        }
+
         public async Task<RatedReestrProjects> GetReestrProjectsReport(Deadline deadline)
         {
             RatedReestrProjects result = new RatedReestrProjects();
-            var reestrExceptions = _reestrProjectException.GetAll().Select(p => p.ReestrProjectId).ToList();
+            var reestrExceptions = _reestrProjectException.GetAll().Select(p => p.ReestrProjectId);
 
-            var reestrProjectPositions = _reestrProjectPosition
-                .Find(p => reestrExceptions.Any(i => i != p.ReestrProjectId));
+            var reestrProjectPositions = _reestrProjectPosition.GetAll();
+            reestrProjectPositions = reestrProjectPositions.Where(p =>p.ProjectStatus!= ReestrProjectStatusInNis.Undefined && reestrExceptions.Any(i => i != p.ReestrProjectId));
 
-            List<int> reestrIds = reestrProjectPositions.Select(p => p.ReestrProjectId).ToList();
-            
-            result.Count = reestrIds.Count;
-
-            result.WorkingStage = reestrProjectPositions.Count(p => p.ProjectStatus == ReestrProjectStatusInNis.WorkingStage && p.ExpertExcept == true);
+            var reestrIds = reestrProjectPositions.Select(p => p.ReestrProjectId);
 
             var reestrProjectExpertDecisions =
                 _reestrProjectExpertDecision.Find(p => reestrIds.Any(i => i == p.ReestrProjectId));
 
+            result.Count = reestrIds.Count();
+            result.ConfirmedProjectPassports = reestrIds.Count();
+            result.WorkingStage = reestrProjectPositions.Count(p => p.ProjectStatus == ReestrProjectStatusInNis.WorkingStage && p.ExpertExcept == true);
             result.ExpertDecision = reestrProjectExpertDecisions.Count(p => p.Exist == true && p.ExpertExcept==true);
-            
-            foreach (int id in reestrIds)
-            {
-                SecondRequestQuery query = new SecondRequestQuery()
-                {
-                    Id = id
-                };
-                SecondRequestQueryResult reestrProjectStatus = await _reesterService.SecondRequest(query);
 
-                if (reestrProjectStatus.PassportStatus == ReesterProjectStatus.CONFIRMED)
-                    result.ConfirmedProjectPassports++;
-            }
-
-            
             
             return await Task.FromResult(result);
         }

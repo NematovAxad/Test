@@ -23,6 +23,7 @@ namespace Domain.Models.DashboardModels
     public class RatedOrganizationServices
     {
         public int Count { get; set; }
+        public int NationalElectronicServices { get; set; }
         public int MyGovServices { get; set; }
         public int OtherAppServices { get; set; }
     }
