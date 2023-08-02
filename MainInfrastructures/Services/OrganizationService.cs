@@ -466,7 +466,9 @@ namespace MainInfrastructures.Services
                     }
                 }
 
-                rate = Math.Round((gotRate / maxRate) * 100, 2);
+                if(maxRate!=0)
+                    rate = Math.Round((gotRate / maxRate) * 100, 2);
+
 
                 if (rate == 0)
                     rate = 1;
@@ -503,7 +505,8 @@ namespace MainInfrastructures.Services
                     }
                 }
 
-                rate = Math.Round((gotRate / maxRate) * 100, 2);
+                if(maxRate != 0)
+                    rate = Math.Round((gotRate / maxRate) * 100, 2);
 
                 if (rate == 0)
                     rate = 1;
@@ -539,8 +542,9 @@ namespace MainInfrastructures.Services
                         maxRate += f.MaxRate;
                     }
                 }
+                if (maxRate != 0)
+                    rate = Math.Round((gotRate / maxRate) * 100, 2);
 
-                rate = Math.Round((gotRate / maxRate)*100, 2);
 
                 if (rate == 0)
                     rate = 1;
