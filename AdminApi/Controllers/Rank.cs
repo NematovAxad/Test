@@ -19,12 +19,14 @@ namespace AdminApi.Controllers
     [Route("apiAdmin/[controller]/[action]")]
     public class Rank : Controller
     {
-        IOrganizationService _organizationService;
+        private readonly IOrganizationService _organizationService;
+        private readonly IDashboardService _dashboardService;
         IMediator _mediator;
-        public Rank(IMediator mediator, IOrganizationService organizationService)
+        public Rank(IMediator mediator, IOrganizationService organizationService, IDashboardService dashboardService)
         {
             _mediator = mediator;
             _organizationService = organizationService;
+            _dashboardService = dashboardService;
         }
         [HttpGet]
         public async Task<ResponseCore<RankQueryResult>> Get([FromQuery] int orgId, int year, Quarters quarter, int sphereId, int fieldId, int subFieldId, int elementId)
@@ -122,6 +124,19 @@ namespace AdminApi.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<bool> TransferRanks([FromQuery] int deadlineFrom, int deadlineTo)
+        {
+            try
+            {
+                var result = await _dashboardService.TransferRanks(deadlineFrom, deadlineTo, this.UserPinfl());
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         [HttpPost]
         public async Task<ResponseCore<FieldExceptionCommandResult>> SetFielsException([FromQuery] FieldExceptionCommand model)
         {

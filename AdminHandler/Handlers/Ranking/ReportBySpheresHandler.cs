@@ -119,7 +119,7 @@ namespace AdminHandler.Handlers.Ranking
                             
                             double fieldRate = 0;
                             var subfields = gSubFields.Where(s => s.FieldId == field.Id).ToList();
-                            if(subfields.Count()>0)
+                            if(subfields.Any())
                             {
                                 foreach(var sField in subfields)
                                 {

@@ -14,6 +14,7 @@ namespace Domain.IntegrationLinks
         public static string AuthOrgGetUrl = "https://auth.egov.uz/api/Organization/GetOrg";
         public static string MyGovServices = "https://my.gov.uz/oz/api/nis-uz/download-service-deadline-file?";
         public static string MibService = "https://nisreport.egov.uz/nisreport/mip2?";
+        public static string MainAdminPinfl = "30811965270037";
 
 
         public static List<string> Sections = new List<string> { "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", 

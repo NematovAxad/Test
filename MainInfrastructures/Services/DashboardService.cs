@@ -110,7 +110,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<OrgReportModel> GetGovernmentOrganizationsReport(Deadline deadline)
+        private async Task<OrgReportModel> GetGovernmentOrganizationsReport(Deadline deadline)
         {
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.GovernmentOrganizations && o.IsActive == true && o.IsIct == true).ToList();
@@ -209,7 +209,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<OrgReportModel> GetFarmOrganizationsReport(Deadline deadline)
+        private async Task<OrgReportModel> GetFarmOrganizationsReport(Deadline deadline)
         {
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.FarmOrganizations && o.IsActive == true && o.IsIct == true).ToList();
@@ -293,7 +293,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<OrgReportModel> GetAdministrationOrganizationsReport(Deadline deadline)
+        private async Task<OrgReportModel> GetAdministrationOrganizationsReport(Deadline deadline)
         {
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.Adminstrations && o.IsActive == true && o.IsIct == true).ToList();
@@ -377,7 +377,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<RatedOrganizationServices> GetRatedServicesReport(Deadline deadline)
+        private async Task<RatedOrganizationServices> GetRatedServicesReport(Deadline deadline)
         {
             RatedOrganizationServices result = new RatedOrganizationServices();
             
@@ -405,7 +405,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<DigitalEconomyProjectsReport> GetDigitalEconomyProjectsReport(Deadline deadline)
+        private async Task<DigitalEconomyProjectsReport> GetDigitalEconomyProjectsReport(Deadline deadline)
         {
             DigitalEconomyProjectsReport result = new DigitalEconomyProjectsReport();
             
@@ -423,7 +423,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<RatedReestrProjects> GetReestrProjectsReport(Deadline deadline)
+        private async Task<RatedReestrProjects> GetReestrProjectsReport(Deadline deadline)
         {
             RatedReestrProjects result = new RatedReestrProjects();
             var reestrExceptions = _reestrProjectException.GetAll().Select(p => p.ReestrProjectId);
@@ -442,6 +442,144 @@ namespace MainInfrastructures.Services
             result.ExpertDecision = reestrProjectExpertDecisions.Count(p => p.Exist == true && p.ExpertExcept==true);
 
             return await Task.FromResult(result);
+        }
+
+        public async Task<bool> TransferRanks(int deadlineFromId, int deadlineToId, string userPinfl)
+        {
+            #region Check Deadline
+
+            if (userPinfl != Links.MainAdminPinfl)
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            
+            var deadlineFrom = _deadline.Find(d => d.Id == deadlineFromId).FirstOrDefault();
+            if (deadlineFrom == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+            
+            var deadlineTo = _deadline.Find(d => d.Id == deadlineToId).FirstOrDefault();
+            if (deadlineTo == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+
+            #endregion
+
+            await CheckRanks(deadlineFrom, deadlineTo);
+
+            await TransferGovernmentRanks(deadlineFrom, deadlineTo);
+
+            await TransferFarmRanks(deadlineFrom, deadlineTo);
+
+            await TransferAdministrationRanks(deadlineFrom, deadlineTo);
+            
+            return await Task.FromResult(true);
+        }
+
+        private Task CheckRanks(Deadline deadlineFrom, Deadline deadlineTo)
+        {
+            var gRanksToExport = _gRankTable.Find(r => r.Year == deadlineFrom.Year && r.Quarter == deadlineFrom.Quarter)
+                .ToList();
+            if (!gRanksToExport.Any())
+                throw ErrorStates.Error(UIErrors.DataForThisPeriodNotFound);
+            
+            var gRanksToFill = _gRankTable.Find(r => r.Year == deadlineTo.Year && r.Quarter == deadlineTo.Quarter)
+                .ToList();
+            if (gRanksToFill.Any())
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist); 
+            
+            var xRanksToExport = _xRankTable.Find(r => r.Year == deadlineFrom.Year && r.Quarter == deadlineFrom.Quarter)
+                .ToList();
+            if (!xRanksToExport.Any())
+                throw ErrorStates.Error(UIErrors.DataForThisPeriodNotFound);
+            
+            var xRanksToFill = _xRankTable.Find(r => r.Year == deadlineTo.Year && r.Quarter == deadlineTo.Quarter)
+                .ToList();
+            if (xRanksToFill.Any())
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            
+            var aRanksToExport = _aRankTable.Find(r => r.Year == deadlineFrom.Year && r.Quarter == deadlineFrom.Quarter)
+                .ToList();
+            if (!aRanksToExport.Any())
+                throw ErrorStates.Error(UIErrors.DataForThisPeriodNotFound);
+            
+            var aRanksToFill = _aRankTable.Find(r => r.Year == deadlineTo.Year && r.Quarter == deadlineTo.Quarter)
+                .ToList();
+            if (aRanksToFill.Any())
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+
+            return Task.FromResult(0);
+        }
+
+        private Task TransferGovernmentRanks(Deadline deadlineFrom, Deadline deadlineTo)
+        {
+         
+            var gRanksToExport = _gRankTable.Find(r => r.Year == deadlineFrom.Year && r.Quarter == deadlineFrom.Quarter)
+                .ToList();
+
+            List<GRankTable> addList = new List<GRankTable>();
+            
+            foreach (var rank in gRanksToExport)
+            {
+                GRankTable newRank = new GRankTable();
+                
+                newRank = rank;
+                newRank.Id = 0;
+                newRank.Year = deadlineTo.Year;
+                newRank.Quarter = deadlineTo.Quarter;
+                
+                addList.Add(newRank);
+            }
+            
+            _gRankTable.AddRange(addList);
+            
+            return Task.FromResult(0);
+        }
+        
+        private Task TransferFarmRanks(Deadline deadlineFrom, Deadline deadlineTo)
+        {
+         
+            var xRanksToExport = _xRankTable.Find(r => r.Year == deadlineFrom.Year && r.Quarter == deadlineFrom.Quarter)
+                .ToList();
+
+            List<XRankTable> addList = new List<XRankTable>();
+            
+            foreach (var rank in xRanksToExport)
+            {
+                XRankTable newRank = new XRankTable();
+                
+                newRank = rank;
+                newRank.Id = 0;
+                newRank.Year = deadlineTo.Year;
+                newRank.Quarter = deadlineTo.Quarter;
+                
+                addList.Add(newRank);
+            }
+            
+            _xRankTable.AddRange(addList);
+            
+            return Task.FromResult(0);
+        }
+        
+        private Task TransferAdministrationRanks(Deadline deadlineFrom, Deadline deadlineTo)
+        {
+         
+            var aRanksToExport = _aRankTable.Find(r => r.Year == deadlineFrom.Year && r.Quarter == deadlineFrom.Quarter)
+                .ToList();
+
+            List<ARankTable> addList = new List<ARankTable>();
+            
+            foreach (var rank in aRanksToExport)
+            {
+                ARankTable newRank = new ARankTable();
+                
+                newRank = rank;
+                newRank.Id = 0;
+                newRank.Year = deadlineTo.Year;
+                newRank.Quarter = deadlineTo.Quarter;
+                
+                addList.Add(newRank);
+            }
+            
+            _aRankTable.AddRange(addList);
+            
+            return Task.FromResult(0);
         }
     }
 }

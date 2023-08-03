@@ -730,8 +730,11 @@ namespace MainInfrastructures.Services
             var memoryStream = new MemoryStream();
             using (ExcelPackage package = new ExcelPackage(memoryStream))
             {
-                ExcelWorksheet worksheet;
-                worksheet = package.Workbook.Worksheets.Add(fileName);
+                var worksheet = package.Workbook.Worksheets.Add(fileName);
+                worksheet.Columns[1].Width = 50;
+                worksheet.DefaultRowHeight = 15;
+                worksheet.DefaultColWidth = 15;
+                
                 if (category != 0)
                 {
                     switch (category)
@@ -767,38 +770,45 @@ namespace MainInfrastructures.Services
 
         private async Task SetGovernmentRateReport(ExcelWorksheet worksheet, Deadline deadline, int excelStartIndex)
         {
+            var gRanks = 
             rankExcelStartIndex = excelStartIndex;
-            int columnIndexHeader = 1;
+            int columnIndex = 1;
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.GovernmentOrganizations && o.IsActive == true && o.IsIct == true).ToList();
 
             var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields)
                 .OrderBy(s => s.Section).ToList();
+
+            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = "Organizations";
+            columnIndex++;
             foreach (var sphere in spheres)
             {
                 foreach (var field in sphere.GFields)
                 {
                     if (field.Section != "2.3")
                     {
-                        worksheet.Cells[rankExcelStartIndex, columnIndexHeader].Value =
+                        worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
                             $"{field.Section} {field.Name} (Max {field.MaxRate.ToString(CultureInfo.InvariantCulture)})";
-                        columnIndexHeader++; 
+                        columnIndex++; 
                     }
                 }
 
-                worksheet.Cells[rankExcelStartIndex, columnIndexHeader].Value =
+                worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
                     $"{sphere.Section} (Max {sphere.MaxRate.ToString(CultureInfo.InvariantCulture)})";
-                columnIndexHeader++;
+                columnIndex++;
             }
-
+            worksheet.Rows[rankExcelStartIndex].Height = 40;
+            
             rankExcelStartIndex++;
             
             foreach (var org in organizations)
             {
-                int columnIndex = 1;
-                double sphereRate = 0;
+                columnIndex = 1;
+                worksheet.Cells[rankExcelStartIndex, columnIndex].Value = $"{org.ShortName}";
+                columnIndex++;    
                 foreach(var sphere in spheres)
                 {
+                    double sphereRate = 0;
                     foreach (var field in sphere.GFields)
                     {
                         if (field.Section != "2.3")
@@ -806,11 +816,11 @@ namespace MainInfrastructures.Services
                             var fieldRank = GetFieldRank(deadline, org, field.Id).Result;
                             worksheet.Cells[rankExcelStartIndex, columnIndex].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
                             columnIndex++;
-                            sphereRate += fieldRank; 
+                            sphereRate += Math.Round(fieldRank, 2); 
                         }
                     }
-                    worksheet.Cells[rankExcelStartIndex, columnIndexHeader].Value = sphereRate.ToString(CultureInfo.InvariantCulture);
-                    columnIndexHeader++;
+                    worksheet.Cells[rankExcelStartIndex, columnIndex].Value = sphereRate.ToString(CultureInfo.InvariantCulture);
+                    columnIndex++;
                 }
                 rankExcelStartIndex++;
             }
