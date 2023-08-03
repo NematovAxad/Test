@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Net.Http.Headers;
 using OfficeOpenXml;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 using Domain.Models.ThirdSection;
@@ -59,6 +60,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ARankTable, int> _aRankTable;
         private readonly IDataContext _db;
         private readonly IReesterService _reesterService;
+        private int rankExcelStartIndex;
         public OrganizationService(IRepository<Deadline, int> deadline,
                                     IRepository<Organizations, int> organization, 
                                     IRepository<GSphere, int> gSphere, 
@@ -588,7 +590,7 @@ namespace MainInfrastructures.Services
 
             var replaceOrgHead = GetReplacerOrgHead(org.Id);
 
-            string fileName = org.ShortName + " _details";
+            string fileName = $"{org.ShortName} _details";
             var memoryStream = new MemoryStream();
 
             using (ExcelPackage package = new ExcelPackage(memoryStream))
@@ -715,6 +717,122 @@ namespace MainInfrastructures.Services
             return memoryStream;
         }
 
+        public async Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category)
+        {
+            rankExcelStartIndex = 1;
+            
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+
+            if (deadline == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+            
+            string fileName = "Rank_details";
+            var memoryStream = new MemoryStream();
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet;
+                worksheet = package.Workbook.Worksheets.Add(fileName);
+                if (category != 0)
+                {
+                    switch (category)
+                    {
+                        case OrgCategory.Adminstrations:
+                            await SetAdministrationRateReport(worksheet, rankExcelStartIndex);
+                            break;
+                        case OrgCategory.GovernmentOrganizations:
+                            await SetGovernmentRateReport(worksheet, deadline, rankExcelStartIndex);
+                            break;
+                        case OrgCategory.FarmOrganizations:
+                            await SetFarmRateReport(worksheet, rankExcelStartIndex);
+                            break;
+                    }
+                }
+                else
+                {
+
+                    await SetGovernmentRateReport(worksheet, deadline, rankExcelStartIndex);
+                    await SetFarmRateReport(worksheet, rankExcelStartIndex);
+                    await SetAdministrationRateReport(worksheet, rankExcelStartIndex);
+
+                    worksheet.Cells[rankExcelStartIndex, 1].Value = "finish";
+                }
+                package.Save();
+            }
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+
+            return await Task.FromResult(memoryStream);
+        }
+
+        private async Task SetGovernmentRateReport(ExcelWorksheet worksheet, Deadline deadline, int excelStartIndex)
+        {
+            rankExcelStartIndex = excelStartIndex;
+            int columnIndexHeader = 1;
+            var organizations = _organization.Find(o =>
+                o.OrgCategory == OrgCategory.GovernmentOrganizations && o.IsActive == true && o.IsIct == true).ToList();
+
+            var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields)
+                .OrderBy(s => s.Section).ToList();
+            foreach (var sphere in spheres)
+            {
+                foreach (var field in sphere.GFields)
+                {
+                    if (field.Section != "2.3")
+                    {
+                        worksheet.Cells[rankExcelStartIndex, columnIndexHeader].Value =
+                            $"{field.Section} {field.Name} (Max {field.MaxRate.ToString(CultureInfo.InvariantCulture)})";
+                        columnIndexHeader++; 
+                    }
+                }
+
+                worksheet.Cells[rankExcelStartIndex, columnIndexHeader].Value =
+                    $"{sphere.Section} (Max {sphere.MaxRate.ToString(CultureInfo.InvariantCulture)})";
+                columnIndexHeader++;
+            }
+
+            rankExcelStartIndex++;
+            
+            foreach (var org in organizations)
+            {
+                int columnIndex = 1;
+                double sphereRate = 0;
+                foreach(var sphere in spheres)
+                {
+                    foreach (var field in sphere.GFields)
+                    {
+                        if (field.Section != "2.3")
+                        {
+                            var fieldRank = GetFieldRank(deadline, org, field.Id).Result;
+                            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
+                            columnIndex++;
+                            sphereRate += fieldRank; 
+                        }
+                    }
+                    worksheet.Cells[rankExcelStartIndex, columnIndexHeader].Value = sphereRate.ToString(CultureInfo.InvariantCulture);
+                    columnIndexHeader++;
+                }
+                rankExcelStartIndex++;
+            }
+
+            rankExcelStartIndex += 3;
+        }
+        private async Task SetFarmRateReport(ExcelWorksheet worksheet, int excelStartIndex)
+        {
+            
+            rankExcelStartIndex = excelStartIndex;
+            worksheet.Cells[rankExcelStartIndex, 1].Value = "Farm";
+            
+
+            rankExcelStartIndex += 3;
+        }
+        private async Task SetAdministrationRateReport(ExcelWorksheet worksheet, int excelStartIndex)
+        {
+            rankExcelStartIndex = excelStartIndex;
+            worksheet.Cells[rankExcelStartIndex, 1].Value = "Administration";
+
+            rankExcelStartIndex += 3;
+        }
         private async Task SetICTDepartmentDetaills(ExcelWorksheet worksheet, int orgId)
         {
             OrganizationIctSpecialForces orgSpecialForces = new OrganizationIctSpecialForces();
@@ -894,7 +1012,7 @@ namespace MainInfrastructures.Services
                             sphereRate += fieldRank;
 
                             worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
-                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
+                            worksheet.Cells[excelIndex, 2].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
 
                             excelIndex++;
                         }

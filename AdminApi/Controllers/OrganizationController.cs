@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Enums;
 using Domain.Models.DashboardModels;
 using MainInfrastructures.Services;
 
@@ -37,6 +38,21 @@ namespace AdminApi.Controllers
             try
             {
                 var stream = await _organizationService.DownloadOrgData(orgId);
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> DownloadRankReport([FromQuery] OrgCategory category)
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrganizationsRateReport(category);
 
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
             }

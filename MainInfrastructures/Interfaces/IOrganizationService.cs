@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace MainInfrastructures.Interfaces
 {
@@ -23,5 +24,6 @@ namespace MainInfrastructures.Interfaces
         Task<OrgExceptionPercentResultModel> GetOrganizationExceptionPercent(int orgId);
 
         Task<MemoryStream> DownloadOrgData(int orgId);
+        Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category);
     }
 }
