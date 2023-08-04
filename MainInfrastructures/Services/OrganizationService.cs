@@ -725,7 +725,11 @@ namespace MainInfrastructures.Services
 
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
-            
+
+           
+            var xRankTable = _gRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
+            var aRankTable = _gRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
+
             string fileName = "Rank_details";
             var memoryStream = new MemoryStream();
             using (ExcelPackage package = new ExcelPackage(memoryStream))
@@ -770,7 +774,7 @@ namespace MainInfrastructures.Services
 
         private async Task SetGovernmentRateReport(ExcelWorksheet worksheet, Deadline deadline, int excelStartIndex)
         {
-            var gRanks = 
+            var gRankTable = _gRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
             rankExcelStartIndex = excelStartIndex;
             int columnIndex = 1;
             var organizations = _organization.Find(o =>
@@ -813,7 +817,7 @@ namespace MainInfrastructures.Services
                     {
                         if (field.Section != "2.3")
                         {
-                            var fieldRank = GetFieldRank(deadline, org, field.Id).Result;
+                            var fieldRank = GetFieldRankGovernment(gRankTable, org, field).Result;
                             worksheet.Cells[rankExcelStartIndex, columnIndex].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
                             columnIndex++;
                             sphereRate += Math.Round(fieldRank, 2); 
@@ -1268,6 +1272,58 @@ namespace MainInfrastructures.Services
                 }
                 default:
                     return await Task.FromResult<double>(0);
+            }
+        }
+
+        private async Task<double> GetFieldRankGovernment(List<GRankTable> rankTable, Organizations organization, GField field)
+        {
+            double fieldRank = 0;
+
+            var rank = rankTable.Where(r =>
+                r.OrganizationId == organization.Id &&
+                r.SphereId == field.SphereId && r.FieldId == field.Id).ToList();
+
+            if (rank.Count > 0)
+            {
+                var subField = _gSubField.Find(s => s.FieldId == field.Id).ToList();
+                if (subField.Any())
+                {
+                    foreach (var sField in subField)
+                    {
+                        var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
+                        if (subFieldRankWithElements.Any())
+                        {
+                            var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
+                            fieldRank += subfieldRankMedium;
+                        }
+
+                        var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
+                        if (subFieldRankWithoutElements != null)
+                        {
+                            fieldRank += Math.Round(subFieldRankWithoutElements.Rank, 2);
+                        }
+                    }
+                    return await Task.FromResult<double>(fieldRank);
+                }
+                else
+                {
+                    var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
+                    if (rankWithElements.Count > 0)
+                    {
+                        fieldRank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                    }
+
+                    var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
+                    if (rankWithouthElements != null)
+                    {
+                        fieldRank = Math.Round(rankWithouthElements.Rank, 2);
+                    }
+                    return await Task.FromResult<double>(fieldRank);
+                }
+            }
+            else
+            {
+                return await Task.FromResult<double>(0);
             }
         }
     }
