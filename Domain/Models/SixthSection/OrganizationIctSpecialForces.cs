@@ -35,6 +35,9 @@ namespace Domain.Models.SixthSection
         [Column("full_name_head")]
         public string FullNameDirector { get; set; }
 
+        [Column("photo_path")]
+        public string PhotoPath { get; set; }
+
 
         [Column("head_position")]
         public string HeadPosition { get; set; }

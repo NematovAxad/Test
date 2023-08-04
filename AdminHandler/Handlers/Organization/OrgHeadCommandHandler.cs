@@ -58,7 +58,8 @@ namespace AdminHandler.Handlers.Organization
                 Phone = model.Phone,
                 Email = model.Email,
                 Fax = model.Fax,
-                FilePath = model.FilePath
+                FilePath = model.FilePath,
+                PhotoPath = model.PhotoPath
             };
             _replacerHead.Add(addModel);
         }
@@ -81,8 +82,8 @@ namespace AdminHandler.Handlers.Organization
             head.Phone = model.Phone;
             head.Email = model.Email;
             head.Fax = model.Fax;
+            head.PhotoPath = model.PhotoPath;
             
-
             _replacerHead.Update(head);
         }
         public void Delete(OrgHeadCommand model)

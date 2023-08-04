@@ -33,5 +33,6 @@ namespace AdminHandler.Commands.Organization
         public string Email { get; set; }
         public string Fax { get; set; }
         public string FilePath { get; set; }
+        public string PhotoPath { get; set; }
     }
 }

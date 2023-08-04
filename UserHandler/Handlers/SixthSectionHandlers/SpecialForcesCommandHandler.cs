@@ -90,6 +90,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             addModel.FullNameDirector = model.FullNameDirector;
 
+            addModel.PhotoPath = model.PhotoPath;
+
             addModel.HeadPosition = model.HeadPosition;
 
             addModel.WorkPhone = model.WorkPhone;
@@ -209,6 +211,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             specialForces.FormOfSpecialForces = model.FormOfSpecialForces;
 
             specialForces.FullNameDirector = model.FullNameDirector;
+
+            specialForces.PhotoPath = model.PhotoPath;
 
             specialForces.HeadPosition = model.HeadPosition;
 

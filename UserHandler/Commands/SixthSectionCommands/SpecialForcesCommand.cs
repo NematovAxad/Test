@@ -37,6 +37,8 @@ namespace UserHandler.Commands.SixthSectionCommands
 
         public string FullNameDirector { get; set; }
 
+        public string PhotoPath { get; set; }
+
         public string HeadPosition { get; set; }
 
         public string WorkPhone { get; set; }

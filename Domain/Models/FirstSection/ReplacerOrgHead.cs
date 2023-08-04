@@ -31,5 +31,7 @@ namespace Domain.Models.FirstSection
         public string Fax { get; set; }
         [Column("file_path")]
         public string FilePath { get; set; }
+        [Column("photo_path")]
+        public string PhotoPath { get; set; }
     }
 }
