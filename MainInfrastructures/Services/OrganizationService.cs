@@ -736,7 +736,7 @@ namespace MainInfrastructures.Services
             {
                 var worksheet = package.Workbook.Worksheets.Add(fileName);
                 worksheet.Columns[1].Width = 50;
-                worksheet.DefaultRowHeight = 15;
+                worksheet.DefaultRowHeight = 20;
                 worksheet.DefaultColWidth = 15;
                 
                 if (category != 0)
@@ -744,24 +744,15 @@ namespace MainInfrastructures.Services
                     switch (category)
                     {
                         case OrgCategory.Adminstrations:
-                            await SetAdministrationRateReport(worksheet, rankExcelStartIndex);
+                            await SetAdministrationRateReport(worksheet, deadline, rankExcelStartIndex);
                             break;
                         case OrgCategory.GovernmentOrganizations:
                             await SetGovernmentRateReport(worksheet, deadline, rankExcelStartIndex);
                             break;
                         case OrgCategory.FarmOrganizations:
-                            await SetFarmRateReport(worksheet, rankExcelStartIndex);
+                            await SetFarmRateReport(worksheet, deadline, rankExcelStartIndex);
                             break;
                     }
-                }
-                else
-                {
-
-                    await SetGovernmentRateReport(worksheet, deadline, rankExcelStartIndex);
-                    await SetFarmRateReport(worksheet, rankExcelStartIndex);
-                    await SetAdministrationRateReport(worksheet, rankExcelStartIndex);
-
-                    worksheet.Cells[rankExcelStartIndex, 1].Value = "finish";
                 }
                 package.Save();
             }
@@ -780,10 +771,11 @@ namespace MainInfrastructures.Services
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.GovernmentOrganizations && o.IsActive == true && o.IsIct == true).ToList();
 
-            var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields)
+            var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields).ThenInclude(mbox => mbox.GSubFields)
                 .OrderBy(s => s.Section).ToList();
 
             worksheet.Cells[rankExcelStartIndex, columnIndex].Value = "Organizations";
+            worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = "Maximal Ball";
             columnIndex++;
             foreach (var sphere in spheres)
             {
@@ -792,18 +784,29 @@ namespace MainInfrastructures.Services
                     if (field.Section != "2.3")
                     {
                         worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
-                            $"{field.Section} {field.Name} (Max {field.MaxRate.ToString(CultureInfo.InvariantCulture)})";
+                            $"{field.Section} {field.Name}";
+                        worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = $"{field.MaxRate.ToString(CultureInfo.InvariantCulture)}";
                         columnIndex++; 
                     }
                 }
 
                 worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
-                    $"{sphere.Section} (Max {sphere.MaxRate.ToString(CultureInfo.InvariantCulture)})";
+                    $"{sphere.Section} {sphere.Name}";
+                worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = $"{sphere.MaxRate.ToString(CultureInfo.InvariantCulture)}";
                 columnIndex++;
             }
-            worksheet.Rows[rankExcelStartIndex].Height = 40;
-            
-            rankExcelStartIndex++;
+            worksheet.Rows[rankExcelStartIndex].Height = 100;
+            worksheet.Rows[rankExcelStartIndex+1].Height = 30;
+
+            using (var range = worksheet.Cells[rankExcelStartIndex, 1, rankExcelStartIndex+1, columnIndex])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                range.Style.WrapText = true;
+                range.Style.Font.Bold = true;
+            }
+
+            rankExcelStartIndex += 2;
             
             foreach (var org in organizations)
             {
@@ -817,13 +820,13 @@ namespace MainInfrastructures.Services
                     {
                         if (field.Section != "2.3")
                         {
-                            var fieldRank = GetFieldRankGovernment(gRankTable, org, field).Result;
-                            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
+                            var fieldRank = await GetFieldRankGovernment(gRankTable, org, field);
+                            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = fieldRank;
                             columnIndex++;
                             sphereRate += Math.Round(fieldRank, 2); 
                         }
                     }
-                    worksheet.Cells[rankExcelStartIndex, columnIndex].Value = sphereRate.ToString(CultureInfo.InvariantCulture);
+                    worksheet.Cells[rankExcelStartIndex, columnIndex].Value = sphereRate;
                     columnIndex++;
                 }
                 rankExcelStartIndex++;
@@ -831,19 +834,146 @@ namespace MainInfrastructures.Services
 
             rankExcelStartIndex += 3;
         }
-        private async Task SetFarmRateReport(ExcelWorksheet worksheet, int excelStartIndex)
+        private async Task SetFarmRateReport(ExcelWorksheet worksheet, Deadline deadline, int excelStartIndex)
         {
-            
+
+            var xRankTable = _xRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
             rankExcelStartIndex = excelStartIndex;
-            worksheet.Cells[rankExcelStartIndex, 1].Value = "Farm";
-            
+            int columnIndex = 1;
+            var organizations = _organization.Find(o =>
+                o.OrgCategory == OrgCategory.FarmOrganizations && o.IsActive == true && o.IsIct == true).ToList();
+
+            var spheres = _xSphere.GetAll().Include(mbox => mbox.XFields).ThenInclude(mbox => mbox.XSubFields)
+                .OrderBy(s => s.Section).ToList();
+
+            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = "Organizations";
+            worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = "Maximal Ball";
+            columnIndex++;
+            foreach (var sphere in spheres)
+            {
+                foreach (var field in sphere.XFields)
+                {
+                    if (field.Section != "2.3")
+                    {
+                        worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
+                            $"{field.Section} {field.Name}";
+                        worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = $"{field.MaxRate.ToString(CultureInfo.InvariantCulture)}";
+                        columnIndex++;
+                    }
+                }
+
+                worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
+                    $"{sphere.Section} {sphere.Name}";
+                worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = $"{sphere.MaxRate.ToString(CultureInfo.InvariantCulture)}";
+                columnIndex++;
+            }
+            worksheet.Rows[rankExcelStartIndex].Height = 100;
+            worksheet.Rows[rankExcelStartIndex + 1].Height = 30;
+
+            using (var range = worksheet.Cells[rankExcelStartIndex, 1, rankExcelStartIndex + 1, columnIndex])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                range.Style.WrapText = true;
+                range.Style.Font.Bold = true;
+            }
+
+            rankExcelStartIndex += 2;
+
+            foreach (var org in organizations)
+            {
+                columnIndex = 1;
+                worksheet.Cells[rankExcelStartIndex, columnIndex].Value = $"{org.ShortName}";
+                columnIndex++;
+                foreach (var sphere in spheres)
+                {
+                    double sphereRate = 0;
+                    foreach (var field in sphere.XFields)
+                    {
+                        if (field.Section != "2.3")
+                        {
+                            var fieldRank = await GetFieldRankFarm(xRankTable, org, field);
+                            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = fieldRank;
+                            columnIndex++;
+                            sphereRate += Math.Round(fieldRank, 2);
+                        }
+                    }
+                    worksheet.Cells[rankExcelStartIndex, columnIndex].Value = sphereRate;
+                    columnIndex++;
+                }
+                rankExcelStartIndex++;
+            }
 
             rankExcelStartIndex += 3;
         }
-        private async Task SetAdministrationRateReport(ExcelWorksheet worksheet, int excelStartIndex)
+        private async Task SetAdministrationRateReport(ExcelWorksheet worksheet, Deadline deadline, int excelStartIndex)
         {
+            var aRankTable = _aRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
             rankExcelStartIndex = excelStartIndex;
-            worksheet.Cells[rankExcelStartIndex, 1].Value = "Administration";
+            int columnIndex = 1;
+            var organizations = _organization.Find(o =>
+                o.OrgCategory == OrgCategory.Adminstrations && o.IsActive == true && o.IsIct == true).ToList();
+
+            var spheres = _aSphere.GetAll().Include(mbox => mbox.AFields).ThenInclude(mbox => mbox.ASubFields)
+                .OrderBy(s => s.Section).ToList();
+
+            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = "Organizations";
+            worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = "Maximal Ball";
+            columnIndex++;
+            foreach (var sphere in spheres)
+            {
+                foreach (var field in sphere.AFields)
+                {
+                    if (field.Section != "2.3")
+                    {
+                        worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
+                            $"{field.Section} {field.Name}";
+                        worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = $"{field.MaxRate.ToString(CultureInfo.InvariantCulture)}";
+                        columnIndex++;
+                    }
+                }
+
+                worksheet.Cells[rankExcelStartIndex, columnIndex].Value =
+                    $"{sphere.Section} {sphere.Name}";
+                worksheet.Cells[rankExcelStartIndex + 1, columnIndex].Value = $"{sphere.MaxRate.ToString(CultureInfo.InvariantCulture)}";
+                columnIndex++;
+            }
+            worksheet.Rows[rankExcelStartIndex].Height = 100;
+            worksheet.Rows[rankExcelStartIndex + 1].Height = 30;
+
+            using (var range = worksheet.Cells[rankExcelStartIndex, 1, rankExcelStartIndex + 1, columnIndex])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                range.Style.WrapText = true;
+                range.Style.Font.Bold = true;
+            }
+
+            rankExcelStartIndex += 2;
+
+            foreach (var org in organizations)
+            {
+                columnIndex = 1;
+                worksheet.Cells[rankExcelStartIndex, columnIndex].Value = $"{org.ShortName}";
+                columnIndex++;
+                foreach (var sphere in spheres)
+                {
+                    double sphereRate = 0;
+                    foreach (var field in sphere.AFields)
+                    {
+                        if (field.Section != "2.3")
+                        {
+                            var fieldRank = await GetFieldRankAdministration(aRankTable, org, field);
+                            worksheet.Cells[rankExcelStartIndex, columnIndex].Value = fieldRank;
+                            columnIndex++;
+                            sphereRate += Math.Round(fieldRank, 2);
+                        }
+                    }
+                    worksheet.Cells[rankExcelStartIndex, columnIndex].Value = sphereRate;
+                    columnIndex++;
+                }
+                rankExcelStartIndex++;
+            }
 
             rankExcelStartIndex += 3;
         }
@@ -1026,7 +1156,7 @@ namespace MainInfrastructures.Services
                             sphereRate += fieldRank;
 
                             worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
-                            worksheet.Cells[excelIndex, 2].Value = fieldRank.ToString(CultureInfo.InvariantCulture);
+                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
 
                             excelIndex++;
                         }
@@ -1285,10 +1415,112 @@ namespace MainInfrastructures.Services
 
             if (rank.Count > 0)
             {
-                var subField = _gSubField.Find(s => s.FieldId == field.Id).ToList();
-                if (subField.Any())
+                //var subField = _gSubField.Find(s => s.FieldId == field.Id).ToList();
+                if (field.GSubFields.Any())
                 {
-                    foreach (var sField in subField)
+                    foreach (var sField in field.GSubFields)
+                    {
+                        var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
+                        if (subFieldRankWithElements.Any())
+                        {
+                            var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
+                            fieldRank += subfieldRankMedium;
+                        }
+
+                        var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
+                        if (subFieldRankWithoutElements != null)
+                        {
+                            fieldRank += Math.Round(subFieldRankWithoutElements.Rank, 2);
+                        }
+                    }
+                    return await Task.FromResult<double>(fieldRank);
+                }
+                else
+                {
+                    var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
+                    if (rankWithElements.Count > 0)
+                    {
+                        fieldRank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                    }
+
+                    var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
+                    if (rankWithouthElements != null)
+                    {
+                        fieldRank = Math.Round(rankWithouthElements.Rank, 2);
+                    }
+                    return await Task.FromResult<double>(fieldRank);
+                }
+            }
+            else
+            {
+                return await Task.FromResult<double>(0);
+            }
+        }
+        private async Task<double> GetFieldRankFarm(List<XRankTable> rankTable, Organizations organization, XField field)
+        {
+            double fieldRank = 0;
+
+            var rank = rankTable.Where(r =>
+                r.OrganizationId == organization.Id &&
+                r.SphereId == field.SphereId && r.FieldId == field.Id).ToList();
+
+            if (rank.Count > 0)
+            {
+                //var subField = _gSubField.Find(s => s.FieldId == field.Id).ToList();
+                if (field.XSubFields.Any())
+                {
+                    foreach (var sField in field.XSubFields)
+                    {
+                        var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
+                        if (subFieldRankWithElements.Any())
+                        {
+                            var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
+                            fieldRank += subfieldRankMedium;
+                        }
+
+                        var subFieldRankWithoutElements = rank.FirstOrDefault(r => r.SubFieldId == sField.Id && r.ElementId == 0);
+                        if (subFieldRankWithoutElements != null)
+                        {
+                            fieldRank += Math.Round(subFieldRankWithoutElements.Rank, 2);
+                        }
+                    }
+                    return await Task.FromResult<double>(fieldRank);
+                }
+                else
+                {
+                    var rankWithElements = rank.Where(r => r.SubFieldId == 0 && r.ElementId != 0).ToList();
+                    if (rankWithElements.Count > 0)
+                    {
+                        fieldRank = Math.Round(rankWithElements.Select(r => r.Rank).Sum() / rankWithElements.Count(), 2);
+                    }
+
+                    var rankWithouthElements = rank.FirstOrDefault(r => r.SubFieldId == 0 && r.ElementId == 0);
+                    if (rankWithouthElements != null)
+                    {
+                        fieldRank = Math.Round(rankWithouthElements.Rank, 2);
+                    }
+                    return await Task.FromResult<double>(fieldRank);
+                }
+            }
+            else
+            {
+                return await Task.FromResult<double>(0);
+            }
+        }
+        private async Task<double> GetFieldRankAdministration(List<ARankTable> rankTable, Organizations organization, AField field)
+        {
+            double fieldRank = 0;
+
+            var rank = rankTable.Where(r =>
+                r.OrganizationId == organization.Id &&
+                r.SphereId == field.SphereId && r.FieldId == field.Id).ToList();
+
+            if (rank.Count > 0)
+            {
+                //var subField = _gSubField.Find(s => s.FieldId == field.Id).ToList();
+                if (field.ASubFields.Any())
+                {
+                    foreach (var sField in field.ASubFields)
                     {
                         var subFieldRankWithElements = rank.Where(r => r.SubFieldId == sField.Id && r.ElementId != 0).ToList();
                         if (subFieldRankWithElements.Any())
