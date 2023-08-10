@@ -38,9 +38,9 @@ namespace MainInfrastructures.Services
         
         public async Task<OpenDataQueryResult> OpenDataApi(OpenDataQuery model)
         {
-            var result = new OpenDataQueryResult();
+            var result = new OpenDataQueryResult() {Data = new List<Data>() };
 
-            var organization = _organizations.Find(o => o.Id == model.OrgId).FirstOrDefault();
+            var organization = _organizations.Find(o => o.UserServiceId == model.OrgId).FirstOrDefault();
             
             if (organization == null)
                 throw ErrorStates.Error(UIErrors.OrganizationNotFound);
@@ -61,19 +61,28 @@ namespace MainInfrastructures.Services
                     Link = table.Link
                 });
             }
+            if(tables.Count > 0)
+                result.LastUpdateTime = tables[0].TableLastUpdateDate;
 
-            result.LastUpdateTime = tables[0].TableLastUpdateDate;
 
             return await Task.FromResult(result);
         }
         
         public async Task<bool> UpdateOpenDataTable()
         {
+            var all = _openDataTable.GetAll();
+            _db.Context.Set<OpenDataTable>().RemoveRange(all);
+            _db.Context.SaveChanges();
+
             List<OpenDataTable> addList = new List<OpenDataTable>();
             var organizations = _organizations.Find(o => o.IsActive == true && o.IsIct == true).ToList();
 
             foreach (Organizations o in organizations)
             {
+                if(o.Id==131)
+                {
+
+                }
                 var result = new OpenDataQueryResult();
 
                 try
@@ -85,7 +94,7 @@ namespace MainInfrastructures.Services
                     var url = Links.OpenDataurl;
                     if (o.Id != 0)
                     {
-                        url = url + "?orgId=" + o.Id.ToString();
+                        url = url + "?orgId=" + o.UserServiceId.ToString();
                     }
 
                     var response = await client.GetAsync(url).ConfigureAwait(false);

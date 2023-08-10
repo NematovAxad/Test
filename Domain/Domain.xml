@@ -86,6 +86,56 @@
             
             </summary>
         </member>
+        <member name="T:Domain.Models.SecondSection.OpenDataTable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.OrganizationId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.Organizations">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.TableId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.TableName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.UpdateDate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.Status">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.Link">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.Models.SecondSection.OpenDataTable.TableLastUpdateDate">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Domain.Models.SecondSection.OrganizationSocials.Link1">
             <summary>
             
@@ -122,11 +172,6 @@
             </summary>
         </member>
         <member name="P:Domain.MonitoringModels.Models.Performencer.Name">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:Domain.RabbitMqTest">
             <summary>
             
             </summary>
