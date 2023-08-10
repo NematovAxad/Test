@@ -24,18 +24,29 @@ namespace UserApi.Controllers
         IMediator _mediator;
         ICyberSecurityService _cyberSecurityService;
         IOrganizationService _organizationService;
+        private IOpenDataService _openDataService;
         IMyGovService _myGovServices;
         IMibService _mibService;
 
-        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService, IMyGovService myGovServices, IMibService mibService)
+        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService, IMyGovService myGovServices, IMibService mibService, IOpenDataService openDataService)
         {
             _mediator = mediator;
             _cyberSecurityService = cyberSecurityService;
             _organizationService = organizationService;
             _myGovServices = myGovServices;
             _mibService = mibService;
+            _openDataService = openDataService;
         }
 
+        [HttpGet]
+        
+        
+        [HttpPost]
+        public async Task<bool> UpdateOpenData()
+        {
+            return await _openDataService.UpdateOpenDataTable();
+        }
+        
         [HttpGet]
         public async Task<ResponseCore<OpenDataQueryResult>> OpenData([FromQuery] int orgId)
         {

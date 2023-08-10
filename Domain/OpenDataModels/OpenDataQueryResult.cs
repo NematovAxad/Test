@@ -7,6 +7,7 @@ namespace Domain.OpenDataModels
     public class OpenDataQueryResult
     {
         public int Count { get; set; }
+        public DateTime LastUpdateTime { get; set; }
         public List<Data> Data { get; set; }
     }
 }

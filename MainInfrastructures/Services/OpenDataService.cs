@@ -6,49 +6,125 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Domain;
+using Domain.Models.FirstSection;
+using Domain.Models.SecondSection;
+using EntityRepository;
+using JohaRepository;
+using Microsoft.EntityFrameworkCore;
+using NLog.Filters;
+using SB.Common.Extensions;
 
 namespace MainInfrastructures.Services
 {
     public class OpenDataService:IOpenDataService
     {
+        private readonly IOrganizationService _organizationService;
+        private readonly IRepository<Organizations, int> _organizations;
+        private readonly IRepository<OpenDataTable, int> _openDataTable;
+        private readonly IDataContext _db;
+
+        public OpenDataService(IOrganizationService organizationService, IRepository<Organizations, int> organizations, IRepository<OpenDataTable, int> openDataTabl, IDataContext db)
+        {
+            _organizationService = organizationService;
+            _organizations = organizations;
+            _openDataTable = openDataTabl;
+            _db = db;
+        }
+        
         public async Task<OpenDataQueryResult> OpenDataApi(OpenDataQuery model)
         {
             var result = new OpenDataQueryResult();
 
-            try
+            var organization = _organizations.Find(o => o.Id == model.OrgId).FirstOrDefault();
+            
+            if (organization == null)
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+
+            var tables = _openDataTable.Find(t => t.OrganizationId == organization.Id)
+                .Include(mbox => mbox.Organizations).ToList();
+
+            foreach (var table in tables)
             {
-                HttpClientHandler clientHandler = new HttpClientHandler();
-                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-                HttpClient client = new HttpClient(clientHandler);
+                result.Count++;
+                result.Data.Add(new Data
+                {
+                    DataName = table.TableName,
+                    OrgName = table.Organizations.ShortName,
+                    Id = table.TableId,
+                    UpdateDate = table.UpdateDate,
+                    Status = table.Status,
+                    Link = table.Link
+                });
+            }
 
-                var url = Links.OpenDataurl;
-                if (model.OrgId != 0)
-                {
-                    url = url + "?orgId=" + model.OrgId.ToString();
-                }
+            result.LastUpdateTime = tables[0].TableLastUpdateDate;
 
-                var response = await client.GetAsync(url).ConfigureAwait(false);
-                if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
+            return await Task.FromResult(result);
+        }
+        
+        public async Task<bool> UpdateOpenDataTable()
+        {
+            List<OpenDataTable> addList = new List<OpenDataTable>();
+            var organizations = _organizations.Find(o => o.IsActive == true && o.IsIct == true).ToList();
+
+            foreach (Organizations o in organizations)
+            {
+                var result = new OpenDataQueryResult();
+
+                try
                 {
-                    var jsonString = await response.Content.ReadAsStringAsync();
-                    var obj = JObject.Parse(jsonString);
-                    var responseResult = JsonConvert.DeserializeObject<OpenDataResultModel>(jsonString);
-                    result.Count = responseResult.Result.Count;
-                    result.Data = responseResult.Result.Data;
-                    return result;
+                    HttpClientHandler clientHandler = new HttpClientHandler();
+                    clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                    HttpClient client = new HttpClient(clientHandler);
+
+                    var url = Links.OpenDataurl;
+                    if (o.Id != 0)
+                    {
+                        url = url + "?orgId=" + o.Id.ToString();
+                    }
+
+                    var response = await client.GetAsync(url).ConfigureAwait(false);
+                    if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                        var obj = JObject.Parse(jsonString);
+                        var responseResult = JsonConvert.DeserializeObject<OpenDataResultModel>(jsonString);
+                        result.Count = responseResult.Result.Count;
+                        result.Data = responseResult.Result.Data;
+                        foreach (Data data in result.Data)
+                        {
+                            OpenDataTable addModel = new OpenDataTable()
+                            {
+                            OrganizationId = o.Id,
+                            TableId = data.Id,
+                            TableName = data.DataName,
+                            UpdateDate = data.UpdateDate,
+                            Status = data.Status,
+                            Link = data.Link,
+                            TableLastUpdateDate = DateTime.Now
+                            };
+                            addList.Add(addModel);
+                        }
+                    }
+                    else
+                    {
+                        throw ErrorStates.NotResponding();
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    throw ErrorStates.NotResponding();
+                    throw ex;
                 }
             }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            _db.Context.Set<OpenDataTable>().AddRange(addList);
+            _db.Context.SaveChanges();
+            
+            return await Task.FromResult(true);
         }
     }
 }

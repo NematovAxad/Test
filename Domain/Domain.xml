@@ -126,6 +126,11 @@
             
             </summary>
         </member>
+        <member name="T:Domain.RabbitMqTest">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="F:Domain.UIErrors.DeadlineNotFound">
             <uz></uz>
             <ru></ru>
