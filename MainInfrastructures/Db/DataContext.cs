@@ -119,6 +119,8 @@ namespace MainInfrastructures.Db
         public DbSet<OrganizationServices> OrganizationServices { get; set; }
         public DbSet<OrganizationServicesRate> OrganizationServicesRate { get; set; }
         public DbSet<OpenDataTable> OpenDataTables { get; set; }
+        public DbSet<ReestrProjectPassport> ReestrProjectPassport { get; set; }
+        public DbSet<ReestrProjectPassportDetails> ReestrProjectPassportDetails { get; set; }
         public DbSet<ExceptionFields> ExceptionFields { get; set; }
 
         public DbSet<MibReport> MibReports { get; set; }
