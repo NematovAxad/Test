@@ -25,10 +25,26 @@ namespace UserApi.Controllers
         ICyberSecurityService _cyberSecurityService;
         IOrganizationService _organizationService;
         private IOpenDataService _openDataService;
+        private IReesterService _reesterService;
         IMyGovService _myGovServices;
         IMibService _mibService;
 
-        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, IOrganizationService organizationService, IMyGovService myGovServices, IMibService mibService, IOpenDataService openDataService)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="cyberSecurityService"></param>
+        /// <param name="organizationService"></param>
+        /// <param name="myGovServices"></param>
+        /// <param name="mibService"></param>
+        /// <param name="openDataService"></param>
+        /// <param name="reesterService"></param>
+        public Integration(IMediator mediator, ICyberSecurityService cyberSecurityService, 
+            IOrganizationService organizationService, 
+            IMyGovService myGovServices, 
+            IMibService mibService, 
+            IOpenDataService openDataService, 
+            IReesterService reesterService)
         {
             _mediator = mediator;
             _cyberSecurityService = cyberSecurityService;
@@ -36,15 +52,27 @@ namespace UserApi.Controllers
             _myGovServices = myGovServices;
             _mibService = mibService;
             _openDataService = openDataService;
+            _reesterService = reesterService;
         }
 
-        [HttpGet]
-        
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<bool> UpdateOpenData()
         {
             return await _openDataService.UpdateOpenDataTable();
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<bool> UpdateReestrTables()
+        {
+            return await _reesterService.UpdateReestrTable();
         }
         
         [HttpGet]
@@ -65,7 +93,7 @@ namespace UserApi.Controllers
                 return ex;
             }
         }
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ResponseCore<FirstRequestQueryResult>> ReesterProjects([FromQuery] int orgId, int page, int limit)
         {
             try
@@ -84,9 +112,28 @@ namespace UserApi.Controllers
             {
                 return ex;
             }
+        }*/
+        [HttpGet]
+        public async Task<ResponseCore<FirstRequestQueryResult>> ReesterProjects([FromQuery] int orgId, int page, int limit)
+        {
+            try
+            {
+                FirstRequestQuery model = new FirstRequestQuery()
+                {
+                    OrgId = orgId,
+                    Page = page,
+                    Limit = limit
+                };
+
+                return await _reesterService.FirstRequestTest(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ResponseCore<SecondRequestQueryResult>> ReesterProjectDetails([FromQuery] int id)
         {
             try
@@ -103,7 +150,31 @@ namespace UserApi.Controllers
             {
                 return ex;
             }
+        }*/
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ResponseCore<SecondRequestQueryResult>> ReesterProjectDetails([FromQuery] int id)
+        {
+            try
+            {
+                SecondRequestQuery model = new SecondRequestQuery()
+                {
+                    Id = id
+                };
+
+                return await _reesterService.SecondRequestTest(model);
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
+        
         [HttpGet]
         public async Task<bool> GetCyberSecurityRank([FromQuery] int deadlineId)
         {

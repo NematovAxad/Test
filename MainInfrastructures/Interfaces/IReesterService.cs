@@ -10,5 +10,9 @@ namespace MainInfrastructures.Interfaces
     {
         Task<FirstRequestQueryResult> FirstRequest(FirstRequestQuery model);
         Task<SecondRequestQueryResult> SecondRequest(SecondRequestQuery model);
+        Task<bool> UpdateReestrTable();
+
+        Task<FirstRequestQueryResult> FirstRequestTest(FirstRequestQuery model);
+        Task<SecondRequestQueryResult> SecondRequestTest(SecondRequestQuery model);
     }
 }

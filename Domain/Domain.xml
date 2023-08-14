@@ -324,5 +324,14 @@
             <en>Element Id Need </en>
             <kr>Требуется идентификатор элемента</kr>
         </member>
+        <member name="F:Domain.UIErrors.ReestrApierrorCase">
+            <summary>
+            
+            </summary>
+            <uz>Reestr api error respond</uz>
+            <ru>Reestr api error respond</ru>
+            <en>Reestr api error respond</en>
+            <kr>Reestr api error respond</kr>
+        </member>
     </members>
 </doc>

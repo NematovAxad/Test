@@ -79,10 +79,6 @@ namespace MainInfrastructures.Services
 
             foreach (Organizations o in organizations)
             {
-                if(o.Id==131)
-                {
-
-                }
                 var result = new OpenDataQueryResult();
 
                 try

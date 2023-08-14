@@ -162,5 +162,14 @@ namespace Domain
         /// <en>Element Id Need </en>
         /// <kr>Требуется идентификатор элемента</kr>
         ElementIdNeed = -16,
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <uz>Reestr api error respond</uz>
+        /// <ru>Reestr api error respond</ru>
+        /// <en>Reestr api error respond</en>
+        /// <kr>Reestr api error respond</kr>
+        ReestrApierrorCase = -16,
     }
 }

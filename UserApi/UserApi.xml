@@ -4,5 +4,29 @@
         <name>UserApi</name>
     </assembly>
     <members>
+        <member name="M:UserApi.Controllers.Integration.#ctor(MediatR.IMediator,MainInfrastructures.Interfaces.ICyberSecurityService,MainInfrastructures.Interfaces.IOrganizationService,MainInfrastructures.Interfaces.IMyGovService,MainInfrastructures.Interfaces.IMibService,MainInfrastructures.Interfaces.IOpenDataService,MainInfrastructures.Interfaces.IReesterService)">
+            <summary>
+            
+            </summary>
+            <param name="mediator"></param>
+            <param name="cyberSecurityService"></param>
+            <param name="organizationService"></param>
+            <param name="myGovServices"></param>
+            <param name="mibService"></param>
+            <param name="openDataService"></param>
+            <param name="reesterService"></param>
+        </member>
+        <member name="M:UserApi.Controllers.Integration.UpdateOpenData">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:UserApi.Controllers.Integration.UpdateReestrTables">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>
