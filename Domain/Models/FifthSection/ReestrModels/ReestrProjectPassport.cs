@@ -42,5 +42,8 @@ namespace Domain.Models.FifthSection.ReestrModels
 
         [Column("link_for_system")]
         public string LinkForSystem { get; set; }
+
+        [Column("update_time")]
+        public DateTime UpdateTime { get; set; }
     }
 }

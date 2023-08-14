@@ -8,6 +8,7 @@ namespace Domain.ReesterModels
     {
         public long Count { get; set; }
         public long TotalPages { get; set; }
+        public DateTime UpdateTime { get; set; }
         public List<FirstRequestResultModel> Items { get; set; }
     }
 }

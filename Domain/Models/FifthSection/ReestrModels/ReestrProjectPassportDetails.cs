@@ -47,5 +47,8 @@ namespace Domain.Models.FifthSection.ReestrModels
 
         [Column("cybersecurity_expertise")]
         public string CybersecurityExpertise { get; set; }
+
+        [Column("update_time")]
+        public DateTime UpdateTime { get; set; }
     }
 }

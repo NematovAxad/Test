@@ -17,6 +17,7 @@ namespace Domain.ReesterModels
         public List<string> RepresentingGovernmentAgencyList { get; set; }
         public List<IdentityGetModel> IdentityTypes { get; set; }
         public string CybersecurityExpertise { get; set; }
+        public DateTime UpdateTime { get; set; }
     }
     public class IdentityGetModel
     {

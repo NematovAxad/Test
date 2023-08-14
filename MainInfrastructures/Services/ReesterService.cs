@@ -181,7 +181,8 @@ namespace MainInfrastructures.Services
                                 PassportStatus = project.PassportStatus,
                                 HasTerms = project.HasTerms,
                                 HasExpertise = project.HasExpertise,
-                                LinkForSystem = project.LinkForSystem
+                                LinkForSystem = project.LinkForSystem,
+                                UpdateTime = DateTime.Now,
                             });
                             try
                             {
@@ -212,7 +213,8 @@ namespace MainInfrastructures.Services
                                         BasisName = resultSecond.BasisName,
                                         Tasks = resultSecond.Tasks,
                                         IsInterdepartmentalInformationSystem = resultSecond.IsInterdepartmentalInformationSystem,
-                                        CybersecurityExpertise = resultSecond.CybersecurityExpertise
+                                        CybersecurityExpertise = resultSecond.CybersecurityExpertise,
+                                        UpdateTime = DateTime.Now,
                                     });
                                 }
                                 else
@@ -248,7 +250,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<FirstRequestQueryResult> FirstRequestTest(FirstRequestQuery model)
+        public async Task<FirstRequestQueryResult> FirstRequestNew(FirstRequestQuery model)
         {
             var organization = _org.Find(d => d.Id == model.OrgId).FirstOrDefault();
             if (organization == null)
@@ -259,10 +261,13 @@ namespace MainInfrastructures.Services
             var orgProjects = _reestrPassport.Find(p => p.OrganizationId == model.OrgId).OrderByDescending(p => p.ReestrProjectId)
                 .ToList();
             var returnPart = orgProjects.Skip((int)(model.Page - 1) * model.Limit).Take(model.Limit)
-                .OrderByDescending(p => p.ReestrProjectId);
+                .OrderByDescending(p => p.ReestrProjectId).ToList();
 
             result.Count = orgProjects.Count;
             result.TotalPages = (int)orgProjects.Count / model.Limit;
+            
+            if (returnPart.Count > 0)
+                result.UpdateTime = returnPart[0].UpdateTime;
 
             if (orgProjects.Count > 0 && orgProjects.Count % model.Limit != 0)
                 result.TotalPages += 1;
@@ -287,7 +292,7 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(result);
         }
 
-        public async Task<SecondRequestQueryResult> SecondRequestTest(SecondRequestQuery model)
+        public async Task<SecondRequestQueryResult> SecondRequestNew(SecondRequestQuery model)
         {
             var result = new SecondRequestQueryResult(){RepresentingGovernmentAgencyList = new List<string>(), IdentityTypes = new List<IdentityGetModel>()};
             var reestrProjectDetails = _reestrPassportDetails.Find(p => p.ReestrProjectId == model.Id).FirstOrDefault();
@@ -301,6 +306,7 @@ namespace MainInfrastructures.Services
                 result.Tasks = reestrProjectDetails.Tasks;
                 result.IsInterdepartmentalInformationSystem = reestrProjectDetails.IsInterdepartmentalInformationSystem;
                 result.CybersecurityExpertise = reestrProjectDetails.CybersecurityExpertise;
+                result.UpdateTime = reestrProjectDetails.UpdateTime;
             }
 
             return await Task.FromResult(result);

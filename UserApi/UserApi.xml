@@ -28,5 +28,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:UserApi.Controllers.Integration.ReesterProjectDetails(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

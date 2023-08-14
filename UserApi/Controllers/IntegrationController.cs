@@ -125,7 +125,7 @@ namespace UserApi.Controllers
                     Limit = limit
                 };
 
-                return await _reesterService.FirstRequestTest(model);
+                return await _reesterService.FirstRequestNew(model);
             }
             catch (Exception ex)
             {
@@ -167,7 +167,7 @@ namespace UserApi.Controllers
                     Id = id
                 };
 
-                return await _reesterService.SecondRequestTest(model);
+                return await _reesterService.SecondRequestNew(model);
             }
             catch (Exception ex)
             {
