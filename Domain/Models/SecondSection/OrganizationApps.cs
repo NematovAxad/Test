@@ -31,5 +31,9 @@ namespace Domain.Models
         public string OtherAppLink { get; set; }
         [Column("has_responsive_website")]
         public bool HasResponsiveWebsite { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set;}
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

@@ -94,6 +94,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                             requirement.RequirementStatus = r.RequirementStatus;
                         };
                         
+                        if(!String.IsNullOrEmpty(model.UserPinfl))
+                            requirement.UserPinfl = model.UserPinfl;
+                        requirement.LastUpdate = DateTime.Now;
+
                         addList.Add(requirement);
                     }
                 }
@@ -158,6 +162,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                         requirement.Comment = r.Comment;
                         requirement.RequirementStatus = r.RequirementStatus;
                     };
+                    if (!String.IsNullOrEmpty(model.UserPinfl))
+                        requirement.UserPinfl = model.UserPinfl;
+                    requirement.LastUpdate = DateTime.Now;
                 }   
 
                 _db.Context.Set<WebSiteRequirements>().UpdateRange(orgRequirements);

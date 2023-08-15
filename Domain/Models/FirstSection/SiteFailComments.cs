@@ -24,5 +24,9 @@ namespace Domain.Models.FirstSection
         public string ExpertComment { get; set; }
         [Column("screen_path")]
         public string ScreenPath { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

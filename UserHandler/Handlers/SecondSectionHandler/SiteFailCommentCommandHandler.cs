@@ -67,6 +67,9 @@ namespace UserHandler.Handlers.SecondSectionHandler
             addModel.ExpertComment = model.ExpertComment;
             addModel.ScreenPath = model.ImagePath;
             
+            if(!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
 
             _fails.Add(addModel);
         }
@@ -90,7 +93,11 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             fail.ScreenPath = model.ImagePath;
-            fail.ExpertComment = model.ExpertComment;   
+            fail.ExpertComment = model.ExpertComment;
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                fail.UserPinfl = model.UserPinfl;
+            fail.LastUpdate = DateTime.Now;
 
             _fails.Update(fail);
         }

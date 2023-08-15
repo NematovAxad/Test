@@ -47,6 +47,7 @@ namespace AdminApi.Controllers
             {
                 model.EventType = Domain.Enums.EventType.Add;
                 model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<OrganizationAppsCommandResult>(model);
@@ -64,6 +65,7 @@ namespace AdminApi.Controllers
             {
                 model.EventType = Domain.Enums.EventType.Update;
                 model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<OrganizationAppsCommandResult>(model);

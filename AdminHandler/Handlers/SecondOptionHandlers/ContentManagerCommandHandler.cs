@@ -58,6 +58,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 FilePath = model.FilePath
             };
              
+            if(!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+
+            addModel.LastUpdate = DateTime.Now;
             
             _contentManager.Add(addModel);
         }
@@ -77,7 +81,12 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             manager.FullName = model.FullName;
             manager.Position = model.Position;
             manager.Phone = model.Phone;
-   
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                manager.UserPinfl = model.UserPinfl;
+
+            manager.LastUpdate = DateTime.Now;
+
             _contentManager.Update(manager);
         }
         public void Delete(ContentManagerCommand model)

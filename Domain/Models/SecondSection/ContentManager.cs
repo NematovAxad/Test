@@ -24,5 +24,9 @@ namespace Domain.Models
         public string Phone { get; set; }
         [Column("file_path")]
         public string FilePath { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

@@ -206,9 +206,9 @@ namespace MainInfrastructures.Services
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
             int part = 0;
-            if (deadline.Quarter == Domain.Enums.Quarters.First || deadline.Quarter == Domain.Enums.Quarters.Second)
+            if (deadline.Quarter == Domain.Enums.Quarters.First)
                 part = 1;
-            if (deadline.Quarter == Domain.Enums.Quarters.Third || deadline.Quarter == Domain.Enums.Quarters.Fourth)
+            if (deadline.Quarter == Domain.Enums.Quarters.Second)
                 part = 2;
 
             var url = Links.MyGovServices + "year=" + deadline.Year + "&part=" + part+ "&type=detail";

@@ -37,5 +37,9 @@ namespace Domain.Models.SecondSection
         public string ScreenLink3 { get; set; }
         [Column("status")]
         public Steps RequirementStatus { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

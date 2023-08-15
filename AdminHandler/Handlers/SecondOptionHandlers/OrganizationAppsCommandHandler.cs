@@ -57,6 +57,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 OtherAppLink = model.OtherAppLink,
                 HasResponsiveWebsite = model.HasResponsiveWebsite
             };
+
+            if(!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _organizationApps.Add(addModel);
         }
         public void Update(OrganizationAppCommand model)
@@ -77,7 +82,11 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             apps.HasOtherApps = model.HasOtherApps;
             apps.OtherAppLink = model.OtherAppLink;
             apps.HasResponsiveWebsite = model.HasResponsiveWebsite;
-            
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                apps.UserPinfl = model.UserPinfl;
+            apps.LastUpdate = DateTime.Now;
+
             _organizationApps.Update(apps);
         }
         public void Delete(OrganizationAppCommand model)
