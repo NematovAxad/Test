@@ -3,8 +3,6 @@
     public enum Quarters
     {
         First = 1,
-        Second,
-        Third,
-        Fourth
+        Second
     }
 }
