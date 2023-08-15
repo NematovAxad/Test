@@ -13,6 +13,10 @@ namespace AdminHandler.Commands.Organization
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public int UserId { get; set; }
+
+        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+        public string UserPinfl { get; set; }
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public int UserOrgId { get; set; }

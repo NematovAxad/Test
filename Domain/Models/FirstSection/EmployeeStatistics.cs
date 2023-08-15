@@ -57,6 +57,10 @@ namespace Domain.Models.FirstSection
         public int ServiceStuffPositions { get; set; }
         [Column("service_stuff_employee")]
         public int ServiceStuffEmployee { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
 
     }
 }

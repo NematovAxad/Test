@@ -54,6 +54,11 @@ namespace AdminHandler.Handlers.Organization
                 Subordinations = model.Subordinations,
                 Others = model.Others
             };
+
+            if(!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _subOrgStatistics.Add(addModel);
         }
         public void Update(SubOrgStatisticsCommand model)
@@ -70,6 +75,10 @@ namespace AdminHandler.Handlers.Organization
             subOrgStat.TerritorialManagements = model.TerritorialManagements;
             subOrgStat.Subordinations = model.Subordinations;
             subOrgStat.Others = model.Others;
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                subOrgStat.UserPinfl = model.UserPinfl;
+            subOrgStat.LastUpdate = DateTime.Now;
 
             _subOrgStatistics.Update(subOrgStat);
         }

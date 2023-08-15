@@ -62,6 +62,11 @@ namespace AdminHandler.Handlers.Organization
                 MainPurpose = model.MainPurpose,
                 Path = model.FilePath
             };
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _orgDocuments.Add(addModel);
 
             return addModel.Id;
@@ -86,7 +91,10 @@ namespace AdminHandler.Handlers.Organization
             orgDoc.DocumentName = model.DocumentName;
             orgDoc.MainPurpose = model.MainPurpose;
             orgDoc.Path = model.FilePath;
-            
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                orgDoc.UserPinfl = model.UserPinfl;
+            orgDoc.LastUpdate = DateTime.Now;
 
             _orgDocuments.Update(orgDoc);
 

@@ -113,6 +113,12 @@ namespace AdminHandler.Handlers.Organization
             if (!String.IsNullOrEmpty(model.Fax))
                 addModel.Fax = model.Fax;
 
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+
+            
+            addModel.LastUpdate = DateTime.Now;
+
 
             addModel.IsActive = true;
             addModel.IsIct = true;
@@ -155,6 +161,12 @@ namespace AdminHandler.Handlers.Organization
             org.WebSite = model.WebSite;
             org.OrgType = model.OrgType;
             org.Fax = model.Fax;
+            
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                org.UserPinfl = model.UserPinfl;
+
+
+            org.LastUpdate = DateTime.Now;
 
             _organization.Update(org);
 

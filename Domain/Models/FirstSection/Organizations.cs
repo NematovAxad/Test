@@ -80,5 +80,11 @@ namespace Domain.Models.FirstSection
         [Column("has_org_documents")]
         public bool HasOrgDocuments { get; set; }
 
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
     }
 }

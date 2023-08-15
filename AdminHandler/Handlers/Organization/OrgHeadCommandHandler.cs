@@ -61,6 +61,11 @@ namespace AdminHandler.Handlers.Organization
                 FilePath = model.FilePath,
                 PhotoPath = model.PhotoPath
             };
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _replacerHead.Add(addModel);
         }
         public void Update(OrgHeadCommand model)
@@ -83,7 +88,11 @@ namespace AdminHandler.Handlers.Organization
             head.Email = model.Email;
             head.Fax = model.Fax;
             head.PhotoPath = model.PhotoPath;
-            
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                head.UserPinfl = model.UserPinfl;
+            head.LastUpdate = DateTime.Now;
+
             _replacerHead.Update(head);
         }
         public void Delete(OrgHeadCommand model)

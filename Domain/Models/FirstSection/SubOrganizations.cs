@@ -33,5 +33,9 @@ namespace Domain.Models.FirstSection
         public string Contacts { get; set; }
         [Column("inn")]
         public string Inn { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

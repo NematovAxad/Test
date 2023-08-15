@@ -70,6 +70,11 @@ namespace AdminHandler.Handlers.Organization
                 ServiceStuffPositions = model.ServiceStuffPositions,
                 ServiceStuffEmployee = model.ServiceStuffEmployee
             };
+
+            if(!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _employeeStatistics.Add(addModel);
         }
         public void Update(EmployeeStatisticsCommand model)
@@ -103,6 +108,11 @@ namespace AdminHandler.Handlers.Organization
             employeeStat.TechnicalStuffEmployee = model.TechnicalStuffEmployee;
             employeeStat.ServiceStuffPositions = model.ServiceStuffPositions;
             employeeStat.ServiceStuffEmployee = model.ServiceStuffEmployee;
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                employeeStat.UserPinfl = model.UserPinfl;
+            employeeStat.LastUpdate = DateTime.Now;
+
             _employeeStatistics.Update(employeeStat);
         }
         public void Delete(EmployeeStatisticsCommand model)

@@ -33,5 +33,9 @@ namespace Domain.Models.FirstSection
         public string FilePath { get; set; }
         [Column("photo_path")]
         public string PhotoPath { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

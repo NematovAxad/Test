@@ -121,6 +121,7 @@ namespace AdminApi.Controllers
             {
                 model.EventType = Domain.Enums.EventType.Add;
                 model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send(model);
@@ -158,6 +159,7 @@ namespace AdminApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
+                model.UserPinfl = this.UserPinfl();
                 var result = await _mediator.Send<OrgCommandResult>(model);
                 return result;
             }
@@ -175,6 +177,7 @@ namespace AdminApi.Controllers
                 model.UserId = this.UserId();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
+                model.UserPinfl = this.UserPinfl();
                 var result = await _mediator.Send<OrgCommandResult>(model);
                 return result;
             }
@@ -190,6 +193,7 @@ namespace AdminApi.Controllers
             {
                 model.EventType = Domain.Enums.EventType.Update;
                 model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send(model);

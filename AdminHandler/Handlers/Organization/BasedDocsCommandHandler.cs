@@ -63,6 +63,11 @@ namespace AdminHandler.Handlers.Organization
                 DocumentName = model.DocumentName,
                 Path = model.FilePath
             };
+
+            if(!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _basedDocs.Add(addModel);
         }
         public void Update(BasedDocsCommand model)
@@ -85,8 +90,12 @@ namespace AdminHandler.Handlers.Organization
             doc.AcceptedOrg = model.AcceptedOrg;
             doc.DocumentName = model.DocumentName;
             doc.Path = model.FilePath;
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                doc.UserPinfl = model.UserPinfl;
+            doc.LastUpdate = DateTime.Now;
 
-            
+
+
             _basedDocs.Update(doc);
         }
         public void Delete(BasedDocsCommand model)

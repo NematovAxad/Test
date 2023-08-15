@@ -57,6 +57,10 @@ namespace AdminHandler.Handlers.Organization
                 Contacts = model.Contacts
             };
 
+            if(!String.IsNullOrEmpty(model.UserPinfl))
+                addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) )
                 if(!String.IsNullOrEmpty(model.Inn))
                     addModel.Inn = model.Inn;
@@ -80,6 +84,10 @@ namespace AdminHandler.Handlers.Organization
             subOrg.OwnerType = model.OwnerType;
             subOrg.OfficialSite = model.OfficialSite;
             subOrg.Contacts = model.Contacts;
+
+            if (!String.IsNullOrEmpty(model.UserPinfl))
+                subOrg.UserPinfl = model.UserPinfl;
+            subOrg.LastUpdate = DateTime.Now;
 
             if (model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER))
                 if (!String.IsNullOrEmpty(model.Inn))
