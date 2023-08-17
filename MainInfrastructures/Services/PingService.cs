@@ -67,7 +67,7 @@ namespace ApiConfigs
             if (deadline == null)
                 throw ErrorStates.NotFound("deadline");
 
-            if(deadline.PingService == true)
+            if(deadline.PingService == true && deadline.OperatorDeadlineDate>DateTime.Now)
             {
                 Console.WriteLine("STARTED");
                 List<SiteFailsTable> webSiteFailsList = new List<SiteFailsTable>();

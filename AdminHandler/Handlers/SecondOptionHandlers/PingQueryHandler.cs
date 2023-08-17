@@ -58,6 +58,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
             PingQueryResult result = new PingQueryResult();
             result.Count = ping.Count();
+            result.Deadline = deadline;
             result.Data = ping.OrderBy(u => u.Id).ToList<object>();
             result.Fails = failsList.OrderBy(f => f.FailedTime).ToList<object>();
             return result;
