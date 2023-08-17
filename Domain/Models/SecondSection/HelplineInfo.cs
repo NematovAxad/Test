@@ -149,5 +149,11 @@ namespace Domain.Models.SecondSection
         public string Screenshot14Link { get; set; }
         [Column("helpline_statistics_intime")]
         public bool? HelplineStatisticsIntime { get; set; }
+
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

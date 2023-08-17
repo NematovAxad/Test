@@ -65,7 +65,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 OrganizationId = model.OrganizationId,
                 MessengerLink = model.MessengerLink
             };
-            
+
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _orgSocials.Add(addModel);
         }
         public void Update(OrgSocialCommand model)
@@ -157,7 +160,8 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 socialSite.CommentToSocialSite = model.CommentToSocialSite;
                 
             }
-            
+            socialSite.UserPinfl = model.UserPinfl;
+            socialSite.LastUpdate = DateTime.Now;
             _orgSocials.Update(socialSite);
         }
         public void Delete(OrgSocialCommand model)

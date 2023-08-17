@@ -98,5 +98,9 @@ namespace Domain.Models.SecondSection
         public bool? SyncronizedPosts { get; set; }
         [Column("comment_to_social_site")]
         public string CommentToSocialSite { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

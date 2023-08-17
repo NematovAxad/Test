@@ -58,7 +58,9 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 OrganizationId = model.OrganizationId,
                 FullName = model.FullName,
                 Position = model.Position,
-                Contacts = model.Contacts
+                Contacts = model.Contacts,
+                UserPinfl = model.UserPinfl,
+                LastUpdate = DateTime.Now
             };
             _orgDataFiller.Add(addModel);
         }
@@ -76,6 +78,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             orgDataFiller.FullName = model.FullName;
             orgDataFiller.Position = model.Position;
             orgDataFiller.Contacts = model.Contacts;
+            orgDataFiller.UserPinfl = model.UserPinfl;
+            orgDataFiller.LastUpdate = DateTime.Now;
 
             _orgDataFiller.Update(orgDataFiller);
         }

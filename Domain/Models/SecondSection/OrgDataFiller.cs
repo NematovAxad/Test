@@ -22,5 +22,9 @@ namespace Domain.Models.SecondSection
         public string Position { get; set; }
         [Column("contacts")]
         public string Contacts { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

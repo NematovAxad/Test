@@ -18,6 +18,10 @@ namespace Domain.Models.SecondSection
         public Organizations Organizations { get; set; }
         [Column("helpline_number")]
         public string HelplineNumber { get; set; }
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
 
     }
 }

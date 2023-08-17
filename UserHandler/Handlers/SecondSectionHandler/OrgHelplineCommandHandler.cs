@@ -63,6 +63,10 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 OrganizationId = model.OrganizationId,
                 HelplineNumber = model.HelplineNumber
             };
+
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _orgHelpline.Add(addModel);
         }
         public void Update(OrgHelplineCommand model)
@@ -82,6 +86,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
             orgHelpline.HelplineNumber = model.HelplineNumber;
+            orgHelpline.UserPinfl = model.UserPinfl;
+            orgHelpline.LastUpdate = DateTime.Now;
 
             _orgHelpline.Update(orgHelpline);
         }

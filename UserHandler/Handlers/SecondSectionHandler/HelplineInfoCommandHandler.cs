@@ -110,7 +110,8 @@ namespace UserHandler.Handlers.SecondSectionHandler
             addModel.Screenshot13Link = model.Screenshot13Link;
             addModel.Screenshot14Link = model.Screenshot14Link;
 
-            
+            addModel.LastUpdate = DateTime.Now;
+            addModel.UserPinfl = model.UserPinfl;
 
             _helplineInfo.Add(addModel);
         }
@@ -220,6 +221,10 @@ namespace UserHandler.Handlers.SecondSectionHandler
             helplineInfo.Comment11 = model.Comment11;
             helplineInfo.Comment12 = model.Comment12;
             helplineInfo.Comment13 = model.Comment13;
+
+            helplineInfo.LastUpdate = DateTime.Now;
+            helplineInfo.UserPinfl = model.UserPinfl;
+
             _helplineInfo.Update(helplineInfo);
         }
         public void Delete(HelplineInfoCommand model)
