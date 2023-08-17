@@ -71,6 +71,7 @@ namespace MainInfrastructures.Services
                 if (s != null)
                 {
                     s.AllRequest += item.AllRequests;
+                    s.LatereRequest += item.LateRequests;
                 }
                 else
                 {
@@ -80,7 +81,7 @@ namespace MainInfrastructures.Services
                         ServiceId = item.ServiceId,
                         ServiceName = item.ServiceName,
                         AllRequest = item.AllRequests,
-                        LatereRequest = MygovReportsDetails(item.ServiceId, item.OrganizationId).Result.Count
+                        LatereRequest = item.LateRequests//MygovReportsDetails(item.ServiceId, item.OrganizationId).Result.Count
                     });
                 }
             }
@@ -90,6 +91,7 @@ namespace MainInfrastructures.Services
             result.Items = serviceList.ToList<object>();
             result.Year = list.First().Year;
             result.Part = list.First().Part;
+            result.LastUpdate = list.First().LastUpdate;
             return result;
         }
 
@@ -104,6 +106,7 @@ namespace MainInfrastructures.Services
             public int Count { get; set; }
             public int Year { get; set; }
             public int Part { get; set; }
+            public DateTime LastUpdate { get; set; }
             public List<object> Items { get; set; }
         }
         public class OrgServiceReport
@@ -165,7 +168,8 @@ namespace MainInfrastructures.Services
                             Year = deadline.Year,
                             Part = part,
                             AllRequests = i.Tasks.All,
-                            LateRequests = i.Tasks.Deadline
+                            LateRequests = i.Tasks.Deadline,
+                            LastUpdate = DateTime.UtcNow,
                         });
                         
                     }

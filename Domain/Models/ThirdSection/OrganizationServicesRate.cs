@@ -80,5 +80,8 @@ namespace Domain.Models.ThirdSection
 
         [Column("rate_set_date")]
         public DateTime RateSetDate { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
     }
 }

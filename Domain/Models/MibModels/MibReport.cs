@@ -36,5 +36,8 @@ namespace Domain.Models.MibModels
         [Column("success_share")]
         public double SuccessShare { get; set; }
 
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
+
     }
 }

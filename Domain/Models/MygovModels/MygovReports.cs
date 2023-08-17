@@ -45,5 +45,8 @@ namespace Domain.Models.Organization
 
         [Column("late_requests")]
         public int LateRequests { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

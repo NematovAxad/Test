@@ -72,7 +72,8 @@ namespace MainInfrastructures.Services
                             SuccessCount = i.SuccessCount,
                             FailCount = i.FailCount,
                             Overall = i.Overall,
-                            SuccessShare = i.SuccessShare
+                            SuccessShare = i.SuccessShare,
+                            LastUpdate = DateTime.Now,
                         });
 
                     }
@@ -126,6 +127,8 @@ namespace MainInfrastructures.Services
             MibReportResult result = new MibReportResult();
 
             result.Data = mibReport.OrderBy(u => u.Id).ToList();
+            result.LastUpdate = mibReport.First().LastUpdate;
+
             if(mibReport.Count > 0)
             {
                 result.SuccessRate = Math.Round((mibReport.Sum(u => u.SuccessCount)*1.0)/mibReport.Sum(u=>u.Overall), 2);

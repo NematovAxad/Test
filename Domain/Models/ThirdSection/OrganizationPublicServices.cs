@@ -147,5 +147,11 @@ namespace Domain.Models.ThirdSection
         [Column("service_type_expert_comment")]
         public string ServiceTypeExpertComment { get; set; }
 
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
+
     }
 }

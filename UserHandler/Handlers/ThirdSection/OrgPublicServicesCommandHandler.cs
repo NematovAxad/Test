@@ -184,7 +184,9 @@ namespace UserHandler.Handlers.ThirdSection
 
                 addModel.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
             }
-                
+
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
 
         _orgPublicServices.Add(addModel);
 
@@ -325,7 +327,10 @@ namespace UserHandler.Handlers.ThirdSection
                 service.ServiceTypeExpertComment = model.ServiceTypeExpertComment;
             }
 
-                _orgPublicServices.Update(service);
+            service.UserPinfl = model.UserPinfl;
+            service.LastUpdate = DateTime.Now;
+
+            _orgPublicServices.Update(service);
 
             return service.Id;
         }

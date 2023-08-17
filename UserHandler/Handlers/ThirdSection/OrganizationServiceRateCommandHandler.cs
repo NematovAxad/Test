@@ -106,6 +106,7 @@ namespace UserHandler.Handlers.ThirdSection
             addModel.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
             addModel.ConversationAudioLink = model.ConversationAudioLink;
             addModel.RateSetDate = DateTime.Now;
+            addModel.UserPinfl = model.UserPinfl;
 
             _orgServiceRate.Add(addModel);
 
@@ -157,6 +158,7 @@ namespace UserHandler.Handlers.ThirdSection
             rate.ServiceCommentConfirmedExspert = model.ServiceCommentConfirmedExspert;
             rate.ConversationAudioLink = model.ConversationAudioLink;
             rate.RateSetDate = DateTime.Now;
+            rate.UserPinfl = model.UserPinfl;
 
             _orgServiceRate.Update(rate);
 

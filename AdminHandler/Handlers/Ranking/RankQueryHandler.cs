@@ -80,12 +80,16 @@ namespace AdminHandler.Handlers.Ranking
                             if (subFieldRankWithoutElements != null)
                             {
                                 data.Rank = data.Rank + subFieldRankWithoutElements.Rank;
+                                
+
                                 var subFieldToAdd = new Results.Ranking.SubField();
                                 subFieldToAdd.RankId = subFieldRankWithoutElements.Id;
                                 subFieldToAdd.SubFieldId = subFieldRankWithoutElements.SubFieldId;
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
                                 subFieldToAdd.IsException = subFieldRankWithoutElements.IsException;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
+                                subFieldToAdd.CreatedDate = subFieldRankWithoutElements.CreatedDAte;
+                                subFieldToAdd.ModeifiedDate = subFieldRankWithoutElements.ModifiedDate;
 
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -93,12 +97,13 @@ namespace AdminHandler.Handlers.Ranking
                             {
                                 var subfieldRankMedium = Math.Round(subFieldRankWithElements.Select(r => r.Rank).Sum() / subFieldRankWithElements.Count(), 2);
                                 data.Rank = data.Rank + subfieldRankMedium;
+
                                 var subFieldToAdd = new Results.Ranking.SubField() { Elements = new List<Elements>() };
                                 subFieldToAdd.SubFieldId = subFieldRankWithElements.FirstOrDefault().SubFieldId;
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
                                 foreach (var element in subFieldRankWithElements)
                                 {
-                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
+                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment, CreatedDate = element.CreatedDAte, ModeifiedDate = element.ModifiedDate });
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -126,6 +131,8 @@ namespace AdminHandler.Handlers.Ranking
                             data.SphereId = rankWithouthElements.SphereId;
                             data.FieldId = rankWithouthElements.FieldId;
                             data.Comment = rankWithouthElements.Comment;
+                            data.CreatedDate = rankWithouthElements.CreatedDAte;
+                            data.ModeifiedDate = rankWithouthElements.ModifiedDate;
                         }
                         if (rankWithElements.Count() > 0)
                         {
@@ -143,7 +150,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment, CreatedDate = element.CreatedDAte, ModeifiedDate = element.ModifiedDate });
                             }
                         }
                         result.Count++;
@@ -182,6 +189,8 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
                                 subFieldToAdd.IsException = subFieldRankWithoutElements.IsException;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
+                                subFieldToAdd.CreatedDate = subFieldRankWithoutElements.CreatedDAte;
+                                subFieldToAdd.ModeifiedDate = subFieldRankWithoutElements.ModifiedDate;
 
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -194,7 +203,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
                                 foreach (var element in subFieldRankWithElements)
                                 {
-                                    subFieldToAdd.Elements.Add(new Elements() {RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
+                                    subFieldToAdd.Elements.Add(new Elements() {RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment, CreatedDate = element.CreatedDAte, ModeifiedDate = element.ModifiedDate });
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -222,6 +231,8 @@ namespace AdminHandler.Handlers.Ranking
                             data.SphereId = rankWithouthElements.SphereId;
                             data.FieldId = rankWithouthElements.FieldId;
                             data.Comment = rankWithouthElements.Comment;
+                            data.CreatedDate = rankWithouthElements.CreatedDAte;
+                            data.ModeifiedDate = rankWithouthElements.ModifiedDate;
                         }
                         if (rankWithElements.Count() > 0)
                         {
@@ -239,7 +250,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment, CreatedDate = element.CreatedDAte, ModeifiedDate = element.ModifiedDate  });
                             }
                         }
                         result.Count++;
@@ -277,6 +288,8 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subFieldRankWithoutElements.Rank;
                                 subFieldToAdd.IsException = subFieldRankWithoutElements.IsException;
                                 subFieldToAdd.Comment = subFieldRankWithoutElements.Comment;
+                                subFieldToAdd.CreatedDate = subFieldRankWithoutElements.CreatedDAte;
+                                subFieldToAdd.ModeifiedDate = subFieldRankWithoutElements.ModifiedDate;
 
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -289,7 +302,7 @@ namespace AdminHandler.Handlers.Ranking
                                 subFieldToAdd.SubfieldRank = subfieldRankMedium;
                                 foreach (var element in subFieldRankWithElements)
                                 {
-                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
+                                    subFieldToAdd.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment, CreatedDate = element.CreatedDAte, ModeifiedDate = element.ModifiedDate });
                                 }
                                 data.SubFields.Add(subFieldToAdd);
                             }
@@ -317,6 +330,8 @@ namespace AdminHandler.Handlers.Ranking
                             data.SphereId = rankWithouthElements.SphereId;
                             data.FieldId = rankWithouthElements.FieldId;
                             data.Comment = rankWithouthElements.Comment;
+                            data.CreatedDate = rankWithouthElements.CreatedDAte;
+                            data.ModeifiedDate = rankWithouthElements.ModifiedDate;
                         }
                         if (rankWithElements.Count() > 0)
                         {
@@ -334,7 +349,7 @@ namespace AdminHandler.Handlers.Ranking
 
                             foreach (var element in rankWithElements)
                             {
-                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment });
+                                data.Elements.Add(new Elements() { RankdId = element.Id, ElementId = element.ElementId, ElementRank = element.Rank, IsException = element.IsException, Comment = element.Comment, CreatedDate = element.CreatedDAte, ModeifiedDate = element.ModifiedDate });
                             }
                         }
                         result.Count++;

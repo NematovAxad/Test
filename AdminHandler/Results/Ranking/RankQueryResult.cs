@@ -23,6 +23,8 @@ namespace AdminHandler.Results.Ranking
         public string Comment { get; set; }
         public List<SubField> SubFields { get; set; }
         public List<Elements> Elements { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModeifiedDate { get; set; }
     }
     public class SubField
     {
@@ -32,6 +34,8 @@ namespace AdminHandler.Results.Ranking
         public bool IsException { get; set; }
         public string Comment { get; set; }
         public List<Elements> Elements { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModeifiedDate { get; set; }
     }
     public class Elements
     {
@@ -40,5 +44,7 @@ namespace AdminHandler.Results.Ranking
         public double ElementRank { get; set; }
         public bool IsException { get; set; }
         public string Comment { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModeifiedDate { get; set; }
     }
 }
