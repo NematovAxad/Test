@@ -210,5 +210,11 @@ namespace Domain.Models.EighthSection
         public double AllPlan4 { get; set; }
         [Column("all_fact_4")]
         public double AllFact4 { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

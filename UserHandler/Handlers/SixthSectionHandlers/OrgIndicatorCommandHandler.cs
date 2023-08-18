@@ -84,8 +84,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.FileUploadDate = DateTime.Now;
             addModel.IndicatorReportPath = model.IndicatorReportPath;
             addModel.IndicatorFilePath = model.IndicatorFilePath;
-
-           
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
 
             _orgIndicators.Add(addModel);
 
@@ -123,7 +123,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             orgIndicator.FileUploadDate = DateTime.Now;
             orgIndicator.IndicatorReportPath = model.IndicatorReportPath;
             orgIndicator.IndicatorFilePath = model.IndicatorFilePath;
-
+            orgIndicator.UserPinfl = model.UserPinfl;
+            orgIndicator.LastUpdate = DateTime.Now;
 
             _orgIndicators.Update(orgIndicator);
 

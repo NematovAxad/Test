@@ -30,5 +30,11 @@ namespace Domain.Models.SixthSection
 
         [Column("date")]
         public DateTime Date { get;set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

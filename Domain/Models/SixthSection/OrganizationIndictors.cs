@@ -32,5 +32,11 @@ namespace Domain.Models.SixthSection
 
         [Column("indicator_report_path")]
         public string IndicatorReportPath { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

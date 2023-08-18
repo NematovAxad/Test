@@ -173,6 +173,9 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 addModel.ExpertExept = model.ExpertExept;
             }
 
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
             _specialForces.Add(addModel);
 
             return addModel.Id;
@@ -295,6 +298,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 specialForces.ExpertExept = model.ExpertExept;  
             }
 
+            specialForces.UserPinfl = model.UserPinfl;
+            specialForces.LastUpdate = DateTime.Now;
 
             _specialForces.Update(specialForces);
 

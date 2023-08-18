@@ -29,5 +29,11 @@ namespace Domain.Models.SixthSection
 
         [Column("not_finished_projects")]
         public int NotFinishedProjects { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

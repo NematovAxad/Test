@@ -47,6 +47,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             result.DataAvailabilityRate = orgData.Sum(d => d.DataAvailabilityRate);
             result.DataRelevanceRate = orgData.Sum(d => d.DataRelevanceRate);
             result.RateSum = result.DataAvailabilityRate + result.DataRelevanceRate;
+            result.LastUpdate = orgData.Select(d => d.UpdateDate).Max();
 
             return result;
         }

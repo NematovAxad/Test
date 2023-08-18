@@ -162,5 +162,11 @@ namespace Domain.Models.SeventhSection
         public int SubordinateConnectedProjectMyWork { get; set; }
         [Column("devicions_connected_project_my_work")]
         public int DevicionsConnectedProjectMyWork { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }

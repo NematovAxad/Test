@@ -51,7 +51,9 @@ namespace UserHandler.Handlers.SeventhSection
                 ServerBrand = model.ServerBrand,
                 ServerConfig = model.ServerConfig,
                 ServerAutomaticTasks = model.ServerAutomaticTasks,
-                NumberOfServers = model.NumberOfServers
+                NumberOfServers = model.NumberOfServers,
+                LastUpdate = DateTime.Now,
+                userPinfl = model.UserPinfl
             };
             _orgServers.Add(addModel);
         }
@@ -73,6 +75,8 @@ namespace UserHandler.Handlers.SeventhSection
             orgServers.ServerConfig = model.ServerConfig;
             orgServers.ServerAutomaticTasks = model.ServerAutomaticTasks;
             orgServers.NumberOfServers = model.NumberOfServers;
+            orgServers.userPinfl = model.UserPinfl;
+            orgServers.LastUpdate = DateTime.Now;
 
             _orgServers.Update(orgServers);
         }

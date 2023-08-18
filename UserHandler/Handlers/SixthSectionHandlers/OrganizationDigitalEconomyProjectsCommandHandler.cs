@@ -79,6 +79,9 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.BasisFilePath = model.BasisFilePath;
             addModel.Comment = model.Comment;
             addModel.Date = DateTime.Now;
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
+
 
             _orgDigitalEconomyProjects.Add(addModel);
 
@@ -105,6 +108,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             economyProject.ProjectName = model.ProjectName;
             economyProject.BasisFilePath = model.BasisFilePath;
             economyProject.Comment = model.Comment;
+            economyProject.UserPinfl = model.UserPinfl;
+            economyProject.LastUpdate = DateTime.Now;
 
             _orgDigitalEconomyProjects.Update(economyProject);
 

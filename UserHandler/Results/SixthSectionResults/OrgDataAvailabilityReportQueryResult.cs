@@ -15,5 +15,7 @@ namespace UserHandler.Results.SixthSectionResults
 
         public double RateSum { get; set; }
 
+        public DateTime LastUpdate { get; set; }
+
     }
 }

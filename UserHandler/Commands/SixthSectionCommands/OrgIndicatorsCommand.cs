@@ -18,6 +18,9 @@ namespace UserHandler.Commands.SixthSectionCommands
         public int UserId { get; set; }
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
+        public string UserPinfl { get; set; }
+        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public int UserOrgId { get; set; }
         [JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]

@@ -30,5 +30,11 @@ namespace Domain.Models.EighthSection
         [Column("full_year_digitalization_budget_percent")]
         public double FullYearDigitalizationBudgetPercent { get; set; }
 
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
+
     }
 }

@@ -124,7 +124,8 @@ namespace UserHandler.Handlers.EigthSectionHandlers
             }
             else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 
-
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
 
             _orgBudget.Add(addModel);
 
@@ -196,7 +197,8 @@ namespace UserHandler.Handlers.EigthSectionHandlers
             }
             else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 
-
+            orgBudget.UserPinfl = model.UserPinfl;
+            orgBudget.LastUpdate = DateTime.Now;
 
             _orgBudget.Update(orgBudget);
 

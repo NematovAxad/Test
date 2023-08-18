@@ -79,6 +79,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.CompletedProjects = model.CompletedProjects;
             addModel.OngoingProjects = model.OngoingProjects;
             addModel.NotFinishedProjects = model.NotFinishedProjects;
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
 
             _orgDigitalEconomyProjectsReport.Add(addModel);
 
@@ -105,7 +107,9 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             economyProjectReport.ProjectsCount = model.ProjectsCount;
             economyProjectReport.CompletedProjects = model.CompletedProjects;
             economyProjectReport.OngoingProjects = model.OngoingProjects;
-            economyProjectReport.NotFinishedProjects = model.NotFinishedProjects; 
+            economyProjectReport.NotFinishedProjects = model.NotFinishedProjects;
+            economyProjectReport.UserPinfl = model.UserPinfl;
+            economyProjectReport.LastUpdate = DateTime.Now;
 
             _orgDigitalEconomyProjectsReport.Update(economyProjectReport);
 

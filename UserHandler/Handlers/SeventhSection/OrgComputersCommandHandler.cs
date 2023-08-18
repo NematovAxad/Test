@@ -119,6 +119,9 @@ namespace UserHandler.Handlers.SeventhSection
             TerritorialConnectedProjectMyWork = model.TerritorialConnectedProjectMyWork,
             SubordinateConnectedProjectMyWork = model.SubordinateConnectedProjectMyWork,
             DevicionsConnectedProjectMyWork = model.DevicionsConnectedProjectMyWork,
+
+            UserPinfl = model.UserPinfl,
+            LastUpdate = DateTime.Now
         };
             _orgComputers.Add(addModel);
         }
@@ -200,6 +203,9 @@ namespace UserHandler.Handlers.SeventhSection
             orgComputers.TerritorialConnectedProjectMyWork = model.TerritorialConnectedProjectMyWork;
             orgComputers.SubordinateConnectedProjectMyWork = model.SubordinateConnectedProjectMyWork;
             orgComputers.DevicionsConnectedProjectMyWork = model.DevicionsConnectedProjectMyWork;
+
+            orgComputers.UserPinfl = model.UserPinfl;
+            orgComputers.LastUpdate = DateTime.Now;
 
             _orgComputers.Update(orgComputers);
         }

@@ -76,8 +76,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             addModel.AllIndicators = model.AllIndicators;
             addModel.CompleteIndicators = model.CompleteIndicators;
             addModel.ExpertComment = model.ExpertComment;
-            
-
+            addModel.UserPinfl = model.UserPinfl;
+            addModel.LastUpdate = DateTime.Now;
 
             _indicatorRating.Add(addModel);
 
@@ -109,7 +109,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             indicatorRate.AllIndicators = model.AllIndicators;
             indicatorRate.CompleteIndicators = model.CompleteIndicators;
             indicatorRate.ExpertComment = model.ExpertComment;
-            
+            indicatorRate.UserPinfl = model.UserPinfl;
+            indicatorRate.LastUpdate = DateTime.Now;
 
 
             _indicatorRating.Update(indicatorRate);

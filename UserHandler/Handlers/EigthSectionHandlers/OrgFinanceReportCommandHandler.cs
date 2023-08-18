@@ -77,6 +77,8 @@ namespace UserHandler.Handlers.EigthSectionHandlers
                 addModel.FullYearBudget = model.FullYearBudget;
                 addModel.FullYearDigitalizationBudgetPercent = model.FullYearDigitalizationBudgetPercent;
                 addModel.FullYearSpentBudgetPercent = model.FullYearSpentBudgetPercent;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
             }
             else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }
 
@@ -109,6 +111,8 @@ namespace UserHandler.Handlers.EigthSectionHandlers
                 orgFinanceReport.FullYearBudget = model.FullYearBudget;
                 orgFinanceReport.FullYearDigitalizationBudgetPercent = model.FullYearDigitalizationBudgetPercent;
                 orgFinanceReport.FullYearSpentBudgetPercent = model.FullYearSpentBudgetPercent;
+                orgFinanceReport.UserPinfl = model.UserPinfl;
+                orgFinanceReport.LastUpdate = DateTime.Now;
 
             }
             else { throw ErrorStates.NotAllowed(model.UserPermissions.ToString()); }

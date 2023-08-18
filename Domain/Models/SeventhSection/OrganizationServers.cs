@@ -28,5 +28,9 @@ namespace Domain.Models.SeventhSection
         public string ServerAutomaticTasks { get; set; }
         [Column("number_of_servers")]
         public string NumberOfServers { get; set; }
+        [Column("user_pinfl")]
+        public string userPinfl { get; set; }
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
     }
 }
