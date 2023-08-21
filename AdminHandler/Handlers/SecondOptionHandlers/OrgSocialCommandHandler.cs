@@ -91,6 +91,16 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (((model.UserOrgId == socialSite.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
             {
                 socialSite.MessengerLink = model.MessengerLink;
+
+                if (model.Pool != null)
+                {
+                    socialSite.Pool = model.Pool;
+                }
+
+                socialSite.PoolScreenshotLink = model.PoolScreenshot;
+
+                socialSite.PoolLink = model.PoolLink;
+                socialSite.PoolComment = model.PoolComment;
             }
             if(model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER || p == Permissions.OPERATOR_RIGHTS))
             {
@@ -126,15 +136,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 {
                     socialSite.SyncronizedPosts = model.SyncronizedPosts;
                 }
-                if (model.Pool != null)
-                {
-                    socialSite.Pool = model.Pool;
-                }
-
-                socialSite.PoolScreenshotLink = model.PoolScreenshot;
-
-                socialSite.PoolLink = model.PoolLink;
-                socialSite.PoolComment = model.PoolComment;
+                
 
                 socialSite.IsMain = model.IsMain;
        
