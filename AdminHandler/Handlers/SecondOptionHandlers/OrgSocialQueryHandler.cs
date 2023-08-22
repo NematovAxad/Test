@@ -46,7 +46,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
             if(socials.Any())
             {
-                if (socials.Any(s => s.Pool == true && s.PoolExpert == true))
+                if (socials.Any(s => s.Pool == true && s.PoolExceptExpert == true))
                     result.IsPoolExceptExpert = true;
             }
 
