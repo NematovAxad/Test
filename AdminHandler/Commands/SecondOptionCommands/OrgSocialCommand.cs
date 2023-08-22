@@ -60,7 +60,7 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public string PoolScreenshot { get; set; }
         public string PoolComment { get; set; }
 
-        public bool PoolExpertExcept { get; set; }
+        public bool PoolExceptExpert { get; set; }
         public string PoolCommentExpert { get; set; }
 
         public bool IsMain { get; set; }
