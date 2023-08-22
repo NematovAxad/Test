@@ -92,7 +92,7 @@ namespace Domain.Models.SecondSection
         /// 
         /// </summary>
         [Column("pool_except_expert")]
-        public bool? PoolExceptExpert { get; set; }
+        public bool PoolExceptExpert { get; set; }
       
         [Column("pool_comment_expert")]
         public string PoolCommentExpert { get; set; }
