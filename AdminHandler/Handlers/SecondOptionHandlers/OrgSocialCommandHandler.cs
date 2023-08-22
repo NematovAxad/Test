@@ -171,7 +171,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
                 socialSite.CommentToSocialSite = model.CommentToSocialSite;
 
-                socialSite.PoolExceptExpert = model.PoolExpertExcept;
+                socialSite.PoolExpert = model.PoolExpertExcept;
                 socialSite.PoolCommentExpert = model.PoolCommentExpert;
                 
             }
