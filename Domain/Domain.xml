@@ -166,6 +166,11 @@
             
             </summary>
         </member>
+        <member name="P:Domain.Models.SecondSection.OrganizationSocials.PoolExceptExpert">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Domain.Models.SecondSection.OrganizationSocials.IsMain">
             <summary>
             

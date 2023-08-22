@@ -87,6 +87,15 @@ namespace Domain.Models.SecondSection
         public string PoolScreenshotLink { get; set; }
         [Column("pool_comment")]
         public string PoolComment { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Column("pool_except_expert")]
+        public bool? PoolExceptExpert { get; set; }
+      
+        [Column("pool_comment_expert")]
+        public string PoolCommentExpert { get; set; }
         /// <summary>
         /// 
         /// </summary>

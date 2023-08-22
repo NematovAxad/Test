@@ -9,5 +9,6 @@ namespace AdminHandler.Results.SecondOptionResults
     {
         public int Count { get; set; }
         public List<OrganizationSocials> Socials { get; set; }
+        public bool IsPoolExceptExpert { get; set; }
     }
 }

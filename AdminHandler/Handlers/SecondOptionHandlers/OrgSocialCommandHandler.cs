@@ -55,17 +55,28 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
             if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+           
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineExpired);
+            
             if (deadline.SecondSectionDeadlineDate < DateTime.Now)
                 throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
+            
+            if (!(model.UserOrgId == org.UserServiceId && model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
             OrganizationSocials addModel = new OrganizationSocials()
             {
                 OrganizationId = model.OrganizationId,
                 MessengerLink = model.MessengerLink
             };
-
+            if (model.Pool != null)
+            {
+                addModel.Pool = model.Pool;
+            }
+            addModel.PoolScreenshotLink = model.PoolScreenshot;
+            addModel.PoolLink = model.PoolLink;
+            addModel.PoolComment = model.PoolComment;
             addModel.UserPinfl = model.UserPinfl;
             addModel.LastUpdate = DateTime.Now;
 
@@ -98,7 +109,6 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                 }
 
                 socialSite.PoolScreenshotLink = model.PoolScreenshot;
-
                 socialSite.PoolLink = model.PoolLink;
                 socialSite.PoolComment = model.PoolComment;
             }
@@ -160,6 +170,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
 
                 socialSite.CommentToSocialSite = model.CommentToSocialSite;
+
+                socialSite.PoolExceptExpert = model.PoolExpertExcept;
+                socialSite.PoolCommentExpert = model.PoolCommentExpert;
                 
             }
             socialSite.UserPinfl = model.UserPinfl;

@@ -60,6 +60,9 @@ namespace AdminHandler.Commands.SecondOptionCommands
         public string PoolScreenshot { get; set; }
         public string PoolComment { get; set; }
 
+        public bool? PoolExpertExcept { get; set; }
+        public string PoolCommentExpert { get; set; }
+
         public bool IsMain { get; set; }
         public bool? Verified { get; set; }
         public bool? SyncronizedPosts { get; set; }
