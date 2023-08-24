@@ -1036,7 +1036,7 @@ namespace MainInfrastructures.Services
 
             FirstRequestQueryResult reestrResult = new FirstRequestQueryResult();
 
-            reestrResult = await _reesterService.FirstRequest(model);
+            reestrResult = await _reesterService.FirstRequestNew(model);
 
             worksheet.Cells[27, 1].Value = "Axborot tizimlari soni";
             worksheet.Cells[27, 1].Style.Font.Bold = true;
