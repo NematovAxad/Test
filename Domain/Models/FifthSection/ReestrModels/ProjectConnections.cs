@@ -27,5 +27,11 @@ namespace Domain.Models.FifthSection.ReestrModels
 
         [Column("file_path")]
         public string FilePath { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
     }
 }

@@ -37,5 +37,11 @@ namespace Domain.Models.FifthSection.ReestrModels
 
         [Column("expert_comment")]
         public string ExpertComment { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
     }
 }

@@ -26,5 +26,11 @@ namespace Domain.Models.FifthSection.ReestrModels
 
         [Column("org_comment")]
         public string OrgComment { get; set; }
+
+        [Column("last_update")]
+        public DateTime LastUpdate { get; set; }
+
+        [Column("user_pinfl")]
+        public string UserPinfl { get; set; }
     }
 }
