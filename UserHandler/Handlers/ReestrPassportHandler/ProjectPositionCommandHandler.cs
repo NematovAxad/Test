@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MainInfrastructures.Interfaces;
 using UserHandler.Commands.ReestrPassportCommands;
 using UserHandler.Results.ReestrPassportResult;
 
@@ -23,12 +24,14 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectPosition, int> _projectPosition;
+        private readonly IReesterService _reesterService;
 
-        public ProjectPositionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectPosition, int> projectPosition)
+        public ProjectPositionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectPosition, int> projectPosition, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectPosition = projectPosition;
+            _reesterService = reesterService;
         }
 
         public async Task<ProjectPositionCommandResult> Handle(ProjectPositionCommand request, CancellationToken cancellationToken)
@@ -75,6 +78,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 addModel.ExpertExcept = model.ExpertExcept;
                 if(!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
+                addModel.LastUpdate = DateTime.Now.ToLocalTime();
+                addModel.UserPinfl = model.UserPinfl;
                 
                 _projectPosition.Add(addModel);
                 id= addModel.Id;    
@@ -93,13 +98,15 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 addModel.ProjectStatus = model.ProjectStatus;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     addModel.FilePath = model.FilePath;
+                addModel.LastUpdate = DateTime.Now.ToLocalTime();
+                addModel.UserPinfl = model.UserPinfl;
 
                 _projectPosition.Add(addModel);
                 id = addModel.Id;
             }
 
 
-            
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
 
             return id;
         }
@@ -140,8 +147,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                     projectPosition.FilePath = model.FilePath;
             }
 
+            projectPosition.LastUpdate = DateTime.Now;
+            projectPosition.UserPinfl = model.UserPinfl;
+            
             _projectPosition.Update(projectPosition);
 
+            _reesterService.RecordUpdateTime(projectPosition.ReestrProjectId);
+            
             return projectPosition.Id;
         }
         public int Delete(ProjectPositionCommand model)

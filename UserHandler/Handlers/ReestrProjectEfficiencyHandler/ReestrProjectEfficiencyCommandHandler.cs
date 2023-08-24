@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 {
@@ -29,13 +30,15 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectEfficiency, int> _projectEfficiency;
         private readonly IRepository<ProjectEfficiency, int> _efficiency;
+        private readonly IReesterService _reesterService;
 
-        public ReestrProjectEfficiencyCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectEfficiency, int> projectEfficiency, IRepository<ProjectEfficiency, int> efficiency)
+        public ReestrProjectEfficiencyCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectEfficiency, int> projectEfficiency, IRepository<ProjectEfficiency, int> efficiency, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectEfficiency = projectEfficiency;
             _efficiency = efficiency;
+            _reesterService = reesterService;
         }
 
 
@@ -84,6 +87,8 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _projectEfficiency.Add(addModel);
                 id = addModel.Id;
@@ -108,13 +113,16 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
+                
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
 
                 _projectEfficiency.Add(addModel);
                 id = addModel.Id;
             }
 
 
-            
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
 
             return id;
         }
@@ -165,8 +173,12 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                     projectEfficiency.ExceptedItems = model.ExceptedItems;
             }
             
-
+            projectEfficiency.LastUpdate = DateTime.Now;
+            projectEfficiency.UserPinfl = model.UserPinfl;
+            
             _projectEfficiency.Update(projectEfficiency);
+
+            _reesterService.RecordUpdateTime(projectEfficiency.ReestrProjectId);
 
             return projectEfficiency.Id;
         }

@@ -10,10 +10,12 @@ using UserHandler.Commands.ReestrPassportCommands;
 using UserHandler.Results.ReestrPassportResult;
 using Domain.States;
 using System.Linq;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using Domain.Permission;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrPassportHandler
 {
@@ -23,12 +25,14 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectCyberSecurityExpertDecision, int> _projectCyberSecurityExpertDecision;
+        private readonly IReesterService _reesterService;
 
-        public ProjectCyberSecurityExpertDecisionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectCyberSecurityExpertDecision, int> projectCyberSecurityExpertDecision)
+        public ProjectCyberSecurityExpertDecisionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectCyberSecurityExpertDecision, int> projectCyberSecurityExpertDecision, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectCyberSecurityExpertDecision = projectCyberSecurityExpertDecision;
+            _reesterService = reesterService;
         }
 
         public async Task<ProjectCyberSecurityExpertDecisionCommandResult> Handle(ProjectCyberSecurityExpertDecisionCommand request, CancellationToken cancellationToken)
@@ -74,6 +78,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 addModel.Exist = model.Exist;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     addModel.FilePath = model.FilePath;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _projectCyberSecurityExpertDecision.Add(addModel);
 
@@ -93,13 +99,15 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
                 addModel.ExpertExcept = model.ExpertExcept;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _projectCyberSecurityExpertDecision.Add(addModel);
 
                 id = addModel.Id;
             }
 
-           
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
 
             return id;
         }
@@ -141,8 +149,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                     projectExpertDecision.ExpertComment = model.ExpertComment;
                 projectExpertDecision.ExpertExcept = model.ExpertExcept;
             }
-
+                
+            projectExpertDecision.LastUpdate = DateTime.Now;
+            projectExpertDecision.UserPinfl = model.UserPinfl;
+            
             _projectCyberSecurityExpertDecision.Update(projectExpertDecision);
+
+            _reesterService.RecordUpdateTime(projectExpertDecision.ReestrProjectId);
 
             return projectExpertDecision.Id;
         }

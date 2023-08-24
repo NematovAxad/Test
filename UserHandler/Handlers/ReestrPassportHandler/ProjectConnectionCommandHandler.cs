@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MainInfrastructures.Interfaces;
 using UserHandler.Commands.ReestrPassportCommands;
 using UserHandler.Results.ReestrPassportResult;
 
@@ -24,13 +25,15 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectConnection, int> _projectConnection;
         private readonly IRepository<ProjectConnections, int> _connections;
+        private readonly IReesterService _reesterService;
 
-        public ProjectConnectionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectConnection, int> projectConnection, IRepository<ProjectConnections, int> connections)
+        public ProjectConnectionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectConnection, int> projectConnection, IRepository<ProjectConnections, int> connections, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectConnection = projectConnection;
             _connections = connections;
+            _reesterService = _reesterService;
         }
         public async Task<ProjectConnectionResult> Handle(ProjectConnectionCommand request, CancellationToken cancellationToken)
         {
@@ -72,6 +75,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _projectConnection.Add(addModel);
 
@@ -97,12 +102,15 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
 
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
+                
                 _projectConnection.Add(addModel);
 
                 id = addModel.Id;
             }
 
-            
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
 
             return id;
         }
@@ -152,8 +160,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 if (model.ExceptedItems >= 0)
                     projectConnection.ExceptedItems = model.ExceptedItems;
             }
+            
+            projectConnection.UserPinfl = model.UserPinfl;
+            projectConnection.LastUpdate = DateTime.Now;
             _projectConnection.Update(projectConnection);
 
+            _reesterService.RecordUpdateTime(projectConnection.ReestrProjectId);
+            
             return projectConnection.Id;
         }
 

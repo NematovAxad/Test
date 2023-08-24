@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MainInfrastructures.Interfaces;
 using UserHandler.Commands.ReestrProjectIdentityCommand;
 using UserHandler.Results.ReestrProjectIdentityResult;
 
@@ -25,13 +26,15 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectIdentities, int> _projectIdentities;
         private readonly IRepository<ProjectIdentities, int> _identities;
+        private readonly IReesterService _reesterService;
 
-        public ReestrProjectIdentityCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectIdentities, int> projectIdentities, IRepository<ProjectIdentities, int> identities)
+        public ReestrProjectIdentityCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectIdentities, int> projectIdentities, IRepository<ProjectIdentities, int> identities, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectIdentities = projectIdentities;
             _identities = identities;
+            _reesterService = reesterService;
         }
         public async Task<ReestrProjectIdentityCommandResult> Handle(ReestrProjectIdentityCommand request, CancellationToken cancellationToken)
         {
@@ -75,6 +78,9 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+                
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
 
                 _projectIdentities.Add(addModel);
                 id = addModel.Id;
@@ -100,13 +106,16 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                     if (model.ExceptedItems >= 0)
                         addModel.ExceptedItems = model.ExceptedItems;
                 }
-
+                
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
+                
                 _projectIdentities.Add(addModel);
                 id = addModel.Id;
             }
 
 
-           
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
 
             return id;
         }
@@ -156,11 +165,13 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                     projectIdentities.ExceptedItems = model.ExceptedItems;
             }
 
-           
-            
+            projectIdentities.LastUpdate = DateTime.Now;
+            projectIdentities.UserPinfl = model.UserPinfl;
 
             _projectIdentities.Update(projectIdentities);
 
+            _reesterService.RecordUpdateTime(projectIdentities.ReestrProjectId);
+            
             return projectIdentities.Id;
         }
         public int Delete(ReestrProjectIdentityCommand model)

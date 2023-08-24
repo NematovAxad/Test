@@ -15,6 +15,7 @@ using Domain.Permission;
 using Domain;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 {
@@ -24,13 +25,15 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<AutomatedServices, int> _services;
         private readonly IRepository<ReestrProjectAutomatedServices, int> _projectServices;
+        private readonly IReesterService _reesterService;
 
-        public AutomaticServicesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<AutomatedServices, int> services, IRepository<ReestrProjectAutomatedServices, int> projectServices)
+        public AutomaticServicesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<AutomatedServices, int> services, IRepository<ReestrProjectAutomatedServices, int> projectServices, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _services = services;
             _projectServices = projectServices;
+            _reesterService = reesterService;
         }
 
         public async Task<AutomaticServicesCommandResult> Handle(AutomaticServicesCommand request, CancellationToken cancellationToken)
@@ -76,15 +79,14 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 addModel.ParentId = model.ParentId;
                 addModel.ServiceName = model.ServiceName;
                 addModel.FilePath = model.FilePath;
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
 
                 _services.Add(addModel);
                 id = addModel.Id;
             }
-            
 
-
-
-            
+            _reesterService.RecordUpdateTime(projectServices.ReestrProjectId);
 
             return id;
         }
@@ -118,11 +120,13 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                     service.FilePath = model.FilePath;
             }
             
-
-
+            service.LastUpdate = DateTime.Now;
+            service.UserPinfl = model.UserPinfl;
 
             _services.Update(service);
 
+            _reesterService.RecordUpdateTime(projectServices.ReestrProjectId);
+            
             return service.Id;
         }
         public int Delete(AutomaticServicesCommand model)

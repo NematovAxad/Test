@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MainInfrastructures.Interfaces;
 using UserHandler.Commands.ReestrPassportCommands;
 using UserHandler.Results.ReestrPassportResult;
 
@@ -22,13 +23,15 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ProjectConnections, int> _projectConnection;
         private readonly IRepository<ReestrProjectConnection, int> _reestrProjectConnection;
+        private readonly IReesterService _reesterService;
 
-        public ConnectionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectConnections, int> projectConnection, IRepository<ReestrProjectConnection, int> reestrProjectConnection)
+        public ConnectionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectConnections, int> projectConnection, IRepository<ReestrProjectConnection, int> reestrProjectConnection, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectConnection = projectConnection;
             _reestrProjectConnection = reestrProjectConnection;
+            _reesterService = reesterService;
         }
 
         public async Task<ConnectionCommandResult> Handle(ConnectionCommand request, CancellationToken cancellationToken)
@@ -80,13 +83,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 addModel.ConnectionType = model.ConnectionType;
                 addModel.PlatformReestrId = model.PlatformReestrId;
                 addModel.FilePath = model.FilePath;
-
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
+                
                 _projectConnection.Add(addModel);
 
                 id = addModel.Id;
             }
-           
 
+            _reesterService.RecordUpdateTime(projectConnection.ReestrProjectId);
+            
             return id;
         }
 
@@ -117,10 +123,12 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 connection.PlatformReestrId = model.PlatformReestrId;
                 if(!String.IsNullOrEmpty(model.FilePath))
                     connection.FilePath = model.FilePath;
+                connection.LastUpdate = DateTime.Now;
+                connection.UserPinfl = model.UserPinfl;
 
             }
 
-
+            _reesterService.RecordUpdateTime(projectConnection.ReestrProjectId);
 
             _projectConnection.Update(connection);
 

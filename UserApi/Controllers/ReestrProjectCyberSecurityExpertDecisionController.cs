@@ -46,6 +46,7 @@ namespace UserApi.Controllers
             {
                 model.EventType = Domain.Enums.EventType.Add;
                 model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<ProjectCyberSecurityExpertDecisionCommandResult>(model);
@@ -64,6 +65,7 @@ namespace UserApi.Controllers
             {
                 model.EventType = Domain.Enums.EventType.Update;
                 model.UserId = this.UserId();
+                model.UserPinfl = this.UserPinfl();
                 model.UserOrgId = this.UserOrgId();
                 model.UserPermissions = this.UserRights();
                 var result = await _mediator.Send<ProjectCyberSecurityExpertDecisionCommandResult>(model);

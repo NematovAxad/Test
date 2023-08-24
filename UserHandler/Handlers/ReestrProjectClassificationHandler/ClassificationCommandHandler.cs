@@ -17,6 +17,7 @@ using Domain.Permission;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 {
@@ -26,13 +27,15 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ProjectClassifications, int> _classifications;
         private readonly IRepository<ReestrProjectClassifications, int> _projectClassification;
+        private readonly IReesterService _reesterService;
 
-        public ClassificationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectClassifications, int> classifications, IRepository<ReestrProjectClassifications, int> projectClassification)
+        public ClassificationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectClassifications, int> classifications, IRepository<ReestrProjectClassifications, int> projectClassification, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _classifications = classifications;
             _projectClassification = projectClassification;
+            _reesterService = reesterService;
         }
 
         public async Task<ClassificationCommandResult> Handle(ClassificationCommand request, CancellationToken cancellationToken)
@@ -81,15 +84,14 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 addModel.ClassificationType = model.ClassificationType;
                 addModel.ClassificationUri = model.ClassificationUri;
                 addModel.FilePath = model.FilePath;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _classifications.Add(addModel);
                 id = addModel.Id;
             }
-            
 
-
-
-            
+            _reesterService.RecordUpdateTime(projectClassification.ReestrProjectId);
 
             return id;
         }
@@ -101,15 +103,15 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 throw ErrorStates.NotFound("available deadline");
 
           
-
-
-            var projectClassification = _projectClassification.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
-            if (projectClassification == null)
-                throw ErrorStates.NotFound(model.ParentId.ToString());
-
             var identity = _classifications.Find(p => p.Id == model.Id).FirstOrDefault();
             if (identity == null)
                 throw ErrorStates.NotAllowed(model.Id.ToString());
+
+            var projectClassification = _projectClassification.Find(p => p.Id == identity.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
+            if (projectClassification == null)
+                throw ErrorStates.NotFound(model.ParentId.ToString());
+
+            
 
 
             if ((model.UserOrgId == projectClassification.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
@@ -121,10 +123,12 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 identity.ClassificationUri = model.ClassificationUri;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     identity.FilePath = model.FilePath;
+                identity.UserPinfl = model.UserPinfl;
+                identity.LastUpdate = DateTime.Now;
             }
-            
 
 
+            _reesterService.RecordUpdateTime(projectClassification.ReestrProjectId);
 
             _classifications.Update(identity);
 

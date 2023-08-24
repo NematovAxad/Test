@@ -18,6 +18,7 @@ using UserHandler.Commands.ReestrProjectIdentityCommand;
 using Domain;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 {
@@ -27,13 +28,15 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<AutomatedFunctions, int> _functions;
         private readonly IRepository<ReestrProjectAutomatedServices, int> _projectServices;
+        private readonly IReesterService _reesterService;
 
-        public AutomaticFunctionsCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<AutomatedFunctions, int> functions, IRepository<ReestrProjectAutomatedServices, int> projectServices)
+        public AutomaticFunctionsCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<AutomatedFunctions, int> functions, IRepository<ReestrProjectAutomatedServices, int> projectServices, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _functions = functions;
             _projectServices = projectServices;
+            _reesterService = reesterService;
         }
 
         public async Task<AutomaticFunctionsCommandResult> Handle(AutomaticFunctionsCommand request, CancellationToken cancellationToken)
@@ -80,16 +83,15 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 AutomatedFunctions addModel = new AutomatedFunctions();
                 addModel.ParentId = model.ParentId;
                 addModel.FunctionName = model.FunctionName;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _functions.Add(addModel);
                 id = addModel.Id;
             }
+
+            _reesterService.RecordUpdateTime(projectFunctions.ReestrProjectId);
             
-
-
-
-            
-
             return id;
         }
 
@@ -128,6 +130,11 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 function.FunctionName = model.FunctionName;
             }
 
+            function.UserPinfl = model.UserPinfl;
+            function.LastUpdate = DateTime.Now;
+
+            _reesterService.RecordUpdateTime(projectFunctions.ReestrProjectId);
+            
             _functions.Update(function);
 
             return function.Id;

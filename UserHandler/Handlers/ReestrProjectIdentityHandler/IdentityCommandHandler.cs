@@ -18,6 +18,7 @@ using UserHandler.Commands.ReestrPassportCommands;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectIdentityHandler
 {
@@ -27,13 +28,15 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ProjectIdentities, int> _identities;
         private readonly IRepository<ReestrProjectIdentities, int> _projectidentity;
+        private readonly IReesterService _reesterService;
 
-        public IdentityCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectIdentities, int> identities, IRepository<ReestrProjectIdentities, int> projectidentity)
+        public IdentityCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectIdentities, int> identities, IRepository<ReestrProjectIdentities, int> projectidentity, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _identities = identities;
             _projectidentity = projectidentity;
+            _reesterService = reesterService;
         }
 
         public async Task<IdentitiyCommandResult> Handle(IdentityCommand request, CancellationToken cancellationToken)
@@ -82,16 +85,15 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                 addModel.IdentitiyType = model.IdentitiyType;
                 addModel.IdentityUrl = model.IdentityUrl;
                 addModel.FilePath = model.FilePath;
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
 
                 _identities.Add(addModel);
                 id = addModel.Id;
             }
-           
 
-
-
+            _reesterService.RecordUpdateTime(projectIdentity.ReestrProjectId);
             
-
             return id;
         }
 
@@ -122,10 +124,14 @@ namespace UserHandler.Handlers.ReestrProjectIdentityHandler
                 identity.IdentityUrl = model.IdentityUrl;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     identity.FilePath = model.FilePath;
+                identity.LastUpdate = DateTime.Now;
+                identity.UserPinfl = model.UserPinfl;
             }
            
             _identities.Update(identity);
 
+            _reesterService.RecordUpdateTime(projectIdentity.ReestrProjectId);
+            
             return identity.Id;
         }
         public int Delete(IdentityCommand model)

@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 {
@@ -26,13 +27,15 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectClassifications, int> _projectClassifications;
         private readonly IRepository<ProjectClassifications, int> _classifications;
+        private readonly IReesterService _reesterService;
 
-        public ReestrProjectClassificationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectClassifications, int> projectClassifications, IRepository<ProjectClassifications, int> classifications)
+        public ReestrProjectClassificationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectClassifications, int> projectClassifications, IRepository<ProjectClassifications, int> classifications, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectClassifications = projectClassifications;
             _classifications = classifications;
+            _reesterService = reesterService;
         }
 
 
@@ -81,6 +84,9 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+                
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _projectClassifications.Add(addModel);
                 id = addModel.Id;
@@ -106,11 +112,14 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
 
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
+                
                 _projectClassifications.Add(addModel);
                 id = addModel.Id;
             }
 
-
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
            
 
             return id;
@@ -166,8 +175,13 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
                     projectClassificator.ExceptedItems = model.ExceptedItems;
             }
 
+            projectClassificator.UserPinfl = model.UserPinfl;
+            projectClassificator.LastUpdate = DateTime.Now;
+            
             _projectClassifications.Update(projectClassificator);
 
+            _reesterService.RecordUpdateTime(projectClassificator.ReestrProjectId);
+            
             return projectClassificator.Id;
         }
         public int Delete(ReestrProjectClassificationCommand model)

@@ -321,7 +321,7 @@ namespace MainInfrastructures.Services
             if (project is null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
             
-            project.UpdateTime = DateTime.Now;
+            project.UpdateTime = DateTime.Now.ToLocalTime();
             
             _reestrPassport.Update(project);
 
@@ -331,6 +331,8 @@ namespace MainInfrastructures.Services
             if (projectDetails is null)
                 throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
 
+            projectDetails.UpdateTime = DateTime.Now.ToLocalTime();
+            
             _reestrPassportDetails.Update(projectDetails);
 
             return await Task.FromResult(projectId);

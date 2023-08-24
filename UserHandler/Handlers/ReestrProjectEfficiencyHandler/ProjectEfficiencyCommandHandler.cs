@@ -17,6 +17,7 @@ using Domain.Permission;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 {
@@ -26,13 +27,15 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ProjectEfficiency, int> _efficiency;
         private readonly IRepository<ReestrProjectEfficiency, int> _projectEfficiency;
+        private readonly IReesterService _reesterService;
 
-        public ProjectEfficiencyCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectEfficiency, int> efficiency, IRepository<ReestrProjectEfficiency, int> projectEfficiency)
+        public ProjectEfficiencyCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectEfficiency, int> efficiency, IRepository<ReestrProjectEfficiency, int> projectEfficiency, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _efficiency = efficiency;
             _projectEfficiency = projectEfficiency;
+            _reesterService = reesterService;
         }
 
         public async Task<ProjectEfficiencyCommandResult> Handle(ProjectEfficiencyCommand request, CancellationToken cancellationToken)
@@ -53,10 +56,6 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-
-            
-
-
 
             var projectEfficiency = _projectEfficiency.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
             if (projectEfficiency == null)
@@ -80,12 +79,14 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                 addModel.EfficiencyType = model.EfficiencyType;
                 addModel.OrgComment = model.OrgComment;
                 addModel.FilePath = model.FilePath;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _efficiency.Add(addModel);
                 id = addModel.Id;
             }
-            
 
+            _reesterService.RecordUpdateTime(projectEfficiency.ReestrProjectId);
 
 
             
@@ -120,9 +121,11 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
                 efficiency.OrgComment = model.OrgComment;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     efficiency.FilePath = model.FilePath;
+                efficiency.UserPinfl = model.UserPinfl;
+                efficiency.LastUpdate = DateTime.Now;
             }
-           
 
+            _reesterService.RecordUpdateTime(projectEfficiency.ReestrProjectId);
 
             _efficiency.Update(efficiency);
 

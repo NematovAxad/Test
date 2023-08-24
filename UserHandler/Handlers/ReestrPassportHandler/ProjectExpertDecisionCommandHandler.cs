@@ -14,6 +14,7 @@ using Domain.Permission;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrPassportHandler
 {
@@ -22,12 +23,14 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         private readonly IRepository<Organizations, int> _organization;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ReestrProjectExpertDecision, int> _projectExpertDecision;
+        private readonly IReesterService _reesterService;
 
-        public ProjectExpertDecisionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectExpertDecision, int> projectExpertDecision)
+        public ProjectExpertDecisionCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectExpertDecision, int> projectExpertDecision, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectExpertDecision = projectExpertDecision;
+            _reesterService = reesterService;
         }
         public async Task<ProjectExpertDecisionCommandResult> Handle(ProjectExpertDecisionCommand request, CancellationToken cancellationToken)
         {
@@ -67,6 +70,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 addModel.Exist = model.Exist;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     addModel.FilePath = model.FilePath;
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
 
                 _projectExpertDecision.Add(addModel);
 
@@ -84,13 +89,16 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 if (!String.IsNullOrEmpty(model.ExpertComment))
                     addModel.ExpertComment = model.ExpertComment;
                 addModel.ExpertExcept = model.ExpertExcept;
+                
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
 
                 _projectExpertDecision.Add(addModel);
 
                 id = addModel.Id;
             }
 
-            
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
 
             return id;
         }
@@ -132,8 +140,13 @@ namespace UserHandler.Handlers.ReestrPassportHandler
                 projectExpertDecision.ExpertExcept = model.ExpertExcept;
             }
 
+            projectExpertDecision.LastUpdate = DateTime.Now;
+            projectExpertDecision.UserPinfl = model.UserPinfl;
+            
             _projectExpertDecision.Update(projectExpertDecision);
 
+            _reesterService.RecordUpdateTime(projectExpertDecision.ReestrProjectId);
+            
             return projectExpertDecision.Id;
         }
 

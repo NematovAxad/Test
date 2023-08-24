@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 {
@@ -26,14 +27,16 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
         private readonly IRepository<ReestrProjectAutomatedServices, int> _projectServices;
         private readonly IRepository<AutomatedFunctions, int> _functions;
         private readonly IRepository<AutomatedServices, int> _services;
+        private readonly IReesterService _reesterService;
 
-        public ReestrProjectServicesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectAutomatedServices, int> projectServices, IRepository<AutomatedFunctions, int> functions, IRepository<AutomatedServices, int> services)
+        public ReestrProjectServicesCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ReestrProjectAutomatedServices, int> projectServices, IRepository<AutomatedFunctions, int> functions, IRepository<AutomatedServices, int> services, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _projectServices = projectServices;
             _functions = functions;
             _services = services;
+            _reesterService = reesterService;
         }
 
         public async Task<ReestrProjectServicesCommandResult> Handle(ReestrProjectServicesCommand request, CancellationToken cancellationToken)
@@ -80,6 +83,9 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 if (deadline.OperatorDeadlineDate < DateTime.Now)
                     throw ErrorStates.Error(UIErrors.DeadlineExpired);
 
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
+                
                 _projectServices.Add(addModel);
                 id = addModel.Id;
             }
@@ -105,12 +111,15 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
 
+                addModel.LastUpdate = DateTime.Now;
+                addModel.UserPinfl = model.UserPinfl;
+                
                 _projectServices.Add(addModel);
                 id = addModel.Id;
             }
 
 
-            
+            _reesterService.RecordUpdateTime(model.ReestrProjectId);
 
             return id;
         }
@@ -162,10 +171,13 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
                     else { throw ErrorStates.Error(UIErrors.EnoughDataNotProvided); }  
             }
 
-            
+            projectServices.LastUpdate = DateTime.Now;
+            projectServices.UserPinfl = model.UserPinfl;
 
             _projectServices.Update(projectServices);
 
+            _reesterService.RecordUpdateTime(projectServices.ReestrProjectId);
+            
             return projectServices.Id;
         }
 
