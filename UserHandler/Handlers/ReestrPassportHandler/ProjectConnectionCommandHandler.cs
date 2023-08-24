@@ -33,7 +33,7 @@ namespace UserHandler.Handlers.ReestrPassportHandler
             _deadline = deadline;
             _projectConnection = projectConnection;
             _connections = connections;
-            _reesterService = _reesterService;
+            _reesterService = reesterService;
         }
         public async Task<ProjectConnectionResult> Handle(ProjectConnectionCommand request, CancellationToken cancellationToken)
         {
