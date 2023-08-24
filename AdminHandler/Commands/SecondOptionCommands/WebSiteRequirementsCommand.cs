@@ -47,5 +47,7 @@ namespace AdminHandler.Commands.SecondOptionCommands
 
         public string Comment { get; set; }
         public Steps RequirementStatus { get; set; }
+
+        public DateTime LastUpdate { get; set; }
     }
 }

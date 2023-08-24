@@ -96,7 +96,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                         
                         if(!String.IsNullOrEmpty(model.UserPinfl))
                             requirement.UserPinfl = model.UserPinfl;
-                        requirement.LastUpdate = DateTime.Now;
+                        
+                        if(r.LastUpdate!=null)
+                            requirement.LastUpdate = r.LastUpdate;
 
                         addList.Add(requirement);
                     }
@@ -164,7 +166,9 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                     };
                     if (!String.IsNullOrEmpty(model.UserPinfl))
                         requirement.UserPinfl = model.UserPinfl;
-                    requirement.LastUpdate = DateTime.Now;
+                    
+                    if(r.LastUpdate!=null)
+                        requirement.LastUpdate = r.LastUpdate;
                 }   
 
                 _db.Context.Set<WebSiteRequirements>().UpdateRange(orgRequirements);
