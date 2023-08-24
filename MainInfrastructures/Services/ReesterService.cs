@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -267,7 +268,7 @@ namespace MainInfrastructures.Services
             result.TotalPages = (int)orgProjects.Count / model.Limit;
             
             if (returnPart.Count > 0)
-                result.UpdateTime = returnPart[0].UpdateTime;
+                result.UpdateTime = returnPart.Select(p=>p.UpdateTime).Max();
 
             if (orgProjects.Count > 0 && orgProjects.Count % model.Limit != 0)
                 result.TotalPages += 1;
@@ -285,7 +286,8 @@ namespace MainInfrastructures.Services
                     ShortName = project.ShortName,
                     PassportStatus = project.PassportStatus,
                     HasTerms = project.HasTerms,
-                    LinkForSystem = project.LinkForSystem
+                    LinkForSystem = project.LinkForSystem,
+                    LastUpdate = project.UpdateTime
                 });
             }
 
@@ -310,6 +312,28 @@ namespace MainInfrastructures.Services
             }
 
             return await Task.FromResult(result);
+        }
+        
+        public async Task<int> RecordUpdateTime(int projectId)
+        {
+            var project = _reestrPassport.Find(p => p.ReestrProjectId == projectId).FirstOrDefault();
+
+            if (project is null)
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+            
+            project.UpdateTime = DateTime.Now;
+            
+            _reestrPassport.Update(project);
+
+
+            var projectDetails = _reestrPassportDetails.Find(p => p.ReestrProjectId == projectId).FirstOrDefault();
+
+            if (projectDetails is null)
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+
+            _reestrPassportDetails.Update(projectDetails);
+
+            return await Task.FromResult(projectId);
         }
     }
 }

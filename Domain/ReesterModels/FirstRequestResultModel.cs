@@ -14,5 +14,7 @@ namespace Domain.ReesterModels
         public bool HasTerms { get; set; }
         public bool HasExpertise { get; set; }
         public string LinkForSystem { get; set; }
+        
+        public DateTime LastUpdate { get; set; }
     }
 }

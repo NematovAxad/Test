@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 {
@@ -26,13 +27,19 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ProjectAuthorizations, int> _authorizations;
         private readonly IRepository<ReestrProjectAuthorizations, int> _projectAuthorization;
+        private readonly IReesterService _reestrService;
 
-        public ReestrProjectAuthorizationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectAuthorizations, int> authorizations, IRepository<ReestrProjectAuthorizations, int> projectAuthorization)
+        public ReestrProjectAuthorizationCommandHandler(IRepository<Organizations, int> organization, 
+            IRepository<Deadline, int> deadline, 
+            IRepository<ProjectAuthorizations, int> authorizations, 
+            IRepository<ReestrProjectAuthorizations, int> projectAuthorization, 
+            IReesterService reestrService)
         {
             _organization = organization;
             _deadline = deadline;
             _authorizations = authorizations;
             _projectAuthorization = projectAuthorization;
+            _reestrService = reestrService;
         }
 
         public async Task<ReestrProjectAuthorizationCommandResult> Handle(ReestrProjectAuthorizationCommand request, CancellationToken cancellationToken)
@@ -79,6 +86,8 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 if (!String.IsNullOrEmpty(model.OrgComment))
                     addModel.OrgComment = model.OrgComment;
                 addModel.Exist = model.Exist;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _projectAuthorization.Add(addModel);
 
@@ -104,14 +113,15 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 if (model.ExceptedItems >= 0)
                     addModel.ExceptedItems = model.ExceptedItems;
 
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
+                
                 _projectAuthorization.Add(addModel);
 
                 id = addModel.Id;
             }
 
-
-            
-
+            _reestrService.RecordUpdateTime(model.ReestrProjectId);
             return id;
         }
         public int Update(ReestrProjectAuthorizationCommand model)
@@ -158,7 +168,12 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                     projectAuthorization.ExceptedItems = model.ExceptedItems;
             }
 
+            projectAuthorization.UserPinfl = model.UserPinfl;
+            projectAuthorization.LastUpdate = DateTime.Now;
+            
             _projectAuthorization.Update(projectAuthorization);
+            
+            _reestrService.RecordUpdateTime(model.ReestrProjectId);
 
             return projectAuthorization.Id;
         }

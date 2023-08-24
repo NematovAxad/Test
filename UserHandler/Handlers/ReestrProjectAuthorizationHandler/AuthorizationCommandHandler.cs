@@ -17,6 +17,7 @@ using Domain.Permission;
 using Domain.Models.FirstSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain;
+using MainInfrastructures.Interfaces;
 
 namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 {
@@ -26,13 +27,15 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<ProjectAuthorizations, int> _authorizations;
         private readonly IRepository<ReestrProjectAuthorizations, int> _projectAuthorization;
+        private readonly IReesterService _reesterService;
 
-        public AuthorizationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectAuthorizations, int> authorizations, IRepository<ReestrProjectAuthorizations, int> projectAuthorization)
+        public AuthorizationCommandHandler(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<ProjectAuthorizations, int> authorizations, IRepository<ReestrProjectAuthorizations, int> projectAuthorization, IReesterService reesterService)
         {
             _organization = organization;
             _deadline = deadline;
             _authorizations = authorizations;
             _projectAuthorization = projectAuthorization;
+            _reesterService = reesterService;
         }
 
         public async Task<AuthorizationCommandResult> Handle(AuthorizationCommand request, CancellationToken cancellationToken)
@@ -74,11 +77,15 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 addModel.AuthorizationType = model.AuthorizationType;
                 addModel.AuthorizationUri = model.AuthorizationUri;
                 addModel.FilePath = model.FilePath;
+                addModel.UserPinfl = model.UserPinfl;
+                addModel.LastUpdate = DateTime.Now;
 
                 _authorizations.Add(addModel);
                 id = addModel.Id;
             }
-
+            
+            _reesterService.RecordUpdateTime(projectAuthorization.ReestrProjectId);
+            
             return id;
         }
 
@@ -87,19 +94,16 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
             var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
-
             
-
-
-            var projectAuthorization = _projectAuthorization.Find(p => p.Id == model.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
-            if (projectAuthorization == null)
-                throw ErrorStates.NotFound(model.ParentId.ToString());
-
             var identity = _authorizations.Find(p => p.Id == model.Id).FirstOrDefault();
             if (identity == null)
                 throw ErrorStates.NotAllowed(model.Id.ToString());
 
-
+            var projectAuthorization = _projectAuthorization.Find(p => p.Id == identity.ParentId && p.Exist == true).Include(mbox => mbox.Organizations).FirstOrDefault();
+            if (projectAuthorization == null)
+                throw ErrorStates.NotFound(model.ParentId.ToString());
+            
+            
             if ((model.UserOrgId == projectAuthorization.Organizations.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
             {
                 if (deadline.FifthSectionDeadlineDate < DateTime.Now)
@@ -109,9 +113,12 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
                 identity.AuthorizationUri = model.AuthorizationUri;
                 if (!String.IsNullOrEmpty(model.FilePath))
                     identity.FilePath = model.FilePath;
+                
+                identity.UserPinfl = model.UserPinfl;
+                identity.LastUpdate = DateTime.Now;
             }
-           
 
+            _reesterService.RecordUpdateTime(projectAuthorization.ReestrProjectId);
 
 
             _authorizations.Update(identity);

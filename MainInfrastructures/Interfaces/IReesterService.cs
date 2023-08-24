@@ -14,5 +14,7 @@ namespace MainInfrastructures.Interfaces
 
         Task<FirstRequestQueryResult> FirstRequestNew(FirstRequestQuery model);
         Task<SecondRequestQueryResult> SecondRequestNew(SecondRequestQuery model);
+
+        Task<int> RecordUpdateTime(int projectId);
     }
 }
