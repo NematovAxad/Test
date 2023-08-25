@@ -19,6 +19,8 @@ using System.Globalization;
 using Domain.MibModels;
 using Microsoft.EntityFrameworkCore;
 
+using Jh.Core.Extensions;
+
 namespace MainInfrastructures.Services
 {
     public class MibService:IMibService
@@ -45,7 +47,7 @@ namespace MainInfrastructures.Services
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
             HttpClient client = new HttpClient(clientHandler);
 
-            var byteArray = Encoding.ASCII.GetBytes("nisreport:n1$R3P0r+");
+            var byteArray = Encoding.ASCII.GetBytes("MipPassword".Env());
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
 
@@ -105,11 +107,8 @@ namespace MainInfrastructures.Services
             if (orgId == 0)
                 throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 
-            var org = _organization.Find(o => o.Id == orgId).Include(mbox => mbox.SubOrganizations).FirstOrDefault();
-            if (org == null)
-                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
-
-            if(String.IsNullOrEmpty(org.OrgInn))
+            var org = _organization.Find(o => o.Id == orgId).Include(mbox => mbox.SubOrganizations).FirstOrDefault() ?? throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            if (String.IsNullOrEmpty(org.OrgInn))
                 throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 
             List<string> orgInnCollection = new List<string>();
@@ -124,12 +123,13 @@ namespace MainInfrastructures.Services
 
             var mibReport = _mibReport.Find(m => orgInnCollection.Any(s => s == m.OwnerInn)).ToList();
 
-            MibReportResult result = new MibReportResult();
+            MibReportResult result = new MibReportResult
+            {
+                Data = mibReport.OrderBy(u => u.Id).ToList(),
+                LastUpdate = mibReport.First().LastUpdate
+            };
 
-            result.Data = mibReport.OrderBy(u => u.Id).ToList();
-            result.LastUpdate = mibReport.First().LastUpdate;
-
-            if(mibReport.Count > 0)
+            if (mibReport.Count > 0)
             {
                 result.SuccessRate = Math.Round((mibReport.Sum(u => u.SuccessCount)*1.0)/mibReport.Sum(u=>u.Overall), 2);
             }

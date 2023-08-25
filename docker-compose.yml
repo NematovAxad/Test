@@ -3,31 +3,77 @@ version: '3.4'
 services:
   AdminApi:
     image: registry.egov.uz/axad/nissystem:adminapi
+    environment:
+         OpenDataurl: 'https://data.egov.uz/apiPartner/Partner/NisUzApi'
+         ReesterFirstLink: 'https://reestr.uz/api/apiProject/Integration/nisgetorgprojects'
+         ReesterSecondLink: 'https://reestr.uz/api/apiProject/Integration/getproject'
+         CyberSecurityUrl: 'https://sm.csec.uz/api/v1/nis/rating'
+         AuthOrgGetUrl: 'https://auth.egov.uz/api/Organization/GetOrg'
+         MyGovServices: 'https://my.gov.uz/oz/api/nis-uz/download-service-deadline-file?'
+         MibService: 'https://nisreport.egov.uz/nisreport/mip2?'
+         MainAdminPinfl: '30811965270037'
+         MipPassword: 'nisreport:n1$R3P0r+'
+         postrgressConnection: 'Host=postgres;Port=5432;Database=nisdata;Username=nisuse;Password=zV6r3dy7CtmbJeEP'
     labels:
      NAME: "Admin Api"
-    
     build:
       context: .
       dockerfile: AdminApi/Dockerfile
     ports:
      - "6051:6051"
+
   UserApi:
     image: registry.egov.uz/axad/nissystem:userapi
+    environment:
+         OpenDataurl: 'https://data.egov.uz/apiPartner/Partner/NisUzApi'
+         ReesterFirstLink: 'https://reestr.uz/api/apiProject/Integration/nisgetorgprojects'
+         ReesterSecondLink: 'https://reestr.uz/api/apiProject/Integration/getproject'
+         CyberSecurityUrl: 'https://sm.csec.uz/api/v1/nis/rating'
+         AuthOrgGetUrl: 'https://auth.egov.uz/api/Organization/GetOrg'
+         MyGovServices: 'https://my.gov.uz/oz/api/nis-uz/download-service-deadline-file?'
+         MibService: 'https://nisreport.egov.uz/nisreport/mip2?'
+         MainAdminPinfl: '30811965270037'
+         MipPassword: 'nisreport:n1$R3P0r+'
+         postrgressConnection: 'Host=postgres;Port=5432;Database=nisdata;Username=nisuse;Password=zV6r3dy7CtmbJeEP'
     labels:
      NAME: "User Api"
-    
     build:
       context: .
       dockerfile: UserApi/Dockerfile
     ports:
      - "6052:6052"
+ 
   MonitoringApi:
     image: registry.egov.uz/axad/nissystem:monitoringapi
+    environment:
+         OpenDataurl: 'https://data.egov.uz/apiPartner/Partner/NisUzApi'
+         ReesterFirstLink: 'https://reestr.uz/api/apiProject/Integration/nisgetorgprojects'
+         ReesterSecondLink: 'https://reestr.uz/api/apiProject/Integration/getproject'
+         CyberSecurityUrl: 'https://sm.csec.uz/api/v1/nis/rating'
+         AuthOrgGetUrl: 'https://auth.egov.uz/api/Organization/GetOrg'
+         MyGovServices: 'https://my.gov.uz/oz/api/nis-uz/download-service-deadline-file?'
+         MibService: 'https://nisreport.egov.uz/nisreport/mip2?'
+         MainAdminPinfl: '30811965270037'
+         MipPassword: 'nisreport:n1$R3P0r+'
+         postrgressConnection: 'Host=postgres;Port=5432;Database=nisdata;Username=nisuse;Password=zV6r3dy7CtmbJeEP'
     labels:
      NAME: "Monitoring Api"
-    
     build:
       context: .
       dockerfile: MonitoringApi/Dockerfile
     ports:
      - "6053:6053"
+  postgres:
+    image: postgres:14.6
+    restart: always
+    environment:
+      POSTGRES_DB: "nisdata"
+      POSTGRES_USER: "nisuse"
+      POSTGRES_PASSWORD: "zV6r3dy7CtmbJeEP"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+        
+    ports:
+      - "5732:5432"
+    volumes:
+      - "/usr/pgsql/initdb:/docker-entrypoint-initdb.d"
+      - "/usr/pgsql/data:/var/lib/postgresql/data"

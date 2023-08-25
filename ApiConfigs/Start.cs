@@ -1,14 +1,25 @@
 ﻿using ApiConfigs.EnumSynonyms.Extensions;
+
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.Variance;
+
 using CoreDomain.Middlewares;
+
 using CoreResult;
+
 using Domain;
+
 using EntityRepository;
+
+using Jh.Core.Extensions;
+
 using JohaRepository;
+
 using MainInfrastructures.Db;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +27,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,8 +38,8 @@ namespace ApiConfigs
 {
     public static class Start
     {
-        public static string ConnectionString => "Host=172.16.60.6;Port=5432;Database=nis_system;Username=postgres;Password=123456789$p";
-
+        public static string ConnectionString => "postrgressConnection".Env();// "Host=172.16.60.6;Port=5432;Database=nis_system;Username=postgres;Password=123456789$p";
+        //Host=postgres;Port=5432;Database=nisdata;Username=nisuse;Password=zV6r3dy7CtmbJeEP
         #region
         public static void RegisterDb(IServiceCollection services, ContainerBuilder builder)
         {
@@ -40,7 +52,7 @@ namespace ApiConfigs
         }
         public static void AddJwt(IServiceCollection services)
         {
-            
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              .AddJwtBearer(options =>
              {

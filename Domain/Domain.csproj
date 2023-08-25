@@ -12,6 +12,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="EntityRepository" Version="0.0.0.2" />
+    <PackageReference Include="Jh.Core-alfa" Version="0.0.3" />
     <PackageReference Include="JohaRepository" Version="0.0.0.4" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="7.1.0" />

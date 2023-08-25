@@ -83,6 +83,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="6.2.2" />
+    <PackageReference Include="Jh.Core-alfa" Version="0.0.3" />
   </ItemGroup>
 
   <ItemGroup>
