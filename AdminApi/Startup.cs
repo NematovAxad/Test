@@ -1,11 +1,19 @@
 using ApiConfigs;
+
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+
+using EntityRepository;
+
+using MainInfrastructures.Db;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using System;
 
 namespace AdminApi
@@ -22,7 +30,7 @@ namespace AdminApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            
+
             services.AddControllers().AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
@@ -30,12 +38,15 @@ namespace AdminApi
 
             services.AddHostedService<WebsitePingService>();
             services.ConfigureServices(builder);
+
             services.AddBeatPulse(setup =>
             {
 
 
             });
             Container = builder.Build();
+            var dbContext = Container.Resolve<DataContext>();
+            dbContext?.Database?.Migrate();
             return new AutofacServiceProvider(Container);
         }
 
