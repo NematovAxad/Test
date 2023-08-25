@@ -1,0 +1,1 @@
+### Nis sistema 195.158.28.147 shu Ip lik serverda turibdi
