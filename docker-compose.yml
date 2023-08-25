@@ -1,8 +1,29 @@
 version: '3.4'
 
 services:
+  frontend:
+    image: registry.egov.uz/a.yakipov/nis/cloud:latest
+    labels:
+     NAME: "front"
+    restart: unless-stopped
+    extra_hosts:
+     - "id.egov.uz sso.egov.uz:185.74.7.84"
+     - "data.egov.uz:185.74.6.228"
+     - "reestr.uz:185.74.6.232"
+     - "sm.csec.uz:84.54.83.156"
+     - "nis-cloud.egov.uz:195.158.28.134"
+     - "auth.egov.uz:195.158.28.131"
+    ports:
+     - "8181:80"
   AdminApi:
     image: registry.egov.uz/axad/nissystem:adminapi
+    extra_hosts:
+     - "id.egov.uz sso.egov.uz:185.74.7.84"
+     - "data.egov.uz:185.74.6.228"
+     - "reestr.uz:185.74.6.232" 
+     - "sm.csec.uz:84.54.83.156"
+     - "nis-cloud.egov.uz:195.158.28.134"
+     - "auth.egov.uz:195.158.28.131"
     environment:
          OpenDataurl: 'https://data.egov.uz/apiPartner/Partner/NisUzApi'
          ReesterFirstLink: 'https://reestr.uz/api/apiProject/Integration/nisgetorgprojects'
@@ -24,6 +45,13 @@ services:
 
   UserApi:
     image: registry.egov.uz/axad/nissystem:userapi
+    extra_hosts:
+     - "id.egov.uz sso.egov.uz:185.74.7.84"
+     - "data.egov.uz:185.74.6.228"
+     - "reestr.uz:185.74.6.232" 
+     - "sm.csec.uz:84.54.83.156"
+     - "nis-cloud.egov.uz:195.158.28.134"
+     - "auth.egov.uz:195.158.28.131"
     environment:
          OpenDataurl: 'https://data.egov.uz/apiPartner/Partner/NisUzApi'
          ReesterFirstLink: 'https://reestr.uz/api/apiProject/Integration/nisgetorgprojects'
@@ -45,6 +73,13 @@ services:
  
   MonitoringApi:
     image: registry.egov.uz/axad/nissystem:monitoringapi
+    extra_hosts:
+     - "id.egov.uz sso.egov.uz:185.74.7.84"
+     - "data.egov.uz:185.74.6.228"
+     - "reestr.uz:185.74.6.232" 
+     - "sm.csec.uz:84.54.83.156"
+     - "nis-cloud.egov.uz:195.158.28.134"
+     - "auth.egov.uz:195.158.28.131"
     environment:
          OpenDataurl: 'https://data.egov.uz/apiPartner/Partner/NisUzApi'
          ReesterFirstLink: 'https://reestr.uz/api/apiProject/Integration/nisgetorgprojects'

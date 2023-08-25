@@ -45,8 +45,8 @@ namespace AdminApi
 
             });
             Container = builder.Build();
-            var dbContext = Container.Resolve<DataContext>();
-            dbContext?.Database?.Migrate();
+            //var dbContext = Container.Resolve<DataContext>();
+            //dbContext?.Database?.Migrate();
             return new AutofacServiceProvider(Container);
         }
 
