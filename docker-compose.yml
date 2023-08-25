@@ -15,6 +15,7 @@ services:
      - "auth.egov.uz:195.158.28.131"
     ports:
      - "8181:80"
+
   AdminApi:
     image: registry.egov.uz/axad/nissystem:adminapi
     extra_hosts:
