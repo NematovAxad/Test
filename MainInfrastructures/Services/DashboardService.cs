@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -48,6 +49,8 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ASphere, int> _aSphere;
         private readonly IRepository<AField, int> _aField;
         private readonly IRepository<ASubField, int> _aSubField;
+
+        private List<int> DashboardBlackList = new List<int>() { 189, 177, 112 };
 
         public DashboardService(IRepository<Organizations, int> organizations, 
                                         IRepository<Deadline, int> deadline, 
@@ -114,6 +117,7 @@ namespace MainInfrastructures.Services
         {
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.GovernmentOrganizations && o.IsActive == true && o.IsIct == true).ToList();
+            organizations = organizations.Where(o=>DashboardBlackList.All(d=>d!=o.Id)).ToList();
             
             OrgReportModel result = new OrgReportModel();
             result.Category = "Davlat boshqaruvi organlari";
@@ -214,6 +218,8 @@ namespace MainInfrastructures.Services
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.FarmOrganizations && o.IsActive == true && o.IsIct == true).ToList();
             
+            organizations = organizations.Where(o=>DashboardBlackList.All(d=>d!=o.Id)).ToList();
+            
             OrgReportModel result = new OrgReportModel();
             result.Category = "Xo'jalik boshqaruvi organlari";
             result.OrganizationsReport = new List<ReportBySpheresModel>();
@@ -297,6 +303,8 @@ namespace MainInfrastructures.Services
         {
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.Adminstrations && o.IsActive == true && o.IsIct == true).ToList();
+            
+            organizations = organizations.Where(o=>DashboardBlackList.All(d=>d!=o.Id)).ToList();
             
             OrgReportModel result = new OrgReportModel();
             result.Category = "Hokimliklar";
@@ -383,6 +391,8 @@ namespace MainInfrastructures.Services
             
             var organizations = _organization.Find(o => o.IsActive == true && o.IsIct == true).ToList();
 
+            organizations = organizations.Where(o=>DashboardBlackList.All(d=>d!=o.Id)).ToList();
+            
             List<int> orgIds = organizations.Select(o=>o.Id).ToList();
 
 
@@ -411,6 +421,8 @@ namespace MainInfrastructures.Services
             
             var organizations = _organization.Find(o => o.IsActive == true && o.IsIct == true).ToList();
 
+            organizations = organizations.Where(o=>DashboardBlackList.All(d=>d!=o.Id)).ToList();
+            
             List<int> orgIds = organizations.Select(o => o.Id).ToList();
 
             var report = _digitalEconomyProjectsReport.Find(r => orgIds.Any(i => i == r.OrganizationId));
