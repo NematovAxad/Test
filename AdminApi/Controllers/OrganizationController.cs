@@ -48,11 +48,11 @@ namespace AdminApi.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> DownloadRankReport([FromQuery] OrgCategory category)
+        public async Task<IActionResult> DownloadRankReport([FromQuery] OrgCategory category, int deadlineId)
         {
             try
             {
-                var stream = await _organizationService.DownloadOrganizationsRateReport(category);
+                var stream = await _organizationService.DownloadOrganizationsRateReport(category, deadlineId);
 
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
             }

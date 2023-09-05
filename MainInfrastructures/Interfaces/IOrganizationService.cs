@@ -24,6 +24,6 @@ namespace MainInfrastructures.Interfaces
         Task<OrgExceptionPercentResultModel> GetOrganizationExceptionPercent(int orgId);
 
         Task<MemoryStream> DownloadOrgData(int orgId);
-        Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category);
+        Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category, int deadlineId);
     }
 }

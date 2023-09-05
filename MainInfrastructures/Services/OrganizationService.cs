@@ -717,19 +717,15 @@ namespace MainInfrastructures.Services
             return memoryStream;
         }
 
-        public async Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category)
+        public async Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category, int deadlineId)
         {
             rankExcelStartIndex = 1;
             
-            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+            var deadline = _deadline.Find(d => d.Id == deadlineId).FirstOrDefault();
 
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
-
-           
-            var xRankTable = _gRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
-            var aRankTable = _gRankTable.Find(r => r.Year == deadline.Year && r.Quarter == deadline.Quarter).ToList();
-
+            
             string fileName = "Rank_details";
             var memoryStream = new MemoryStream();
             using (ExcelPackage package = new ExcelPackage(memoryStream))
