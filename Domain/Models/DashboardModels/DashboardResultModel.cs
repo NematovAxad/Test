@@ -99,6 +99,7 @@ namespace Domain.Models.DashboardModels
         public string WorkPhone { get; set; }
         public string MobilePhone { get; set; }
         public string Email { get; set; }
+        public string PhotoLink { get; set; }
     }
 
     public class DigitalProjectsModel

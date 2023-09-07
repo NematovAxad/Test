@@ -262,7 +262,8 @@ namespace MainInfrastructures.Services
                         DirectorPosition = specialForce.HeadPosition,
                         WorkPhone = specialForce.WorkPhone,
                         MobilePhone = specialForce.MobilePhone,
-                        Email = specialForce.Email
+                        Email = specialForce.Email,
+                        PhotoLink = specialForce.PhotoPath
                     };
                 }
                 
@@ -421,7 +422,8 @@ namespace MainInfrastructures.Services
                         DirectorPosition = specialForce.HeadPosition,
                         WorkPhone = specialForce.WorkPhone,
                         MobilePhone = specialForce.MobilePhone,
-                        Email = specialForce.Email
+                        Email = specialForce.Email,
+                        PhotoLink = specialForce.PhotoPath
                     };
                 }
                 
@@ -579,7 +581,8 @@ namespace MainInfrastructures.Services
                         DirectorPosition = specialForce.HeadPosition,
                         WorkPhone = specialForce.WorkPhone,
                         MobilePhone = specialForce.MobilePhone,
-                        Email = specialForce.Email
+                        Email = specialForce.Email,
+                        PhotoLink = specialForce.PhotoPath
                     };
                 }
                 
