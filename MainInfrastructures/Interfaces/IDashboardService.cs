@@ -7,7 +7,7 @@ namespace MainInfrastructures.Interfaces
 {
     public interface IDashboardService
     {
-        Task<DashboardResultModel> GetDashboardData();
+        Task<DashboardResultModel> GetDashboardData(int? deadlineId);
         Task<bool> TransferRanks(int deadlineFromId, int deadlineToId, string userPinfl);
     }
 }

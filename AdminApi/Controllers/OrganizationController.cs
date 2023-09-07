@@ -63,11 +63,11 @@ namespace AdminApi.Controllers
         }
         
         [HttpGet]
-        public async Task<ResponseCore<DashboardResultModel>> DashboardReport()
+        public async Task<ResponseCore<DashboardResultModel>> DashboardReport(int? deadlineId)
         {
             try
             {
-                return await _dashboardService.GetDashboardData();
+                return await _dashboardService.GetDashboardData(deadlineId);
             }
             catch(Exception ex)
             {

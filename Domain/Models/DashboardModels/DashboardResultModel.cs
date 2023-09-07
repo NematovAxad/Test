@@ -51,6 +51,61 @@ namespace Domain.Models.DashboardModels
         public string Category { get; set; }
         public int Count { get; set; }
         
-        public List<ReportBySpheresModel> OrganizationsReport { get; set; }
+        public List<ReportBySpheresModelDashboard> OrganizationsReport { get; set; }
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ReportBySpheresModelDashboard
+    {
+        public int OrganizationId { get; set; }
+        public string OrgName { get; set; }
+        public string OrgNameRu { get; set; }
+        public int UserServiceId { get; set; }
+        public OrgCategory Category { get; set; }
+        public OrgHeadModel OrgHeadModel { get; set; }
+        public ItDepartmentModel ItDepartmentModel { get; set; }
+        public string OrgWebsite { get; set; }
+        public List<SphereRateElement> Spheres { get; set; }
+        public DigitalProjectsModel DigitalProjectsModel { get; set; }
+        public int ReestrProjectCount { get; set; }
+        public double RateSum { get; set; }
+        public double RatePercent { get; set; }
+    }
+
+    public class OrgHeadModel
+    {
+        public string FirstName { get; set; }
+        
+        public string LastName { get; set; }
+        
+        public string MiddleName { get; set; }
+        
+        public string Position { get; set; }
+        
+        public string Phone { get; set; }
+        
+        public string Email { get; set; }
+        
+        public string PhotoLink { get; set; }
+    }
+
+    public class ItDepartmentModel
+    {
+        public string DepartmentName { get; set; }
+        public string FullNameDirector { get; set; }
+        public string DirectorPosition { get; set; }
+        public string WorkPhone { get; set; }
+        public string MobilePhone { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class DigitalProjectsModel
+    {
+        public int AllProjects { get; set; }
+        public int CompletedProjects { get; set; }
+        public int OngoinProjects { get; set; }
+        public int NotCompletedProjects { get; set; }
     }
 }

@@ -25,6 +25,7 @@ using MainInfrastructures.Migrations;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Domain.Models.SixthSection;
+using SB.Common.Extensions;
 
 namespace MainInfrastructures.Services
 {
@@ -36,6 +37,8 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ReestrProjectPosition, int> _reestrProjectPosition;
         private readonly IRepository<ReestrProjectExpertDecision, int> _reestrProjectExpertDecision;
         private readonly IRepository<OrganizationDigitalEconomyProjectsReport, int> _digitalEconomyProjectsReport;
+        private readonly IRepository<ReplacerOrgHead, int> _replacerOrgHead;
+        private readonly IRepository<OrganizationIctSpecialForces, int> _orgSpecialForces;
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<GRankTable, int> _gRankTable;
         private readonly IRepository<XRankTable, int> _xRankTable;
@@ -70,8 +73,10 @@ namespace MainInfrastructures.Services
                                         IRepository<ReestrProjectException, int> reestrProjectException,
                                         IRepository<ReestrProjectPosition, int> reestrProjectPosition,
                                         IRepository<ReestrProjectExpertDecision, int> reestrProjectExpertDecision,
-                                        IRepository<OrganizationDigitalEconomyProjectsReport, int> digitalEconomyProjectsReport
-                                        )
+                                        IRepository<OrganizationDigitalEconomyProjectsReport, int> digitalEconomyProjectsReport,
+                                        IRepository<ReplacerOrgHead, int> replacerOrgHead,
+                                        IRepository<OrganizationIctSpecialForces, int> orgSpecialForces
+        )
         {
             _organization = organizations;
             _organizationPublicServices = organizationPublicServices;
@@ -92,13 +97,25 @@ namespace MainInfrastructures.Services
             _aSphere = aSphere;
             _aField = aField;
             _aSubField = aSubField;
+            _replacerOrgHead = replacerOrgHead;
+            _orgSpecialForces = orgSpecialForces;
         }
         
-        public async Task<DashboardResultModel> GetDashboardData()
+        public async Task<DashboardResultModel> GetDashboardData(int? deadlineId)
         {
             DashboardResultModel result = new DashboardResultModel();
+
+            var deadline = new Deadline();
+
+            if (deadlineId != null && deadlineId > 0)
+            {
+                deadline = _deadline.Find(d => d.Dashboard == true && d.Id == deadlineId).FirstOrDefault();
+            }
+            else
+            {
+                deadline = _deadline.Find(d => d.Dashboard == true).OrderBy(i => i.Id).LastOrDefault();
+            }
             
-            var deadline = _deadline.Find(d => d.Dashboard == true).OrderBy(i => i.Id).LastOrDefault();
 
             if (deadline == null)
                 return await Task.FromResult(result);
@@ -121,7 +138,7 @@ namespace MainInfrastructures.Services
             
             OrgReportModel result = new OrgReportModel();
             result.Category = "Davlat boshqaruvi organlari";
-            result.OrganizationsReport = new List<ReportBySpheresModel>();
+            result.OrganizationsReport = new List<ReportBySpheresModelDashboard>();
             
             var gSpheres = _gSphere.GetAll().ToList();
             var gFields = _gField.GetAll().ToList();
@@ -130,11 +147,14 @@ namespace MainInfrastructures.Services
 
             foreach (var o in organizations)
             {
-                ReportBySpheresModel model = new ReportBySpheresModel()
+                ReportBySpheresModelDashboard model = new ReportBySpheresModelDashboard()
                 {
                     OrganizationId = o.Id, OrgName = o.ShortName, OrgNameRu = o.ShortNameRu,
                     UserServiceId = o.UserServiceId, Category = o.OrgCategory, Spheres = new List<SphereRateElement>()
                 };
+
+                #region CalculateSphereRanks
+
                 double maxRate = 0;
                 double reached = 0;
                 foreach (var sphere in gSpheres)
@@ -203,6 +223,76 @@ namespace MainInfrastructures.Services
                     model.Spheres.Add(addElement);
                     reached += sphereRate;
                 }
+
+                #endregion
+
+                #region ReplacerOrgHeadSet
+                var replacerOrgHead = _replacerOrgHead.Find(r => r.OrganizationId == o.Id).FirstOrDefault();
+                
+                if (replacerOrgHead != null)
+                {
+                    model.OrgHeadModel = new OrgHeadModel()
+                    {
+                        FirstName = replacerOrgHead.FirstName,
+                        LastName = replacerOrgHead.LastName,
+                        MiddleName = replacerOrgHead.MidName,
+                        Phone = replacerOrgHead.Phone,
+                        Email = replacerOrgHead.Email,
+                        PhotoLink = replacerOrgHead.PhotoPath
+                    };
+                }
+                
+                #endregion
+
+                #region OrgWebsiteSet
+
+                model.OrgWebsite = o.WebSite;
+
+                #endregion
+
+                #region ItDepartmentModelSet
+
+                var specialForce = _orgSpecialForces.Find(s => s.OrganizationId == o.Id).FirstOrDefault();
+                if (specialForce != null)
+                {
+                    model.ItDepartmentModel = new ItDepartmentModel()
+                    {
+                        DepartmentName = specialForce.SpecialForcesName,
+                        FullNameDirector = specialForce.FullNameDirector,
+                        DirectorPosition = specialForce.HeadPosition,
+                        WorkPhone = specialForce.WorkPhone,
+                        MobilePhone = specialForce.MobilePhone,
+                        Email = specialForce.Email
+                    };
+                }
+                
+                #endregion
+
+                #region ReestrProjectCountSet
+
+                var reestrProjects = _reestrProjectPosition.Find(r => r.OrganizationId == o.Id).ToList();
+                if (reestrProjects != null)
+                    model.ReestrProjectCount = reestrProjects.Count;
+
+                #endregion
+
+                #region DigitalEconomyProjectsSet
+
+                var digitalEconomyProjects =
+                    _digitalEconomyProjectsReport.Find(d => d.OrganizationId == o.Id).FirstOrDefault();
+                if (digitalEconomyProjects != null)
+                {
+                    model.DigitalProjectsModel = new DigitalProjectsModel()
+                    {
+                        AllProjects = digitalEconomyProjects.ProjectsCount,
+                        CompletedProjects = digitalEconomyProjects.CompletedProjects,
+                        OngoinProjects = digitalEconomyProjects.OngoingProjects,
+                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects
+                    };
+                }
+
+                #endregion
+                
                 model.RateSum = Math.Round(reached, 2);
                 model.RatePercent = Math.Round((reached / maxRate) * 100, 2);
 
@@ -222,7 +312,7 @@ namespace MainInfrastructures.Services
             
             OrgReportModel result = new OrgReportModel();
             result.Category = "Xo'jalik boshqaruvi organlari";
-            result.OrganizationsReport = new List<ReportBySpheresModel>();
+            result.OrganizationsReport = new List<ReportBySpheresModelDashboard>();
             
             var xSpheres = _xSphere.GetAll().ToList();
             var xFields = _xField.GetAll().ToList();
@@ -231,11 +321,14 @@ namespace MainInfrastructures.Services
 
             foreach (var o in organizations)
             {
-                ReportBySpheresModel model = new ReportBySpheresModel()
+                ReportBySpheresModelDashboard model = new ReportBySpheresModelDashboard()
                 {
                     OrganizationId = o.Id, OrgName = o.ShortName, OrgNameRu = o.ShortNameRu,
                     UserServiceId = o.UserServiceId, Category = o.OrgCategory, Spheres = new List<SphereRateElement>()
                 };
+
+                #region CalculateSphereRanks
+
                 double maxRate = 0;
                 double reached = 0;
                 foreach (var sphere in xSpheres)
@@ -289,6 +382,76 @@ namespace MainInfrastructures.Services
                     model.Spheres.Add(addElement);
                     reached += sphereRate;
                 }
+
+                #endregion
+
+                #region ReplacerOrgHeadSet
+                var replacerOrgHead = _replacerOrgHead.Find(r => r.OrganizationId == o.Id).FirstOrDefault();
+                
+                if (replacerOrgHead != null)
+                {
+                    model.OrgHeadModel = new OrgHeadModel()
+                    {
+                        FirstName = replacerOrgHead.FirstName,
+                        LastName = replacerOrgHead.LastName,
+                        MiddleName = replacerOrgHead.MidName,
+                        Phone = replacerOrgHead.Phone,
+                        Email = replacerOrgHead.Email,
+                        PhotoLink = replacerOrgHead.PhotoPath
+                    };
+                }
+                
+                #endregion
+                
+                #region OrgWebsiteSet
+
+                model.OrgWebsite = o.WebSite;
+
+                #endregion
+                
+                #region ItDepartmentModelSet
+
+                var specialForce = _orgSpecialForces.Find(s => s.OrganizationId == o.Id).FirstOrDefault();
+                if (specialForce != null)
+                {
+                    model.ItDepartmentModel = new ItDepartmentModel()
+                    {
+                        DepartmentName = specialForce.SpecialForcesName,
+                        FullNameDirector = specialForce.FullNameDirector,
+                        DirectorPosition = specialForce.HeadPosition,
+                        WorkPhone = specialForce.WorkPhone,
+                        MobilePhone = specialForce.MobilePhone,
+                        Email = specialForce.Email
+                    };
+                }
+                
+                #endregion
+                
+                #region DigitalEconomyProjectsSet
+
+                var digitalEconomyProjects =
+                    _digitalEconomyProjectsReport.Find(d => d.OrganizationId == o.Id).FirstOrDefault();
+                if (digitalEconomyProjects != null)
+                {
+                    model.DigitalProjectsModel = new DigitalProjectsModel()
+                    {
+                        AllProjects = digitalEconomyProjects.ProjectsCount,
+                        CompletedProjects = digitalEconomyProjects.CompletedProjects,
+                        OngoinProjects = digitalEconomyProjects.OngoingProjects,
+                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects
+                    };
+                }
+
+                #endregion
+                
+                #region ReestrProjectCountSet
+
+                var reestrProjects = _reestrProjectPosition.Find(r => r.OrganizationId == o.Id).ToList();
+                if (reestrProjects != null)
+                    model.ReestrProjectCount = reestrProjects.Count;
+
+                #endregion
+                
                 model.RateSum = Math.Round(reached, 2);
                 model.RatePercent = Math.Round((reached / maxRate) * 100, 2);
 
@@ -308,7 +471,7 @@ namespace MainInfrastructures.Services
             
             OrgReportModel result = new OrgReportModel();
             result.Category = "Hokimliklar";
-            result.OrganizationsReport = new List<ReportBySpheresModel>();
+            result.OrganizationsReport = new List<ReportBySpheresModelDashboard>();
             
             var aSpheres = _aSphere.GetAll().ToList();
             var aFields = _aField.GetAll().ToList();
@@ -317,11 +480,13 @@ namespace MainInfrastructures.Services
 
             foreach (var o in organizations)
             {
-                ReportBySpheresModel model = new ReportBySpheresModel()
+                ReportBySpheresModelDashboard model = new ReportBySpheresModelDashboard()
                 {
                     OrganizationId = o.Id, OrgName = o.ShortName, OrgNameRu = o.ShortNameRu,
                     UserServiceId = o.UserServiceId, Category = o.OrgCategory, Spheres = new List<SphereRateElement>()
                 };
+
+                #region CalculateSphereRanks
                 
                 double maxRate = 0;
                 double reached = 0;
@@ -375,6 +540,76 @@ namespace MainInfrastructures.Services
                     model.Spheres.Add(addElement);
                     reached += sphereRate;
                 }
+                
+                #endregion
+                
+                #region ReplacerOrgHeadSet
+                var replacerOrgHead = _replacerOrgHead.Find(r => r.OrganizationId == o.Id).FirstOrDefault();
+                
+                if (replacerOrgHead != null)
+                {
+                    model.OrgHeadModel = new OrgHeadModel()
+                    {
+                        FirstName = replacerOrgHead.FirstName,
+                        LastName = replacerOrgHead.LastName,
+                        MiddleName = replacerOrgHead.MidName,
+                        Phone = replacerOrgHead.Phone,
+                        Email = replacerOrgHead.Email,
+                        PhotoLink = replacerOrgHead.PhotoPath
+                    };
+                }
+                
+                #endregion
+                
+                #region OrgWebsiteSet
+
+                model.OrgWebsite = o.WebSite;
+
+                #endregion
+                
+                #region ItDepartmentModelSet
+
+                var specialForce = _orgSpecialForces.Find(s => s.OrganizationId == o.Id).FirstOrDefault();
+                if (specialForce != null)
+                {
+                    model.ItDepartmentModel = new ItDepartmentModel()
+                    {
+                        DepartmentName = specialForce.SpecialForcesName,
+                        FullNameDirector = specialForce.FullNameDirector,
+                        DirectorPosition = specialForce.HeadPosition,
+                        WorkPhone = specialForce.WorkPhone,
+                        MobilePhone = specialForce.MobilePhone,
+                        Email = specialForce.Email
+                    };
+                }
+                
+                #endregion
+                
+                #region DigitalEconomyProjectsSet
+
+                var digitalEconomyProjects =
+                    _digitalEconomyProjectsReport.Find(d => d.OrganizationId == o.Id).FirstOrDefault();
+                if (digitalEconomyProjects != null)
+                {
+                    model.DigitalProjectsModel = new DigitalProjectsModel()
+                    {
+                        AllProjects = digitalEconomyProjects.ProjectsCount,
+                        CompletedProjects = digitalEconomyProjects.CompletedProjects,
+                        OngoinProjects = digitalEconomyProjects.OngoingProjects,
+                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects
+                    };
+                }
+
+                #endregion
+                
+                #region ReestrProjectCountSet
+
+                var reestrProjects = _reestrProjectPosition.Find(r => r.OrganizationId == o.Id).ToList();
+                if (reestrProjects != null)
+                    model.ReestrProjectCount = reestrProjects.Count;
+
+                #endregion
+                
                 model.RateSum = Math.Round(reached, 2);
                 model.RatePercent = Math.Round((reached / maxRate) * 100, 2);
 
