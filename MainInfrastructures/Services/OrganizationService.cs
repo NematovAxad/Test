@@ -39,6 +39,7 @@ using System.Xml.Linq;
 using Domain.Enums;
 using Domain.Models.SixthSection;
 using Domain.OpenDataModels;
+using Domain.Models.SecondSection;
 
 namespace MainInfrastructures.Services
 {
@@ -58,6 +59,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<AField, int> _aField;
         private readonly IRepository<ASubField, int> _aSubField;
         private readonly IRepository<ARankTable, int> _aRankTable;
+        private readonly IRepository<WebSiteAvailability, int> _websiteAvailability;
         private readonly IDataContext _db;
         private readonly IReesterService _reesterService;
         private int rankExcelStartIndex;
@@ -77,7 +79,8 @@ namespace MainInfrastructures.Services
                                     IRepository<ASubField, int> aSubField,
                                     IRepository<ARankTable, int> aRankTable,
                                     IDataContext db,
-                                    IReesterService reesterService)
+                                    IReesterService reesterService, 
+                                    IRepository<WebSiteAvailability, int> websiteAvailability)
         {
             _deadline = deadline;
             _organization = organization;
@@ -95,6 +98,7 @@ namespace MainInfrastructures.Services
             _aRankTable = aRankTable;
             _db = db;
             _reesterService = reesterService;
+            _websiteAvailability = websiteAvailability;
         }
 
         public async Task<RankingStruct> GetStruct(int orgId)
@@ -570,8 +574,6 @@ namespace MainInfrastructures.Services
             var deadline = _deadline.Find(d => d.IsActive == true && d.PingService == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
-
-            var org = _organization.Find(o => o.IsActive == true).ToList();
             
             
             string fileName = "OrgPingReport";
@@ -668,11 +670,11 @@ namespace MainInfrastructures.Services
                 }
                 #endregion
 
-                organizationsPingReportIndex = 5;
+                organizationsPingReportIndex = 6;
                 
-                SetGovernmentPingReport(worksheet, deadline);
-                SetFarmPingReport(worksheet, deadline);
-                SetAdministrationPingReport(worksheet, deadline);
+                await SetGovernmentPingReport(worksheet, deadline);
+                await SetFarmPingReport(worksheet, deadline);
+                await SetAdministrationPingReport(worksheet, deadline);
                 
                 package.Save();
             }
@@ -684,7 +686,7 @@ namespace MainInfrastructures.Services
             return memoryStream;
         }
 
-        private void SetGovernmentPingReport(ExcelWorksheet worksheet, Deadline deadline)
+        private async Task SetGovernmentPingReport(ExcelWorksheet worksheet, Deadline deadline)
         {
             using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
             {
@@ -696,10 +698,26 @@ namespace MainInfrastructures.Services
                 range.Merge = true;
             }
 
-            organizationsPingReportIndex += 2;
+            organizationsPingReportIndex += 1;
+
+            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization).Where(r => r.Organization.IsActive == true && r.Organization.OrgCategory == OrgCategory.GovernmentOrganizations).ToList();
             
+            if(report.Count > 0)
+            {
+                foreach(WebSiteAvailability r in report) 
+                {
+                    worksheet.Cells[organizationsPingReportIndex, 1].Value = r.Organization.ShortName;
+                    worksheet.Cells[organizationsPingReportIndex, 2].Value = r.Organization.OrgCategory.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 3].Value = r.Website;
+                    worksheet.Cells[organizationsPingReportIndex, 4].Value = (r.FailedPing + r.SuccessfulPing).ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing;
+                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math.Round(((decimal)r.FailedPing / (r.SuccessfulPing + r.FailedPing)) * 100, 2);
+
+                    organizationsPingReportIndex += 1;
+                }
+            }
         }
-        private void SetFarmPingReport(ExcelWorksheet worksheet, Deadline deadline)
+        private async Task SetFarmPingReport(ExcelWorksheet worksheet, Deadline deadline)
         {
             using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
             {
@@ -711,9 +729,26 @@ namespace MainInfrastructures.Services
                 range.Merge = true;
             }
 
-            organizationsPingReportIndex += 2;
+            organizationsPingReportIndex += 1;
+
+            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization).Where(r => r.Organization.IsActive == true && r.Organization.OrgCategory == OrgCategory.FarmOrganizations).ToList();
+
+            if (report.Count > 0)
+            {
+                foreach (WebSiteAvailability r in report)
+                {
+                    worksheet.Cells[organizationsPingReportIndex, 1].Value = r.Organization.ShortName;
+                    worksheet.Cells[organizationsPingReportIndex, 2].Value = r.Organization.OrgCategory.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 3].Value = r.Website;
+                    worksheet.Cells[organizationsPingReportIndex, 4].Value = (r.FailedPing + r.SuccessfulPing).ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing;
+                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math.Round((decimal)(r.FailedPing / (r.SuccessfulPing + r.FailedPing))*100, 2);
+
+                    organizationsPingReportIndex += 1;
+                }
+            }
         }
-        private void SetAdministrationPingReport(ExcelWorksheet worksheet, Deadline deadline)
+        private async Task SetAdministrationPingReport(ExcelWorksheet worksheet, Deadline deadline)
         {
             using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
             {
@@ -725,7 +760,24 @@ namespace MainInfrastructures.Services
                 range.Merge = true;
             }
 
-            organizationsPingReportIndex += 2;
+            organizationsPingReportIndex += 1;
+
+            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization).Where(r => r.Organization.IsActive == true && r.Organization.OrgCategory == OrgCategory.Adminstrations).ToList();
+
+            if (report.Count > 0)
+            {
+                foreach (WebSiteAvailability r in report)
+                {
+                    worksheet.Cells[organizationsPingReportIndex, 1].Value = r.Organization.ShortName;
+                    worksheet.Cells[organizationsPingReportIndex, 2].Value = r.Organization.OrgCategory.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 3].Value = r.Website;
+                    worksheet.Cells[organizationsPingReportIndex, 4].Value = (r.FailedPing + r.SuccessfulPing).ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing;
+                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math.Round((decimal)(r.FailedPing / (r.SuccessfulPing + r.FailedPing)) * 100, 2);
+
+                    organizationsPingReportIndex += 1;
+                }
+            }
         }
         #endregion
         
