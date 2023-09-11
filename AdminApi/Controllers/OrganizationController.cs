@@ -56,7 +56,7 @@ namespace AdminApi.Controllers
         {
             try
             {
-                var stream = await _organizationService.DownloadOrgPingReport();
+                var stream = await _organizationService.DownloadOrgPingReport(this.UserRights());
 
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
             }

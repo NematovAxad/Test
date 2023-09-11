@@ -569,8 +569,11 @@ namespace MainInfrastructures.Services
         }
 
         #region DownloadOrgPingReport 2.3
-        public async Task<MemoryStream> DownloadOrgPingReport()
+        public async Task<MemoryStream> DownloadOrgPingReport(List<string> userRights)
         {
+            if (!userRights.Contains(Permissions.OPERATOR_RIGHTS))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            
             var deadline = _deadline.Find(d => d.IsActive == true && d.PingService == true).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
@@ -688,30 +691,22 @@ namespace MainInfrastructures.Services
 
         private async Task SetGovernmentPingReport(ExcelWorksheet worksheet, Deadline deadline)
         {
-            using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
-            {
-                range.Value = "Davlat organlari";
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                range.Style.WrapText = true;
-                range.Style.Font.Size = 11;
-                range.Merge = true;
-            }
-
-            organizationsPingReportIndex += 1;
-
-            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization).Where(r => r.Organization.IsActive == true && r.Organization.OrgCategory == OrgCategory.GovernmentOrganizations).ToList();
+            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization)
+                .Where(r => r.Organization.IsActive == true && r.Organization.IsIct == true &&
+                            r.Organization.OrgCategory == OrgCategory.GovernmentOrganizations).ToList();
             
             if(report.Count > 0)
             {
                 foreach(WebSiteAvailability r in report) 
                 {
                     worksheet.Cells[organizationsPingReportIndex, 1].Value = r.Organization.ShortName;
-                    worksheet.Cells[organizationsPingReportIndex, 2].Value = r.Organization.OrgCategory.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 2].Value = "Davlat boshqaruvi";
                     worksheet.Cells[organizationsPingReportIndex, 3].Value = r.Website;
                     worksheet.Cells[organizationsPingReportIndex, 4].Value = (r.FailedPing + r.SuccessfulPing).ToString();
-                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing;
-                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math.Round(((decimal)r.FailedPing / (r.SuccessfulPing + r.FailedPing)) * 100, 2);
+                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math
+                        .Round(((decimal)r.FailedPing / (r.SuccessfulPing + r.FailedPing)) * 100, 2)
+                        .ToString(CultureInfo.InvariantCulture);
 
                     organizationsPingReportIndex += 1;
                 }
@@ -719,30 +714,22 @@ namespace MainInfrastructures.Services
         }
         private async Task SetFarmPingReport(ExcelWorksheet worksheet, Deadline deadline)
         {
-            using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
-            {
-                range.Value = "Xo'jalik organlari";
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                range.Style.WrapText = true;
-                range.Style.Font.Size = 11;
-                range.Merge = true;
-            }
-
-            organizationsPingReportIndex += 1;
-
-            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization).Where(r => r.Organization.IsActive == true && r.Organization.OrgCategory == OrgCategory.FarmOrganizations).ToList();
+            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization)
+                .Where(r => r.Organization.IsActive == true && r.Organization.IsIct == true &&
+                            r.Organization.OrgCategory == OrgCategory.FarmOrganizations).ToList();
 
             if (report.Count > 0)
             {
                 foreach (WebSiteAvailability r in report)
                 {
                     worksheet.Cells[organizationsPingReportIndex, 1].Value = r.Organization.ShortName;
-                    worksheet.Cells[organizationsPingReportIndex, 2].Value = r.Organization.OrgCategory.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 2].Value = "Xo'jalik boshqaruvi";
                     worksheet.Cells[organizationsPingReportIndex, 3].Value = r.Website;
                     worksheet.Cells[organizationsPingReportIndex, 4].Value = (r.FailedPing + r.SuccessfulPing).ToString();
-                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing;
-                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math.Round((decimal)(r.FailedPing / (r.SuccessfulPing + r.FailedPing))*100, 2);
+                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math
+                        .Round(((decimal)r.FailedPing / (r.SuccessfulPing + r.FailedPing)) * 100, 2)
+                        .ToString(CultureInfo.InvariantCulture);
 
                     organizationsPingReportIndex += 1;
                 }
@@ -750,30 +737,22 @@ namespace MainInfrastructures.Services
         }
         private async Task SetAdministrationPingReport(ExcelWorksheet worksheet, Deadline deadline)
         {
-            using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
-            {
-                range.Value = "Hokimliklar";
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                range.Style.WrapText = true;
-                range.Style.Font.Size = 11;
-                range.Merge = true;
-            }
-
-            organizationsPingReportIndex += 1;
-
-            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization).Where(r => r.Organization.IsActive == true && r.Organization.OrgCategory == OrgCategory.Adminstrations).ToList();
+            var report = _websiteAvailability.Find(a => a.DeadlineId == deadline.Id).Include(mbox => mbox.Organization)
+                .Where(r => r.Organization.IsActive == true && r.Organization.IsIct == true &&
+                            r.Organization.OrgCategory == OrgCategory.Adminstrations).ToList();
 
             if (report.Count > 0)
             {
                 foreach (WebSiteAvailability r in report)
                 {
                     worksheet.Cells[organizationsPingReportIndex, 1].Value = r.Organization.ShortName;
-                    worksheet.Cells[organizationsPingReportIndex, 2].Value = r.Organization.OrgCategory.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 2].Value = "Hokimliklar";
                     worksheet.Cells[organizationsPingReportIndex, 3].Value = r.Website;
                     worksheet.Cells[organizationsPingReportIndex, 4].Value = (r.FailedPing + r.SuccessfulPing).ToString();
-                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing;
-                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math.Round((decimal)(r.FailedPing / (r.SuccessfulPing + r.FailedPing)) * 100, 2);
+                    worksheet.Cells[organizationsPingReportIndex, 5].Value = r.FailedPing.ToString();
+                    worksheet.Cells[organizationsPingReportIndex, 6].Value = Math
+                        .Round(((decimal)r.FailedPing / (r.SuccessfulPing + r.FailedPing)) * 100, 2)
+                        .ToString(CultureInfo.InvariantCulture);
 
                     organizationsPingReportIndex += 1;
                 }
