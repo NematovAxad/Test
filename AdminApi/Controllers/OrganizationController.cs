@@ -47,6 +47,25 @@ namespace AdminApi.Controllers
             }
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadOrgPingReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgPingReport();
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        
         [HttpGet]
         public async Task<IActionResult> DownloadRankReport([FromQuery] OrgCategory category, int deadlineId)
         {

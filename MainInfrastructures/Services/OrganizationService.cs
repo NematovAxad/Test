@@ -61,6 +61,7 @@ namespace MainInfrastructures.Services
         private readonly IDataContext _db;
         private readonly IReesterService _reesterService;
         private int rankExcelStartIndex;
+        private int organizationsPingReportIndex;
         public OrganizationService(IRepository<Deadline, int> deadline,
                                     IRepository<Organizations, int> organization, 
                                     IRepository<GSphere, int> gSphere, 
@@ -563,18 +564,172 @@ namespace MainInfrastructures.Services
 
         }
 
-        public ReplacerOrgHead GetReplacerOrgHead(int orgId)
+        #region DownloadOrgPingReport 2.3
+        public async Task<MemoryStream> DownloadOrgPingReport()
         {
-            ReplacerOrgHead result = new ReplacerOrgHead();
+            var deadline = _deadline.Find(d => d.IsActive == true && d.PingService == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
 
-            var replaceOrgHead = _db.Context.Set<ReplacerOrgHead>().Where(r => r.OrganizationId == orgId).FirstOrDefault();
+            var org = _organization.Find(o => o.IsActive == true).ToList();
+            
+            
+            string fileName = "OrgPingReport";
+            var memoryStream = new MemoryStream();
 
-            if (replaceOrgHead != null)
-                result = replaceOrgHead;
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet;
+                worksheet = package.Workbook.Worksheets.Add(fileName);
 
-            return result;
+                worksheet.Name = fileName;
+                worksheet.Columns[1].Width = 60;
+                worksheet.Columns[2].Width = 25;
+                worksheet.Columns[3].Width = 25;
+                worksheet.Columns[4].Width = 25;
+                worksheet.Columns[5].Width = 25;
+                worksheet.Columns[6].Width = 25;
+ 
+                worksheet.DefaultRowHeight = 25;
+                worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                #region SetHeader
+
+                using (var range = worksheet.Cells[1, 1, 2, 6])
+                {
+                    range.Value = "RASMIY VEB-SAYTNING MAVJUDLIGI VA INTERNET ORQALI FOYDALANA OLISH";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    range.Style.Font.Size = 12;
+                }
+
+                using (var range = worksheet.Cells[3, 1, 3, 6])
+                {
+                    range.Value = deadline.Year + "- yil " + (int)deadline.Quarter + " - yarim yilligi";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.Font.Size = 10;
+                }
+
+                using (var range = worksheet.Cells[4, 1, 5, 1])
+                {
+                    range.Value = "Tashkilot nomi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 2, 5, 2])
+                {
+                    range.Value = "Tashkilot turi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 3, 5, 3])
+                {
+                    range.Value = "Websayt havolasi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 4, 5, 4])
+                {
+                    range.Value = "Jami yuborilgan so'rov;ar soni";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 5, 5, 5])
+                {
+                    range.Value = "Muvofaqqiyatsiz so'rovlar soni";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 6, 5, 6])
+                {
+                    range.Value = "Muvofaqqiyatsiz so'rovlar ulushi(%)";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                #endregion
+
+                organizationsPingReportIndex = 5;
+                
+                SetGovernmentPingReport(worksheet, deadline);
+                SetFarmPingReport(worksheet, deadline);
+                SetAdministrationPingReport(worksheet, deadline);
+                
+                package.Save();
+            }
+
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+
+            return memoryStream;
         }
 
+        private void SetGovernmentPingReport(ExcelWorksheet worksheet, Deadline deadline)
+        {
+            using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
+            {
+                range.Value = "Davlat organlari";
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                range.Style.WrapText = true;
+                range.Style.Font.Size = 11;
+                range.Merge = true;
+            }
+
+            organizationsPingReportIndex += 2;
+            
+        }
+        private void SetFarmPingReport(ExcelWorksheet worksheet, Deadline deadline)
+        {
+            using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
+            {
+                range.Value = "Xo'jalik organlari";
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                range.Style.WrapText = true;
+                range.Style.Font.Size = 11;
+                range.Merge = true;
+            }
+
+            organizationsPingReportIndex += 2;
+        }
+        private void SetAdministrationPingReport(ExcelWorksheet worksheet, Deadline deadline)
+        {
+            using (var range = worksheet.Cells[organizationsPingReportIndex, 1, organizationsPingReportIndex, 6])
+            {
+                range.Value = "Hokimliklar";
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                range.Style.WrapText = true;
+                range.Style.Font.Size = 11;
+                range.Merge = true;
+            }
+
+            organizationsPingReportIndex += 2;
+        }
+        #endregion
+        
+        #region DownloadOrgData 1.1
         public async Task<MemoryStream> DownloadOrgData(int orgId)
         {
             var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
@@ -716,7 +871,276 @@ namespace MainInfrastructures.Services
 
             return memoryStream;
         }
+        public ReplacerOrgHead GetReplacerOrgHead(int orgId)
+        {
+            ReplacerOrgHead result = new ReplacerOrgHead();
 
+            var replaceOrgHead = _db.Context.Set<ReplacerOrgHead>().Where(r => r.OrganizationId == orgId).FirstOrDefault();
+
+            if (replaceOrgHead != null)
+                result = replaceOrgHead;
+
+            return result;
+        }
+        private async Task SetICTDepartmentDetaills(ExcelWorksheet worksheet, int orgId)
+        {
+            OrganizationIctSpecialForces orgSpecialForces = new OrganizationIctSpecialForces();
+
+            var result = _db.Context.Set<OrganizationIctSpecialForces>()
+                .FirstOrDefault(r => r.OrganizationId == orgId);
+
+            if (result != null)
+                orgSpecialForces = result;
+
+            worksheet.Cells[18, 1].Value = "AKT Bo'linma";
+            worksheet.Cells[18, 1].Style.Font.Bold = true;
+            worksheet.Cells[18, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[18, 2].Value = orgSpecialForces.MinistryAgreedHead == true ? "ha" : "yo'q";
+
+            worksheet.Cells[19, 1].Value = "AKT bo'linma rahbari";
+            worksheet.Cells[19, 2].Value = orgSpecialForces.FullNameDirector;
+
+            worksheet.Cells[20, 1].Value = "Lavozim";
+            worksheet.Cells[20, 2].Value = orgSpecialForces.HeadPosition;
+
+            worksheet.Cells[21, 1].Value = "Telefon";
+            worksheet.Cells[21, 2].Value = orgSpecialForces.MobilePhone;
+
+            worksheet.Cells[22, 1].Value = "Elektron pochta manzili";
+            worksheet.Cells[22, 2].Value = orgSpecialForces.Email;
+
+            worksheet.Cells[23, 1].Value = "Maxsus tarkibiy bo‘linma xodimlarining umumiy soni (jami tizim bo‘yicha)";
+            worksheet.Cells[23, 2].Value = orgSpecialForces.EmployeesSum;
+
+            worksheet.Cells[24, 1].Value = "Markaziy boshqaruv apparatida";
+            worksheet.Cells[24, 2].Value = orgSpecialForces;
+
+            worksheet.Cells[25, 1].Value = "Hududiy boshqarmalarda";
+            worksheet.Cells[25, 2].Value = orgSpecialForces;
+
+            using (var range = worksheet.Cells[19, 1, 25, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+            }
+            using (var range = worksheet.Cells[18, 2, 25, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
+
+        }
+        private async Task SetReestrData(ExcelWorksheet worksheet, int orgId)
+        {
+            FirstRequestQuery model = new FirstRequestQuery
+            {
+                OrgId = orgId,
+                Page = 1,
+                Limit = 1000000
+            };
+
+            FirstRequestQueryResult reestrResult = new FirstRequestQueryResult();
+
+            reestrResult = await _reesterService.FirstRequestNew(model);
+
+            worksheet.Cells[27, 1].Value = "Axborot tizimlari soni";
+            worksheet.Cells[27, 1].Style.Font.Bold = true;
+            worksheet.Cells[27, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[27, 2].Value = reestrResult.Items.Count.ToString(CultureInfo.InvariantCulture) + " ta";
+
+            worksheet.Cells[28, 1].Value = "Ekspert xulosalari olinganligi";
+            worksheet.Cells[28, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+
+            worksheet.Cells[28, 2].Value = reestrResult.Items.Where(i => i.HasExpertise == true).ToList().Count.ToString(CultureInfo.InvariantCulture) + " ta";
+
+            using (var range = worksheet.Cells[27, 2, 28, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
+
+        }
+        private async Task SetOrgProjectsReport(ExcelWorksheet worksheet, int orgId)
+        {
+            OrganizationDigitalEconomyProjectsReport orgProjects = new OrganizationDigitalEconomyProjectsReport();
+
+            var result = _db.Context
+                .Set<OrganizationDigitalEconomyProjectsReport>().FirstOrDefault(r => r.OrganizationId == orgId);
+            if (result != null)
+                orgProjects = result;
+            
+            worksheet.Cells[29, 1].Value = "Jami AKT loyihalarining soni";
+            worksheet.Cells[29, 1].Style.Font.Bold = true;
+            worksheet.Cells[29, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[29, 2].Value = orgProjects.ProjectsCount.ToString(CultureInfo.InvariantCulture) + " ta";
+
+            worksheet.Cells[30, 1].Value = "Bajarilgan";
+            worksheet.Cells[30, 2].Value = orgProjects.CompletedProjects.ToString(CultureInfo.InvariantCulture) + " ta";
+
+            worksheet.Cells[31, 1].Value = "Bajarilmoqda";
+            worksheet.Cells[31, 2].Value = orgProjects.OngoingProjects.ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[32, 1].Value = "Bajarilmagan";
+            worksheet.Cells[32, 2].Value = orgProjects.NotFinishedProjects.ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            using (var range = worksheet.Cells[30, 1, 32, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+            }
+            using (var range = worksheet.Cells[29, 2, 32, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
+        }
+        private async Task SetOrgServicesReport(ExcelWorksheet worksheet, int orgId)
+        {
+            var result = _db.Context
+                .Set<OrganizationPublicServices>().Where(r => r.OrganizationId == orgId);
+            
+            worksheet.Cells[33, 1].Value = "Davlat xizmatlari soni";
+            worksheet.Cells[33, 1].Style.Font.Bold = true;
+            worksheet.Cells[33, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
+            worksheet.Cells[33, 2].Value = result.Count().ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[34, 1].Value = "An'anaviy xizmatlar";
+            worksheet.Cells[34, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.National && s.ServiceTypeExpert == true)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[35, 1].Value = "Elektron xizmatlar";
+            worksheet.Cells[35, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.Electronic && s.ServiceTypeExpert == true)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[36, 1].Value = "Elektron xizmatlar (YIDXP orqali)";
+            worksheet.Cells[36, 2].Value = result.Count(s => s.MyGovService == true && s.MyGovServiceExpert == true)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            worksheet.Cells[37, 1].Value = "Elektron xizmatlar (Muqobil xizmatlar orqali)";
+            worksheet.Cells[37, 2].Value = result.Count(s => s.OtherApps == true && s.OtherAppsExpert == true)
+                .ToString(CultureInfo.InvariantCulture) + " ta";
+            
+            using (var range = worksheet.Cells[34, 1, 37, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+            }
+            using (var range = worksheet.Cells[33, 2, 37, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+            }
+        }
+        private async Task SetRanks(ExcelWorksheet worksheet, Deadline deadline, Organizations organization)
+        {
+            using (var range = worksheet.Cells[39, 1, 39, 2])
+            {
+                range.Value = "REYTING NATIJALARI";
+                range.Style.Font.Bold = true;
+                range.Style.Font.Size = 12;
+                range.Merge = true;
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                   
+            }
+
+            var excelIndex = 39;
+            
+            switch (organization.OrgCategory)
+            {
+                case Domain.Enums.OrgCategory.GovernmentOrganizations:
+                {
+                    var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields).OrderBy(s => s.Section).ToList();
+                    foreach(var sphere in spheres)
+                    {
+                        excelIndex += 2;
+                        double sphereRate = 0;
+                        foreach (var field in sphere.GFields)
+                        {
+                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
+                            sphereRate += fieldRank;
+
+                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
+
+                            excelIndex++;
+                        }
+
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Value =
+                            $"{sphere.Section} {sphere.Name}";
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Style.Font.Bold = true;
+                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 2].Value = sphereRate;
+                    }
+                    
+                    break;
+                }
+                    
+                case Domain.Enums.OrgCategory.FarmOrganizations:
+                {
+                    var spheres = _xSphere.GetAll().Include(mbox => mbox.XFields).OrderBy(s => s.Section);
+                    foreach(var sphere in spheres)
+                    {
+                        excelIndex += 2;
+                        double sphereRate = 0;
+                        foreach (var field in sphere.XFields)
+                        {
+                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
+                            sphereRate += fieldRank;
+
+                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 2].Value =  fieldRank;
+
+                            excelIndex++;
+                        }
+
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Value =
+                            $"{sphere.Section} {sphere.Name}";
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Style.Font.Bold = true;
+                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 2].Value = sphereRate;
+                    }
+                    
+                    break;
+                }
+                    
+                case Domain.Enums.OrgCategory.Adminstrations:
+                {
+                    var spheres = _aSphere.GetAll().Include(mbox => mbox.AFields).OrderBy(s => s.Section);
+                    foreach(var sphere in spheres)
+                    {
+                        excelIndex += 2;
+                        double sphereRate = 0;
+                        foreach (var field in sphere.AFields)
+                        {
+                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
+                            sphereRate += fieldRank;
+
+                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
+                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
+
+                            excelIndex++;
+                        }
+
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Value =
+                            $"{sphere.Section} {sphere.Name}";
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Style.Font.Bold = true;
+                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 2].Value = sphereRate;
+                    }
+                    
+                    break;
+                }
+                default:
+                    throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            }
+            using (var range = worksheet.Cells[40, 1, excelIndex, 1])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+            }
+            using (var range = worksheet.Cells[40, 2, excelIndex, 2])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+            }
+        }
+        #endregion
+
+        #region DownloadOrganizationsRateReport
         public async Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category, int deadlineId)
         {
             rankExcelStartIndex = 1;
@@ -973,267 +1397,9 @@ namespace MainInfrastructures.Services
 
             rankExcelStartIndex += 3;
         }
-        private async Task SetICTDepartmentDetaills(ExcelWorksheet worksheet, int orgId)
-        {
-            OrganizationIctSpecialForces orgSpecialForces = new OrganizationIctSpecialForces();
+        #endregion
 
-            var result = _db.Context.Set<OrganizationIctSpecialForces>()
-                .FirstOrDefault(r => r.OrganizationId == orgId);
-
-            if (result != null)
-                orgSpecialForces = result;
-
-            worksheet.Cells[18, 1].Value = "AKT Bo'linma";
-            worksheet.Cells[18, 1].Style.Font.Bold = true;
-            worksheet.Cells[18, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-
-            worksheet.Cells[18, 2].Value = orgSpecialForces.MinistryAgreedHead == true ? "ha" : "yo'q";
-
-            worksheet.Cells[19, 1].Value = "AKT bo'linma rahbari";
-            worksheet.Cells[19, 2].Value = orgSpecialForces.FullNameDirector;
-
-            worksheet.Cells[20, 1].Value = "Lavozim";
-            worksheet.Cells[20, 2].Value = orgSpecialForces.HeadPosition;
-
-            worksheet.Cells[21, 1].Value = "Telefon";
-            worksheet.Cells[21, 2].Value = orgSpecialForces.MobilePhone;
-
-            worksheet.Cells[22, 1].Value = "Elektron pochta manzili";
-            worksheet.Cells[22, 2].Value = orgSpecialForces.Email;
-
-            worksheet.Cells[23, 1].Value = "Maxsus tarkibiy bo‘linma xodimlarining umumiy soni (jami tizim bo‘yicha)";
-            worksheet.Cells[23, 2].Value = orgSpecialForces.EmployeesSum;
-
-            worksheet.Cells[24, 1].Value = "Markaziy boshqaruv apparatida";
-            worksheet.Cells[24, 2].Value = orgSpecialForces;
-
-            worksheet.Cells[25, 1].Value = "Hududiy boshqarmalarda";
-            worksheet.Cells[25, 2].Value = orgSpecialForces;
-
-            using (var range = worksheet.Cells[19, 1, 25, 1])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-            }
-            using (var range = worksheet.Cells[18, 2, 25, 2])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-            }
-
-        }
-
-        private async Task SetReestrData(ExcelWorksheet worksheet, int orgId)
-        {
-            FirstRequestQuery model = new FirstRequestQuery
-            {
-                OrgId = orgId,
-                Page = 1,
-                Limit = 1000000
-            };
-
-            FirstRequestQueryResult reestrResult = new FirstRequestQueryResult();
-
-            reestrResult = await _reesterService.FirstRequestNew(model);
-
-            worksheet.Cells[27, 1].Value = "Axborot tizimlari soni";
-            worksheet.Cells[27, 1].Style.Font.Bold = true;
-            worksheet.Cells[27, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-
-            worksheet.Cells[27, 2].Value = reestrResult.Items.Count.ToString(CultureInfo.InvariantCulture) + " ta";
-
-            worksheet.Cells[28, 1].Value = "Ekspert xulosalari olinganligi";
-            worksheet.Cells[28, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-
-            worksheet.Cells[28, 2].Value = reestrResult.Items.Where(i => i.HasExpertise == true).ToList().Count.ToString(CultureInfo.InvariantCulture) + " ta";
-
-            using (var range = worksheet.Cells[27, 2, 28, 2])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-            }
-
-        }
-
-        private async Task SetOrgProjectsReport(ExcelWorksheet worksheet, int orgId)
-        {
-            OrganizationDigitalEconomyProjectsReport orgProjects = new OrganizationDigitalEconomyProjectsReport();
-
-            var result = _db.Context
-                .Set<OrganizationDigitalEconomyProjectsReport>().FirstOrDefault(r => r.OrganizationId == orgId);
-            if (result != null)
-                orgProjects = result;
-            
-            worksheet.Cells[29, 1].Value = "Jami AKT loyihalarining soni";
-            worksheet.Cells[29, 1].Style.Font.Bold = true;
-            worksheet.Cells[29, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-
-            worksheet.Cells[29, 2].Value = orgProjects.ProjectsCount.ToString(CultureInfo.InvariantCulture) + " ta";
-
-            worksheet.Cells[30, 1].Value = "Bajarilgan";
-            worksheet.Cells[30, 2].Value = orgProjects.CompletedProjects.ToString(CultureInfo.InvariantCulture) + " ta";
-
-            worksheet.Cells[31, 1].Value = "Bajarilmoqda";
-            worksheet.Cells[31, 2].Value = orgProjects.OngoingProjects.ToString(CultureInfo.InvariantCulture) + " ta";
-            
-            worksheet.Cells[32, 1].Value = "Bajarilmagan";
-            worksheet.Cells[32, 2].Value = orgProjects.NotFinishedProjects.ToString(CultureInfo.InvariantCulture) + " ta";
-            
-            using (var range = worksheet.Cells[30, 1, 32, 1])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-            }
-            using (var range = worksheet.Cells[29, 2, 32, 2])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-            }
-        }
-
-        private async Task SetOrgServicesReport(ExcelWorksheet worksheet, int orgId)
-        {
-            var result = _db.Context
-                .Set<OrganizationPublicServices>().Where(r => r.OrganizationId == orgId);
-            
-            worksheet.Cells[33, 1].Value = "Davlat xizmatlari soni";
-            worksheet.Cells[33, 1].Style.Font.Bold = true;
-            worksheet.Cells[33, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-
-            worksheet.Cells[33, 2].Value = result.Count().ToString(CultureInfo.InvariantCulture) + " ta";
-            
-            worksheet.Cells[34, 1].Value = "An'anaviy xizmatlar";
-            worksheet.Cells[34, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.National && s.ServiceTypeExpert == true)
-                .ToString(CultureInfo.InvariantCulture) + " ta";
-            
-            worksheet.Cells[35, 1].Value = "Elektron xizmatlar";
-            worksheet.Cells[35, 2].Value = result.Count(s => s.ServiceType == OrganizationServiceType.Electronic && s.ServiceTypeExpert == true)
-                .ToString(CultureInfo.InvariantCulture) + " ta";
-            
-            worksheet.Cells[36, 1].Value = "Elektron xizmatlar (YIDXP orqali)";
-            worksheet.Cells[36, 2].Value = result.Count(s => s.MyGovService == true && s.MyGovServiceExpert == true)
-                .ToString(CultureInfo.InvariantCulture) + " ta";
-            
-            worksheet.Cells[37, 1].Value = "Elektron xizmatlar (Muqobil xizmatlar orqali)";
-            worksheet.Cells[37, 2].Value = result.Count(s => s.OtherApps == true && s.OtherAppsExpert == true)
-                .ToString(CultureInfo.InvariantCulture) + " ta";
-            
-            using (var range = worksheet.Cells[34, 1, 37, 1])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-            }
-            using (var range = worksheet.Cells[33, 2, 37, 2])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-            }
-        }
-
-        private async Task SetRanks(ExcelWorksheet worksheet, Deadline deadline, Organizations organization)
-        {
-            using (var range = worksheet.Cells[39, 1, 39, 2])
-            {
-                range.Value = "REYTING NATIJALARI";
-                range.Style.Font.Bold = true;
-                range.Style.Font.Size = 12;
-                range.Merge = true;
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                   
-            }
-
-            var excelIndex = 39;
-            
-            switch (organization.OrgCategory)
-            {
-                case Domain.Enums.OrgCategory.GovernmentOrganizations:
-                {
-                    var spheres = _gSphere.GetAll().Include(mbox => mbox.GFields).OrderBy(s => s.Section).ToList();
-                    foreach(var sphere in spheres)
-                    {
-                        excelIndex += 2;
-                        double sphereRate = 0;
-                        foreach (var field in sphere.GFields)
-                        {
-                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
-                            sphereRate += fieldRank;
-
-                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
-                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
-
-                            excelIndex++;
-                        }
-
-                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Value =
-                            $"{sphere.Section} {sphere.Name}";
-                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 1].Style.Font.Bold = true;
-                        worksheet.Cells[excelIndex - (sphere.GFields.Count() + 1), 2].Value = sphereRate;
-                    }
-                    
-                    break;
-                }
-                    
-                case Domain.Enums.OrgCategory.FarmOrganizations:
-                {
-                    var spheres = _xSphere.GetAll().Include(mbox => mbox.XFields).OrderBy(s => s.Section);
-                    foreach(var sphere in spheres)
-                    {
-                        excelIndex += 2;
-                        double sphereRate = 0;
-                        foreach (var field in sphere.XFields)
-                        {
-                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
-                            sphereRate += fieldRank;
-
-                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
-                            worksheet.Cells[excelIndex, 2].Value =  fieldRank;
-
-                            excelIndex++;
-                        }
-
-                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Value =
-                            $"{sphere.Section} {sphere.Name}";
-                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 1].Style.Font.Bold = true;
-                        worksheet.Cells[excelIndex - (sphere.XFields.Count() + 1), 2].Value = sphereRate;
-                    }
-                    
-                    break;
-                }
-                    
-                case Domain.Enums.OrgCategory.Adminstrations:
-                {
-                    var spheres = _aSphere.GetAll().Include(mbox => mbox.AFields).OrderBy(s => s.Section);
-                    foreach(var sphere in spheres)
-                    {
-                        excelIndex += 2;
-                        double sphereRate = 0;
-                        foreach (var field in sphere.AFields)
-                        {
-                            var fieldRank = GetFieldRank(deadline, organization, field.Id).Result;
-                            sphereRate += fieldRank;
-
-                            worksheet.Cells[excelIndex, 1].Value = $"{field.Section} {field.Name}";
-                            worksheet.Cells[excelIndex, 2].Value = fieldRank;
-
-                            excelIndex++;
-                        }
-
-                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Value =
-                            $"{sphere.Section} {sphere.Name}";
-                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 1].Style.Font.Bold = true;
-                        worksheet.Cells[excelIndex - (sphere.AFields.Count() + 1), 2].Value = sphereRate;
-                    }
-                    
-                    break;
-                }
-                default:
-                    throw ErrorStates.Error(UIErrors.OrganizationNotFound);
-            }
-            using (var range = worksheet.Cells[40, 1, excelIndex, 1])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-            }
-            using (var range = worksheet.Cells[40, 2, excelIndex, 2])
-            {
-                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-            }
-        }
-
+        #region GetFieldRankByOrgTypehelpers
         private async Task<double> GetFieldRank(Deadline deadline, Organizations organization, int fieldId)
         {
             double fieldRank = 0;
@@ -1554,5 +1720,6 @@ namespace MainInfrastructures.Services
                 return await Task.FromResult<double>(0);
             }
         }
+        #endregion
     }
 }

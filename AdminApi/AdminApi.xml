@@ -4,5 +4,11 @@
         <name>AdminApi</name>
     </assembly>
     <members>
+        <member name="M:AdminApi.Controllers.Organization.DownloadOrgPingReport">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>
