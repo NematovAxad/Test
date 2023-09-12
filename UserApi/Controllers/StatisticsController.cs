@@ -12,6 +12,8 @@ using ClosedXML.Excel;
 using CoreResult.ResponseCores;
 using AdminHandler.Results.Ranking;
 using AdminHandler.Querys.Ranking;
+using ApiConfigs;
+using AuthLib;
 
 namespace UserApi.Controllers
 {
@@ -78,11 +80,15 @@ namespace UserApi.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> DownloadSiteStatistics([FromQuery] SiteReportQuery query)
+        public async Task<IActionResult> DownloadSiteStatistics([FromQuery] SiteReportQuery model)
         {
             try
             {
-                var data = await _mediator.Send(query);
+                model.UserPinfl = this.UserPinfl();
+                model.UserOrgId = this.UserOrgId();
+                model.UserPermissions = this.UserRights();
+                
+                var data = await _mediator.Send(model);
 
 
                 var path = Directory.GetCurrentDirectory();

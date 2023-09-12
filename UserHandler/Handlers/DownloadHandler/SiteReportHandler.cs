@@ -9,6 +9,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.EMMA;
+using Domain;
+using Domain.Permission;
+using Domain.States;
 using UserHandler.Queries.DownloadQuery;
 using UserHandler.Results.DownloadResult;
 
@@ -32,9 +36,22 @@ namespace UserHandler.Handlers.DownloadHandler
             var list = _siteRequirements.GetAll();
             var orgList = _organizations.GetAll().ToList();
 
-            if(request.OrgId!=0)
+            if (request.UserPermissions.Any(p => p != Permissions.OPERATOR_RIGHTS) &&
+                request.UserPermissions.Any(p => p != Permissions.ORGANIZATION_EMPLOYEE))
             {
-                orgList = orgList.Where(o => o.Id == request.OrgId).ToList();
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            }
+            
+            if(request.OrgId != 0)
+            {
+                if (request.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS))
+                {
+                    orgList = orgList.Where(o => o.Id == request.OrgId).ToList();
+                }
+                else
+                {
+                    orgList = orgList.Where(o => o.Id == request.UserOrgId).ToList();
+                }
             }
 
             foreach(var o in orgList)
