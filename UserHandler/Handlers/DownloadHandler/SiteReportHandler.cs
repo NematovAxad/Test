@@ -13,6 +13,7 @@ using DocumentFormat.OpenXml.EMMA;
 using Domain;
 using Domain.Permission;
 using Domain.States;
+using Microsoft.EntityFrameworkCore.Internal;
 using UserHandler.Queries.DownloadQuery;
 using UserHandler.Results.DownloadResult;
 
@@ -36,8 +37,8 @@ namespace UserHandler.Handlers.DownloadHandler
             var list = _siteRequirements.GetAll();
             var orgList = _organizations.GetAll().ToList();
 
-            if (request.UserPermissions.Any(p => p != Permissions.OPERATOR_RIGHTS) &&
-                request.UserPermissions.Any(p => p != Permissions.ORGANIZATION_EMPLOYEE))
+            if (request.UserPermissions.All(p => p != Permissions.OPERATOR_RIGHTS) &&
+                request.UserPermissions.All(p => p != Permissions.ORGANIZATION_EMPLOYEE))
             {
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
             }
@@ -50,7 +51,14 @@ namespace UserHandler.Handlers.DownloadHandler
                 }
                 else
                 {
-                    orgList = orgList.Where(o => o.Id == request.UserOrgId).ToList();
+                    orgList = orgList.Where(o => o.UserServiceId == request.UserOrgId).ToList();
+                }
+            }
+            else
+            {
+                if (request.UserPermissions.All(p => p != Permissions.OPERATOR_RIGHTS))
+                {
+                    orgList = orgList.Where(o => o.UserServiceId == request.UserOrgId).ToList();
                 }
             }
 
