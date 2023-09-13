@@ -84,7 +84,7 @@ namespace AdminApi.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> DownloadReestrProjectsReport([FromQuery] int orgId)
+        public async Task<IActionResult> DownloadReestrProjectsReport()
         {
             try
             {

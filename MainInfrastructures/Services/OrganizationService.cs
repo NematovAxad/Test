@@ -64,6 +64,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ReestrProjectPassport, int> _reestrProjectPassport;
         private readonly IRepository<ReestrProjectException, int> _reestrException;
         private readonly IRepository<ReestrProjectPosition, int> _reestrProjectPosition;
+        private readonly IRepository<ReestrProjectConnection, int> _reestrProjectConnection;
         private readonly IDataContext _db;
         private readonly IReesterService _reesterService;
         private int rankExcelStartIndex;
@@ -87,7 +88,8 @@ namespace MainInfrastructures.Services
                                     IRepository<WebSiteAvailability, int> websiteAvailability, 
                                     IRepository<ReestrProjectPassport, int> reestrProjectPassport, 
                                     IRepository<ReestrProjectException, int> reestrException,
-                                    IRepository<ReestrProjectPosition, int> reestrProjectPosition)
+                                    IRepository<ReestrProjectPosition, int> reestrProjectPosition,
+                                    IRepository<ReestrProjectConnection, int> reestrProjectConnection)
         {
             _deadline = deadline;
             _organization = organization;
@@ -109,6 +111,7 @@ namespace MainInfrastructures.Services
             _reestrProjectPassport = reestrProjectPassport;
             _reestrException = reestrException;
             _reestrProjectPosition = reestrProjectPosition;
+            _reestrProjectConnection = reestrProjectConnection;
         }
 
         public async Task<RankingStruct> GetStruct(int orgId)
@@ -1360,7 +1363,14 @@ namespace MainInfrastructures.Services
                 #endregion
 
                 var exceptions = _reestrException.GetAll().ToList();
-                var projectPositions = _reestrProjectPosition.GetAll().ToList();
+                List<int> exceptionPassportsId = exceptions.Select(e => e.Id).ToList();
+                
+                var projectPositions = _reestrProjectPosition
+                    .Find(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+                
+                var reestrProjectConnection = _reestrProjectConnection
+                    .Find(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+                
                 excelIndex = 4;
                 
                 foreach (var org in organizations)
@@ -1371,7 +1381,8 @@ namespace MainInfrastructures.Services
                     {
 
                         await SetPassportBasics(worksheet, passport, excelIndex, org, exceptions, projectPositions);
-
+                        await SetProjectConnections(worksheet, passport, excelIndex, reestrProjectConnection);
+                        
                         excelIndex++;
                     }
                 }
@@ -1385,15 +1396,13 @@ namespace MainInfrastructures.Services
 
 
             return memoryStream;
-            
-            
-            return null;
         }
 
-        private async Task SetPassportBasics(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex, Organizations org, List<ReestrProjectException> exceptions, List<ReestrProjectPosition> projectPositions)
+        private async Task SetPassportBasics(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex, Organizations org, 
+            List<ReestrProjectException> exceptions, List<ReestrProjectPosition> projectPositions)
         {
 
-            var projectPosition = projectPositions.FirstOrDefault(p => p.ReestrProjectId == passport.Id);
+            var projectPosition = projectPositions.FirstOrDefault(p => p.ReestrProjectId == passport.ReestrProjectId);
             
             worksheet.Cells[rowIndex, 1].Value = org.ShortName;
             switch (org.OrgCategory)
@@ -1438,6 +1447,18 @@ namespace MainInfrastructures.Services
                 }
             }
         }
+
+        private async Task SetProjectConnections(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex,
+            List<ReestrProjectConnection> connections)
+        {
+            var connection = connections.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (connection != null)
+            {
+                worksheet.Cells[rowIndex, 9].Value = connection.AllItems.ToString();
+                worksheet.Cells[rowIndex, 10].Value = connection.ExceptedItems.ToString();
+            }
+        }
+        
         #endregion
         
         #region DownloadOrganizationsRateReport
