@@ -26,5 +26,6 @@ namespace MainInfrastructures.Interfaces
         Task<MemoryStream> DownloadOrgData(int orgId);
         Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category, int deadlineId);
         Task<MemoryStream> DownloadOrgPingReport(List<string> userRights);
+        Task<MemoryStream> DownloadOrganizationsReestrReport(List<string> userRights, int userOrgId);
     }
 }

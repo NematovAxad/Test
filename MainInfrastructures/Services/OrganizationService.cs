@@ -37,6 +37,7 @@ using Domain.Models.MibModels;
 using Domain.Permission;
 using System.Xml.Linq;
 using Domain.Enums;
+using Domain.Models.FifthSection.ReestrModels;
 using Domain.Models.SixthSection;
 using Domain.OpenDataModels;
 using Domain.Models.SecondSection;
@@ -60,6 +61,9 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ASubField, int> _aSubField;
         private readonly IRepository<ARankTable, int> _aRankTable;
         private readonly IRepository<WebSiteAvailability, int> _websiteAvailability;
+        private readonly IRepository<ReestrProjectPassport, int> _reestrProjectPassport;
+        private readonly IRepository<ReestrProjectException, int> _reestrException;
+        private readonly IRepository<ReestrProjectPosition, int> _reestrProjectPosition;
         private readonly IDataContext _db;
         private readonly IReesterService _reesterService;
         private int rankExcelStartIndex;
@@ -80,7 +84,10 @@ namespace MainInfrastructures.Services
                                     IRepository<ARankTable, int> aRankTable,
                                     IDataContext db,
                                     IReesterService reesterService, 
-                                    IRepository<WebSiteAvailability, int> websiteAvailability)
+                                    IRepository<WebSiteAvailability, int> websiteAvailability, 
+                                    IRepository<ReestrProjectPassport, int> reestrProjectPassport, 
+                                    IRepository<ReestrProjectException, int> reestrException,
+                                    IRepository<ReestrProjectPosition, int> reestrProjectPosition)
         {
             _deadline = deadline;
             _organization = organization;
@@ -99,6 +106,9 @@ namespace MainInfrastructures.Services
             _db = db;
             _reesterService = reesterService;
             _websiteAvailability = websiteAvailability;
+            _reestrProjectPassport = reestrProjectPassport;
+            _reestrException = reestrException;
+            _reestrProjectPosition = reestrProjectPosition;
         }
 
         public async Task<RankingStruct> GetStruct(int orgId)
@@ -1171,6 +1181,265 @@ namespace MainInfrastructures.Services
         }
         #endregion
 
+        #region DownloadOrgReestrProjectsReport
+
+        public async Task<MemoryStream> DownloadOrganizationsReestrReport(List<string> userRights, int userOrgId)
+        {
+            #region CheckRequestData
+
+            var organizations = _organization.Find(o => o.IsActive == true & o.IsIct == true).OrderBy(o=>o.OrgCategory).ToList();
+
+            if (!userRights.Contains(Permissions.OPERATOR_RIGHTS))
+            {
+                organizations = organizations.Where(o => o.UserServiceId == userOrgId).ToList();
+            }
+
+            if (organizations.Count == 0)
+                throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            
+            var deadline = _deadline.Find(d => d.IsActive == true).FirstOrDefault();
+
+            if (deadline == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+
+            #endregion
+
+            int excelIndex = 0;
+            string fileName = "Axborot_tizimlari";
+            var memoryStream = new MemoryStream();
+
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet;
+                worksheet = package.Workbook.Worksheets.Add(fileName);
+
+                worksheet.Name = fileName;
+                worksheet.Columns[1].Width = 40;
+                worksheet.Columns[2].Width = 20;
+                worksheet.Columns[3].Width = 40;
+                worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+
+                #region SetHeader
+
+                using (var range = worksheet.Cells[1, 1, 1, 4])
+                {
+                    range.Value = "Axborot tizimlari haqida ma'lumot";
+                    range.Style.Font.Size = 12;
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                   
+                }
+                using (var range = worksheet.Cells[2, 1, 2, 4])
+                {
+                    range.Value = deadline.Year + "- yil " + (int)deadline.Quarter + " - yarim yilligi";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                }
+
+                using (var range = worksheet.Cells[3, 1, 3, 50])
+                {
+                    range.Style.Font.Size = 12;
+                    range.Style.WrapText = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                }
+
+                worksheet.Cells[3, 1].Value = "Tashkilot to'liq nomi";
+                worksheet.Cells[3, 1].Style.Font.Bold = true;
+                worksheet.Cells[3, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 2].Value = "Tashkilot turi";
+                worksheet.Cells[3, 2].Style.Font.Bold = true;
+                worksheet.Cells[3, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 3].Value = "Axborot tizimi nomi";
+                worksheet.Cells[3, 3].Style.Font.Bold = true;
+                worksheet.Cells[3, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 4].Value = "Id raqami";
+                worksheet.Cells[3, 4].Style.Font.Bold = true;
+                worksheet.Cells[3, 4].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 5].Value = "Istisno (ha/yo'q)";
+                worksheet.Cells[3, 5].Style.Font.Bold = true;
+                worksheet.Cells[3, 5].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 6].Value = " Passport (tasdiqlangan/tasdiqlanmagan)";
+                worksheet.Cells[3, 6].Style.Font.Bold = true;
+                worksheet.Cells[3, 6].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 7].Value = "Axborot tizimi uchun qo'yilgan baho";
+                worksheet.Cells[3, 7].Style.Font.Bold = true;
+                worksheet.Cells[3, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 8].Value = "Joriy holati";
+                worksheet.Cells[3, 8].Style.Font.Bold = true;
+                worksheet.Cells[3, 8].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 9].Value = "Tashqi tizimlar bilan bog‘langanligi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 9].Style.Font.Bold = true;
+                worksheet.Cells[3, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 10].Value = "Tashqi tizimlar bilan bog‘langanligi (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 10].Style.Font.Bold = true;
+                worksheet.Cells[3, 10].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 11].Value = "Ma’lumotnomalar va klassifikatorlardan foydalanganligi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 11].Style.Font.Bold = true;
+                worksheet.Cells[3, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 12].Value = "Ma’lumotnomalar va klassifikatorlardan foydalanganligi (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 12].Style.Font.Bold = true;
+                worksheet.Cells[3, 12].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 13].Value = "Yagona identifikatorlardan foydalanganligi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 13].Style.Font.Bold = true;
+                worksheet.Cells[3, 13].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 14].Value = "Yagona identifikatorlardan foydalanganligi (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 14].Style.Font.Bold = true;
+                worksheet.Cells[3, 14].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 15].Value = "Raqamli texnologiyalar vazirligi ekspert xulosasi mavjudligi";
+                worksheet.Cells[3, 15].Style.Font.Bold = true;
+                worksheet.Cells[3, 15].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 16].Value = "Izoh";
+                worksheet.Cells[3, 16].Style.Font.Bold = true;
+                worksheet.Cells[3, 16].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 17].Value = "“Kiberxavfsizlik Markazi” DUK Ekspert xulosasi mavjudligi";
+                worksheet.Cells[3, 17].Style.Font.Bold = true;
+                worksheet.Cells[3, 17].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 18].Value = "Izoh";
+                worksheet.Cells[3, 18].Style.Font.Bold = true;
+                worksheet.Cells[3, 18].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 19].Value = "Tashqi foydalanuvchilar uchun avtorizasiyaning avtomatlashtirilganligi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 19].Style.Font.Bold = true;
+                worksheet.Cells[3, 19].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 20].Value = "Tashqi foydalanuvchilar uchun avtorizasiyaning avtomatlashtirilganligi (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 20].Style.Font.Bold = true;
+                worksheet.Cells[3, 20].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 21].Value = "Avtomatlashtirilgan xizmatlari (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 21].Style.Font.Bold = true;
+                worksheet.Cells[3, 21].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 22].Value = "Avtomatlashtirilgan xizmatlari (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 22].Style.Font.Bold = true;
+                worksheet.Cells[3, 22].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 23].Value = "Avtomatlashtirilgan xizmatlar va funksiyalarbo'yicha olgan bahosi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 23].Style.Font.Bold = true;
+                worksheet.Cells[3, 23].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 24].Value = "Avtomatlashtirilgan xizmatlar va funksiyalarbo'yicha olgan bahosi (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 24].Style.Font.Bold = true;
+                worksheet.Cells[3, 24].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 25].Value = "Avtomatlashtirilgan xizmatlar va funksiyalar bo'yicha izoh";
+                worksheet.Cells[3, 25].Style.Font.Bold = true;
+                worksheet.Cells[3, 25].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 26].Value = "Axborot tizimlari samaradorligi bo'yicha olgan bahosi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 26].Style.Font.Bold = true;
+                worksheet.Cells[3, 26].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 27].Value = "Axborot tizimlari samaradorligi bo'yicha olgan bahosi (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 27].Style.Font.Bold = true;
+                worksheet.Cells[3, 27].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                worksheet.Cells[3, 28].Value = "Izoh";
+                worksheet.Cells[3, 28].Style.Font.Bold = true;
+                worksheet.Cells[3, 28].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                
+                #endregion
+
+                var exceptions = _reestrException.GetAll().ToList();
+                var projectPositions = _reestrProjectPosition.GetAll().ToList();
+                excelIndex = 4;
+                
+                foreach (var org in organizations)
+                {
+                    var passports = _reestrProjectPassport.Find(p => p.OrganizationId == org.Id).ToList();
+
+                    foreach (var passport in passports)
+                    {
+
+                        await SetPassportBasics(worksheet, passport, excelIndex, org, exceptions, projectPositions);
+
+                        excelIndex++;
+                    }
+                }
+                
+
+                package.Save();
+            }
+
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+
+            return memoryStream;
+            
+            
+            return null;
+        }
+
+        private async Task SetPassportBasics(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex, Organizations org, List<ReestrProjectException> exceptions, List<ReestrProjectPosition> projectPositions)
+        {
+
+            var projectPosition = projectPositions.FirstOrDefault(p => p.ReestrProjectId == passport.Id);
+            
+            worksheet.Cells[rowIndex, 1].Value = org.ShortName;
+            switch (org.OrgCategory)
+            {
+                case OrgCategory.GovernmentOrganizations:
+                    worksheet.Cells[rowIndex, 2].Value = "Davlat boshqaruvi";
+                    break;
+                case OrgCategory.FarmOrganizations:
+                    worksheet.Cells[rowIndex, 2].Value = "Xo'jalik boshqaruvi";
+                    break;
+                case OrgCategory.Adminstrations:
+                    worksheet.Cells[rowIndex, 2].Value = "Hokimlik";
+                    break;
+                default:
+                    worksheet.Cells[rowIndex, 2].Value = "";
+                    break;
+            }
+            worksheet.Cells[rowIndex, 3].Value = passport.ShortName;
+            worksheet.Cells[rowIndex, 4].Value = passport.Id.ToString();
+            worksheet.Cells[rowIndex, 5].Value = exceptions.Any(e => e.ReestrProjectId == passport.Id) ? "ha" : "yo'q";
+            worksheet.Cells[rowIndex, 6].Value = passport.PassportStatus == ReesterProjectStatus.CONFIRMED ? "ha" : "yo'q";
+
+            if (projectPosition != null)
+            {
+                switch (projectPosition.ProjectStatus)
+                {
+                    case ReestrProjectStatusInNis.WorkingStage:
+                        worksheet.Cells[rowIndex, 8].Value = "Ish holatida";
+                        break;
+                    case ReestrProjectStatusInNis.DevelopmentStage:
+                        worksheet.Cells[rowIndex, 8].Value = "Ishlab chiqish jarayonida";
+                        break;
+                    case ReestrProjectStatusInNis.TestStage:
+                        worksheet.Cells[rowIndex, 8].Value = "Test holatida";
+                        break;
+                    case ReestrProjectStatusInNis.ModerationStage:
+                        worksheet.Cells[rowIndex, 8].Value = "Moderatsiya jarayonida";
+                        break;
+                    case ReestrProjectStatusInNis.Decommissioned:
+                        worksheet.Cells[rowIndex, 8].Value = "Ishlatilmaydi";
+                        break;
+                }
+            }
+        }
+        #endregion
+        
         #region DownloadOrganizationsRateReport
         public async Task<MemoryStream> DownloadOrganizationsRateReport(OrgCategory category, int deadlineId)
         {

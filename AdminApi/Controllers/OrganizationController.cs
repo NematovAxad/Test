@@ -84,6 +84,21 @@ namespace AdminApi.Controllers
         }
         
         [HttpGet]
+        public async Task<IActionResult> DownloadReestrProjectsReport([FromQuery] int orgId)
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrganizationsReestrReport(this.UserRights(), this.UserOrgId());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        
+        [HttpGet]
         public async Task<ResponseCore<DashboardResultModel>> DashboardReport(int? deadlineId)
         {
             try
