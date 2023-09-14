@@ -1364,12 +1364,12 @@ namespace MainInfrastructures.Services
 
                 var exceptions = _reestrException.GetAll().ToList();
                 List<int> exceptionPassportsId = exceptions.Select(e => e.Id).ToList();
-                
-                var projectPositions = _reestrProjectPosition
-                    .Find(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
-                
-                var reestrProjectConnection = _reestrProjectConnection
-                    .Find(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+
+                var projectPositions = _reestrProjectPosition.GetAll().ToList();
+                projectPositions = projectPositions.Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+
+                var reestrProjectConnection = _reestrProjectConnection.GetAll().ToList();
+                reestrProjectConnection = reestrProjectConnection.Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
                 
                 excelIndex = 4;
                 
