@@ -53,6 +53,9 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
         public int Add(ReestrProjectServicesCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             int id = 0;
 
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
@@ -126,6 +129,9 @@ namespace UserHandler.Handlers.ReestrProjectAutomatedServicesHandler
 
         public int Update(ReestrProjectServicesCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.Error(UIErrors.OrganizationNotFound);

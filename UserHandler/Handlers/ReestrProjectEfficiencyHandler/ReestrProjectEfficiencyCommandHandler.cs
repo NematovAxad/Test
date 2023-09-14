@@ -56,6 +56,9 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
 
         public int Add(ReestrProjectEfficiencyCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             int id = 0;
 
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
@@ -128,6 +131,9 @@ namespace UserHandler.Handlers.ReestrProjectEfficiencyHandler
         }
         public int Update(ReestrProjectEfficiencyCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             var projectEfficiency = _projectEfficiency.Find(p => p.Id == model.Id).Include(mbox => mbox.Efficiencies).FirstOrDefault();
             if (projectEfficiency == null)
                 throw ErrorStates.NotFound(model.Id.ToString());

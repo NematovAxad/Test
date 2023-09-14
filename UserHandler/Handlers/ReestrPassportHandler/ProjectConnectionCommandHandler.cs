@@ -48,6 +48,8 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         }
         public int Add(ProjectConnectionCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
             int id = 0;
             
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
@@ -116,6 +118,9 @@ namespace UserHandler.Handlers.ReestrPassportHandler
         }
         public int Update(ProjectConnectionCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());

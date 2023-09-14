@@ -56,6 +56,9 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
 
         public int Add(ReestrProjectAuthorizationCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             int id = 0;
 
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
@@ -126,6 +129,9 @@ namespace UserHandler.Handlers.ReestrProjectAuthorizationHandler
         }
         public int Update(ReestrProjectAuthorizationCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.OrganizationId.ToString());

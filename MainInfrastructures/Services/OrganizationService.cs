@@ -65,6 +65,14 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ReestrProjectException, int> _reestrException;
         private readonly IRepository<ReestrProjectPosition, int> _reestrProjectPosition;
         private readonly IRepository<ReestrProjectConnection, int> _reestrProjectConnection;
+        private readonly IRepository<ReestrProjectClassifications, int> _reestrClassifications;
+        private readonly IRepository<ReestrProjectIdentities, int> _reestrIdentities;
+        private readonly IRepository<ReestrProjectExpertDecision, int> _reestrProjectExpertDecision;
+        private readonly IRepository<ReestrProjectCyberSecurityExpertDecision, int> _reestrProjectCyberSecurityExpertDecision;
+        private readonly IRepository<ReestrProjectAuthorizations, int> _reestrProjectAuthorization;
+        private readonly IRepository<ReestrProjectAutomatedServices, int> _reestrProjectAutomatedServices;
+        private readonly IRepository<ReestrProjectEfficiency, int> _reestrProjectEfficiency;
+
         private readonly IDataContext _db;
         private readonly IReesterService _reesterService;
         private int rankExcelStartIndex;
@@ -89,7 +97,14 @@ namespace MainInfrastructures.Services
                                     IRepository<ReestrProjectPassport, int> reestrProjectPassport, 
                                     IRepository<ReestrProjectException, int> reestrException,
                                     IRepository<ReestrProjectPosition, int> reestrProjectPosition,
-                                    IRepository<ReestrProjectConnection, int> reestrProjectConnection)
+                                    IRepository<ReestrProjectConnection, int> reestrProjectConnection, 
+                                    IRepository<ReestrProjectClassifications, int> reestrClassifications,
+                                    IRepository<ReestrProjectIdentities, int> reestrIdentities,
+                                    IRepository<ReestrProjectExpertDecision, int> reestrProjectExpertDecision,
+                                    IRepository<ReestrProjectCyberSecurityExpertDecision, int> reestrProjectCyberSecurityExpertDecision,
+                                    IRepository<ReestrProjectAuthorizations, int> reestrProjectAuthorization,
+                                    IRepository<ReestrProjectAutomatedServices, int> reestrProjectAutomatedServices,
+                                    IRepository<ReestrProjectEfficiency, int> reestrProjectEfficiency)
         {
             _deadline = deadline;
             _organization = organization;
@@ -112,6 +127,13 @@ namespace MainInfrastructures.Services
             _reestrException = reestrException;
             _reestrProjectPosition = reestrProjectPosition;
             _reestrProjectConnection = reestrProjectConnection;
+            _reestrClassifications = reestrClassifications;
+            _reestrIdentities = reestrIdentities;
+            _reestrProjectExpertDecision = reestrProjectExpertDecision;
+            _reestrProjectCyberSecurityExpertDecision = reestrProjectCyberSecurityExpertDecision;
+            _reestrProjectAuthorization = reestrProjectAuthorization;
+            _reestrProjectAutomatedServices = reestrProjectAutomatedServices;
+            _reestrProjectEfficiency = reestrProjectEfficiency;
         }
 
         public async Task<RankingStruct> GetStruct(int orgId)
@@ -1190,7 +1212,7 @@ namespace MainInfrastructures.Services
         {
             #region CheckRequestData
 
-            var organizations = _organization.Find(o => o.IsActive == true & o.IsIct == true).OrderBy(o=>o.OrgCategory).ToList();
+            var organizations = _organization.Find(o => o.IsActive == true & o.IsIct == true).OrderBy(o=>o.OrgCategory).ThenBy(o=>o.Id).ToList();
 
             if (!userRights.Contains(Permissions.OPERATOR_RIGHTS))
             {
@@ -1328,39 +1350,33 @@ namespace MainInfrastructures.Services
                 worksheet.Cells[3, 20].Style.Font.Bold = true;
                 worksheet.Cells[3, 20].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 
-                worksheet.Cells[3, 21].Value = "Avtomatlashtirilgan xizmatlari (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 21].Value = "Avtomatlashtirilgan xizmatlar va funksiyalari (Tashkilot ko'rsatgan son)";
                 worksheet.Cells[3, 21].Style.Font.Bold = true;
                 worksheet.Cells[3, 21].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 
-                worksheet.Cells[3, 22].Value = "Avtomatlashtirilgan xizmatlari (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 22].Value = "Avtomatlashtirilgan xizmatlar va funksiyalari (Ekspert tasdiqlagan son)";
                 worksheet.Cells[3, 22].Style.Font.Bold = true;
                 worksheet.Cells[3, 22].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 
-                worksheet.Cells[3, 23].Value = "Avtomatlashtirilgan xizmatlar va funksiyalarbo'yicha olgan bahosi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 23].Value = "Avtomatlashtirilgan xizmatlar va funksiyalar bo'yicha izoh";
                 worksheet.Cells[3, 23].Style.Font.Bold = true;
                 worksheet.Cells[3, 23].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 
-                worksheet.Cells[3, 24].Value = "Avtomatlashtirilgan xizmatlar va funksiyalarbo'yicha olgan bahosi (Ekspert tasdiqlagan son)";
+                worksheet.Cells[3, 24].Value = "Axborot tizimlari samaradorligi bo'yicha olgan bahosi (Tashkilot ko'rsatgan son)";
                 worksheet.Cells[3, 24].Style.Font.Bold = true;
                 worksheet.Cells[3, 24].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 
-                worksheet.Cells[3, 25].Value = "Avtomatlashtirilgan xizmatlar va funksiyalar bo'yicha izoh";
+                worksheet.Cells[3, 25].Value = "Axborot tizimlari samaradorligi bo'yicha olgan bahosi (Ekspert tasdiqlagan son)";
                 worksheet.Cells[3, 25].Style.Font.Bold = true;
                 worksheet.Cells[3, 25].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 
-                worksheet.Cells[3, 26].Value = "Axborot tizimlari samaradorligi bo'yicha olgan bahosi (Tashkilot ko'rsatgan son)";
+                worksheet.Cells[3, 26].Value = "Izoh";
                 worksheet.Cells[3, 26].Style.Font.Bold = true;
                 worksheet.Cells[3, 26].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 
-                worksheet.Cells[3, 27].Value = "Axborot tizimlari samaradorligi bo'yicha olgan bahosi (Ekspert tasdiqlagan son)";
-                worksheet.Cells[3, 27].Style.Font.Bold = true;
-                worksheet.Cells[3, 27].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                
-                worksheet.Cells[3, 28].Value = "Izoh";
-                worksheet.Cells[3, 28].Style.Font.Bold = true;
-                worksheet.Cells[3, 28].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                
                 #endregion
+
+                #region TemplateDataToSendToFunctions
 
                 var exceptions = _reestrException.GetAll().ToList();
                 List<int> exceptionPassportsId = exceptions.Select(e => e.Id).ToList();
@@ -1370,7 +1386,37 @@ namespace MainInfrastructures.Services
 
                 var reestrProjectConnection = _reestrProjectConnection.GetAll().ToList();
                 reestrProjectConnection = reestrProjectConnection.Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+
+                var reestrProjectClassifications = _reestrClassifications.GetAll().ToList();
+                reestrProjectClassifications = reestrProjectClassifications
+                    .Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+
+                var reestrProjectIdentities = _reestrIdentities.GetAll().ToList();
+                reestrProjectIdentities = reestrProjectIdentities
+                    .Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+
+                var reestrProjectExpertDecision = _reestrProjectExpertDecision.GetAll().ToList();
+                reestrProjectExpertDecision = reestrProjectExpertDecision
+                    .Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
                 
+                var reestrProjectCyberSecurityExpertDecision = _reestrProjectCyberSecurityExpertDecision.GetAll().ToList();
+                reestrProjectCyberSecurityExpertDecision = reestrProjectCyberSecurityExpertDecision
+                    .Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+                
+                var reestrProjectAuthorizations = _reestrProjectAuthorization.GetAll().ToList();
+                reestrProjectAuthorizations = reestrProjectAuthorizations
+                    .Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+                
+                var reestrProjectAutomatedServices = _reestrProjectAutomatedServices.GetAll().ToList();
+                reestrProjectAutomatedServices = reestrProjectAutomatedServices
+                    .Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+
+                var reestrProjectEfficiencies = _reestrProjectEfficiency.GetAll().ToList();
+                reestrProjectEfficiencies = reestrProjectEfficiencies
+                    .Where(p => exceptionPassportsId.Any(i => i != p.ReestrProjectId)).ToList();
+
+                #endregion
+
                 excelIndex = 4;
                 
                 foreach (var org in organizations)
@@ -1382,7 +1428,14 @@ namespace MainInfrastructures.Services
 
                         await SetPassportBasics(worksheet, passport, excelIndex, org, exceptions, projectPositions);
                         await SetProjectConnections(worksheet, passport, excelIndex, reestrProjectConnection);
-                        
+                        await SetProjectClassifications(worksheet, passport, excelIndex, reestrProjectClassifications);
+                        await SetProjectIdentities(worksheet, passport, excelIndex, reestrProjectIdentities);
+                        await SetProjectIdentities(worksheet, passport, excelIndex, reestrProjectIdentities);
+                        await SetProjectExpertDecisions(worksheet, passport, excelIndex, reestrProjectExpertDecision,
+                            reestrProjectCyberSecurityExpertDecision);
+                        await SetProjectAuthorization(worksheet, passport, excelIndex, reestrProjectAuthorizations);
+                        await SetProjectAutomatedServices(worksheet, passport, excelIndex, reestrProjectAutomatedServices);
+                        await SetProjectEfficiency(worksheet, passport, excelIndex, reestrProjectEfficiencies);
                         excelIndex++;
                     }
                 }
@@ -1421,8 +1474,9 @@ namespace MainInfrastructures.Services
                     break;
             }
             worksheet.Cells[rowIndex, 3].Value = passport.ShortName;
-            worksheet.Cells[rowIndex, 4].Value = passport.Id.ToString();
-            worksheet.Cells[rowIndex, 5].Value = exceptions.Any(e => e.ReestrProjectId == passport.Id) ? "ha" : "yo'q";
+            worksheet.Cells[rowIndex, 4].Value = passport.ReestrProjectId.ToString();
+            worksheet.Cells[rowIndex, 5].Value =
+                exceptions.Any(e => e.ReestrProjectId == passport.ReestrProjectId) ? "ha" : "yo'q";
             worksheet.Cells[rowIndex, 6].Value = passport.PassportStatus == ReesterProjectStatus.CONFIRMED ? "ha" : "yo'q";
 
             if (projectPosition != null)
@@ -1458,7 +1512,76 @@ namespace MainInfrastructures.Services
                 worksheet.Cells[rowIndex, 10].Value = connection.ExceptedItems.ToString();
             }
         }
+        private async Task SetProjectClassifications(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex,
+            List<ReestrProjectClassifications> classifications)
+        {
+            var classification = classifications.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (classification != null)
+            {
+                worksheet.Cells[rowIndex, 11].Value = classification.AllItems.ToString();
+                worksheet.Cells[rowIndex, 12].Value = classification.ExceptedItems.ToString();
+            }
+        }
+        private async Task SetProjectIdentities(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex,
+            List<ReestrProjectIdentities> identities)
+        {
+            var identity = identities.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (identity != null)
+            {
+                worksheet.Cells[rowIndex, 13].Value = identity.AllItems.ToString();
+                worksheet.Cells[rowIndex, 14].Value = identity.ExceptedItems.ToString();
+            }
+        }
+        private async Task SetProjectExpertDecisions(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex,
+            List<ReestrProjectExpertDecision> expertDecisions, List<ReestrProjectCyberSecurityExpertDecision> cyberSecurityExpertDecisions)
+        {
+            var expertDecision = expertDecisions.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (expertDecision != null)
+            {
+                worksheet.Cells[rowIndex, 15].Value = expertDecision.Exist == true ? "ha" : "yo'q";
+                worksheet.Cells[rowIndex, 16].Value = expertDecision.ExpertComment;
+            }
+            var cyberSecurityExpertDecision = cyberSecurityExpertDecisions.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (cyberSecurityExpertDecision != null)
+            {
+                worksheet.Cells[rowIndex, 17].Value = cyberSecurityExpertDecision.Exist == true ? "ha" : "yo'q";
+                worksheet.Cells[rowIndex, 18].Value = cyberSecurityExpertDecision.ExpertComment;
+            }
+        }
         
+        private async Task SetProjectAuthorization(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex,
+            List<ReestrProjectAuthorizations> authorizations)
+        {
+            var authorization = authorizations.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (authorization != null)
+            {
+                worksheet.Cells[rowIndex, 19].Value = authorization.AllItems.ToString();
+                worksheet.Cells[rowIndex, 20].Value = authorization.ExceptedItems.ToString();
+            }
+        }
+        
+        private async Task SetProjectAutomatedServices(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex,
+            List<ReestrProjectAutomatedServices> automatedServices)
+        {
+            var automatedService = automatedServices.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (automatedService != null)
+            {
+                worksheet.Cells[rowIndex, 21].Value = automatedService.AllItems.ToString();
+                worksheet.Cells[rowIndex, 22].Value = automatedService.ExceptedItems.ToString();
+                worksheet.Cells[rowIndex, 23].Value = automatedService.ExpertComment;
+            }
+        }
+        private async Task SetProjectEfficiency(ExcelWorksheet worksheet, ReestrProjectPassport passport, int rowIndex,
+            List<ReestrProjectEfficiency> efficiencies)
+        {
+            var efficiency = efficiencies.FirstOrDefault(c => c.ReestrProjectId == passport.ReestrProjectId);
+            if (efficiency != null)
+            {
+                worksheet.Cells[rowIndex, 24].Value = efficiency.AllItems.ToString();
+                worksheet.Cells[rowIndex, 25].Value = efficiency.ExceptedItems.ToString();
+                worksheet.Cells[rowIndex, 26].Value = efficiency.ExpertComment;
+            }
+        }
         #endregion
         
         #region DownloadOrganizationsRateReport

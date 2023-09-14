@@ -53,6 +53,9 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
 
         public int Add(ReestrProjectClassificationCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             int id = 0;
 
             var org = _organization.Find(o => o.Id == model.OrganizationId).FirstOrDefault();
@@ -126,6 +129,9 @@ namespace UserHandler.Handlers.ReestrProjectClassificationHandler
         }
         public int Update(ReestrProjectClassificationCommand model)
         {
+            if (model.AllItems < model.ExceptedItems)
+                throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
+            
             var projectClassificator = _projectClassifications.Find(p => p.Id == model.Id).Include(mbox => mbox.Classifications).FirstOrDefault();
             if (projectClassificator == null)
                 throw ErrorStates.NotAllowed(model.OrganizationId.ToString());
