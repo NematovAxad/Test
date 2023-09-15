@@ -46,6 +46,10 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
         }
         public void Add(WebSiteRequirementsCommand model)
         {
+            var orgRequirements = _websiteRequirements.Find(r => r.OrganizationId == model.Requirements[0].OrganizationId).ToList();
+            if (orgRequirements.Count > 0)
+                throw ErrorStates.Error(UIErrors.DataWithThisParametersIsExist);
+            
             var org = _organizations.Find(o => o.Id == model.Requirements[0].OrganizationId).FirstOrDefault();
             if (org == null)
                 throw ErrorStates.NotFound(model.Requirements[0].Id.ToString());
@@ -63,7 +67,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
                     throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 
 
-            if (model.Requirements.Count()>0)
+            if (model.Requirements.Any())
             {
                 List<WebSiteRequirements> addList = new List<WebSiteRequirements>();
 
@@ -139,7 +143,7 @@ namespace AdminHandler.Handlers.SecondOptionHandlers
 
             var orgRequirements = _websiteRequirements.Find(r => r.OrganizationId == model.Requirements[0].OrganizationId).ToList();
 
-            if (model.Requirements.Count() > 0)
+            if (model.Requirements.Any())
             {
                 
                 foreach (var r in model.Requirements)
