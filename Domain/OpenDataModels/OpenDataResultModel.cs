@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Enums;
 
 namespace Domain.OpenDataModels
 {
@@ -32,7 +33,7 @@ namespace Domain.OpenDataModels
         public DateTime UpdateDate { get; set; }
 
         [JsonProperty(PropertyName = "status")]
-        public int Status { get; set; }
+        public OpenDataTableStatus Status { get; set; }
 
         [JsonProperty(PropertyName = "link")]
         public string Link { get; set; }

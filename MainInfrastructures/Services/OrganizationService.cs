@@ -72,6 +72,8 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ReestrProjectAuthorizations, int> _reestrProjectAuthorization;
         private readonly IRepository<ReestrProjectAutomatedServices, int> _reestrProjectAutomatedServices;
         private readonly IRepository<ReestrProjectEfficiency, int> _reestrProjectEfficiency;
+        private readonly IRepository<OrganizationSocials, int> _orgSocialSites;
+        private readonly IRepository<OpenDataTable, int> _openDataTable;
 
         private readonly IDataContext _db;
         private readonly IReesterService _reesterService;
@@ -104,7 +106,9 @@ namespace MainInfrastructures.Services
                                     IRepository<ReestrProjectCyberSecurityExpertDecision, int> reestrProjectCyberSecurityExpertDecision,
                                     IRepository<ReestrProjectAuthorizations, int> reestrProjectAuthorization,
                                     IRepository<ReestrProjectAutomatedServices, int> reestrProjectAutomatedServices,
-                                    IRepository<ReestrProjectEfficiency, int> reestrProjectEfficiency)
+                                    IRepository<ReestrProjectEfficiency, int> reestrProjectEfficiency,
+                                    IRepository<OrganizationSocials, int> orgSocialSites,
+                                    IRepository<OpenDataTable, int> openDataTable)
         {
             _deadline = deadline;
             _organization = organization;
@@ -134,6 +138,8 @@ namespace MainInfrastructures.Services
             _reestrProjectAuthorization = reestrProjectAuthorization;
             _reestrProjectAutomatedServices = reestrProjectAutomatedServices;
             _reestrProjectEfficiency = reestrProjectEfficiency;
+            _orgSocialSites = orgSocialSites;
+            _openDataTable = openDataTable;
         }
 
         public async Task<RankingStruct> GetStruct(int orgId)
@@ -794,6 +800,395 @@ namespace MainInfrastructures.Services
             }
         }
         #endregion
+
+        #region DownloadOrgSocialSitesReport 2.5
+
+        public async Task<MemoryStream> DownloadOrgSocialSitesReport(List<string> userRights)
+        {
+            if (!userRights.Contains(Permissions.OPERATOR_RIGHTS))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            
+            var deadline = _deadline.Find(d => d.IsActive == true && d.PingService == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+
+            var organizations = _organization.Find(o => o.IsActive == true && o.IsIct == true)
+                .OrderBy(o => o.OrgCategory).ToList();
+
+            var orgSocialSites = _orgSocialSites.GetAll().ToList();
+            
+            string fileName = "OrgPingReport";
+            var memoryStream = new MemoryStream();
+            
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet;
+                worksheet = package.Workbook.Worksheets.Add(fileName);
+
+                worksheet.Name = fileName;
+                worksheet.Columns[1].Width = 60;
+                worksheet.Columns[2].Width = 25;
+                
+                worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                #region SetHeader
+
+                using (var range = worksheet.Cells[1, 1, 2, 6])
+                {
+                    range.Value = "IJTIMOIY TARMOQLARDAGI SAHIFALAR HAVOLALARI";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    range.Style.Font.Size = 12;
+                }
+
+                using (var range = worksheet.Cells[3, 1, 3, 6])
+                {
+                    range.Value = deadline.Year + "- yil " + (int)deadline.Quarter + " - yarim yilligi";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.Font.Size = 10;
+                }
+
+                using (var range = worksheet.Cells[4, 1, 5, 1])
+                {
+                    range.Value = "Tashkilot nomi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 2, 5, 2])
+                {
+                    range.Value = "Tashkilot turi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 3, 5, 3])
+                {
+                    range.Value = "Ijtimoiy tarmoq havolasi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 4, 5, 4])
+                {
+                    range.Value = "Asosiymi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 5, 5, 5])
+                {
+                    range.Value = "Jamoatchilik bilan ochiq muloqot o'tkazganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 6, 5, 6])
+                {
+                    range.Value = "Tashkkilotning to'liq nomi ko'rsatilganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 7, 5, 7])
+                {
+                    range.Value = "Rasmiy web-sayt ko'rsatilganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 8, 5, 8])
+                {
+                    range.Value = "Ishonch telefoni raqami ko'rsatilganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 9, 5, 9])
+                {
+                    range.Value = "Yuridik manzili ko'rsatilganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 10, 5, 10])
+                {
+                    range.Value = "Elektron pochtasi ko'rsatilganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 11, 5, 11])
+                {
+                    range.Value = "Boshqa ijtimoiy tarmoq va messenjerlardagi sahifalarga xavolalar ko'rsatilganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 12, 5, 12])
+                {
+                    range.Value = "Tasdiqlanganligi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 13, 5, 13])
+                {
+                    range.Value = "Postlar sinxronizatsiyasi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                #endregion
+
+                int excelIndex = 6;
+
+                foreach (var organization in organizations)
+                {
+                    var orgSocials = orgSocialSites.Where(s => s.OrganizationId == organization.Id)
+                        .OrderByDescending(s => s.IsMain).ToList();
+
+                    foreach (var social in orgSocials)
+                    {
+                        worksheet.Cells[excelIndex, 1].Value = organization.ShortName;
+                        worksheet.Cells[excelIndex, 2].Value = organization.OrgCategory switch
+                        {
+                            OrgCategory.GovernmentOrganizations => "Davlat boshqaruvi",
+                            OrgCategory.FarmOrganizations => "Xo'jalik boshqaruvi",
+                            OrgCategory.Adminstrations => "Hokimliklar",
+                            _ => worksheet.Cells[excelIndex, 2].Value
+                        };
+                        worksheet.Cells[excelIndex, 3].Value = social.MessengerLink;
+                        worksheet.Cells[excelIndex, 4].Value = social.IsMain == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 5].Value = social.PoolExceptExpert == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 6].Value = social.OrgFullName == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 7].Value = social.OrgLegalSite == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 8].Value = social.OrgPhone == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 9].Value = social.OrgLegalAddress == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 10].Value = social.OrgEmail == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 11].Value = social.LinksToOtherSocials == true ? "Ha" : "Yo'q";
+                        worksheet.Cells[excelIndex, 12].Value = social.Verified == true ? "Ha" : "Yo'q";
+
+                        var poolCount = 5;
+                        if (social.IsMain == false && social.Post1 == false)
+                            poolCount--;
+                        if (social.IsMain == false && social.Post1 == false)
+                            poolCount--;
+                        if (social.IsMain == false && social.Post1 == false)
+                            poolCount--;
+                        if (social.IsMain == false && social.Post1 == false)
+                            poolCount--;
+                        if (social.IsMain == false && social.Post1 == false)
+                            poolCount--;
+                        
+                        worksheet.Cells[excelIndex, 13].Value = poolCount.ToString();
+                        
+                        excelIndex++;
+                    }
+                    
+                }
+
+                package.Save();
+            }
+
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+
+            return memoryStream;
+        }
+
+        #endregion
+
+        #region DownloadOrgOpenDataReport 2.6
+
+        public async Task<MemoryStream> DownloadOrgOpenDataReport(List<string> userRights)
+        {
+            if (!userRights.Contains(Permissions.OPERATOR_RIGHTS))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            
+            var deadline = _deadline.Find(d => d.IsActive == true && d.PingService == true).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+
+            var organizations = _organization.Find(o => o.IsActive == true && o.IsIct == true)
+                .OrderBy(o => o.OrgCategory).ToList();
+
+            var openDataTable = _openDataTable.GetAll().ToList();
+            
+            string fileName = "OrgPingReport";
+            var memoryStream = new MemoryStream();
+            
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet;
+                worksheet = package.Workbook.Worksheets.Add(fileName);
+
+                worksheet.Name = fileName;
+                worksheet.Columns[1].Width = 60;
+                worksheet.Columns[2].Width = 25;
+                
+                worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                #region SetHeader
+
+                using (var range = worksheet.Cells[1, 1, 2, 6])
+                {
+                    range.Value = "OCHIQ MA'LUMOTLAR PORTALIDA OCHIQ MA'LUMOTLAR TO'PLAMLARI MAVJUDLIGI";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    range.Style.Font.Size = 12;
+                }
+
+                using (var range = worksheet.Cells[3, 1, 3, 6])
+                {
+                    range.Value = deadline.Year + "- yil " + (int)deadline.Quarter + " - yarim yilligi";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.Font.Size = 10;
+                }
+
+                using (var range = worksheet.Cells[4, 1, 5, 1])
+                {
+                    range.Value = "Tashkilot nomi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 2, 5, 2])
+                {
+                    range.Value = "Tashkilot turi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 3, 5, 3])
+                {
+                    range.Value = "Ochiq ma'lumotlar nomi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 4, 5, 4])
+                {
+                    range.Value = "Identifikatsiya raqami";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 5, 5, 5])
+                {
+                    range.Value = "So'ngi yangilangan sana";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 6, 5, 6])
+                {
+                    range.Value = "Holati";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 7, 5, 7])
+                {
+                    range.Value = "(URL)";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                
+                #endregion
+
+                int excelIndex = 6;
+
+                foreach (var organization in organizations)
+                {
+                    var orgOpenData = openDataTable.Where(s => s.OrganizationId == organization.Id)
+                        .OrderBy(s => s.Status).ToList();
+
+                    foreach (var table in orgOpenData)
+                    {
+                        worksheet.Cells[excelIndex, 1].Value = organization.ShortName;
+                        worksheet.Cells[excelIndex, 2].Value = organization.OrgCategory switch
+                        {
+                            OrgCategory.GovernmentOrganizations => "Davlat boshqaruvi",
+                            OrgCategory.FarmOrganizations => "Xo'jalik boshqaruvi",
+                            OrgCategory.Adminstrations => "Hokimliklar",
+                            _ => worksheet.Cells[excelIndex, 2].Value
+                        };
+                        worksheet.Cells[excelIndex, 3].Value = table.TableName;
+                        worksheet.Cells[excelIndex, 4].Value = table.TableId;
+                        worksheet.Cells[excelIndex, 5].Value = table.UpdateDate.ToString();
+                        worksheet.Cells[excelIndex, 6].Value = table.Status switch
+                        {
+                            OpenDataTableStatus.Custom => "Yangi",
+                            OpenDataTableStatus.Updated => "Yangilangan",
+                            OpenDataTableStatus.Rejected => "Rad qilingan",
+                            OpenDataTableStatus.Checked => "Tasdiqlangan",
+                            OpenDataTableStatus.Old => "Eskirgan",
+                            _ => worksheet.Cells[excelIndex, 6].Value
+                        };
+                        worksheet.Cells[excelIndex, 7].Value = table.Link;
+                        
+                        excelIndex++;
+                    }
+                }
+                
+                package.Save();
+            }
+
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+
+            return memoryStream;
+        }
+
+        #endregion
         
         #region DownloadOrgData 1.1
         public async Task<MemoryStream> DownloadOrgData(int orgId)
@@ -1206,7 +1601,7 @@ namespace MainInfrastructures.Services
         }
         #endregion
 
-        #region DownloadOrgReestrProjectsReport
+        #region DownloadOrgReestrProjectsReport 5.1
 
         public async Task<MemoryStream> DownloadOrganizationsReestrReport(List<string> userRights, int userOrgId)
         {

@@ -36,7 +36,7 @@ namespace ApiConfigs
 {
     public static class Start
     {
-        public static string ConnectionString => "postrgressConnection".Env();  //"Host=172.16.30.250;Port=45432;Database=nisdata;Username=nisuse;Password=zV6r3dy7CtmbJeEP";
+        public static string ConnectionString => "postrgressConnection".Env() ?? "Host=172.16.30.250;Port=45432;Database=nisdata;Username=nisuse;Password=zV6r3dy7CtmbJeEP";
         //Host=postgres;Port=5432;Database=nisdata;Username=nisuse;Password=zV6r3dy7CtmbJeEP
         #region
         public static void RegisterDb(IServiceCollection services, ContainerBuilder builder)

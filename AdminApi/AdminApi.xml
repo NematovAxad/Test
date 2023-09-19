@@ -6,7 +6,19 @@
     <members>
         <member name="M:AdminApi.Controllers.Organization.DownloadOrgPingReport">
             <summary>
-            
+            2.3 report
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadOrgSocialsReport">
+            <summary>
+            2.5 report
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadOpenDataReport">
+            <summary>
+            2.6 report
             </summary>
             <returns></returns>
         </member>

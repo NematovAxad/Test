@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Enums;
 using Domain.Models.FirstSection;
 using JohaRepository;
 
@@ -50,7 +51,7 @@ namespace Domain.Models.SecondSection
         /// 
         /// </summary>
         [Column("status")]
-        public int Status { get; set; }
+        public OpenDataTableStatus Status { get; set; }
         
         /// <summary>
         /// 

@@ -50,7 +50,7 @@ namespace AdminApi.Controllers
         
         
         /// <summary>
-        /// 
+        /// 2.3 report
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -59,6 +59,44 @@ namespace AdminApi.Controllers
             try
             {
                 var stream = await _organizationService.DownloadOrgPingReport(this.UserRights());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        
+        /// <summary>
+        /// 2.5 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadOrgSocialsReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgSocialSitesReport(this.UserRights());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        
+        /// <summary>
+        /// 2.6 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadOpenDataReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgOpenDataReport(this.UserRights());
 
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
             }
