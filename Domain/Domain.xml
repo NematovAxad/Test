@@ -4,6 +4,31 @@
         <name>Domain</name>
     </assembly>
     <members>
+        <member name="F:Domain.Enums.OpenDataTableStatus.Custom">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Domain.Enums.OpenDataTableStatus.Updated">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Domain.Enums.OpenDataTableStatus.Rejected">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Domain.Enums.OpenDataTableStatus.Checked">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Domain.Enums.OpenDataTableStatus.Old">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Domain.Models.DashboardModels.RatedOrganizationServices">
             <summary>
             
