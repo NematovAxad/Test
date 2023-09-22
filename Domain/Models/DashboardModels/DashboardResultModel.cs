@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain.Enums;
 using Domain.Models.Models;
+using Domain.Models.SixthSection;
 
 namespace Domain.Models.DashboardModels
 {
@@ -105,8 +106,12 @@ namespace Domain.Models.DashboardModels
     public class DigitalProjectsModel
     {
         public int AllProjects { get; set; }
+        public List<OrganizationDigitalEconomyProjectsDetail> AllProjectsList { get; set; }
         public int CompletedProjects { get; set; }
+        public List<OrganizationDigitalEconomyProjectsDetail> CompletedProjectsList { get; set; }
         public int OngoinProjects { get; set; }
+        public List<OrganizationDigitalEconomyProjectsDetail> OngoinProjectsList { get; set; }
         public int NotCompletedProjects { get; set; }
+        public List<OrganizationDigitalEconomyProjectsDetail> NotCompletedProjectsList { get; set; }
     }
 }

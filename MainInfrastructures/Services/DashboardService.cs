@@ -37,6 +37,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ReestrProjectPosition, int> _reestrProjectPosition;
         private readonly IRepository<ReestrProjectExpertDecision, int> _reestrProjectExpertDecision;
         private readonly IRepository<OrganizationDigitalEconomyProjectsReport, int> _digitalEconomyProjectsReport;
+        private readonly IRepository<OrganizationDigitalEconomyProjectsDetail, int> _orgDigitalProjectsDetail;
         private readonly IRepository<ReplacerOrgHead, int> _replacerOrgHead;
         private readonly IRepository<OrganizationIctSpecialForces, int> _orgSpecialForces;
         private readonly IRepository<Deadline, int> _deadline;
@@ -75,8 +76,8 @@ namespace MainInfrastructures.Services
                                         IRepository<ReestrProjectExpertDecision, int> reestrProjectExpertDecision,
                                         IRepository<OrganizationDigitalEconomyProjectsReport, int> digitalEconomyProjectsReport,
                                         IRepository<ReplacerOrgHead, int> replacerOrgHead,
-                                        IRepository<OrganizationIctSpecialForces, int> orgSpecialForces
-        )
+                                        IRepository<OrganizationIctSpecialForces, int> orgSpecialForces,
+                                        IRepository<OrganizationDigitalEconomyProjectsDetail, int> orgDigitalProjectsDetail)
         {
             _organization = organizations;
             _organizationPublicServices = organizationPublicServices;
@@ -84,6 +85,7 @@ namespace MainInfrastructures.Services
             _reestrProjectPosition = reestrProjectPosition;
             _reestrProjectExpertDecision = reestrProjectExpertDecision;
             _digitalEconomyProjectsReport = digitalEconomyProjectsReport;
+            _orgDigitalProjectsDetail = orgDigitalProjectsDetail;
             _deadline = deadline;
             _gRankTable = gRankTable;
             _xRankTable = xRankTable;
@@ -132,6 +134,8 @@ namespace MainInfrastructures.Services
 
         private async Task<OrgReportModel> GetGovernmentOrganizationsReport(Deadline deadline)
         {
+            var digitalProjectsDetailList = _orgDigitalProjectsDetail.GetAll().ToList();
+            
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.GovernmentOrganizations && o.IsActive == true && o.IsIct == true).ToList();
             organizations = organizations.Where(o=>DashboardBlackList.All(d=>d!=o.Id)).ToList();
@@ -286,9 +290,13 @@ namespace MainInfrastructures.Services
                     model.DigitalProjectsModel = new DigitalProjectsModel()
                     {
                         AllProjects = digitalEconomyProjects.ProjectsCount,
+                        AllProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id).ToList(),
                         CompletedProjects = digitalEconomyProjects.CompletedProjects,
+                        CompletedProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.Done).ToList(),
                         OngoinProjects = digitalEconomyProjects.OngoingProjects,
-                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects
+                        OngoinProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.InProccess).ToList(),
+                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects,
+                        NotCompletedProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.Failed).ToList(),
                     };
                 }
 
