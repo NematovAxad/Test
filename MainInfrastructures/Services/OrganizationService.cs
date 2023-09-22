@@ -1189,6 +1189,197 @@ namespace MainInfrastructures.Services
         }
 
         #endregion
+
+        #region JustToGetClassifications
+
+        public async Task<MemoryStream> DownloadOrgClassifications()
+        {
+            var organizations = _organization.Find(o => o.IsActive == true && o.IsIct == true)
+                .OrderBy(o => o.OrgCategory).ToList();
+
+            
+            
+            string fileName = "OrgClassifications";
+            var memoryStream = new MemoryStream();
+            
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet;
+                worksheet = package.Workbook.Worksheets.Add(fileName);
+
+                worksheet.Name = fileName;
+                worksheet.Columns[1].Width = 60;
+                worksheet.Columns[2].Width = 25;
+                
+                worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                #region SetHeader
+
+                using (var range = worksheet.Cells[1, 1, 2, 6])
+                {
+                    range.Value = "Classificator va Identifikatorlar";
+                    range.Merge = true;
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    range.Style.Font.Size = 12;
+                }
+
+                
+
+                using (var range = worksheet.Cells[4, 1, 5, 1])
+                {
+                    range.Value = "Tashkilot nomi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 2, 5, 2])
+                {
+                    range.Value = "Tashkilot turi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 3, 5, 3])
+                {
+                    range.Value = "Sistema nomi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 4, 5, 4])
+                {
+                    range.Value = "Sistema reestrdagi id raqami";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 5, 5, 5])
+                {
+                    range.Value = "Classification/Identification";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 6, 5, 6])
+                {
+                    range.Value = "Nomi";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+                using (var range = worksheet.Cells[4, 7, 5, 7])
+                {
+                    range.Value = "Url";
+                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 11;
+                    range.Merge = true;
+                }
+
+                #endregion
+
+                int excelIndex = 6;
+
+                foreach (var organization in organizations)
+                {
+                    var reestrProjects = _reestrProjectPassport.Find(s => s.OrganizationId == organization.Id)
+                        .OrderBy(s => s.ReestrProjectId).ToList();
+
+                    foreach (var project in reestrProjects)
+                    {
+                        var projectClassifications = _reestrClassifications
+                            .Find(c => c.ReestrProjectId == project.ReestrProjectId).Include(mbox=>mbox.Classifications).FirstOrDefault();
+
+                        var projectIdentifications = _reestrIdentities
+                            .Find(i => i.ReestrProjectId == project.ReestrProjectId).Include(mbox => mbox.Identities)
+                            .FirstOrDefault();
+
+                        if (projectClassifications != null)
+                        {
+                            foreach (var classification in projectClassifications.Classifications)
+                            {
+                                worksheet.Cells[excelIndex, 1].Value = organization.ShortName;
+                                worksheet.Cells[excelIndex, 2].Value = organization.OrgCategory switch
+                                {
+                                    OrgCategory.GovernmentOrganizations => "Davlat boshqaruvi",
+                                    OrgCategory.FarmOrganizations => "Xo'jalik boshqaruvi",
+                                    OrgCategory.Adminstrations => "Hokimliklar",
+                                    _ => worksheet.Cells[excelIndex, 2].Value
+                                };
+                                worksheet.Cells[excelIndex, 3].Value = project.FullName;
+                                worksheet.Cells[excelIndex, 4].Value = project.ReestrProjectId;
+                                worksheet.Cells[excelIndex, 5].Value = "Classification";
+                                worksheet.Cells[excelIndex, 6].Value = classification.ClassificationType switch
+                                {
+                                    ReestrProjectClassificationType.ClassificationEgov => "cs.egov.uz",
+                                    ReestrProjectClassificationType.OwnClassifications =>
+                                        "Shaxsiy tizimlarda mavjud klassifikatorlar",
+                                    ReestrProjectClassificationType.ExternalSystemClassifications =>
+                                        "Tashqi tizimlardan yuklanuvchi klassificatorlar",
+                                    _ => worksheet.Cells[excelIndex, 6].Value
+                                };
+                                worksheet.Cells[excelIndex, 7].Value = classification.ClassificationUri;
+
+                                excelIndex++;
+                            }
+                        }
+
+                        if (projectIdentifications != null)
+                        {
+                            foreach (var identity in projectIdentifications.Identities)
+                            {
+                                worksheet.Cells[excelIndex, 1].Value = organization.ShortName;
+                                worksheet.Cells[excelIndex, 2].Value = organization.OrgCategory switch
+                                {
+                                    OrgCategory.GovernmentOrganizations => "Davlat boshqaruvi",
+                                    OrgCategory.FarmOrganizations => "Xo'jalik boshqaruvi",
+                                    OrgCategory.Adminstrations => "Hokimliklar",
+                                    _ => worksheet.Cells[excelIndex, 2].Value
+                                };
+                                worksheet.Cells[excelIndex, 3].Value = project.FullName;
+                                worksheet.Cells[excelIndex, 4].Value = project.ReestrProjectId;
+                                worksheet.Cells[excelIndex, 5].Value = "Identifikatsiya";
+                                worksheet.Cells[excelIndex, 6].Value = identity.IdentitiyType switch
+                                {
+                                    ReestrProjectIdentityType.Inn => "INN",
+                                    ReestrProjectIdentityType.PersonalId => "JSHIR",
+                                    ReestrProjectIdentityType.CadastralCode => "Kadastr raqami",
+                                    ReestrProjectIdentityType.CarNumber => "Avtotransport raqami",
+                                    ReestrProjectIdentityType.GeographicalCode => "Geografik kodi",
+                                    _ => worksheet.Cells[excelIndex, 6].Value
+                                };
+                                worksheet.Cells[excelIndex, 7].Value = identity.IdentityUrl;
+                                excelIndex++;
+                            }
+                        }
+                    }
+                }
+                
+                package.Save();
+            }
+
+            memoryStream.Flush();
+            memoryStream.Position = 0;
+
+
+            return memoryStream;
+        }
+
+        #endregion
         
         #region DownloadOrgData 1.1
         public async Task<MemoryStream> DownloadOrgData(int orgId)

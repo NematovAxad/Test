@@ -22,5 +22,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadReestrClassificationsReport">
+            <summary>
+            classification/identification report
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

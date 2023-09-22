@@ -34,5 +34,7 @@ namespace MainInfrastructures.Interfaces
         Task<MemoryStream> DownloadOrgSocialSitesReport(List<string> userRights);
         
         Task<MemoryStream> DownloadOrgOpenDataReport(List<string> userRights);
+
+        Task<MemoryStream> DownloadOrgClassifications();
     }
 }

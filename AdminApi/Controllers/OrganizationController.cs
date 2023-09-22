@@ -135,6 +135,24 @@ namespace AdminApi.Controllers
                 return NoContent();
             }
         }
+        /// <summary>
+        /// classification/identification report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadReestrClassificationsReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgClassifications();
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
         
         [HttpGet]
         public async Task<ResponseCore<DashboardResultModel>> DashboardReport(int? deadlineId)
@@ -148,7 +166,6 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
-
 
         [HttpGet]
         public async Task<ResponseCore<OrgQueryResult>> Get([FromQuery] int id)
