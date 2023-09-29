@@ -161,6 +161,7 @@ namespace MainInfrastructures.Services
                         Id = sphere.Id,
                         Name = sphere.Name,
                         Section = sphere.Section,
+                        MaxRate = sphere.MaxRate,
                         Fields = new List<Fields>()
                     };
 
@@ -196,6 +197,7 @@ namespace MainInfrastructures.Services
                         Id = sphere.Id,
                         Name = sphere.Name,
                         Section = sphere.Section,
+                        MaxRate = sphere.MaxRate,
                         Fields = new List<Fields>()
                     };
 
@@ -231,6 +233,7 @@ namespace MainInfrastructures.Services
                         Id = sphere.Id,
                         Name = sphere.Name,
                         Section = sphere.Section,
+                        MaxRate = sphere.MaxRate,
                         Fields = new List<Fields>()
                     };
 
@@ -332,14 +335,13 @@ namespace MainInfrastructures.Services
                 using var package = new ExcelPackage(memory);
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 var workSheet = package.Workbook.Worksheets.First();
-                long neighborhoodid = 0;
                 var rowCount = workSheet.Dimension.End.Row;
                 for (int row = 5; row <= rowCount; row++)
                 {
                     try
                     {
 
-                        if (workSheet.Cells[row, 2].Value?.ToString().Length > 1)
+                        if (workSheet.Cells[row, 2].Value?.ToString()?.Length > 1)
                         {
                             OrganizationPublicServices addModel = new OrganizationPublicServices();
                             
@@ -366,6 +368,61 @@ namespace MainInfrastructures.Services
             }
 
             _db.Context.Set<OrganizationPublicServices>().AddRange(addList);
+
+            _db.Context.SaveChanges();
+
+            return true;
+        }
+        
+        public async Task<bool> UploadDigitalEconomyProjects(IFormFile file)
+        {
+            List<OrganizationDigitalEconomyProjectsDetail> addList = new List<OrganizationDigitalEconomyProjectsDetail>();
+
+            
+
+            using (MemoryStream memory = new MemoryStream())
+            {
+                file.CopyTo(memory);
+                using var package = new ExcelPackage(memory);
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var workSheet = package.Workbook.Worksheets.First();
+                var rowCount = workSheet.Dimension.End.Row;
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    try
+                    {
+
+                        if (workSheet.Cells[row, 2].Value?.ToString()?.Length > 1)
+                        {
+                            OrganizationDigitalEconomyProjectsDetail addModel = new OrganizationDigitalEconomyProjectsDetail();
+                            
+                            addModel.OrganizationId = Convert.ToInt32(workSheet.Cells[row, 1].Value?.ToString());
+                            addModel.NormativeDocumentNumber = workSheet.Cells[row, 2].Value?.ToString();
+                            addModel.ApplicationNumber = workSheet.Cells[row, 3].Value?.ToString();
+                            addModel.ProjectIndex = workSheet.Cells[row, 4].Value?.ToString();
+                            addModel.Responsibles = workSheet.Cells[row, 5].Value?.ToString();
+                            addModel.Actions = workSheet.Cells[row, 6].Value?.ToString();
+
+                            if (workSheet.Cells[row, 7].Value?.ToString() == "1")
+                                addModel.Status = ProjectStatus.Done;
+
+                            if (workSheet.Cells[row, 7].Value?.ToString() == "2")
+                                addModel.Status = ProjectStatus.InProccess;
+
+                            if (workSheet.Cells[row, 7].Value?.ToString() == "3")
+                                addModel.Status = ProjectStatus.Failed;
+
+                            addList.Add(addModel);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+                    }
+                }
+            }
+
+            _db.Context.Set<OrganizationDigitalEconomyProjectsDetail>().AddRange(addList);
 
             _db.Context.SaveChanges();
 

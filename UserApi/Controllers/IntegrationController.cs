@@ -249,6 +249,12 @@ namespace UserApi.Controllers
             return (bool)result;
         }
         [HttpPost]
+        public async Task<bool> UploadOrgDigitalProjects(IFormFile file)
+        {
+            var result = await _organizationService.UploadDigitalEconomyProjects(file);
+            return (bool)result;
+        }
+        [HttpPost]
         public async Task<bool> MibReportUpdate([FromQuery] DateTime startTime, DateTime endTime)
         {
 

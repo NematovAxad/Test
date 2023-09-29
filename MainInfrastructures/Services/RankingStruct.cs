@@ -13,6 +13,7 @@ namespace MainInfrastructures.Services
         public int Id { get; set; }
         public string Name { get; set; }
         public string Section { get; set; }
+        public double MaxRate { get; set; }
         public List<Fields> Fields { get; set; }
     }
 

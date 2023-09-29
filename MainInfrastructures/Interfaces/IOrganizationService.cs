@@ -18,6 +18,7 @@ namespace MainInfrastructures.Interfaces
         Task<bool> UpdateOrgsName();
         Task<bool> UploadOrgServices(IFormFile file);
 
+        Task<bool> UploadDigitalEconomyProjects(IFormFile file);
         Task<decimal> SubFieldMaxRate(int orgId, string fieldSection, string subFieldSection);
         Task<decimal> FieldMaxRate(int orgId, string fieldSection);
 
