@@ -32,9 +32,11 @@ namespace MainInfrastructures.Interfaces
         
         Task<MemoryStream> DownloadOrganizationsReestrReport(List<string> userRights, int userOrgId);   // 5.1 report
         
-        Task<MemoryStream> DownloadOrgSocialSitesReport(List<string> userRights);
+        Task<MemoryStream> DownloadOrgSocialSitesReport(List<string> userRights);  // 2.5 report
         
-        Task<MemoryStream> DownloadOrgOpenDataReport(List<string> userRights);
+        Task<MemoryStream> DownloadOrgOpenDataReport(List<string> userRights);  // 2.6 report
+
+        Task<MemoryStream> DownloadOrgHelplineReport(List<string> userRights);  // 2.7 report
 
         Task<MemoryStream> DownloadOrgClassifications();
     }

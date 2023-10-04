@@ -68,7 +68,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                     throw ErrorStates.NotAllowed(deadline.OperatorDeadlineDate.ToString());
 
             if ((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE)))
-                if (deadline.SecondSectionDeadlineDate < DateTime.Now)
+                if (deadline.SixthSectionDeadlineDate < DateTime.Now)
                     throw ErrorStates.NotAllowed(deadline.SecondSectionDeadlineDate.ToString());
 
 
