@@ -105,6 +105,24 @@ namespace AdminApi.Controllers
                 return NoContent();
             }
         }
+        /// <summary>
+        /// 2.7 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadHelplineReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgHelplineReport(this.UserRights());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
         
         [HttpGet]
         public async Task<IActionResult> DownloadRankReport([FromQuery] OrgCategory category, int deadlineId)

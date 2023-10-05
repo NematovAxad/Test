@@ -1332,7 +1332,7 @@ namespace MainInfrastructures.Services
                 }
                 using (var range = worksheet.Cells[4, 4, 5, 4])
                 {
-                    range.Value = "Identifikatsiya raqami";
+                    range.Value = "Ishonch telefoni reglamentda ko'rsatilganligi";
                     range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
                     range.Style.WrapText = true;
@@ -1341,7 +1341,7 @@ namespace MainInfrastructures.Services
                 }
                 using (var range = worksheet.Cells[4, 5, 5, 5])
                 {
-                    range.Value = "So'ngi yangilangan sana";
+                    range.Value = "Ishonch telefoni ish holatidaligi";
                     range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
                     range.Style.WrapText = true;
@@ -1350,16 +1350,7 @@ namespace MainInfrastructures.Services
                 }
                 using (var range = worksheet.Cells[4, 6, 5, 6])
                 {
-                    range.Value = "Holati";
-                    range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                    range.Style.WrapText = true;
-                    range.Style.Font.Size = 11;
-                    range.Merge = true;
-                }
-                using (var range = worksheet.Cells[4, 7, 5, 7])
-                {
-                    range.Value = "(URL)";
+                    range.Value = "Ishonch telefonini baholash imkoniyati";
                     range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     range.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
                     range.Style.WrapText = true;
@@ -1373,35 +1364,24 @@ namespace MainInfrastructures.Services
 
                 foreach (var organization in organizations)
                 {
-                    var orgOpenData = openDataTable.Where(s => s.OrganizationId == organization.Id)
-                        .OrderBy(s => s.Status).ToList();
+                    var helpline = orgHelpline.FirstOrDefault(s => s.OrganizationId == organization.Id);
+                    var helplineInfo = orgHelplineInfo.FirstOrDefault(s => s.OrganizationId == organization.Id);
 
-                    foreach (var table in orgOpenData)
+                    worksheet.Cells[excelIndex, 1].Value = organization.ShortName;
+                    worksheet.Cells[excelIndex, 2].Value = organization.OrgCategory switch
                     {
-                        worksheet.Cells[excelIndex, 1].Value = organization.ShortName;
-                        worksheet.Cells[excelIndex, 2].Value = organization.OrgCategory switch
-                        {
-                            OrgCategory.GovernmentOrganizations => "Davlat boshqaruvi",
-                            OrgCategory.FarmOrganizations => "Xo'jalik boshqaruvi",
-                            OrgCategory.Adminstrations => "Hokimliklar",
-                            _ => worksheet.Cells[excelIndex, 2].Value
-                        };
-                        worksheet.Cells[excelIndex, 3].Value = table.TableName;
-                        worksheet.Cells[excelIndex, 4].Value = table.TableId;
-                        worksheet.Cells[excelIndex, 5].Value = table.UpdateDate.ToString();
-                        worksheet.Cells[excelIndex, 6].Value = table.Status switch
-                        {
-                            OpenDataTableStatus.Custom => "Yangi",
-                            OpenDataTableStatus.Updated => "Yangilangan",
-                            OpenDataTableStatus.Rejected => "Rad qilingan",
-                            OpenDataTableStatus.Checked => "Tasdiqlangan",
-                            OpenDataTableStatus.Old => "Eskirgan",
-                            _ => worksheet.Cells[excelIndex, 6].Value
-                        };
-                        worksheet.Cells[excelIndex, 7].Value = table.Link;
-                        
-                        excelIndex++;
-                    }
+                        OrgCategory.GovernmentOrganizations => "Davlat boshqaruvi",
+                        OrgCategory.FarmOrganizations => "Xo'jalik boshqaruvi",
+                        OrgCategory.Adminstrations => "Hokimliklar",
+                        _ => worksheet.Cells[excelIndex, 2].Value
+                    };
+                    worksheet.Cells[excelIndex, 3].Value = helpline.HelplineNumber;
+                    worksheet.Cells[excelIndex, 4].Value = helplineInfo.RegulationShowsPhone == true ? "Ha" : "Yo'q";
+                    worksheet.Cells[excelIndex, 5].Value = helplineInfo.HelplinePhoneWorkStatus == true ? "Ha" : "Yo'q";
+                    worksheet.Cells[excelIndex, 6].Value =
+                        helplineInfo.HelplinePhoneRatingOption == true ? "Ha" : "Yo'q";
+                    excelIndex++;
+                    
                 }
                 
                 package.Save();

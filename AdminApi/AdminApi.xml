@@ -22,6 +22,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadHelplineReport">
+            <summary>
+            2.7 report
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AdminApi.Controllers.Organization.DownloadReestrClassificationsReport">
             <summary>
             classification/identification report
