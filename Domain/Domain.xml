@@ -211,6 +211,36 @@
             
             </summary>
         </member>
+        <member name="T:Domain.MyGovModels.MygovReportModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.MyGovModels.MygovReportModel.Organization">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.MyGovModels.MygovReportModel.ServiceId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.MyGovModels.MygovReportModel.ServiceName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.MyGovModels.MygovReportModel.AllRequest">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Domain.MyGovModels.MygovReportModel.LateRequest">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="F:Domain.UIErrors.DeadlineNotFound">
             <uz></uz>
             <ru></ru>

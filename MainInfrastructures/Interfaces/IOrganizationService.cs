@@ -38,6 +38,16 @@ namespace MainInfrastructures.Interfaces
 
         Task<MemoryStream> DownloadOrgHelplineReport(List<string> userRights);  // 2.7 report
 
+        Task<MemoryStream> DownloadOrgServicesReport(List<string> userRights);  //3.1 report
+        
+        Task<MemoryStream> DownloadOrgPublicServicesReport(List<string> userRights, int userOrgId);  //3.2 report
+        
+        Task<MemoryStream> DownloadOrgMygovServicesReport(List<string> userRights);  //3.3 report
+        
+        Task<MemoryStream> DownloadOrgMibServicesReport(List<string> userRights);  //3.4 report
+
+        Task<MemoryStream> DownloadITDepartmentReport(List<string> userRights, int userOrgId); // 6.2 report
+
         Task<MemoryStream> DownloadOrgClassifications();
     }
 }

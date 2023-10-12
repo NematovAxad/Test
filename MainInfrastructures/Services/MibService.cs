@@ -107,7 +107,8 @@ namespace MainInfrastructures.Services
             if (orgId == 0)
                 throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 
-            var org = _organization.Find(o => o.Id == orgId).Include(mbox => mbox.SubOrganizations).FirstOrDefault() ?? throw ErrorStates.Error(UIErrors.OrganizationNotFound);
+            var org = _organization.Find(o => o.Id == orgId).Include(mbox => mbox.SubOrganizations).FirstOrDefault() ??
+                      throw ErrorStates.Error(UIErrors.OrganizationNotFound);
             if (String.IsNullOrEmpty(org.OrgInn))
                 throw ErrorStates.Error(UIErrors.EnoughDataNotProvided);
 

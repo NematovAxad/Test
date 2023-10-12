@@ -35,7 +35,7 @@ namespace UserHandler.Handlers.DownloadHandler
             var result = new SiteReportResult {Items = new List<SiteReportResultModel>() };
 
             var list = _siteRequirements.GetAll();
-            var orgList = _organizations.GetAll().ToList();
+            var orgList = _organizations.Find(o => o.IsActive == true && o.IsIct == true).ToList();
 
             if (request.UserPermissions.All(p => p != Permissions.OPERATOR_RIGHTS) &&
                 request.UserPermissions.All(p => p != Permissions.ORGANIZATION_EMPLOYEE))

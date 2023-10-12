@@ -314,6 +314,8 @@ namespace MainInfrastructures.Services
 
         private async Task<OrgReportModel> GetFarmOrganizationsReport(Deadline deadline)
         {
+            var digitalProjectsDetailList = _orgDigitalProjectsDetail.GetAll().ToList();
+            
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.FarmOrganizations && o.IsActive == true && o.IsIct == true).ToList();
             
@@ -446,9 +448,13 @@ namespace MainInfrastructures.Services
                     model.DigitalProjectsModel = new DigitalProjectsModel()
                     {
                         AllProjects = digitalEconomyProjects.ProjectsCount,
+                        AllProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id).ToList(),
                         CompletedProjects = digitalEconomyProjects.CompletedProjects,
+                        CompletedProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.Done).ToList(),
                         OngoinProjects = digitalEconomyProjects.OngoingProjects,
-                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects
+                        OngoinProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.InProccess).ToList(),
+                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects,
+                        NotCompletedProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.Failed).ToList(),
                     };
                 }
 
@@ -474,6 +480,8 @@ namespace MainInfrastructures.Services
 
         private async Task<OrgReportModel> GetAdministrationOrganizationsReport(Deadline deadline)
         {
+            var digitalProjectsDetailList = _orgDigitalProjectsDetail.GetAll().ToList();
+            
             var organizations = _organization.Find(o =>
                 o.OrgCategory == OrgCategory.Adminstrations && o.IsActive == true && o.IsIct == true).ToList();
             
@@ -605,9 +613,13 @@ namespace MainInfrastructures.Services
                     model.DigitalProjectsModel = new DigitalProjectsModel()
                     {
                         AllProjects = digitalEconomyProjects.ProjectsCount,
+                        AllProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id).ToList(),
                         CompletedProjects = digitalEconomyProjects.CompletedProjects,
+                        CompletedProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.Done).ToList(),
                         OngoinProjects = digitalEconomyProjects.OngoingProjects,
-                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects
+                        OngoinProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.InProccess).ToList(),
+                        NotCompletedProjects = digitalEconomyProjects.NotFinishedProjects,
+                        NotCompletedProjectsList = digitalProjectsDetailList.Where(d=>d.OrganizationId == o.Id && d.Status == ProjectStatus.Failed).ToList(),
                     };
                 }
 

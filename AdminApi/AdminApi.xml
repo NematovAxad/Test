@@ -28,6 +28,42 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadOrgServicesReport">
+            <summary>
+            3.1 report
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadOrgPublicServicesReport">
+            <summary>
+            3.2 report
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadOrgMygovServicesReport">
+            <summary>
+            3.3 report
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadOrgMibServicesReport">
+            <summary>
+            3.4 report
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadItDepartmentReport">
+            <summary>
+            6.2 report
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AdminApi.Controllers.Organization.DownloadReestrProjectsReport">
+            <summary>
+            5.1 report
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AdminApi.Controllers.Organization.DownloadReestrClassificationsReport">
             <summary>
             classification/identification report

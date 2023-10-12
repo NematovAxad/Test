@@ -79,6 +79,12 @@ namespace UserApi.Controllers
                 return NoContent();
             }
         }
+        
+        /// <summary>
+        /// 2.4 report
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> DownloadSiteStatistics([FromQuery] SiteReportQuery model)
         {

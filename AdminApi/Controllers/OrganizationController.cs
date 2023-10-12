@@ -123,6 +123,96 @@ namespace AdminApi.Controllers
                 return NoContent();
             }
         }
+        /// <summary>
+        /// 3.1 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadOrgServicesReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgServicesReport(this.UserRights());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        /// <summary>
+        /// 3.2 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadOrgPublicServicesReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgPublicServicesReport(this.UserRights(), this.UserOrgId());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        /// <summary>
+        /// 3.3 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadOrgMygovServicesReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgMygovServicesReport(this.UserRights());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        /// <summary>
+        /// 3.4 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadOrgMibServicesReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadOrgMibServicesReport(this.UserRights());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
+        /// <summary>
+        /// 6.2 report
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> DownloadItDepartmentReport()
+        {
+            try
+            {
+                var stream = await _organizationService.DownloadITDepartmentReport(this.UserRights(), this.UserOrgId());
+
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orgData");
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
+        }
         
         [HttpGet]
         public async Task<IActionResult> DownloadRankReport([FromQuery] OrgCategory category, int deadlineId)
@@ -138,7 +228,10 @@ namespace AdminApi.Controllers
                 return NoContent();
             }
         }
-        
+        /// <summary>
+        /// 5.1 report
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> DownloadReestrProjectsReport()
         {
