@@ -240,6 +240,7 @@ namespace MainInfrastructures.Services
                         FirstName = replacerOrgHead.FirstName,
                         LastName = replacerOrgHead.LastName,
                         MiddleName = replacerOrgHead.MidName,
+                        Position = replacerOrgHead.Position,
                         Phone = replacerOrgHead.Phone,
                         Email = replacerOrgHead.Email,
                         PhotoLink = replacerOrgHead.PhotoPath
@@ -406,6 +407,7 @@ namespace MainInfrastructures.Services
                         FirstName = replacerOrgHead.FirstName,
                         LastName = replacerOrgHead.LastName,
                         MiddleName = replacerOrgHead.MidName,
+                        Position = replacerOrgHead.Position,
                         Phone = replacerOrgHead.Phone,
                         Email = replacerOrgHead.Email,
                         PhotoLink = replacerOrgHead.PhotoPath
@@ -571,6 +573,7 @@ namespace MainInfrastructures.Services
                         FirstName = replacerOrgHead.FirstName,
                         LastName = replacerOrgHead.LastName,
                         MiddleName = replacerOrgHead.MidName,
+                        Position = replacerOrgHead.Position,
                         Phone = replacerOrgHead.Phone,
                         Email = replacerOrgHead.Email,
                         PhotoLink = replacerOrgHead.PhotoPath
