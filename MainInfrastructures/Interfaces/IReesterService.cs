@@ -12,7 +12,7 @@ namespace MainInfrastructures.Interfaces
         Task<SecondRequestQueryResult> SecondRequest(SecondRequestQuery model);
         Task<bool> UpdateReestrTable();
 
-        Task<FirstRequestQueryResult> FirstRequestNew(FirstRequestQuery model);
+        Task<FirstRequestQueryResultNew> FirstRequestNew(FirstRequestQuery model);
         Task<SecondRequestQueryResult> SecondRequestNew(SecondRequestQuery model);
 
         Task<int> RecordUpdateTime(int projectId);

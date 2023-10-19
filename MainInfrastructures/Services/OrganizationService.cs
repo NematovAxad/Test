@@ -2874,7 +2874,7 @@ namespace MainInfrastructures.Services
                 Limit = 1000000
             };
 
-            FirstRequestQueryResult reestrResult = new FirstRequestQueryResult();
+            FirstRequestQueryResultNew reestrResult = new FirstRequestQueryResultNew();
 
             reestrResult = await _reesterService.FirstRequestNew(model);
 
@@ -2887,7 +2887,7 @@ namespace MainInfrastructures.Services
             worksheet.Cells[28, 1].Value = "Ekspert xulosalari olinganligi";
             worksheet.Cells[28, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
 
-            worksheet.Cells[28, 2].Value = reestrResult.Items.Where(i => i.HasExpertise == true).ToList().Count.ToString(CultureInfo.InvariantCulture) + " ta";
+            worksheet.Cells[28, 2].Value = reestrResult.Items.Where(i => i.HasDigitalTechnologyMinistryExpertise == true).ToList().Count.ToString(CultureInfo.InvariantCulture) + " ta";
 
             using (var range = worksheet.Cells[27, 2, 28, 2])
             {

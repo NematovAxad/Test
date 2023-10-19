@@ -26,14 +26,22 @@ namespace MainInfrastructures.Services
         private readonly IRepository<Organizations, int> _org;
         private readonly IRepository<ReestrProjectPassport, int> _reestrPassport;
         private readonly IRepository<ReestrProjectPassportDetails, int> _reestrPassportDetails;
+        private readonly IRepository<ReestrProjectExpertDecision, int> _ministryExpertDecision;
+        private readonly IRepository<ReestrProjectCyberSecurityExpertDecision, int> _cyberSecurityExpertDecision;
         private readonly IDataContext _db;
 
-        public ReesterService(IRepository<Organizations, int> org, IDataContext db, IRepository<ReestrProjectPassport, int> reestrPassport, IRepository<ReestrProjectPassportDetails, int> reestrPassportDetails)
+        public ReesterService(IRepository<Organizations, int> org, IDataContext db, 
+            IRepository<ReestrProjectPassport, int> reestrPassport, 
+            IRepository<ReestrProjectPassportDetails, int> reestrPassportDetails, 
+            IRepository<ReestrProjectExpertDecision, int> ministryExpertDecision, 
+            IRepository<ReestrProjectCyberSecurityExpertDecision, int> cyberSecurityExpertDecision)
         {
             _org = org;
             _reestrPassport = reestrPassport;
             _reestrPassportDetails = reestrPassportDetails;
             _db = db;
+            _ministryExpertDecision = ministryExpertDecision;
+            _cyberSecurityExpertDecision = cyberSecurityExpertDecision;
         }
 
         public async Task<FirstRequestQueryResult> FirstRequest(FirstRequestQuery model)
@@ -251,13 +259,13 @@ namespace MainInfrastructures.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<FirstRequestQueryResult> FirstRequestNew(FirstRequestQuery model)
+        public async Task<FirstRequestQueryResultNew> FirstRequestNew(FirstRequestQuery model)
         {
             var organization = _org.Find(d => d.Id == model.OrgId).FirstOrDefault();
             if (organization == null)
                 throw ErrorStates.NotFound("organization");
 
-            var result = new FirstRequestQueryResult(){Items = new List<FirstRequestResultModel>()};
+            var result = new FirstRequestQueryResultNew(){Items = new List<FirstRequestResultModelNew>()};
 
             var orgProjects = _reestrPassport.Find(p => p.OrganizationId == model.OrgId).OrderByDescending(p => p.ReestrProjectId)
                 .ToList();
@@ -279,13 +287,21 @@ namespace MainInfrastructures.Services
             
             foreach (var project in returnPart)
             {
-                result.Items.Add(new FirstRequestResultModel()
+                var ministryExpertise = _ministryExpertDecision.Find(r =>
+                        r.ReestrProjectId == project.ReestrProjectId && r.Exist == true && r.ExpertExcept == true)
+                    .FirstOrDefault();
+                var cyberSecurityExpertise = _cyberSecurityExpertDecision.Find(r =>
+                        r.ReestrProjectId == project.ReestrProjectId && r.Exist == true && r.ExpertExcept == true)
+                    .FirstOrDefault();
+
+                result.Items.Add(new FirstRequestResultModelNew()
                 {
                     Id = project.ReestrProjectId,
                     FullName = project.FullName,
                     ShortName = project.ShortName,
                     PassportStatus = project.PassportStatus,
-                    HasTerms = project.HasTerms,
+                    HasCyberSecurityExpertise = cyberSecurityExpertise != null,
+                    HasDigitalTechnologyMinistryExpertise = ministryExpertise != null,
                     LinkForSystem = project.LinkForSystem,
                     LastUpdate = project.UpdateTime
                 });

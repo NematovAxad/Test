@@ -114,7 +114,7 @@ namespace UserApi.Controllers
             }
         }*/
         [HttpGet]
-        public async Task<ResponseCore<FirstRequestQueryResult>> ReesterProjects([FromQuery] int orgId, int page, int limit)
+        public async Task<ResponseCore<FirstRequestQueryResultNew>> ReesterProjects([FromQuery] int orgId, int page, int limit)
         {
             try
             {
