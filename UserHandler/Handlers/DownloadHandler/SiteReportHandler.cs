@@ -42,6 +42,11 @@ namespace UserHandler.Handlers.DownloadHandler
             {
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
             }
+
+            if (request.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))
+            {
+                request.OrgId = request.UserOrgId;
+            }
             
             if(request.OrgId != 0)
             {
