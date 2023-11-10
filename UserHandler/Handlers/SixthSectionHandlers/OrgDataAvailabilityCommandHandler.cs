@@ -63,7 +63,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if (deadline == null)
                 throw ErrorStates.NotFound("available deadline");
 
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !(model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
+            if (model.UserPermissions.All(p => p != Permissions.SITE_CONTENT_FILLER) && !(model.UserPermissions.Any(p => p == Permissions.OPERATOR_RIGHTS)))
                 throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
 
             if (deadline.OperatorDeadlineDate < DateTime.Now)
@@ -74,7 +74,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
 
             if (org.OrgCategory == Domain.Enums.OrgCategory.GovernmentOrganizations)
             {
-                if (!Links.listGos.Any(t => t.Item1 == model.Section))
+                if (Links.listGos.All(t => t.Item1 != model.Section))
                     throw ErrorStates.Error(UIErrors.IncorrectSection);
                 rateAvailability = Links.listGos.Where(t => t.Item1 == model.Section).FirstOrDefault().Item2;
                 rateRelevance = Links.listGos.Where(t => t.Item1 == model.Section).FirstOrDefault().Item3;
@@ -83,8 +83,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             {
                 if (!Links.listXoz.Any(t => t.Item1 == model.Section))
                     throw ErrorStates.Error(UIErrors.IncorrectSection);
-                rateAvailability = Links.listGos.Where(t => t.Item1 == model.Section).FirstOrDefault().Item2;
-                rateRelevance = Links.listGos.Where(t => t.Item1 == model.Section).FirstOrDefault().Item3;
+                rateAvailability = Links.listXoz.Where(t => t.Item1 == model.Section).FirstOrDefault().Item2;
+                rateRelevance = Links.listXoz.Where(t => t.Item1 == model.Section).FirstOrDefault().Item3;
             }
 
             var orgData = _orgDataAvailability.Find(p => p.OrganizationId == model.OrganizationId && p.Section == model.Section && p.DeadlineId == deadline.Id).FirstOrDefault();
@@ -164,8 +164,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 if (!Links.listXoz.Any(t => t.Item1 == model.Section))
                     throw ErrorStates.Error(UIErrors.IncorrectSection);
 
-                rateAvailability = Links.listGos.Where(t => t.Item1 == model.Section).FirstOrDefault().Item2;
-                rateRelevance = Links.listGos.Where(t => t.Item1 == model.Section).FirstOrDefault().Item3;
+                rateAvailability = Links.listXoz.Where(t => t.Item1 == model.Section).FirstOrDefault().Item2;
+                rateRelevance = Links.listXoz.Where(t => t.Item1 == model.Section).FirstOrDefault().Item3;
             }
 
 
