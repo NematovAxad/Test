@@ -72,6 +72,7 @@ namespace UserHandler.Handlers.SixthSectionHandlers
                 addModel.ReestrProjectId = request.ReestrProjectId;
                 addModel.Exception = true;
                 addModel.ExpertPinfl = request.UserPinfl;
+                addModel.Comment = request.Comment;
 
                 _db.Context.Set<ReestrProjectException>().Add(addModel);
                 

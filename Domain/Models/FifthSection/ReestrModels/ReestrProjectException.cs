@@ -27,5 +27,8 @@ namespace Domain.Models.FifthSection.ReestrModels
 
         [Column("expert_pinfl")]
         public string ExpertPinfl { get; set; }
+        
+        [Column("comment")]
+        public string Comment { get; set; }
     }
 }

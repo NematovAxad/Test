@@ -33,5 +33,7 @@ namespace UserHandler.Commands.SixthSectionCommands
         public int ReestrProjectId { get; set; }
 
         public bool IsException { get; set; }
+        
+        public string Comment { get; set; }
     }
 }
