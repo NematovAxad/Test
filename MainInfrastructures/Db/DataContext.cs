@@ -4,6 +4,7 @@ using Domain.Models.FifthSection;
 using Domain.Models.FifthSection.ReestrModels;
 using Domain.Models.FirstSection;
 using Domain.Models.MibModels;
+using Domain.Models.MygovModels;
 using Domain.Models.Organization;
 using Domain.Models.Ranking;
 using Domain.Models.Ranking.Administrations;
@@ -123,7 +124,7 @@ namespace MainInfrastructures.Db
         public DbSet<ReestrProjectPassport> ReestrProjectPassport { get; set; }
         public DbSet<ReestrProjectPassportDetails> ReestrProjectPassportDetails { get; set; }
         public DbSet<ExceptionFields> ExceptionFields { get; set; }
-
         public DbSet<MibReport> MibReports { get; set; }
+        public DbSet<MygovExceptionCases> MygovExceptionCases { get; set;}
     }
 }
