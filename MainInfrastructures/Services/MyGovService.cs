@@ -2,6 +2,7 @@
 using Domain.IntegrationLinks;
 using Domain.Models;
 using Domain.Models.FirstSection;
+using Domain.Models.MygovModels;
 using Domain.Models.Organization;
 using Domain.MonitoringModels.Models;
 using Domain.MyGovModels;
@@ -9,6 +10,7 @@ using Domain.States;
 using EntityRepository;
 using JohaRepository;
 using MainInfrastructures.Interfaces;
+using MainInfrastructures.Migrations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,14 +28,16 @@ namespace MainInfrastructures.Services
         private readonly IRepository<Deadline, int> _deadline;
         private readonly IRepository<MygovReports, int> _mygovReports;
         private readonly IRepository<MygovReportsDetail, int> _mygovReportsDetail;
+        private readonly IRepository<MygovExceptionCases, int> _mygovException;
         private readonly IDataContext _db;
 
-        public MyGovService(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<MygovReports, int> mygovReports, IRepository<MygovReportsDetail, int> mygovReportsDetail, IDataContext db)
+        public MyGovService(IRepository<Organizations, int> organization, IRepository<Deadline, int> deadline, IRepository<MygovReports, int> mygovReports, IRepository<MygovReportsDetail, int> mygovReportsDetail, IRepository<MygovExceptionCases, int> mygovException, IDataContext db)
         {
             _organization = organization;
             _deadline = deadline;
             _mygovReports = mygovReports;
             _mygovReportsDetail = mygovReportsDetail;
+            _mygovException = mygovException;
             _db = db;
         }
 
@@ -128,7 +132,10 @@ namespace MainInfrastructures.Services
             var deadline = _deadline.Find(o => o.Id == deadlineId).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+
             var orgList = _organization.GetAll();
+            var exceptionList = _mygovException.GetAll();
+
 
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
@@ -157,21 +164,44 @@ namespace MainInfrastructures.Services
 
                     foreach (var i in responseResult)
                     {
-                        serviceList.Add(new MygovReports
+                        if (exceptionList.Any(e=>e.MygovServiceId == i.MyGovService.Id))
                         {
-                            MygovMainOrgId = i.MainOrganization.Id,
-                            MygovOrgId = i.OrganizationRecord.Id,
-                            OrganizationId = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? 0 : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().Id,
-                            Name = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? String.Empty : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().ShortName,
-                            ServiceId = i.MyGovService.Id,
-                            ServiceName = i.MyGovService.Name,
-                            Year = deadline.Year,
-                            Part = part,
-                            AllRequests = i.Tasks.All,
-                            LateRequests = i.Tasks.Deadline,
-                            LastUpdate = DateTime.UtcNow,
-                        });
-                        
+                            var exception = exceptionList.Where(e => e.MygovServiceId == i.MyGovService.Id).FirstOrDefault();
+                            if(exception != null)
+                            {
+                                serviceList.Add(new MygovReports
+                                {
+                                    MygovMainOrgId = exception.Organization.MyGovId,
+                                    MygovOrgId = exception.Organization.MyGovId,
+                                    OrganizationId = exception.Organization.Id,
+                                    Name = exception.Organization.ShortName,
+                                    ServiceId = i.MyGovService.Id,
+                                    ServiceName = i.MyGovService.Name,
+                                    Year = deadline.Year,
+                                    Part = part,
+                                    AllRequests = i.Tasks.All,
+                                    LateRequests = i.Tasks.Deadline,
+                                    LastUpdate = DateTime.UtcNow,
+                                });
+                            }
+                        }
+                        else
+                        {
+                            serviceList.Add(new MygovReports
+                            {
+                                MygovMainOrgId = i.MainOrganization.Id,
+                                MygovOrgId = i.OrganizationRecord.Id,
+                                OrganizationId = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? 0 : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().Id,
+                                Name = orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault() == null ? String.Empty : orgList.Where(o => o.MyGovId == i.MainOrganization.Id).FirstOrDefault().ShortName,
+                                ServiceId = i.MyGovService.Id,
+                                ServiceName = i.MyGovService.Name,
+                                Year = deadline.Year,
+                                Part = part,
+                                AllRequests = i.Tasks.All,
+                                LateRequests = i.Tasks.Deadline,
+                                LastUpdate = DateTime.UtcNow,
+                            });
+                        }
                     }
                 }
                 catch
@@ -200,7 +230,9 @@ namespace MainInfrastructures.Services
             var deadline = _deadline.Find(o => o.Id == deadlineId).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+            
             var orgList = _organization.GetAll();
+            var exceptionList = _mygovException.GetAll();
 
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
@@ -228,17 +260,38 @@ namespace MainInfrastructures.Services
                     
                     foreach(var item in responseResult)
                     {
-                        addList.Add(new MygovReportsDetail
+                        if (exceptionList.Any(e => e.MygovServiceId == item.MyGovService.Id))
                         {
-                            TaskId = item.DeadlineTask.Id,
-                            MygovOrgId = item.OrganizationRecord.Id,
-                            ServiceId = item.MyGovService.Id,
-                            ServiceName = item.MyGovService.Name,
-                            DeadlineFrom = item.DeadlineTask.DeadlineFrom,
-                            DeadlineTo = item.DeadlineTask.DeadlineTo,
-                            Year = deadline.Year,
-                            Part = part,
-                        });
+                            var exception = exceptionList.Where(e => e.MygovServiceId == item.MyGovService.Id).FirstOrDefault();
+                            if (exception != null)
+                            {
+                                addList.Add(new MygovReportsDetail
+                                {
+                                    TaskId = item.DeadlineTask.Id,
+                                    MygovOrgId = exception.Organization.Id,
+                                    ServiceId = item.MyGovService.Id,
+                                    ServiceName = item.MyGovService.Name,
+                                    DeadlineFrom = item.DeadlineTask.DeadlineFrom,
+                                    DeadlineTo = item.DeadlineTask.DeadlineTo,
+                                    Year = deadline.Year,
+                                    Part = part,
+                                });
+                            }
+                        }
+                        else 
+                        {
+                            addList.Add(new MygovReportsDetail
+                            {
+                                TaskId = item.DeadlineTask.Id,
+                                MygovOrgId = item.OrganizationRecord.Id,
+                                ServiceId = item.MyGovService.Id,
+                                ServiceName = item.MyGovService.Name,
+                                DeadlineFrom = item.DeadlineTask.DeadlineFrom,
+                                DeadlineTo = item.DeadlineTask.DeadlineTo,
+                                Year = deadline.Year,
+                                Part = part,
+                            });
+                        }                       
                     }
 
                     var allRecords = _mygovReportsDetail.GetAll();
