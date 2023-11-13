@@ -19,6 +19,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace MainInfrastructures.Services
 {
@@ -166,7 +167,8 @@ namespace MainInfrastructures.Services
                     {
                         if (exceptionList.Any(e=>e.MygovServiceId == i.MyGovService.Id))
                         {
-                            var exception = exceptionList.Where(e => e.MygovServiceId == i.MyGovService.Id).FirstOrDefault();
+                            var exception = exceptionList.Where(e => e.MygovServiceId == i.MyGovService.Id)
+                                .Include(mbox => mbox.Organization).FirstOrDefault();
                             if(exception != null)
                             {
                                 serviceList.Add(new MygovReports
@@ -262,7 +264,8 @@ namespace MainInfrastructures.Services
                     {
                         if (exceptionList.Any(e => e.MygovServiceId == item.MyGovService.Id))
                         {
-                            var exception = exceptionList.Where(e => e.MygovServiceId == item.MyGovService.Id).FirstOrDefault();
+                            var exception = exceptionList.Where(e => e.MygovServiceId == item.MyGovService.Id)
+                                .Include(mbox => mbox.Organization).FirstOrDefault();
                             if (exception != null)
                             {
                                 addList.Add(new MygovReportsDetail
@@ -300,8 +303,7 @@ namespace MainInfrastructures.Services
 
                     _db.Context.Set<MygovReportsDetail>().AddRange(addList);
 
-
-                    _db.Context.SaveChanges();
+                    _db.Context.SaveChangesAsync();
                 }
                 catch
                 {

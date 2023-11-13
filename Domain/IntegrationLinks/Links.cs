@@ -6,12 +6,14 @@ namespace Domain.IntegrationLinks
 {
     public static class Links
     {
-        public static string OpenDataurl => "OpenDataurl".Env();// "https://data.egov.uz/apiPartner/Partner/NisUzApi";
+        public static string OpenDataurl => "OpenDataurl".Env() ?? "https://data.egov.uz/apiPartner/Partner/NisUzApi";
         public static string ReesterFirstLink => "ReesterFirstLink".Env() ?? "https://reestr.uz/api/apiProject/Integration/nisgetorgprojects";
         public static string ReesterSecondLink => "ReesterSecondLink".Env() ?? "https://reestr.uz/api/apiProject/Integration/getproject";
         public static string CyberSecurityUrl = "CyberSecurityUrl".Env();//"https://sm.csec.uz/api/v1/nis/rating";
         public static string AuthOrgGetUrl = "AuthOrgGetUrl".Env();//"https://auth.egov.uz/api/Organization/GetOrg";
-        public static string MyGovServices = "MyGovServices".Env();//"https://my.gov.uz/oz/api/nis-uz/download-service-deadline-file?";
+
+        public static string MyGovServices =
+            "MyGovServices".Env() ?? "https://my.gov.uz/oz/api/nis-uz/download-service-deadline-file?";
         public static string MibService = "MibService".Env();// "https://nisreport.egov.uz/nisreport/mip2?";
         public static string MainAdminPinfl = "MainAdminPinfl".Env();//"30811965270037";
 

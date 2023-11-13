@@ -46,8 +46,8 @@ namespace UserHandler.Handlers.SixthSectionHandlers
             if(orgData.Any())
             {
                 result.Data = orgData.OrderBy(o => o.Sphere).ThenBy(o => o.Section).ToList();
-                result.DataAvailabilityRate = orgData.Sum(d => d.DataAvailabilityRate);
-                result.DataRelevanceRate = orgData.Sum(d => d.DataRelevanceRate);
+                result.DataAvailabilityRate = Math.Round(orgData.Sum(d => d.DataAvailabilityRate), 2);
+                result.DataRelevanceRate = Math.Round(orgData.Sum(d => d.DataRelevanceRate), 2);
                 result.RateSum = result.DataAvailabilityRate + result.DataRelevanceRate;
                 result.LastUpdate = orgData.Select(d => d.UpdateDate).Max();
             }
