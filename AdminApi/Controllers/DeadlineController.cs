@@ -21,10 +21,12 @@ namespace AdminApi.Controllers
     {
         IMediator _mediator;
         private readonly IOrganizationService _orgService;
-        public Deadline(IMediator mediator, IOrganizationService orgService)
+        private IDashboardService _dashboardService;
+        public Deadline(IMediator mediator, IOrganizationService orgService, IDashboardService dashboardService)
         {
             _mediator = mediator;
             _orgService = orgService;
+            _dashboardService = dashboardService;
         }
         [HttpGet]
         public async Task<ResponseCore<DeadlineQueryResult>> Get([FromQuery] int year, Quarters quarter, bool isActive)
@@ -62,6 +64,13 @@ namespace AdminApi.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<bool> SetDashboardPeriod([FromBody] int deadlineId)
+        {
+            var result = await _dashboardService.SetDashboardPeriod(this.UserRights(), deadlineId);
+            return result;
+        }
+        
         [HttpPost]
         public async Task<ResponseCore<DeadlineCommandResult>> Add([FromQuery] DeadlineCommand model)
         {

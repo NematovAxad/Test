@@ -18,7 +18,7 @@ namespace AdminHandler.Handlers.Ranking
     public class DeadlineCommandHandler : IRequestHandler<DeadlineCommand, DeadlineCommandResult>
     {
         private readonly IRepository<Deadline, int> _deadline;
-        IDataContext _db;
+        private readonly IDataContext _db;
         public DeadlineCommandHandler(IRepository<Deadline, int> deadline, IDataContext db)
         {
             _deadline = deadline;

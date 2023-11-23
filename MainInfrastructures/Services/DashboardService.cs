@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using Domain;
@@ -25,6 +26,8 @@ using MainInfrastructures.Migrations;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Domain.Models.SixthSection;
+using Domain.Permission;
+using EntityRepository;
 using SB.Common.Extensions;
 
 namespace MainInfrastructures.Services
@@ -53,6 +56,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ASphere, int> _aSphere;
         private readonly IRepository<AField, int> _aField;
         private readonly IRepository<ASubField, int> _aSubField;
+        private readonly IDataContext _db;
 
         private List<int> DashboardBlackList = new List<int>() { 189, 177, 112 };
 
@@ -77,8 +81,10 @@ namespace MainInfrastructures.Services
                                         IRepository<OrganizationDigitalEconomyProjectsReport, int> digitalEconomyProjectsReport,
                                         IRepository<ReplacerOrgHead, int> replacerOrgHead,
                                         IRepository<OrganizationIctSpecialForces, int> orgSpecialForces,
-                                        IRepository<OrganizationDigitalEconomyProjectsDetail, int> orgDigitalProjectsDetail)
+                                        IRepository<OrganizationDigitalEconomyProjectsDetail, int> orgDigitalProjectsDetail,
+                                        IDataContext db)
         {
+            _db = db;
             _organization = organizations;
             _organizationPublicServices = organizationPublicServices;
             _reestrProjectException = reestrProjectException;
@@ -853,6 +859,29 @@ namespace MainInfrastructures.Services
             _aRankTable.AddRange(addList);
             
             return Task.FromResult(0);
+        }
+
+        public async Task<bool> SetDashboardPeriod(List<string> userRight, int deadlineId)
+        {
+            if (userRight.All(p => p != Permissions.SITE_CONTENT_FILLER))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+
+            var deadline = _deadline.Find(d => d.Id == deadlineId).FirstOrDefault();
+            if (deadline == null)
+                throw ErrorStates.Error(UIErrors.DeadlineNotFound);
+            
+            var list = _deadline.GetAll().ToList();
+            foreach (var t in list)
+            {
+                t.Dashboard = false;
+            }
+
+            _db.Context.Set<Deadline>().UpdateRange(list);
+            _db.Context.SaveChanges();
+            
+            _deadline.Update(deadline);
+            
+            return true;
         }
     }
 }

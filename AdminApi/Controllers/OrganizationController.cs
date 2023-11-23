@@ -370,6 +370,12 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="activation"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<bool> ActivateDeactivateOrg([FromBody] int orgId, bool activation)
         {
