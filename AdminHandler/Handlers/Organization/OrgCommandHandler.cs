@@ -46,7 +46,7 @@ namespace AdminHandler.Handlers.Organization
             {
                 throw ErrorStates.NotAllowed(model.ShortName);
             }
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER))
+            if (model.UserPermissions.All(p => p != Permissions.SITE_CONTENT_FILLER))
                 throw ErrorStates.NotAllowed("permission");
             Organizations addModel = new Organizations();
 
@@ -138,7 +138,7 @@ namespace AdminHandler.Handlers.Organization
             { 
                 throw ErrorStates.NotFound("");
             }
-            if (!model.UserPermissions.Any(p => p == Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
+            if (model.UserPermissions.All(p => p != Permissions.SITE_CONTENT_FILLER) && !((model.UserOrgId == org.UserServiceId) && (model.UserPermissions.Any(p => p == Permissions.ORGANIZATION_EMPLOYEE))))
                 throw ErrorStates.NotAllowed("permission");
             org.FullName = model.FullName;
             org.FullNameRu = model.FullNameRu;

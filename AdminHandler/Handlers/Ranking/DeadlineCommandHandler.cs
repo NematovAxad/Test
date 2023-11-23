@@ -40,14 +40,14 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Year == model.Year && d.Quarter == model.Quarter).FirstOrDefault();
             if (deadline != null)
                 throw ErrorStates.NotAllowed(model.Year.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.DEADLINE_CONTROL))
+            if (model.UserPermissions.All(p => p != Permissions.DEADLINE_CONTROL))
                 throw ErrorStates.NotAllowed("permission");
             if (model.IsActive == true)
             {
                 var list = _deadline.GetAll().ToList();
-                for(int i = 0; i<list.Count; i++)
+                foreach (var t in list)
                 {
-                    list[i].IsActive = false;
+                    t.IsActive = false;
                 }
 
                 _db.Context.Set<Deadline>().UpdateRange(list);
@@ -73,14 +73,14 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == model.Id).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.DEADLINE_CONTROL))
+            if (model.UserPermissions.All(p => p != Permissions.DEADLINE_CONTROL))
                 throw ErrorStates.NotAllowed("permission");
             if (model.IsActive == true)
             {
                 var list = _deadline.GetAll().ToList();
-                for (int i = 0; i < list.Count; i++)
+                foreach (var t in list)
                 {
-                    list[i].IsActive = false;
+                    t.IsActive = false;
                 }
 
                 _db.Context.Set<Deadline>().UpdateRange(list);
@@ -99,7 +99,7 @@ namespace AdminHandler.Handlers.Ranking
             var deadline = _deadline.Find(d => d.Id == model.Id).FirstOrDefault();
             if (deadline == null)
                 throw ErrorStates.NotFound(model.Id.ToString());
-            if (!model.UserPermissions.Any(p => p == Permissions.DEADLINE_CONTROL))
+            if (model.UserPermissions.All(p => p != Permissions.DEADLINE_CONTROL))
                 throw ErrorStates.NotAllowed("permission");
             _deadline.Remove(deadline);
         }

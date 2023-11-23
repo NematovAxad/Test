@@ -2663,6 +2663,35 @@ namespace MainInfrastructures.Services
             return memoryStream;
         }
 
+        public async Task<bool> ActivateDeactivateOrganizations(List<string> userRights, int orgId, bool activation)
+        {
+            if (userRights.All(p => p != Permissions.SITE_CONTENT_FILLER))
+                throw ErrorStates.NotAllowed("permission");
+            
+            var org = _organization.Find(o => o.Id == orgId).FirstOrDefault();
+            if (org != null)
+            {
+                throw ErrorStates.NotFound(orgId.ToString());
+            }
+
+            switch (activation)
+            {
+                case true:
+                    org.IsActive = true;
+                    org.IsIct = true;
+                    org.IsMonitoring = true;
+                    break;
+                case false:
+                    org.IsActive = false;
+                    org.IsIct = false;
+                    org.IsMonitoring = false;
+                    break;
+            }
+            _organization.Update(org);
+
+            return true;
+        }
+
         #endregion
         
         #region DownloadOrgData 1.1

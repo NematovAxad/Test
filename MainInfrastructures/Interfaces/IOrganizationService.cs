@@ -49,5 +49,7 @@ namespace MainInfrastructures.Interfaces
         Task<MemoryStream> DownloadITDepartmentReport(List<string> userRights, int userOrgId); // 6.2 report
 
         Task<MemoryStream> DownloadOrgClassifications();
+
+        Task<bool> ActivateDeactivateOrganizations(List<string> userRights, int orgId, bool activation);
     }
 }

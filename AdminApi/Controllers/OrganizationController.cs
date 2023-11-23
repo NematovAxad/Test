@@ -370,6 +370,12 @@ namespace AdminApi.Controllers
                 return ex;
             }
         }
+        [HttpPost]
+        public async Task<bool> ActivateDeactivateOrg([FromBody] int orgId, bool activation)
+        {
+            var result = await _organizationService.ActivateDeactivateOrganizations(this.UserRights(), orgId, activation);
+            return result;
+        }
         [HttpPut]
         public async Task<ResponseCore<OrgCommandResult>> PutOrg([FromBody] OrgCommand model)
         {
