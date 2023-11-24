@@ -56,6 +56,7 @@ namespace MainInfrastructures.Services
         private readonly IRepository<ASphere, int> _aSphere;
         private readonly IRepository<AField, int> _aField;
         private readonly IRepository<ASubField, int> _aSubField;
+        private readonly IRepository<NewsOnDashboard, int> _newsOnDashboard;
         private readonly IDataContext _db;
 
         private List<int> DashboardBlackList = new List<int>() { 189, 177, 112 };
@@ -82,9 +83,11 @@ namespace MainInfrastructures.Services
                                         IRepository<ReplacerOrgHead, int> replacerOrgHead,
                                         IRepository<OrganizationIctSpecialForces, int> orgSpecialForces,
                                         IRepository<OrganizationDigitalEconomyProjectsDetail, int> orgDigitalProjectsDetail,
+                                        IRepository<NewsOnDashboard, int> newsOnDashboard,
                                         IDataContext db)
         {
             _db = db;
+            _newsOnDashboard = newsOnDashboard;
             _organization = organizations;
             _organizationPublicServices = organizationPublicServices;
             _reestrProjectException = reestrProjectException;
@@ -881,6 +884,120 @@ namespace MainInfrastructures.Services
             
             _deadline.Update(deadline);
             
+            return true;
+        }
+
+        public async Task<List<NewsOnDashboard>> GetNews(int id)
+        {
+            List<NewsOnDashboard> result = new List<NewsOnDashboard>();
+            
+            var news = _newsOnDashboard.GetAll();
+
+            if (id != 0)
+            {
+                result = news.Where(n => n.Id == id).ToList(); 
+            }
+            else
+            {
+                var first = news.FirstOrDefault(n => n.First == true);
+                
+                if(first!=null)
+                    result.Add(first);
+                
+                var left = news.Where(n => n.First == false).OrderByDescending(n => n.UpdateDate).ToList();
+                
+                result.AddRange(left);
+            }
+
+            return result;
+        }
+        
+        public async Task<bool> AddNews(AddNewsRequest request)
+        {
+            if (request.UserPermissions.IsNullOrEmpty())
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            if (request.UserPermissions.All(p => p != Permissions.SITE_CONTENT_FILLER))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+
+            NewsOnDashboard addModel = new NewsOnDashboard()
+            {
+                Title = request.Title,
+                Body = request.Body,
+                FileLink = request.FileLink,
+                AddDate = DateTime.Now,
+                UpdateDate = DateTime.Now,
+                First = request.First,
+                AuthorPinfl = request.UserPinfl
+                
+            };
+
+            if (addModel.First == true)
+            {
+                var newsList = _newsOnDashboard.Find(n => n.First == true).ToList();
+                foreach (var n in newsList)
+                {
+                    n.First = false;
+                }
+                _db.Context.Set<NewsOnDashboard>().UpdateRange(newsList);
+                _db.Context.SaveChanges();
+            }
+            
+            _newsOnDashboard.Add(addModel);
+            
+            return true;
+        }
+
+        public async Task<NewsOnDashboard> UpdateNews(UpdateNewsRequest request)
+        {
+            if (request.UserPermissions.IsNullOrEmpty())
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            if (request.UserPermissions.All(p => p != Permissions.SITE_CONTENT_FILLER))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+
+            var news = _newsOnDashboard.Find(n => n.Id == request.Id).FirstOrDefault();
+            if (news == null)
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+            
+            
+            if (!request.Title.IsNullOrEmpty())
+                news.Title = request.Title;
+            if (!request.Body.IsNullOrEmpty())
+                news.Body = request.Body;
+            if (!request.FileLink.IsNullOrEmpty())
+                news.FileLink = request.FileLink;
+            if (request.First == true)
+            {
+                news.First = true;
+                var newsList = _newsOnDashboard.Find(n => n.First == true).ToList();
+                foreach (var n in newsList)
+                {
+                    n.First = false;
+                }
+                _db.Context.Set<NewsOnDashboard>().UpdateRange(newsList);
+                _db.Context.SaveChanges();
+            }
+            
+            news.AuthorPinfl = request.UserPinfl;
+            news.UpdateDate = DateTime.Now;
+            
+            _newsOnDashboard.Update(news);
+
+            return news;
+        }
+
+        public async Task<bool> DeleteNews(List<string> userRights, int id)
+        {
+            if (userRights.IsNullOrEmpty())
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+            if (userRights.All(p => p != Permissions.SITE_CONTENT_FILLER))
+                throw ErrorStates.Error(UIErrors.UserPermissionsNotAllowed);
+
+            var news = _newsOnDashboard.Find(n => n.Id == id).FirstOrDefault();
+            
+            if (news == null)
+                throw ErrorStates.Error(UIErrors.DataToChangeNotFound);
+            _newsOnDashboard.Remove(news);
+
             return true;
         }
     }
