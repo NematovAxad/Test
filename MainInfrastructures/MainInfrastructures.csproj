@@ -79,6 +79,8 @@
     <Compile Remove="Migrations\20230406052529_digitaleconomyprojects.Designer.cs" />
     <Compile Remove="Migrations\20230523132301_fieldexceptiontable.cs" />
     <Compile Remove="Migrations\20230523132301_fieldexceptiontable.Designer.cs" />
+    <Compile Remove="Migrations\20231124043440_newtables.cs" />
+    <Compile Remove="Migrations\20231124043440_newtables.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

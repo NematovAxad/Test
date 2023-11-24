@@ -70,5 +70,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AdminApi.Controllers.Organization.ActivateDeactivateOrg(System.Int32,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="orgId"></param>
+            <param name="activation"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

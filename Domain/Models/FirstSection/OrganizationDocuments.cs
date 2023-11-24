@@ -2,6 +2,7 @@
 using JohaRepository;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace Domain.Models.FirstSection
     [Table("organization_documents", Schema = "organizations")]
     public class OrganizationDocuments : IDomain<int>
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int Id { get; set; }
         [Column("organization_id")]

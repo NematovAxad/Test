@@ -127,5 +127,6 @@ namespace MainInfrastructures.Db
         public DbSet<MibReport> MibReports { get; set; }
         public DbSet<MygovExceptionCases> MygovExceptionCases { get; set;}
         public DbSet<OrganizationEmployeeAttestats> OrganizationEmployeeAttestats { get; set; }
+        public DbSet<NewsOnDashboard> NewsOnDashboard { get; set;}
     }
 }
